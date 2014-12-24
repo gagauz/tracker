@@ -1,11 +1,14 @@
 package com.gagauz.tracker.web.services;
 
+import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.ServiceId;
+import org.apache.tapestry5.ioc.annotations.Startup;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
@@ -21,10 +24,14 @@ import java.io.IOException;
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
  * configure and extend Tapestry, or to place your own service definitions.
  */
-public class AppModule
-{
-    public static void bind(ServiceBinder binder)
-    {
+public class AppModule {
+
+    @Startup
+    public static void initScenarios(@Inject TestDataInitializer ai) {
+        ai.execute();
+    }
+
+    public static void bind(ServiceBinder binder) {
         // binder.bind(MyServiceInterface.class, MyServiceImpl.class);
 
         // Make bind() calls on the binder object to define most IoC services.
@@ -33,9 +40,7 @@ public class AppModule
         // invoking the constructor.
     }
 
-    public static void contributeFactoryDefaults(
-                                                 MappedConfiguration<String, Object> configuration)
-    {
+    public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
         // The application version number is incorprated into URLs for some
         // assets. Web browsers will cache assets because of the far future expires
         // header. If existing assets are changed, the version number should also
@@ -45,9 +50,7 @@ public class AppModule
         configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
     }
 
-    public static void contributeApplicationDefaults(
-                                                     MappedConfiguration<String, Object> configuration)
-    {
+    public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
         // Contributions to ApplicationDefaults will override any contributions to
         // FactoryDefaults (with the same key). Here we're restricting the supported
         // locales to just "en" (English). As you add localised message catalogs and other assets,

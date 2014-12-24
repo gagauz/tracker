@@ -1,4 +1,4 @@
-package com.gagauz.tracker.beans.config;
+package com.gagauz.tracker.beans.setup;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.JDBC4Connection;

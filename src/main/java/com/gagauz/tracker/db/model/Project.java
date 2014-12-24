@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,6 +12,7 @@ public class Project {
     private int id;
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

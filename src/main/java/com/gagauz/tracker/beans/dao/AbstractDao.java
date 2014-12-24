@@ -5,7 +5,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.ParameterizedType;
 
 public class AbstractDao<Id extends Serializable, Entity> {
 
@@ -14,10 +14,9 @@ public class AbstractDao<Id extends Serializable, Entity> {
 
     protected Class<Entity> entityClass;
 
+    @SuppressWarnings("unchecked")
     public AbstractDao() {
-        for (TypeVariable<?> typeVar : this.getClass().getTypeParameters()) {
-            System.out.println(typeVar);
-        }
+        entityClass = (Class<Entity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
     protected Session getSession() {
@@ -29,8 +28,8 @@ public class AbstractDao<Id extends Serializable, Entity> {
         return (Entity) getSession().get(entityClass, id);
     }
 
-    public void save(Entity id) {
-        getSession().saveOrUpdate(entityClass);
+    public void save(Entity entity) {
+        getSession().saveOrUpdate(entity);
     }
 
 }

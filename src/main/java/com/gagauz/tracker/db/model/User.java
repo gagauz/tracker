@@ -1,9 +1,6 @@
 package com.gagauz.tracker.db.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import java.util.EnumSet;
 
@@ -17,6 +14,7 @@ public class User {
     private String password;
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

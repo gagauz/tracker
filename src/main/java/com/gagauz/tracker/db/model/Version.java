@@ -10,6 +10,7 @@ public class Version {
     private String version;
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

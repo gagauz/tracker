@@ -142,6 +142,17 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<classpathExcludes>
+						<exclude>jtidy:jtidy</exclude>
+					</classpathExcludes>
+				</configuration>
+			</plugin>
+
 			<!-- Run the application using "mvn jetty:run" -->
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>

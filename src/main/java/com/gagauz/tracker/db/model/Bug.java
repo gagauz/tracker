@@ -13,6 +13,7 @@ public class Bug extends CommitOwner {
     private User owner;
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }

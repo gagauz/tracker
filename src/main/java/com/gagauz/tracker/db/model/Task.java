@@ -13,6 +13,7 @@ public class Task extends CommitOwner {
     private User owner;
 
     @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
