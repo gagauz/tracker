@@ -1,6 +1,11 @@
 package com.gagauz.tracker.db.model;
 
+import com.gagauz.tracker.db.base.CollectionType;
 import com.gagauz.tracker.db.base.CommitOwner;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 
@@ -10,6 +15,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "task")
+@TypeDefs({
+        @TypeDef(name = "listOf.Attachment",
+                typeClass = CollectionType.class,
+                parameters = @Parameter(name = CollectionType.ELEMENT_CLASS, value = "com.gagauz.tracker.db.model.Attachment")
+        )
+})
 public class Task extends CommitOwner {
 
     @Embeddable
@@ -72,6 +83,8 @@ public class Task extends CommitOwner {
     private List<Bug> bugs;
     private String name;
     private String description;
+
+    private List<Attachment> attachments;
 
     @EmbeddedId
     public TaskId getId() {
@@ -178,6 +191,16 @@ public class Task extends CommitOwner {
 
     public void setBugs(List<Bug> bugs) {
         this.bugs = bugs;
+    }
+
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "listOf.Attachment")
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 
 }
