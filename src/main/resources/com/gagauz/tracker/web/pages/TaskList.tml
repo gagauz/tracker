@@ -3,7 +3,7 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>All tasks of ${version.project.name} ${version.version}</p>
+    <p>Release scope ${version.project.name} ${version.version}</p>
 
 
     <t:grid source="tasks" row="task" add="edit">

@@ -30,6 +30,7 @@ body {
 	width:100%;
 	position:fixed;
 	bottom:0;
+	background: #757575 url(images/img08.gif) repeat-x 0 bottom;
 }
 
 form {
@@ -345,11 +346,6 @@ div.calendar #today {
 }
 
 /* Footer */
-
-div.footer {
-    padding: 10px;
-    background: #757575 url(images/img08.gif) repeat-x;
-}
 
 div.footer p {
     margin-bottom: 1em;
