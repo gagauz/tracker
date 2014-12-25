@@ -1,0 +1,35 @@
+<html t:type="layout" title="task header info"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <p>${taskheader.name}</p>
+    <p>${taskheader.description}</p>
+    <p>Creator: ${taskheader.creator.name}</p>
+    <p>Created: ${taskheader.created}</p>
+    <p>Versions changes</p>
+    <t:loop source="taskheader.tasks" value="task">
+    	<div>
+    		<b>${task.name}</b>
+    		<div>
+    			${task.description}
+    		</div>
+    		<div>
+    			${task.version.version}
+    		</div>
+    	</div>
+    </t:loop>
+    
+    
+    <p:sidebar>
+        <p>
+            
+        </p>
+
+
+        <p>
+            
+        </p>
+    </p:sidebar>
+
+</html>

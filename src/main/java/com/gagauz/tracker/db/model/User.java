@@ -1,16 +1,19 @@
 package com.gagauz.tracker.db.model;
 
+import com.gagauz.tracker.db.base.Identifiable;
+
 import javax.persistence.*;
 
-import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Identifiable {
     private int id;
     private String name;
     private String email;
-    private EnumSet<Role> roles = EnumSet.noneOf(Role.class);
+    private Set<Role> roles = new HashSet<Role>();
     private String password;
 
     @Id
@@ -41,12 +44,13 @@ public class User {
         this.email = email;
     }
 
-    @Column(nullable = false)
-    public EnumSet<Role> getRoles() {
+    @JoinColumn(nullable = false)
+    @ManyToMany
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(EnumSet<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

@@ -1,0 +1,34 @@
+<html t:type="layout" title="tracker Index"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <p>${message:greeting}</p>
+
+
+	<t:if test="editUser">
+	<p>User</p>
+	<div>
+		<t:beaneditform t:id="form" object="editUser"></t:beaneditform>
+	</div>
+	<br/>
+	</t:if>
+
+    <t:grid source="users" row="user" add="edit">
+    	<p:editCell>
+    	<t:eventlink event="edit" context="user.id">Edit</t:eventlink>
+    	</p:editCell>
+    </t:grid>
+
+    <p:sidebar>
+        <p>
+            
+        </p>
+
+
+        <p>
+            
+        </p>
+    </p:sidebar>
+
+</html>

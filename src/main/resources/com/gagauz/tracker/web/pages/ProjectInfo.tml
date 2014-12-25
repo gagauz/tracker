@@ -1,0 +1,34 @@
+<html t:type="layout" title="tracker Index"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <p>Project versions</p>
+
+    <t:grid source="versions" row="version" add="tasks">
+    	<p:tasksCell>
+    		<t:pagelink page="tasklist" context="version">Tasks</t:pagelink>
+    	</p:tasksCell>
+    </t:grid>
+    
+    <p>Project tasks</p>
+
+    <t:grid source="taskHeaders" row="taskHeader" add="tasks">
+    	<p:tasksCell>
+    		<t:pagelink page="taskheaderinfo" context="taskHeader">Info</t:pagelink>
+    	</p:tasksCell>
+    </t:grid>
+    
+    
+    <p:sidebar>
+        <p>
+            
+        </p>
+
+
+        <p>
+            
+        </p>
+    </p:sidebar>
+
+</html>

@@ -8,8 +8,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "bug")
-public class Bug extends CommitOwner implements Identifiable {
+@Table(name = "sub_task")
+public class SubTask extends CommitOwner implements Identifiable {
     private int id;
     private Task task;
     private User creator;
@@ -52,7 +52,7 @@ public class Bug extends CommitOwner implements Identifiable {
         this.creator = creator;
     }
 
-    @JoinColumn
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getOwner() {
         return owner;
@@ -60,6 +60,24 @@ public class Bug extends CommitOwner implements Identifiable {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    @Column
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    @Column(columnDefinition = "text")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Column(updatable = false)
@@ -82,21 +100,4 @@ public class Bug extends CommitOwner implements Identifiable {
         this.updated = updated;
     }
 
-    @Column(nullable = false)
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    @Column
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

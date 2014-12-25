@@ -1,0 +1,27 @@
+<html t:type="layout" title="tracker Index"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <p>${task.name}</p>
+    <p>Task: ${task.name}</p>
+    <p>Owner: ${task.owner.name}</p>
+    <p>Creator: ${task.creator.name}</p>
+    <p>Description</p>
+    <p>${task.description}</p>
+
+	
+    
+    
+    <p:sidebar>
+        <p>
+            
+        </p>
+
+
+        <p>
+            
+        </p>
+    </p:sidebar>
+
+</html>

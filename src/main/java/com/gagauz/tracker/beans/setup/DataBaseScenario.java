@@ -27,6 +27,7 @@ public abstract class DataBaseScenario {
         }
 
         try {
+            System.out.println("* Execute scenario " + getClass().getSimpleName());
             execute();
         } finally {
             executedScenarios.add(this.getClass());

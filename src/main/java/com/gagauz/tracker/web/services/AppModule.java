@@ -1,7 +1,12 @@
 package com.gagauz.tracker.web.services;
 
+import com.gagauz.tracker.beans.dao.*;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
+import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.db.model.Task.TaskId;
+import com.gagauz.tracker.db.model.Version;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -9,11 +14,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.ServiceId;
 import org.apache.tapestry5.ioc.annotations.Startup;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.RequestFilter;
-import org.apache.tapestry5.services.RequestHandler;
-import org.apache.tapestry5.services.Response;
+import org.apache.tapestry5.services.*;
 import org.hibernate.*;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -134,6 +137,10 @@ public class AppModule {
                             Session session = sessionHolder.getSession();
                             if (null != session && session.isOpen()) {
 
+                                if (session.isDirty()) {
+                                    session.flush();
+                                }
+
                                 Transaction transaction = null;
                                 try {
                                     transaction = session.getTransaction();
@@ -183,13 +190,119 @@ public class AppModule {
      */
     public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
                                          @InjectService("TimingFilter") RequestFilter timing,
-                                         @InjectService("HibernateFilter") RequestFilter hibernate)
-    {
+                                         @InjectService("HibernateFilter") RequestFilter hibernate) {
         // Each contribution to an ordered configuration has a name, When necessary, you may
         // set constraints to precisely control the invocation order of the contributed filter
         // within the pipeline.
 
         configuration.add("Hibernate", hibernate, "before:*");
         configuration.add("Timing", timing);
+    }
+
+    public static void contributeValueEncoderSource(MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
+                                                    final UserDao userDao,
+                                                    final ProjectDao projectDao,
+                                                    final VersionDao versionDao,
+                                                    final TaskHeaderDao taskHeaderDao,
+                                                    final TaskDao taskDao,
+                                                    final BugDao bugDao) {
+        configuration.add(User.class, new ValueEncoderFactory<User>() {
+
+            public ValueEncoder<User> create(Class<User> arg0) {
+                return new ValueEncoder<User>() {
+
+                    public String toClient(User arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId());
+                    }
+
+                    public User toValue(String arg0) {
+                        return null == arg0 ? null : userDao.findById(Integer.parseInt(arg0));
+                    }
+                };
+            }
+        });
+        configuration.add(Project.class, new ValueEncoderFactory<Project>() {
+
+            public ValueEncoder<Project> create(Class<Project> arg0) {
+                return new ValueEncoder<Project>() {
+
+                    public String toClient(Project arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId());
+                    }
+
+                    public Project toValue(String arg0) {
+                        return null == arg0 ? null : projectDao.findById(Integer.parseInt(arg0));
+                    }
+                };
+            }
+        });
+
+        configuration.add(Version.class, new ValueEncoderFactory<Version>() {
+
+            public ValueEncoder<Version> create(Class<Version> arg0) {
+                return new ValueEncoder<Version>() {
+
+                    public String toClient(Version arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId());
+                    }
+
+                    public Version toValue(String arg0) {
+                        return null == arg0 ? null : versionDao.findById(Integer.parseInt(arg0));
+                    }
+                };
+            }
+        });
+
+        configuration.add(Task.class, new ValueEncoderFactory<Task>() {
+
+            public ValueEncoder<Task> create(Class<Task> arg0) {
+                return new ValueEncoder<Task>() {
+
+                    public String toClient(Task arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId().getTaskHeaderId() + "_" + arg0.getId().getVersionId());
+                    }
+
+                    public Task toValue(String arg0) {
+                        if (null == arg0) {
+                            return null;
+                        }
+                        String[] ids = arg0.split("_");
+                        return taskDao.findById(new TaskId(Integer.parseInt(ids[0]), Integer.parseInt(ids[1])));
+                    }
+                };
+            }
+        });
+
+        configuration.add(TaskHeader.class, new ValueEncoderFactory<TaskHeader>() {
+
+            public ValueEncoder<TaskHeader> create(Class<TaskHeader> arg0) {
+                return new ValueEncoder<TaskHeader>() {
+
+                    public String toClient(TaskHeader arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId());
+                    }
+
+                    public TaskHeader toValue(String arg0) {
+                        return null == arg0 ? null : taskHeaderDao.findById(Integer.parseInt(arg0));
+                    }
+                };
+            }
+        });
+
+        configuration.add(Bug.class, new ValueEncoderFactory<Bug>() {
+
+            public ValueEncoder<Bug> create(Class<Bug> arg0) {
+                return new ValueEncoder<Bug>() {
+
+                    public String toClient(Bug arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId());
+                    }
+
+                    public Bug toValue(String arg0) {
+                        return null == arg0 ? null : bugDao.findById(Integer.parseInt(arg0));
+                    }
+                };
+            }
+        });
     }
 }

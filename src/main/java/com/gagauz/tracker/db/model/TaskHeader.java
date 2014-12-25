@@ -1,22 +1,22 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.CommitOwner;
 import com.gagauz.tracker.db.base.Identifiable;
 
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "bug")
-public class Bug extends CommitOwner implements Identifiable {
+@Table(name = "task_header")
+public class TaskHeader implements Identifiable {
     private int id;
-    private Task task;
+    private Project project;
     private User creator;
-    private User owner;
     private Date created = new Date();
     private Date updated = new Date();
-    private String summary;
+    private List<Task> tasks;
+    private String name;
     private String description;
 
     @Id
@@ -29,17 +29,14 @@ public class Bug extends CommitOwner implements Identifiable {
         this.id = id;
     }
 
-    @JoinColumns({
-            @JoinColumn(name = "taskHeader_id", updatable = false, referencedColumnName = "taskHeader_id"),
-            @JoinColumn(name = "version_id", updatable = false, referencedColumnName = "version_id")
-    })
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    public Task getTask() {
-        return task;
+    public Project getProject() {
+        return project;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @JoinColumn(nullable = false)
@@ -50,16 +47,6 @@ public class Bug extends CommitOwner implements Identifiable {
 
     public void setCreator(User creator) {
         this.creator = creator;
-    }
-
-    @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
     }
 
     @Column(updatable = false)
@@ -82,13 +69,22 @@ public class Bug extends CommitOwner implements Identifiable {
         this.updated = updated;
     }
 
-    @Column(nullable = false)
-    public String getSummary() {
-        return summary;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskHeader")
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Column
@@ -99,4 +95,5 @@ public class Bug extends CommitOwner implements Identifiable {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

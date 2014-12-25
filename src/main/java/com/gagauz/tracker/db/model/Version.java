@@ -1,13 +1,21 @@
 package com.gagauz.tracker.db.model;
 
+import com.gagauz.tracker.db.base.Identifiable;
+
 import javax.persistence.*;
+
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "version")
-public class Version {
+public class Version implements Identifiable {
     private int id;
     private Project project;
+    private Date created = new Date();
+    private Date updated = new Date();
     private String version;
+    private List<Task> tasks;
 
     @Id
     @GeneratedValue
@@ -19,7 +27,7 @@ public class Version {
         this.id = id;
     }
 
-    @JoinColumn
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public Project getProject() {
         return project;
@@ -35,5 +43,34 @@ public class Version {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 }

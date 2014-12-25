@@ -1,11 +1,14 @@
 package com.gagauz.tracker.beans.dao;
 
+import com.gagauz.tracker.db.utils.Param;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public class AbstractDao<Id extends Serializable, Entity> {
 
@@ -26,6 +29,20 @@ public class AbstractDao<Id extends Serializable, Entity> {
     @SuppressWarnings("unchecked")
     public Entity findById(Id id) {
         return (Entity) getSession().get(entityClass, id);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Entity> findByQuery(String hql, Param... params) {
+        Query query = getSession().createQuery(hql);
+        for (Param param : params) {
+            param.update(query);
+        }
+        return query.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Entity> findAll() {
+        return getSession().createCriteria(entityClass).list();
     }
 
     public void save(Entity entity) {
