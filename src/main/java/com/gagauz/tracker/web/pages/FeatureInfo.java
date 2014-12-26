@@ -2,14 +2,14 @@ package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tracker.beans.dao.BugDao;
 import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.db.model.TaskHeader;
+import com.gagauz.tracker.db.model.Feature;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-public class TaskHeaderInfo {
+public class FeatureInfo {
 
     @Property(write = false)
-    private TaskHeader taskHeader;
+    private Feature feature;
 
     @Property
     private Task task;
@@ -17,19 +17,19 @@ public class TaskHeaderInfo {
     @Inject
     private BugDao bugDao;
 
-    Object onActivate(TaskHeader taskHeader) {
-        if (null == taskHeader) {
+    Object onActivate(Feature feature) {
+        if (null == feature) {
             return ProjectList.class;
         }
-        this.taskHeader = taskHeader;
+        this.feature = feature;
 
-        System.out.println(taskHeader.getTasks().size());
+        System.out.println(feature.getTasks().size());
 
         return null;
     }
 
     Object onPassivate() {
-        return taskHeader;
+        return feature;
     }
 
 }

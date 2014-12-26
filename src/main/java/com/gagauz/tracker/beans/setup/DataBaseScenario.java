@@ -1,11 +1,14 @@
 package com.gagauz.tracker.beans.setup;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public abstract class DataBaseScenario {
 
     private static final Set<Class> executedScenarios = new HashSet<Class>();
+
+    protected Random rand = new Random(System.currentTimeMillis());
 
     protected abstract void execute();
 

@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "task_header")
-public class TaskHeader implements Identifiable {
+@Table(name = "feature")
+public class Feature implements Identifiable {
     private int id;
     private Project project;
     private User creator;
@@ -19,6 +19,7 @@ public class TaskHeader implements Identifiable {
     private String name;
     private String description;
 
+    @Override
     @Id
     @GeneratedValue
     public int getId() {
@@ -69,7 +70,7 @@ public class TaskHeader implements Identifiable {
         this.updated = updated;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskHeader")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feature")
     public List<Task> getTasks() {
         return tasks;
     }

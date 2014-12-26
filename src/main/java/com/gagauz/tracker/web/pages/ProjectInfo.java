@@ -1,10 +1,8 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.TaskHeaderDao;
+import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.TaskHeader;
-import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -19,10 +17,16 @@ public class ProjectInfo {
     private Version version;
 
     @Property
-    private TaskHeader taskHeader;
+    private Task task;
+
+    @Property
+    private SubTask subtask;
+
+    @Property
+    private Feature feature;
 
     @Inject
-    private TaskHeaderDao taskHeaderDao;
+    private FeatureDao featureDao;
 
     @Inject
     private VersionDao versionDao;
@@ -39,8 +43,8 @@ public class ProjectInfo {
         return project;
     }
 
-    public List<TaskHeader> getTaskHeaders() {
-        return taskHeaderDao.findByProject(project);
+    public List<Feature> getUserStories() {
+        return featureDao.findByProject(project);
     }
 
     public List<Version> getVersions() {

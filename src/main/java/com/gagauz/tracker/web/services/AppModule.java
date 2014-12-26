@@ -83,6 +83,7 @@ public class AppModule {
     @ServiceId("TimingFilter")
     public RequestFilter buildTimingFilter(final Logger log) {
         return new RequestFilter() {
+            @Override
             public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
                 long startTime = System.currentTimeMillis();
 
@@ -104,6 +105,7 @@ public class AppModule {
     @ServiceId("HibernateFilter")
     public RequestFilter buildHibernateFilter(final Logger log, final SessionFactory sessionFactory) {
         return new RequestFilter() {
+            @Override
             public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
                 boolean process = false;
                 boolean participate = false;
@@ -203,18 +205,21 @@ public class AppModule {
                                                     final UserDao userDao,
                                                     final ProjectDao projectDao,
                                                     final VersionDao versionDao,
-                                                    final TaskHeaderDao taskHeaderDao,
+                                                    final FeatureDao featureDao,
                                                     final TaskDao taskDao,
                                                     final BugDao bugDao) {
         configuration.add(User.class, new ValueEncoderFactory<User>() {
 
+            @Override
             public ValueEncoder<User> create(Class<User> arg0) {
                 return new ValueEncoder<User>() {
 
+                    @Override
                     public String toClient(User arg0) {
                         return null == arg0 ? null : String.valueOf(arg0.getId());
                     }
 
+                    @Override
                     public User toValue(String arg0) {
                         return null == arg0 ? null : userDao.findById(Integer.parseInt(arg0));
                     }
@@ -223,13 +228,16 @@ public class AppModule {
         });
         configuration.add(Project.class, new ValueEncoderFactory<Project>() {
 
+            @Override
             public ValueEncoder<Project> create(Class<Project> arg0) {
                 return new ValueEncoder<Project>() {
 
+                    @Override
                     public String toClient(Project arg0) {
                         return null == arg0 ? null : String.valueOf(arg0.getId());
                     }
 
+                    @Override
                     public Project toValue(String arg0) {
                         return null == arg0 ? null : projectDao.findById(Integer.parseInt(arg0));
                     }
@@ -239,13 +247,16 @@ public class AppModule {
 
         configuration.add(Version.class, new ValueEncoderFactory<Version>() {
 
+            @Override
             public ValueEncoder<Version> create(Class<Version> arg0) {
                 return new ValueEncoder<Version>() {
 
+                    @Override
                     public String toClient(Version arg0) {
                         return null == arg0 ? null : String.valueOf(arg0.getId());
                     }
 
+                    @Override
                     public Version toValue(String arg0) {
                         return null == arg0 ? null : versionDao.findById(Integer.parseInt(arg0));
                     }
@@ -255,13 +266,16 @@ public class AppModule {
 
         configuration.add(Task.class, new ValueEncoderFactory<Task>() {
 
+            @Override
             public ValueEncoder<Task> create(Class<Task> arg0) {
                 return new ValueEncoder<Task>() {
 
+                    @Override
                     public String toClient(Task arg0) {
-                        return null == arg0 ? null : String.valueOf(arg0.getId().getTaskHeaderId() + "_" + arg0.getId().getVersionId());
+                        return null == arg0 ? null : String.valueOf(arg0.getId().getFeatureId() + "_" + arg0.getId().getVersionId());
                     }
 
+                    @Override
                     public Task toValue(String arg0) {
                         if (null == arg0) {
                             return null;
@@ -273,17 +287,20 @@ public class AppModule {
             }
         });
 
-        configuration.add(TaskHeader.class, new ValueEncoderFactory<TaskHeader>() {
+        configuration.add(Feature.class, new ValueEncoderFactory<Feature>() {
 
-            public ValueEncoder<TaskHeader> create(Class<TaskHeader> arg0) {
-                return new ValueEncoder<TaskHeader>() {
+            @Override
+            public ValueEncoder<Feature> create(Class<Feature> arg0) {
+                return new ValueEncoder<Feature>() {
 
-                    public String toClient(TaskHeader arg0) {
+                    @Override
+                    public String toClient(Feature arg0) {
                         return null == arg0 ? null : String.valueOf(arg0.getId());
                     }
 
-                    public TaskHeader toValue(String arg0) {
-                        return null == arg0 ? null : taskHeaderDao.findById(Integer.parseInt(arg0));
+                    @Override
+                    public Feature toValue(String arg0) {
+                        return null == arg0 ? null : featureDao.findById(Integer.parseInt(arg0));
                     }
                 };
             }
@@ -291,13 +308,16 @@ public class AppModule {
 
         configuration.add(Bug.class, new ValueEncoderFactory<Bug>() {
 
+            @Override
             public ValueEncoder<Bug> create(Class<Bug> arg0) {
                 return new ValueEncoder<Bug>() {
 
+                    @Override
                     public String toClient(Bug arg0) {
                         return null == arg0 ? null : String.valueOf(arg0.getId());
                     }
 
+                    @Override
                     public Bug toValue(String arg0) {
                         return null == arg0 ? null : bugDao.findById(Integer.parseInt(arg0));
                     }

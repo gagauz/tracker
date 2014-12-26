@@ -2,7 +2,7 @@ package com.gagauz.tracker.db.model;
 
 public class Attachment {
 
-    private final String value;
+    private String value;
 
     public Attachment(String value) {
         this.value = value;
@@ -11,5 +11,4 @@ public class Attachment {
     public String getValue() {
         return value;
     }
-
 }

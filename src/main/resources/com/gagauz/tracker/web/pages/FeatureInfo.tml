@@ -3,12 +3,12 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>${taskheader.name}</p>
-    <p>${taskheader.description}</p>
-    <p>Creator: ${taskheader.creator.name}</p>
-    <p>Created: ${taskheader.created}</p>
+    <p>${feature.name}</p>
+    <p>${feature.description}</p>
+    <p>Creator: ${feature.creator.name}</p>
+    <p>Created: ${feature.created}</p>
     <p>Versions changes</p>
-    <t:loop source="taskheader.tasks" value="task">
+    <t:loop source="feature.tasks" value="task">
     	<div>
     		<b>${task.name}</b>
     		<div>

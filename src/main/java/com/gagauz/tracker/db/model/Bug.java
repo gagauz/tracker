@@ -19,6 +19,7 @@ public class Bug extends CommitOwner implements Identifiable {
     private String summary;
     private String description;
 
+    @Override
     @Id
     @GeneratedValue
     public int getId() {
@@ -30,7 +31,7 @@ public class Bug extends CommitOwner implements Identifiable {
     }
 
     @JoinColumns({
-            @JoinColumn(name = "taskHeader_id", updatable = false, referencedColumnName = "taskHeader_id"),
+            @JoinColumn(name = "feature_id", updatable = false, referencedColumnName = "feature_id"),
             @JoinColumn(name = "version_id", updatable = false, referencedColumnName = "version_id")
     })
     @ManyToOne(fetch = FetchType.LAZY)

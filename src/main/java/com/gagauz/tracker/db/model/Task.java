@@ -18,7 +18,10 @@ import java.util.List;
 @TypeDefs({
         @TypeDef(name = "listOf.Attachment",
                 typeClass = CollectionType.class,
-                parameters = @Parameter(name = CollectionType.ELEMENT_CLASS, value = "com.gagauz.tracker.db.model.Attachment")
+                parameters = {
+                        @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
+                        @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
+                }
         )
 })
 public class Task extends CommitOwner {
@@ -27,23 +30,23 @@ public class Task extends CommitOwner {
     public static class TaskId implements Serializable {
         private static final long serialVersionUID = 4441697145474451670L;
 
-        private int taskHeaderId;
+        private int featureId;
         private int versionId;
 
-        public TaskId(int taskHeaderId, int versionId) {
-            this.setTaskHeaderId(taskHeaderId);
+        public TaskId(int featureId, int versionId) {
+            this.setFeatureId(featureId);
             this.setVersionId(versionId);
         }
 
         protected TaskId() {
         }
 
-        public int getTaskHeaderId() {
-            return taskHeaderId;
+        public int getFeatureId() {
+            return featureId;
         }
 
-        public void setTaskHeaderId(int taskHeaderId) {
-            this.taskHeaderId = taskHeaderId;
+        public void setFeatureId(int featureId) {
+            this.featureId = featureId;
         }
 
         public int getVersionId() {
@@ -60,20 +63,20 @@ public class Task extends CommitOwner {
                 return false;
             }
             if (obj instanceof TaskId) {
-                return taskHeaderId == ((TaskId) obj).getTaskHeaderId() && versionId == ((TaskId) obj).getVersionId();
+                return featureId == ((TaskId) obj).getFeatureId() && versionId == ((TaskId) obj).getVersionId();
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return taskHeaderId * (taskHeaderId + versionId);
+            return featureId * (featureId + versionId);
         }
 
     }
 
     private TaskId id = new TaskId();
-    private TaskHeader taskHeader;
+    private Feature feature;
     private Version version;
     private User creator;
     private User owner;
@@ -95,15 +98,15 @@ public class Task extends CommitOwner {
         this.id = id;
     }
 
-    @MapsId("taskHeaderId")
+    @MapsId("featureId")
     @JoinColumn(nullable = false, updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    public TaskHeader getTaskHeader() {
-        return taskHeader;
+    public Feature getFeature() {
+        return feature;
     }
 
-    public void setTaskHeader(TaskHeader taskHeader) {
-        this.taskHeader = taskHeader;
+    public void setFeature(Feature feature) {
+        this.feature = feature;
     }
 
     @MapsId("versionId")

@@ -13,9 +13,10 @@ public class User implements Identifiable {
     private int id;
     private String name;
     private String email;
-    private Set<Role> roles = new HashSet<Role>();
+    private Set<RoleGroup> roleGroups = new HashSet<RoleGroup>();
     private String password;
 
+    @Override
     @Id
     @GeneratedValue
     public int getId() {
@@ -44,16 +45,6 @@ public class User implements Identifiable {
         this.email = email;
     }
 
-    @JoinColumn(nullable = false)
-    @ManyToMany
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     @Column
     public String getPassword() {
         return password;
@@ -61,5 +52,15 @@ public class User implements Identifiable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @JoinTable(name = "user_roles")
+    @ManyToMany(fetch = FetchType.LAZY)
+    public Set<RoleGroup> getRoleGroups() {
+        return roleGroups;
+    }
+
+    public void setRoleGroups(Set<RoleGroup> roleGroups) {
+        this.roleGroups = roleGroups;
     }
 }

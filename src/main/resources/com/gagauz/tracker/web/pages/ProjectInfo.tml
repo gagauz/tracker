@@ -12,12 +12,43 @@
     </t:grid>
     
     <p>Project tasks</p>
-
-    <t:grid source="taskHeaders" row="taskHeader" add="tasks">
-    	<p:tasksCell>
-    		<t:pagelink page="taskheaderinfo" context="taskHeader">Info</t:pagelink>
-    	</p:tasksCell>
-    </t:grid>
+	<div style="width:100%;overflow-x:scroll;border:2px solid white;">
+		<div style="width:auto;white-space:nowrap;">
+			<t:loop source="userStories" value="feature">
+				<div style="border:1px solid gray;display:inline-block;width:auto;overflow:hidden;padding:0 5px 0 0;margin-right:5px;">
+					
+					<div style="border:1px solid green;padding:5px;margin:5px 0 5px 5px;">
+						<h2>${feature.name}</h2>
+					</div>
+					
+					<t:loop source="feature.tasks" value="task">
+						<div style="border:0px solid black;overflow:hidden;margin:5px 0 5px 5px;white-space:nowrap;">
+							<h3 style="border:1px solid red;margin:5px 0 5px;padding:5px">${task.name}</h3>
+							
+							<t:loop source="task.subtasks" value="subtask">
+								<div style="border:1px solid black;margin:0 5px 5px 0;display:inline-block;width:130px;white-space:normal;text-align:left;">
+									${subtask.summary}
+									<div>${subtask.description}</div>
+									<div>Assegnee: 
+										<t:if test="subtask.owner">
+											${subtask.owner.name}
+											<p:else>
+											unassigned
+											</p:else>
+										</t:if>
+									</div>
+								</div>
+							</t:loop>
+							
+						</div>
+					</t:loop>
+					
+				</div>
+			</t:loop>
+			<div style="width:100%;clear:both;height:1px;"></div>
+		</div>
+		
+	</div>
     
     
     <p:sidebar>
