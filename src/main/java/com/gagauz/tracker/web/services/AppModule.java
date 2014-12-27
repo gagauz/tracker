@@ -15,6 +15,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.ServiceId;
 import org.apache.tapestry5.ioc.annotations.Startup;
+import org.apache.tapestry5.ioc.services.Coercion;
+import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.services.*;
 import org.hibernate.*;
 import org.hibernate.Session;
@@ -23,6 +25,7 @@ import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.io.IOException;
+import java.util.*;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -350,5 +353,26 @@ public class AppModule {
                 };
             }
         });
+    }
+
+    public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration) {
+        Coercion<List, Set> coercion = new Coercion<List, Set>() {
+
+            @Override
+            public Set coerce(List input) {
+                return new HashSet(input);
+            }
+        };
+
+        Coercion<Collection, EnumSet> coercion1 = new Coercion<Collection, EnumSet>() {
+
+            @Override
+            public EnumSet coerce(Collection input) {
+                return EnumSet.copyOf(input);
+            }
+        };
+
+        configuration.add(new CoercionTuple<List, Set>(List.class, Set.class, coercion));
+        configuration.add(new CoercionTuple<Collection, EnumSet>(Collection.class, EnumSet.class, coercion1));
     }
 }

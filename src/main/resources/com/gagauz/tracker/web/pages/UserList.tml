@@ -10,7 +10,8 @@
 	<div>
 		<t:beaneditform t:id="form" object="editUser" exclude="id" add="roles">
 			<p:roles>
-				<t:tap.MultiSelect model="allRoleGroups" value="editUser.roleGroups" size="4" blankLabel="message:select"/>
+				<t:label for="roles"></t:label>
+				<t:tap.MultiSelect t:id="roles" model="allRoleGroups" value="editUser.roleGroups" size="4" blankLabel="message:select"/>
 			</p:roles>
 		
 		</t:beaneditform>
@@ -33,3 +34,4 @@
     </p:sidebar>
 
 </html>
+

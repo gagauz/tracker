@@ -1,6 +1,5 @@
 package com.gagauz.tapestry.components;
 
-import com.gagauz.tapestry.encoder.CollectionValueEncoder;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.BeforeRenderTemplate;
 import org.apache.tapestry5.annotations.Environmental;
@@ -16,9 +15,8 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentDefaultProvider;
 import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.util.EnumSelectModel;
+import org.apache.tapestry5.services.ValueEncoderSource;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 /**
@@ -26,6 +24,19 @@ import java.util.Collection;
  * @author mg
  */
 public class MultiSelect extends AbstractField {
+
+    private final ValueEncoder<Object> emptyEncoder = new ValueEncoder<Object>() {
+
+        @Override
+        public String toClient(Object value) {
+            return null;
+        }
+
+        @Override
+        public Object toValue(String clientValue) {
+            return null;
+        }
+    };
 
     protected class Renderer extends SelectModelRenderer {
 
@@ -41,6 +52,7 @@ public class MultiSelect extends AbstractField {
 
     @Parameter
     protected ValueEncoder encoder;
+    protected ValueEncoder encoderValue;
 
     @Inject
     private ComponentDefaultProvider defaultProvider;
@@ -70,7 +82,7 @@ public class MultiSelect extends AbstractField {
     protected FieldValidator<Object> validate;
 
     @Parameter(required = true, principal = true, autoconnect = true)
-    protected Collection<?> value;
+    protected Collection value;
 
     @Inject
     private FieldValidationSupport fieldValidationSupport;
@@ -78,14 +90,17 @@ public class MultiSelect extends AbstractField {
     @Mixin
     private RenderDisabled renderDisabled;
 
+    @Inject
+    private ValueEncoderSource valueEncoderSource;
+
     protected boolean isSelected(String clientValue) {
-        return value != null && value.contains(encoder.toValue(clientValue));
+        return value != null && value.contains(getEncoder().toValue(clientValue));
     }
 
     @Override
     protected void processSubmission(String controlName) {
         String[] params = request.getParameters(controlName);
-        Collection<?> submittedValue = toValue(params);
+        Collection submittedValue = toValue(params);
 
         putPropertyNameIntoBeanValidationContext("value");
 
@@ -105,7 +120,15 @@ public class MultiSelect extends AbstractField {
     }
 
     protected void beginRender(MarkupWriter writer) {
-        writer.element("select", "name", getControlName(), "id", getClientId(), "multiple", true, "size", size);
+
+        int sizeA = size;
+        if (model != null && model.getOptions().size() < size) {
+            sizeA = model.getOptions().size();
+            if (blankOption != BlankOption.NEVER) {
+                sizeA++;
+            }
+        }
+        writer.element("select", "name", getControlName(), "id", getClientId(), "multiple", true, "size", sizeA);
 
         putPropertyNameIntoBeanValidationContext("value");
 
@@ -120,32 +143,31 @@ public class MultiSelect extends AbstractField {
         // Disabled is via a mixin
     }
 
-    protected Collection<?> toValue(String[] values) {
+    protected Collection toValue(String[] values) {
         return F.flow(values).map(new Mapper<String, Object>() {
             @Override
             public Object map(String element) {
-                return encoder.toValue(element);
+                return getEncoder().toValue(element);
             }
+
         }).toList();
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    SelectModel defaultModel() {
-        Class valueType = (Class) ((ParameterizedType) resources.getBoundType("value").getGenericSuperclass()).getActualTypeArguments()[0];
-
-        if (valueType == null) {
-            return null;
+    private ValueEncoder getEncoder() {
+        if (null == encoderValue) {
+            if (null != encoder && emptyEncoder != encoder) {
+                return encoderValue = encoder;
+            }
+            if (null == model || model.getOptions().isEmpty()) {
+                return emptyEncoder;
+            }
+            return encoderValue = valueEncoderSource.getValueEncoder(model.getOptions().get(0).getValue().getClass());
         }
-
-        if (Enum.class.isAssignableFrom(valueType)) {
-            return new EnumSelectModel(valueType, resources.getContainerMessages());
-        }
-
-        return null;
+        return encoderValue;
     }
 
     ValueEncoder defaultEncoder() {
-        return defaultProvider.defaultValueEncoder("value", resources);
+        return emptyEncoder;
     }
 
     Binding defaultValidate() {
@@ -172,7 +194,7 @@ public class MultiSelect extends AbstractField {
             writer.end();
         }
 
-        SelectModelVisitor renderer = new Renderer(writer, encoder);
+        SelectModelVisitor renderer = new Renderer(writer, getEncoder());
 
         model.visit(renderer);
     }
@@ -202,12 +224,8 @@ public class MultiSelect extends AbstractField {
         blankOption = BlankOption.NEVER;
     }
 
-    void setValue(Collection<?> value) {
+    void setValue(Collection value) {
         this.value = value;
-    }
-
-    void setValueEncoder(CollectionValueEncoder<?> encoder) {
-        this.encoder = encoder;
     }
 
     void setValidationTracker(ValidationTracker tracker) {

@@ -1,6 +1,7 @@
 package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.annotations.Property;
@@ -12,6 +13,9 @@ public class ProjectInfo {
 
     @Property
     private Project project;
+
+    @Property
+    private RoleGroup roleGroup;
 
     @Property
     private Version version;
@@ -31,6 +35,9 @@ public class ProjectInfo {
     @Inject
     private VersionDao versionDao;
 
+    @Inject
+    private RoleGroupDao roleGroupDao;
+
     Object onActivate(Project project) {
         if (null == project) {
             return ProjectList.class;
@@ -49,6 +56,10 @@ public class ProjectInfo {
 
     public List<Version> getVersions() {
         return versionDao.findByProject(project);
+    }
+
+    public List<RoleGroup> getRoleGroups() {
+        return roleGroupDao.findByProject(project);
     }
 
 }

@@ -1,0 +1,40 @@
+<html t:type="layout" title="tracker Index"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <p>${message:greeting}</p>
+
+	<t:if test="editRoleGroup">
+	<p>roleGroup</p>
+	<div>
+		<t:beaneditform t:id="form" object="editRoleGroup" exclude="id" add="roles, project">
+			<p:project>
+				<label for="project"></label>
+				<input type="text" readonly="true" value="${projectName}" />
+			</p:project>
+			<p:roles>
+				<t:label for="roles"></t:label>
+				<t:tap.MultiSelect t:id="roles" model="model" value="editRoleGroup.roles" size="10" blankLabel="message:select"/>
+			</p:roles>
+		
+		</t:beaneditform>
+		<t:eventlink event="reset">${message:reset}</t:eventlink>
+	</div>
+	<br/>
+	<p:else>
+	<t:eventlink event="create" context="project">${message:create}</t:eventlink>
+	</p:else>
+	</t:if>
+
+    <t:grid source="roleGroups" row="roleGroup" add="edit">
+    	<p:editCell>
+    	<t:eventlink event="edit" context="[project,roleGroup]">${message:edit}</t:eventlink>
+    	</p:editCell>
+    </t:grid>
+
+    <p:sidebar>
+        <t:UserMenu/>
+    </p:sidebar>
+
+</html>

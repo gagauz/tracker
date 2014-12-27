@@ -3,7 +3,19 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>Project versions</p>
+
+	<h3><t:pagelink page="rolegrouplist" context="[project,null]">Project roles</t:pagelink></h3>
+
+	
+    <t:grid source="roleGroups" row="roleGroup" add="edit">
+    	<p:editCell>
+    		<t:pagelink page="rolegrouplist" context="[project, roleGroup]">edit</t:pagelink>
+    	</p:editCell>
+    </t:grid>
+
+	<hr/>
+
+    <h3>Project versions</h3>
 
     <t:grid source="versions" row="version" add="tasks">
     	<p:tasksCell>
@@ -11,7 +23,8 @@
     	</p:tasksCell>
     </t:grid>
     
-    <p>Project tasks</p>
+    <hr/>
+    <h3>Project tasks</h3>
 	<div style="width:100%;overflow-x:scroll;border:2px solid white;">
 		<div style="width:auto;white-space:nowrap;">
 			<t:loop source="userStories" value="feature">

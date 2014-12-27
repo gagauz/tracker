@@ -1,5 +1,6 @@
 package com.gagauz.tracker.db.model;
 
+import com.gagauz.tracker.db.base.ArrayListType;
 import com.gagauz.tracker.db.base.CollectionType;
 import com.gagauz.tracker.db.base.CommitOwner;
 import org.hibernate.annotations.Parameter;
@@ -17,7 +18,7 @@ import java.util.List;
 @Table(name = "task")
 @TypeDefs({
         @TypeDef(name = "listOf.Attachment",
-                typeClass = CollectionType.class,
+                typeClass = ArrayListType.class,
                 parameters = {
                         @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
                         @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")

@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.CollectionType;
+import com.gagauz.tracker.db.base.EnumSetType;
 import com.gagauz.tracker.db.base.Identifiable;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -9,14 +10,13 @@ import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 
-import java.util.Collection;
 import java.util.EnumSet;
 
 @Entity
 @Table(name = "role_group")
 @TypeDefs({
         @TypeDef(name = "setOf.Enum",
-                typeClass = CollectionType.class,
+                typeClass = EnumSetType.class,
                 parameters = {
                         @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Role"),
                         @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.RoleSerializer")
@@ -65,11 +65,11 @@ public class RoleGroup implements Identifiable {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(EnumSet<Role> roles) {
         if (null != roles && !(roles instanceof EnumSet)) {
             roles = EnumSet.copyOf(roles);
         }
-        this.roles = (EnumSet<Role>) roles;
+        this.roles = roles;
     }
 
     @Override

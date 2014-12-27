@@ -11,9 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Properties;
 
-public class CollectionType implements UserType, ParameterizedType {
+public abstract class CollectionType implements UserType, ParameterizedType {
 
     public static final String CLASS = "class";
     public static final String SERIALIZER = "serializer";
@@ -75,7 +77,7 @@ public class CollectionType implements UserType, ParameterizedType {
             return null;
         }
         String[] strings = string.split(SEPARATOR_STRING);
-        List<Object> result = new ArrayList<Object>(strings.length);
+        Collection<Object> result = createCollection(entityClass, strings.length);
         for (String str : strings) {
             result.add(serializer.unserialize(str));
         }
@@ -123,7 +125,14 @@ public class CollectionType implements UserType, ParameterizedType {
 
     @Override
     public Object deepCopy(Object value) throws HibernateException {
-        return null == value ? null : new ArrayList((Collection) value);
+        if (null != value) {
+            Collection source = (Collection) value;
+            Collection destination = createCollection(entityClass, source.size());
+            destination.addAll(source);
+            return destination;
+        }
+
+        return null;
     }
 
     @Override
@@ -133,7 +142,7 @@ public class CollectionType implements UserType, ParameterizedType {
 
     @Override
     public Serializable disassemble(Object value) throws HibernateException {
-        return (ArrayList) deepCopy(value);
+        return (Serializable) deepCopy(value);
     }
 
     @Override
@@ -145,4 +154,6 @@ public class CollectionType implements UserType, ParameterizedType {
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return deepCopy(original);
     }
+
+    public abstract Collection createCollection(Class class1, int size);
 }
