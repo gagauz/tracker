@@ -5,30 +5,31 @@
 
     <p>${message:greeting}</p>
 
-
 	<t:if test="editUser">
 	<p>User</p>
 	<div>
-		<t:beaneditform t:id="form" object="editUser"></t:beaneditform>
+		<t:beaneditform t:id="form" object="editUser" exclude="id" add="roles">
+			<p:roles>
+				<t:tap.MultiSelect model="allRoleGroups" value="editUser.roleGroups" size="4" blankLabel="message:select"/>
+			</p:roles>
+		
+		</t:beaneditform>
+		<t:eventlink event="reset">${message:reset}</t:eventlink>
 	</div>
 	<br/>
+	<p:else>
+	<t:eventlink event="create">${message:create}</t:eventlink>
+	</p:else>
 	</t:if>
 
     <t:grid source="users" row="user" add="edit">
     	<p:editCell>
-    	<t:eventlink event="edit" context="user.id">Edit</t:eventlink>
+    	<t:eventlink event="edit" context="user.id">${message:edit}</t:eventlink>
     	</p:editCell>
     </t:grid>
 
     <p:sidebar>
-        <p>
-            
-        </p>
-
-
-        <p>
-            
-        </p>
+        <t:UserMenu/>
     </p:sidebar>
 
 </html>

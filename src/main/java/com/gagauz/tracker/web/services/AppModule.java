@@ -7,6 +7,7 @@ import com.gagauz.tracker.db.model.Task.TaskId;
 import com.gagauz.tracker.db.model.Version;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ValueEncoder;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -51,6 +52,7 @@ public class AppModule {
         // (a random hexadecimal number), but may be further overriden by DevelopmentModule or
         // QaModule.
         configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
+        configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
     }
 
     public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
@@ -100,6 +102,10 @@ public class AppModule {
                 }
             }
         };
+    }
+
+    public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
+        configuration.add(new LibraryMapping("tap", "com.gagauz.tapestry"));
     }
 
     @ServiceId("HibernateFilter")
@@ -207,6 +213,7 @@ public class AppModule {
                                                     final VersionDao versionDao,
                                                     final FeatureDao featureDao,
                                                     final TaskDao taskDao,
+                                                    final RoleGroupDao roleGroupDao,
                                                     final BugDao bugDao) {
         configuration.add(User.class, new ValueEncoderFactory<User>() {
 
@@ -320,6 +327,25 @@ public class AppModule {
                     @Override
                     public Bug toValue(String arg0) {
                         return null == arg0 ? null : bugDao.findById(Integer.parseInt(arg0));
+                    }
+                };
+            }
+        });
+
+        configuration.add(RoleGroup.class, new ValueEncoderFactory<RoleGroup>() {
+
+            @Override
+            public ValueEncoder<RoleGroup> create(Class<RoleGroup> arg0) {
+                return new ValueEncoder<RoleGroup>() {
+
+                    @Override
+                    public String toClient(RoleGroup arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId());
+                    }
+
+                    @Override
+                    public RoleGroup toValue(String arg0) {
+                        return null == arg0 ? null : roleGroupDao.findById(Integer.parseInt(arg0));
                     }
                 };
             }

@@ -11,6 +11,7 @@ public class Project implements Identifiable {
     private int id;
     private String name;
 
+    @Override
     @Id
     @GeneratedValue
     public int getId() {
@@ -30,4 +31,13 @@ public class Project implements Identifiable {
         this.name = name;
     }
 
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (null != obj && obj.hashCode() == hashCode());
+    }
 }

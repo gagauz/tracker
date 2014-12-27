@@ -8,8 +8,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "version")
+@Table(name = "version", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"project_id", "version"})
+})
 public class Version implements Identifiable {
+
     private int id;
     private Project project;
     private Date created = new Date();
@@ -17,6 +20,7 @@ public class Version implements Identifiable {
     private String version;
     private List<Task> tasks;
 
+    @Override
     @Id
     @GeneratedValue
     public int getId() {

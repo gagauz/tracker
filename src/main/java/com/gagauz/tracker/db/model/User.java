@@ -4,8 +4,8 @@ import com.gagauz.tracker.db.base.Identifiable;
 
 import javax.persistence.*;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -13,7 +13,7 @@ public class User implements Identifiable {
     private int id;
     private String name;
     private String email;
-    private Set<RoleGroup> roleGroups = new HashSet<RoleGroup>();
+    private Collection<RoleGroup> roleGroups = new HashSet<RoleGroup>();
     private String password;
 
     @Override
@@ -56,11 +56,11 @@ public class User implements Identifiable {
 
     @JoinTable(name = "user_roles")
     @ManyToMany(fetch = FetchType.LAZY)
-    public Set<RoleGroup> getRoleGroups() {
+    public Collection<RoleGroup> getRoleGroups() {
         return roleGroups;
     }
 
-    public void setRoleGroups(Set<RoleGroup> roleGroups) {
+    public void setRoleGroups(Collection<RoleGroup> roleGroups) {
         this.roleGroups = roleGroups;
     }
 }

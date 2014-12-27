@@ -9,6 +9,7 @@ import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 
+import java.util.Collection;
 import java.util.EnumSet;
 
 @Entity
@@ -39,7 +40,7 @@ public class RoleGroup implements Identifiable {
         this.id = id;
     }
 
-    @Column
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -64,8 +65,21 @@ public class RoleGroup implements Identifiable {
         return roles;
     }
 
-    public void setRoles(EnumSet<Role> roles) {
-        this.roles = roles;
+    public void setRoles(Collection<Role> roles) {
+        if (null != roles && !(roles instanceof EnumSet)) {
+            roles = EnumSet.copyOf(roles);
+        }
+        this.roles = (EnumSet<Role>) roles;
+    }
+
+    @Override
+    public int hashCode() {
+        return (null == project ? 0 : project.getId()) + name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
 }
