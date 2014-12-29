@@ -25,7 +25,7 @@ public class TaskInfo {
 
     Object onActivate(Task task) {
         if (null == task) {
-            return ProjectList.class;
+            return Index.class;
         }
         this.task = task;
         return null;

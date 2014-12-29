@@ -6,11 +6,11 @@
     <p>${message:greeting}</p>
 
 	<t:if test="editRoleGroup">
-	<p>roleGroup</p>
+	<h2>Roles Group</h2>
 	<div>
 		<t:beaneditform t:id="form" object="editRoleGroup" exclude="id" add="roles, project">
 			<p:project>
-				<label for="project"></label>
+				<label for="project">${message:project}</label>
 				<input type="text" readonly="true" value="${projectName}" />
 			</p:project>
 			<p:roles>
@@ -23,7 +23,7 @@
 	</div>
 	<br/>
 	<p:else>
-	<t:eventlink event="create" context="project">${message:create}</t:eventlink>
+	<t:eventlink event="create" context="[project]">${message:create}</t:eventlink>
 	</p:else>
 	</t:if>
 

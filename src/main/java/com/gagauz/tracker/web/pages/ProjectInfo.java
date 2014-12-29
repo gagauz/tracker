@@ -40,7 +40,7 @@ public class ProjectInfo {
 
     Object onActivate(Project project) {
         if (null == project) {
-            return ProjectList.class;
+            return Index.class;
         }
         this.project = project;
         return null;

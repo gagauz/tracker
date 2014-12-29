@@ -19,7 +19,7 @@ public class FeatureInfo {
 
     Object onActivate(Feature feature) {
         if (null == feature) {
-            return ProjectList.class;
+            return Index.class;
         }
         this.feature = feature;
 

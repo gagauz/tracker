@@ -21,7 +21,7 @@ public class TaskList {
 
     Object onActivate(Version version) {
         if (null == version) {
-            return ProjectList.class;
+            return Index.class;
         }
 
         this.version = version;

@@ -1,11 +1,24 @@
-<html t:type="layout" title="tracker Index"
+<html t:type="layout" title="${project.name}"
       t:sidebarTitle="Framework Version"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-
+	
 	<h3><t:pagelink page="rolegrouplist" context="[project,null]">Project roles</t:pagelink></h3>
-
+	<h4>Global</h4>
+	<t:grid source="roleGroups" row="roleGroup" add="edit">
+    	<p:editCell>
+    		<t:pagelink page="rolegrouplist" context="[project, roleGroup]">edit</t:pagelink>
+    	</p:editCell>
+    </t:grid>
+	
+	<h4>This project only</h4>
+	<t:grid source="roleGroups" row="roleGroup" add="edit">
+    	<p:editCell>
+    		<t:pagelink page="rolegrouplist" context="[project, roleGroup]">edit</t:pagelink>
+    	</p:editCell>
+    </t:grid>
+	
 	
     <t:grid source="roleGroups" row="roleGroup" add="edit">
     	<p:editCell>
