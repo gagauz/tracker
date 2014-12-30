@@ -19,6 +19,8 @@ public class Version implements Identifiable {
     private Date updated = new Date();
     private String version;
     private List<Task> tasks;
+    private Date releaseDate = new Date();
+    private boolean released = false;
 
     @Override
     @Id
@@ -77,4 +79,24 @@ public class Version implements Identifiable {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+
+    @Column
+    @Temporal(TemporalType.DATE)
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    @Column
+    public boolean isReleased() {
+        return released;
+    }
+
+    public void setReleased(boolean released) {
+        this.released = released;
+    }
+
 }
