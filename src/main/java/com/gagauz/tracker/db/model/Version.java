@@ -18,7 +18,7 @@ public class Version implements Identifiable {
     private Date created = new Date();
     private Date updated = new Date();
     private String version;
-    private List<Task> tasks;
+    private List<FeatureVersion> tasks;
     private Date releaseDate = new Date();
     private boolean released = false;
 
@@ -52,11 +52,11 @@ public class Version implements Identifiable {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
-    public List<Task> getTasks() {
+    public List<FeatureVersion> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<FeatureVersion> tasks) {
         this.tasks = tasks;
     }
 

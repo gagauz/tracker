@@ -8,7 +8,7 @@
 
     <t:grid source="tasks" row="task" add="edit">
     	<p:editCell>
-    		<t:pagelink page="taskinfo" context="task">View</t:pagelink>
+    		<t:pagelink page="FeatureVersionInfo" context="task">View</t:pagelink>
     	</p:editCell>
     </t:grid>
     

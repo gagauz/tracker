@@ -13,14 +13,14 @@
     <p>Subtasks</p>
     <t:grid source="task.subtasks" row="subtask" add="edit">
     	<p:editCell>
-    		<t:pagelink page="taskinfo" context="subtask">View</t:pagelink>
+    		<t:pagelink page="FeatureVersionInfo" context="subtask">View</t:pagelink>
     	</p:editCell>
     </t:grid>
     
     <p>Bugs</p>
     <t:grid source="task.bugs" row="bug" add="edit">
     	<p:editCell>
-    		<t:pagelink page="taskinfo" context="bug">View</t:pagelink>
+    		<t:pagelink page="FeatureVersionInfo" context="bug">View</t:pagelink>
     	</p:editCell>
     </t:grid>
     

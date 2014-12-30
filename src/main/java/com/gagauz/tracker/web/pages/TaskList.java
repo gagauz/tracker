@@ -1,7 +1,7 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.TaskDao;
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Version;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -11,13 +11,13 @@ import java.util.List;
 public class TaskList {
 
     @Property
-    private Task task;
+    private FeatureVersion task;
 
     @Property(write = false)
     private Version version;
 
     @Inject
-    private TaskDao taskDao;
+    private FeatureVersionDao taskDao;
 
     Object onActivate(Version version) {
         if (null == version) {
@@ -29,7 +29,7 @@ public class TaskList {
         return null;
     }
 
-    public List<Task> getTasks() {
+    public List<FeatureVersion> getTasks() {
         return taskDao.findByVersion(version);
     }
 

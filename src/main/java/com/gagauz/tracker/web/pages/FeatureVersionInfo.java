@@ -2,20 +2,20 @@ package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tracker.beans.dao.BugDao;
 import com.gagauz.tracker.db.model.Bug;
-import com.gagauz.tracker.db.model.SubTask;
+import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Task;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
 
-public class TaskInfo {
+public class FeatureVersionInfo {
 
     @Property(write = false)
-    private Task task;
+    private FeatureVersion featureVersion;
 
     @Property
-    private SubTask subTask;
+    private Task subTask;
 
     @Property
     private Bug bug;
@@ -23,20 +23,20 @@ public class TaskInfo {
     @Inject
     private BugDao bugDao;
 
-    Object onActivate(Task task) {
-        if (null == task) {
+    Object onActivate(FeatureVersion featureVersion) {
+        if (null == featureVersion) {
             return Index.class;
         }
-        this.task = task;
+        this.featureVersion = featureVersion;
         return null;
     }
 
     Object onPassivate() {
-        return task;
+        return featureVersion;
     }
 
     public List<Bug> getBugs() {
-        return bugDao.findByTask(task);
+        return bugDao.findByFeatureVersion(featureVersion);
     }
 
 }

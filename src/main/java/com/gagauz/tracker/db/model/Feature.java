@@ -15,7 +15,7 @@ public class Feature implements Identifiable {
     private User creator;
     private Date created = new Date();
     private Date updated = new Date();
-    private List<Task> tasks;
+    private List<FeatureVersion> tasks;
     private String name;
     private String description;
 
@@ -71,11 +71,11 @@ public class Feature implements Identifiable {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "feature")
-    public List<Task> getTasks() {
+    public List<FeatureVersion> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<FeatureVersion> tasks) {
         this.tasks = tasks;
     }
 

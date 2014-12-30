@@ -21,10 +21,10 @@ public class ProjectInfo {
     private Version version;
 
     @Property
-    private Task task;
+    private FeatureVersion task;
 
     @Property
-    private SubTask subtask;
+    private Task subtask;
 
     @Property
     private Feature feature;

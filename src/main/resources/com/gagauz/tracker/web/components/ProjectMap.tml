@@ -1,5 +1,6 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 	<style>
+		.left {float:left}
 		.project-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
 		.project-map-owerflow {display:inline-block;position:absolute1;}
 		.project-map .feature-col {background-color:#990000;color:white;border:1px solid #ccaaaa;}
@@ -7,10 +8,13 @@
 		.project-map .version-col.col, .empty-col.col {width:100px;}
 		.project-map .task-col {background-color:#ffffcc;border:1px solid #ccccaa;}
 		.project-map .task-col-div {width:250px}
-		.project-map .task-col div{margin-bottom:5px;}
+		.project-map .task-col div{margin-bottom:5px;overflow:hidden;}
 		.project-map .task-col .owner {color:#660000}
 		.project-map .task-col .description {}
-		.project-map .subtask {border:1px solid	gray;background-color:#cccccc;padding:2px 3px;float:left;margin:0 1px 1px 0;font-size:90%;}
+		.project-map .tasks a {border:1px solid	gray;background-color:#dddddd;padding:2px 3px;float:left;margin:0 1px 1px 0;font-size:90%;}
+		.project-map .bugs a {border:1px solid red;background-color:#ffdddd;padding:2px 3px;float:left;margin:0 1px 1px 0;font-size:90%;}
+
+		.project-map .progress {border:green;color:green;}
 
 		.project-map th {padding:5px;white-space:normal;}
 		.project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
@@ -29,28 +33,42 @@
 				<tbody>
 					<t:loop source="versions" value="version">
 						<tr>
-							<th class="version-col">${version.version}</th>
+							<th class="version-col">
+								Name: ${version.version}<br/>
+								Release date: ${version.releaseDate}
+							</th>
 							<t:loop source="features" value="feature">
 								<td class="task-col">
 									<div class="task-col-div">
-									<t:if test="task">
+									<t:if test="featureVersion">
 										<b>
-											<t:pagelink t:page="taskinfo" t:context="task">${task.name}</t:pagelink>
+											<t:pagelink t:page="FeatureVersionInfo" t:context="featureVersion">${featureVersion.name}</t:pagelink>
 										</b>
 										<div class="description">
-											${task.description}
+											${featureVersion.description}
 										</div>
 										<div class="owner">
 											Owner:
-											<t:if test="task.owner">
-												${task.owner.name}
+											<t:if test="featureVersion.owner">
+												${featureVersion.owner.name}
 												<p:else>Unassigned</p:else>
 											</t:if>
 										</div>
-										<div>
-											<t:loop source="task.subtasks" value="subtask">
-												<t:pagelink class="subtask" t:page="taskinfo" t:context="task">${subtask.summary}</t:pagelink>
+										
+										<div class="tasks">
+											<div class="left">Tasks:</div>
+											<t:loop source="featureVersion.tasks" value="task">
+												<t:pagelink class="task" t:page="FeatureVersionInfo" t:context="featureVersion">${task.summary}</t:pagelink>
 											</t:loop>
+										</div>
+										<div class="bugs">
+											<div class="left">Bugs:</div>
+											<t:loop source="featureVersion.bugs" value="bug">
+												<t:pagelink class="bug" t:page="FeatureVersionInfo" t:context="featureVersion">${bug.summary}</t:pagelink>
+											</t:loop>
+										</div>
+										<div class="progress">
+											Total progress: ${progress}
 										</div>
 									</t:if>
 									</div>

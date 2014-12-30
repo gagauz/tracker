@@ -1,23 +1,26 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.CommitOwner;
 import com.gagauz.tracker.db.base.Identifiable;
 
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "bug")
-public class Bug extends CommitOwner implements Identifiable {
+public class Bug implements Identifiable {
     private int id;
-    private Task task;
+    private FeatureVersion featureVersion;
     private User creator;
     private User owner;
     private Date created = new Date();
     private Date updated = new Date();
     private String summary;
     private String description;
+    private int estimated;
+    private int progress;
+    private List<Commit> commits;
 
     @Override
     @Id
@@ -35,12 +38,12 @@ public class Bug extends CommitOwner implements Identifiable {
             @JoinColumn(name = "version_id", updatable = false, referencedColumnName = "version_id")
     })
     @ManyToOne(fetch = FetchType.LAZY)
-    public Task getTask() {
-        return task;
+    public FeatureVersion getFeatureVersion() {
+        return featureVersion;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setFeatureVersion(FeatureVersion featureVersion) {
+        this.featureVersion = featureVersion;
     }
 
     @JoinColumn(nullable = false)
@@ -53,7 +56,7 @@ public class Bug extends CommitOwner implements Identifiable {
         this.creator = creator;
     }
 
-    @JoinColumn
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getOwner() {
         return owner;
@@ -61,6 +64,24 @@ public class Bug extends CommitOwner implements Identifiable {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    @Column
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    @Column(columnDefinition = "text")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Column(updatable = false)
@@ -83,21 +104,30 @@ public class Bug extends CommitOwner implements Identifiable {
         this.updated = updated;
     }
 
-    @Column(nullable = false)
-    public String getSummary() {
-        return summary;
+    @Column
+    public int getEstimated() {
+        return estimated;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setEstimated(int estimated) {
+        this.estimated = estimated;
     }
 
     @Column
-    public String getDescription() {
-        return description;
+    public int getProgress() {
+        return progress;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
+    @OneToMany
+    public List<Commit> getCommits() {
+        return commits;
+    }
+
+    public void setCommits(List<Commit> commits) {
+        this.commits = commits;
     }
 }

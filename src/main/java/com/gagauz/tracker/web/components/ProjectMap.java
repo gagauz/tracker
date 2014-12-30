@@ -20,18 +20,22 @@ public class ProjectMap {
     @Property
     private Feature feature;
 
-    @Property
-    private SubTask subTask;
+    private Task task;
 
-    private Map<Tuple, Task> map;
+    private Bug bug;
+
+    private Map<Tuple, FeatureVersion> map;
+
+    private int estimated = 0;
+    private int progress = 0;
 
     @Cached
-    public Map<Tuple, Task> getMap() {
+    public Map<Tuple, FeatureVersion> getMap() {
         if (null == map) {
             map = CollectionFactory.newMap();
 
             for (Feature feature : project.getFeatures()) {
-                for (Task task : feature.getTasks()) {
+                for (FeatureVersion task : feature.getTasks()) {
                     map.put(new Tuple(task.getVersion(), feature), task);
                 }
             }
@@ -49,8 +53,35 @@ public class ProjectMap {
         return project.getFeatures();
     }
 
-    public Task getTask() {
+    public FeatureVersion getFeatureVersion() {
+        estimated = 0;
+        progress = 0;
         return getMap().get(new Tuple(version, feature));
+    }
+
+    public String getProgress() {
+        return estimated > 0 ? 100 * (progress / estimated) + "%" : "N/A";
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        estimated += task.getEstimated();
+        progress += task.getProgress();
+        this.task = task;
+    }
+
+    public Bug getBug() {
+
+        return bug;
+    }
+
+    public void setBug(Bug bug) {
+        estimated += bug.getEstimated();
+        progress += bug.getProgress();
+        this.bug = bug;
     }
 
     private class Tuple {

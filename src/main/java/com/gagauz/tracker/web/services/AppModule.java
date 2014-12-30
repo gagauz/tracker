@@ -3,7 +3,7 @@ package com.gagauz.tracker.web.services;
 import com.gagauz.tracker.beans.dao.*;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.db.model.Task.TaskId;
+import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
 import com.gagauz.tracker.db.model.Version;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ValueEncoder;
@@ -215,7 +215,7 @@ public class AppModule {
                                                     final ProjectDao projectDao,
                                                     final VersionDao versionDao,
                                                     final FeatureDao featureDao,
-                                                    final TaskDao taskDao,
+                                                    final FeatureVersionDao taskDao,
                                                     final RoleGroupDao roleGroupDao,
                                                     final BugDao bugDao) {
         configuration.add(User.class, new ValueEncoderFactory<User>() {
@@ -274,24 +274,24 @@ public class AppModule {
             }
         });
 
-        configuration.add(Task.class, new ValueEncoderFactory<Task>() {
+        configuration.add(FeatureVersion.class, new ValueEncoderFactory<FeatureVersion>() {
 
             @Override
-            public ValueEncoder<Task> create(Class<Task> arg0) {
-                return new ValueEncoder<Task>() {
+            public ValueEncoder<FeatureVersion> create(Class<FeatureVersion> arg0) {
+                return new ValueEncoder<FeatureVersion>() {
 
                     @Override
-                    public String toClient(Task arg0) {
+                    public String toClient(FeatureVersion arg0) {
                         return null == arg0 ? null : String.valueOf(arg0.getId().getFeatureId() + "_" + arg0.getId().getVersionId());
                     }
 
                     @Override
-                    public Task toValue(String arg0) {
+                    public FeatureVersion toValue(String arg0) {
                         if (null == arg0) {
                             return null;
                         }
                         String[] ids = arg0.split("_");
-                        return taskDao.findById(new TaskId(Integer.parseInt(ids[0]), Integer.parseInt(ids[1])));
+                        return taskDao.findById(new FeatureVersionId(Integer.parseInt(ids[0]), Integer.parseInt(ids[1])));
                     }
                 };
             }
