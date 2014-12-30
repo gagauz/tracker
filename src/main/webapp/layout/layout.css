@@ -115,28 +115,3 @@ div.page {
 
 /* Content */
 
-div.content {
-    position:absolute;
-    left:240px;
-}
-
-/* Sidebar */
-
-div.sidebar {
-    position:absolute;
-    top:200px;
-    width: 200px;
-    background:white;
-    overflow:hidden;
-    height:100%;
-    padding:20px;
-}
-
-div.sidebar ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-div.sidebar li {
-}

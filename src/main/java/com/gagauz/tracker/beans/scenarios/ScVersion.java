@@ -48,7 +48,7 @@ public class ScVersion extends DataBaseScenario {
 
             List<Feature> theaders = new ArrayList<Feature>();
 
-            for (int h = 0; h < 20; h++) {
+            for (int h = 0; h < 10; h++) {
                 Feature th = new Feature();
                 th.setProject(p);
                 th.setCreator(user1);
@@ -62,13 +62,16 @@ public class ScVersion extends DataBaseScenario {
                 v.setVersion("1." + j + (j == 4 ? "-SNAPSHOT" : ""));
                 versionDao.save(v);
                 for (Feature th : theaders) {
+                    if (rand.nextBoolean() && rand.nextBoolean()) {
+                        continue;
+                    }
                     Task t = new Task();
                     t.setFeature(th);
                     t.setVersion(v);
                     t.setOwner(user1);
                     t.setCreator(user2);
-                    t.setName("Release task on " + v.getVersion());
-                    t.setDescription("Вывод всех проектов в таблице. Колонки ...");
+                    t.setName("Task #" + th.getId() + "/" + v.getVersion());
+                    t.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
                     Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
                     Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
                     t.setAttachments(Arrays.asList(a1, a2));

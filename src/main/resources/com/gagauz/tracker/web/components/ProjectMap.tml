@@ -1,0 +1,65 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<style>
+		.project-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
+		.project-map-owerflow {display:inline-block;position:absolute1;}
+		.project-map .feature-col {background-color:#990000;color:white;border:1px solid #ccaaaa;}
+		.project-map .version-col {background-color:#009900;color:white;border:1px solid #ccffcc;}
+		.project-map .version-col.col, .empty-col.col {width:100px;}
+		.project-map .task-col {background-color:#ffffcc;border:1px solid #ccccaa;}
+		.project-map .task-col-div {width:250px}
+		.project-map .task-col div{margin-bottom:5px;}
+		.project-map .task-col .owner {color:#660000}
+		.project-map .task-col .description {}
+		.project-map .subtask {border:1px solid	gray;background-color:#cccccc;padding:2px 3px;float:left;margin:0 1px 1px 0;font-size:90%;}
+
+		.project-map th {padding:5px;white-space:normal;}
+		.project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
+	</style>
+	<div class="project-map">
+		<div class="project-map-owerflow">
+			<table>
+				<thead>
+					<tr>
+						<td></td>
+						<t:loop source="features" value="feature">
+							<th class="feature-col">${feature.name}</th>
+						</t:loop>
+					</tr>
+				</thead>
+				<tbody>
+					<t:loop source="versions" value="version">
+						<tr>
+							<th class="version-col">${version.version}</th>
+							<t:loop source="features" value="feature">
+								<td class="task-col">
+									<div class="task-col-div">
+									<t:if test="task">
+										<b>
+											<t:pagelink t:page="taskinfo" t:context="task">${task.name}</t:pagelink>
+										</b>
+										<div class="description">
+											${task.description}
+										</div>
+										<div class="owner">
+											Owner:
+											<t:if test="task.owner">
+												${task.owner.name}
+												<p:else>Unassigned</p:else>
+											</t:if>
+										</div>
+										<div>
+											<t:loop source="task.subtasks" value="subtask">
+												<t:pagelink class="subtask" t:page="taskinfo" t:context="task">${subtask.summary}</t:pagelink>
+											</t:loop>
+										</div>
+									</t:if>
+									</div>
+								</td>
+							</t:loop>
+						</tr>
+					</t:loop>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

@@ -1,10 +1,10 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.List;
-
 import com.gagauz.tracker.db.base.Identifiable;
 
 import javax.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "project")
@@ -12,11 +12,10 @@ public class Project implements Identifiable {
 
     private int id;
     private String name;
-	private List<Version> versions;
+    private List<Version> versions;
+    private List<Feature> features;
 
- 
-
-	@Override
+    @Override
     @Id
     @GeneratedValue
     public int getId() {
@@ -46,12 +45,21 @@ public class Project implements Identifiable {
         return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="project")
-	public List<Version> getVersions() {
-		return versions;
-	}
-    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
+    public List<Version> getVersions() {
+        return versions;
+    }
+
     public void setVersions(List<Version> versions) {
- 		this.versions = versions;
- 	}
+        this.versions = versions;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
+    public List<Feature> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(List<Feature> features) {
+        this.features = features;
+    }
 }
