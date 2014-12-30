@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.Identifiable;
+import com.gagauz.tracker.web.services.security.SessionUser;
 
 import javax.persistence.*;
 
@@ -9,12 +10,13 @@ import java.util.HashSet;
 
 @Entity
 @Table(name = "user")
-public class User implements Identifiable {
+public class User implements Identifiable, SessionUser {
     private int id;
     private String name;
     private String email;
     private Collection<RoleGroup> roleGroups = new HashSet<RoleGroup>();
     private String password;
+    private Role[] roles;
 
     @Override
     @Id
@@ -61,6 +63,20 @@ public class User implements Identifiable {
     }
 
     public void setRoleGroups(Collection<RoleGroup> roleGroups) {
+        this.roles = null;
         this.roleGroups = roleGroups;
+    }
+
+    @Override
+    @Transient
+    public Role[] getRoles() {
+        if (null == roles) {
+            HashSet<Role> roleSet = new HashSet<Role>();
+            for (RoleGroup group : roleGroups) {
+                roleSet.addAll(group.getRoles());
+            }
+            roles = roleSet.toArray(new Role[roleSet.size()]);
+        }
+        return roles;
     }
 }

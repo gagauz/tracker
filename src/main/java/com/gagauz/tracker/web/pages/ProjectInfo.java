@@ -4,6 +4,9 @@ import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.web.components.forms.VersionForm;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -11,8 +14,15 @@ import java.util.List;
 
 public class ProjectInfo {
 
+    @Component
+    private VersionForm versionForm;
+
     @Property
     private Project project;
+
+    @Property
+    @Persist("flash")
+    private Version newVersion;
 
     @Property
     private RoleGroup roleGroup;
@@ -48,6 +58,11 @@ public class ProjectInfo {
 
     Object onPassivate() {
         return project;
+    }
+
+    void onCreateVersion() {
+        newVersion = new Version();
+        newVersion.setProject(project);
     }
 
     public List<Feature> getUserStories() {

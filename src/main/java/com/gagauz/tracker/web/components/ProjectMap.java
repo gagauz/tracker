@@ -1,9 +1,11 @@
 package com.gagauz.tracker.web.components;
 
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 
 import java.util.Collection;
@@ -28,6 +30,16 @@ public class ProjectMap {
 
     private int estimated = 0;
     private int progress = 0;
+
+    @Inject
+    private FeatureVersionDao featureVersionDao;
+
+    void onCreateFeatureVersion(Feature feature, Version version) {
+        FeatureVersion featureVersion = new FeatureVersion();
+        featureVersion.setFeature(feature);
+        featureVersion.setVersion(version);
+        featureVersionDao.save(featureVersion);
+    }
 
     @Cached
     public Map<Tuple, FeatureVersion> getMap() {

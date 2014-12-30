@@ -28,7 +28,10 @@
 
 	<hr/>
 
-    <h3>Project versions</h3>
+    <h3>Project versions <t:pagelink page="rolegrouplist" context="[project,null]">Manage</t:pagelink></h3>
+
+	<t:eventlink t:event="createVersion">Create new version</t:eventlink>
+	<div t:id="versionForm" project="project" version="newVersion" />
 
     <t:grid source="versions" row="version" add="tasks">
     	<p:tasksCell>

@@ -70,6 +70,10 @@
 										<div class="progress">
 											Total progress: ${progress}
 										</div>
+										
+									<p:else>
+										<t:eventlink t:event="createFeatureVersion" t:context="[feature, version]">Create</t:eventlink>
+									</p:else>
 									</t:if>
 									</div>
 								</td>

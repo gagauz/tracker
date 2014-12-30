@@ -43,6 +43,7 @@ public class Version implements Identifiable {
         this.project = project;
     }
 
+    @Column(nullable = false)
     public String getVersion() {
         return version;
     }

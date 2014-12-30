@@ -110,7 +110,7 @@ public class FeatureVersion {
     }
 
     @MapsId("versionId")
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public Version getVersion() {
         return version;
@@ -130,7 +130,7 @@ public class FeatureVersion {
         this.creator = creator;
     }
 
-    @JoinColumn(nullable = false)
+    @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
     public User getOwner() {
         return owner;

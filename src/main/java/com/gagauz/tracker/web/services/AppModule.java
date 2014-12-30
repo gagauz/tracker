@@ -5,16 +5,14 @@ import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.*;
 import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.web.services.security.SecurityModule;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
-import org.apache.tapestry5.ioc.annotations.ServiceId;
-import org.apache.tapestry5.ioc.annotations.Startup;
+import org.apache.tapestry5.ioc.annotations.*;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.services.*;
@@ -31,6 +29,7 @@ import java.util.*;
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
  * configure and extend Tapestry, or to place your own service definitions.
  */
+@SubModule({SecurityModule.class})
 public class AppModule {
 
     @Startup
