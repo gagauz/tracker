@@ -1,17 +1,26 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.FeatureDao;
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.web.components.forms.VersionForm;
+import java.util.List;
+
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import java.util.List;
+import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.RoleGroupDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Role;
+import com.gagauz.tracker.db.model.RoleGroup;
+import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.web.components.forms.VersionForm;
+import com.gagauz.tracker.web.services.security.Secured;
 
+@Secured({Role.PROJECT_USER, Role.PROJECT_ADMIN})
 public class ProjectInfo {
 
     @Component

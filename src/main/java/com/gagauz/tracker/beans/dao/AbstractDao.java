@@ -1,14 +1,15 @@
 package com.gagauz.tracker.beans.dao;
 
-import com.gagauz.tracker.db.utils.Param;
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
+import com.gagauz.tracker.db.utils.Param;
 
 public class AbstractDao<Id extends Serializable, Entity> {
 
@@ -47,6 +48,10 @@ public class AbstractDao<Id extends Serializable, Entity> {
 
     public void save(Entity entity) {
         getSession().saveOrUpdate(entity);
+    }
+
+    public void evict(Entity entity) {
+        getSession().evict(entity);
     }
 
 }

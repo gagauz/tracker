@@ -1,7 +1,8 @@
 package com.gagauz.tracker.db.model;
 
+import java.io.Serializable;
 
-public enum Role {
+public enum Role implements Serializable {
     VIEWER,
     ADMIN,
     PROJECT_ADMIN,

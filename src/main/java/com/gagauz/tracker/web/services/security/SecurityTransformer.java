@@ -1,6 +1,7 @@
 package com.gagauz.tracker.web.services.security;
 
-import com.gagauz.tracker.db.model.Role;
+import java.util.List;
+
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.model.MutableComponentModel;
@@ -16,7 +17,7 @@ import org.apache.tapestry5.services.transform.TransformationSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import com.gagauz.tracker.db.model.Role;
 
 public class SecurityTransformer implements ComponentClassTransformWorker2 {
     protected static Logger logger = LoggerFactory.getLogger(SecurityTransformer.class);
@@ -47,6 +48,7 @@ public class SecurityTransformer implements ComponentClassTransformWorker2 {
                     if (!securityChecker.isCurrentUserHasRoles(annotation.value())) {
                         throw new SecurityException();
                     }
+                    //instance.dispatchComponentEvent(event);
                 }
             });
         }

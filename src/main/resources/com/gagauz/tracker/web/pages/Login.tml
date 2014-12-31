@@ -2,6 +2,23 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>Login page</p>
+    <h2>Login page</h2>
+    <!--
+    <t:form t:id="loginForm">
+    	<t:label for="username"></t:label>
+    	<t:textfield t:id="username"/><br/>
+    	<t:label for="password"></t:label>
+    	<t:passwordfield t:id="password"/><br/>
+    	<t:label for="remember"></t:label>
+    	<t:checkbox t:id="remember"/><br/>
+    	<t:submit/>
+    </t:form>
+-->
 
+	<form action="" method="post">
+		Username: <input type="text" name="username" value="${username}"/><br/>
+		Password: <input type="password" name="password" /><br/>
+		Remember me: <input type="checkbox" name="remember" value="${remember}"/><br/>
+		<input type="submit" value="login"/>
+	</form>
 </html>

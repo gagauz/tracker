@@ -1,29 +1,62 @@
 package com.gagauz.tracker.web.services;
 
-import com.gagauz.tracker.beans.dao.*;
-import com.gagauz.tracker.beans.setup.TestDataInitializer;
-import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
-import com.gagauz.tracker.db.model.Version;
-import com.gagauz.tracker.web.services.security.SecurityModule;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.*;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
+import org.apache.tapestry5.ioc.annotations.ServiceId;
+import org.apache.tapestry5.ioc.annotations.Startup;
+import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
-import org.apache.tapestry5.services.*;
-import org.hibernate.*;
+import org.apache.tapestry5.services.LibraryMapping;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.RequestFilter;
+import org.apache.tapestry5.services.RequestHandler;
+import org.apache.tapestry5.services.Response;
+import org.apache.tapestry5.services.ValueEncoderFactory;
+import org.hibernate.AssertionFailure;
+import org.hibernate.FlushMode;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import java.io.IOException;
-import java.util.*;
+import com.gagauz.tracker.beans.dao.BugDao;
+import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.beans.dao.RoleGroupDao;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.beans.setup.TestDataInitializer;
+import com.gagauz.tracker.db.model.Bug;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Role;
+import com.gagauz.tracker.db.model.RoleGroup;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.web.services.security.Credentials;
+import com.gagauz.tracker.web.services.security.SecurityModule;
+import com.gagauz.tracker.web.services.security.SessionUser;
+import com.gagauz.tracker.web.services.security.SessionUserService;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -187,6 +220,33 @@ public class AppModule {
             private boolean isUseHibernateSessionInRequest(Request request) {
                 String path = request.getPath();
                 return !(path.startsWith("/assets") || path.startsWith("/ajaxproxy"));
+            }
+        };
+    }
+
+    @ServiceId("")
+    public SessionUserService buildSessionUserService(@Inject final UserDao userDao) {
+        return new SessionUserService() {
+
+            @Override
+            public SessionUser loadByCredentials(Credentials credentials) {
+                if (credentials.getToken() != null) {
+                    User user = userDao.findByToken(credentials.getToken());
+                    if (user != null) {
+                        Role[] role = user.getRoles();
+                        userDao.evict(user);
+                    }
+                    return user;
+                }
+                if (credentials.getUsername() != null) {
+                    User user = userDao.findByUsername(credentials.getUsername());
+                    if (null != user && user.getPassword().equals(credentials.getPassword())) {
+                        Role[] role = user.getRoles();
+                        userDao.evict(user);
+                        return user;
+                    }
+                }
+                return null;
             }
         };
     }
@@ -374,4 +434,5 @@ public class AppModule {
         configuration.add(new CoercionTuple<List, Set>(List.class, Set.class, coercion));
         configuration.add(new CoercionTuple<Collection, EnumSet>(Collection.class, EnumSet.class, coercion1));
     }
+
 }

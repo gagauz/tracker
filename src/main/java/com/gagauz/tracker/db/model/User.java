@@ -1,20 +1,31 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
-import com.gagauz.tracker.web.services.security.SessionUser;
-
-import javax.persistence.*;
-
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.gagauz.tracker.db.base.Identifiable;
+import com.gagauz.tracker.web.services.security.SessionUser;
+
 @Entity
 @Table(name = "user")
-public class User implements Identifiable, SessionUser {
+public class User implements Identifiable, Serializable, SessionUser {
+    private static final long serialVersionUID = 7903294228565311630L;
     private int id;
     private String name;
     private String email;
     private Collection<RoleGroup> roleGroups = new HashSet<RoleGroup>();
+    private String username;
     private String password;
     private Role[] roles;
 
@@ -45,6 +56,15 @@ public class User implements Identifiable, SessionUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Column(nullable = false, unique = true)
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Column
@@ -79,4 +99,5 @@ public class User implements Identifiable, SessionUser {
         }
         return roles;
     }
+
 }
