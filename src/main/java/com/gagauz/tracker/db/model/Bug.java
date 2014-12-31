@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -43,11 +44,10 @@ public class Bug implements Identifiable {
         this.id = id;
     }
 
-    /*
-        @JoinColumns({
-                @JoinColumn(name = "feature_id", updatable = false, referencedColumnName = "feature_id"),
-                @JoinColumn(name = "version_id", updatable = false, referencedColumnName = "version_id")
-        })*/
+    @JoinColumns({
+            @JoinColumn(name = "feature_id", updatable = false, referencedColumnName = "feature_id"),
+            @JoinColumn(name = "version_id", updatable = false, referencedColumnName = "version_id")
+    })
     @ManyToOne(fetch = FetchType.LAZY)
     public FeatureVersion getFeatureVersion() {
         return featureVersion;

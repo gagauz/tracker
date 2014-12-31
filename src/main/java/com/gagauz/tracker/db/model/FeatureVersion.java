@@ -1,17 +1,29 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.ArrayListType;
-import com.gagauz.tracker.db.base.CollectionType;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.*;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import com.gagauz.tracker.db.base.ArrayListType;
+import com.gagauz.tracker.db.base.CollectionType;
 
 @Entity
 @Table(name = "feature_version")
@@ -30,31 +42,35 @@ public class FeatureVersion {
     public static class FeatureVersionId implements Serializable {
         private static final long serialVersionUID = 4441697145474451670L;
 
-        private int featureId;
-        private int versionId;
+        private Feature feature;
+        private Version version;
 
-        public FeatureVersionId(int featureId, int versionId) {
-            this.setFeatureId(featureId);
-            this.setVersionId(versionId);
+        public FeatureVersionId(Feature feature, Version version) {
+            setFeature(feature);
+            setVersion(version);
         }
 
         protected FeatureVersionId() {
         }
 
-        public int getFeatureId() {
-            return featureId;
+        @JoinColumn(name = "feature_id", nullable = false)
+        @ManyToOne(fetch = FetchType.LAZY)
+        public Feature getFeature() {
+            return feature;
         }
 
-        public void setFeatureId(int featureId) {
-            this.featureId = featureId;
+        public void setFeature(Feature feature) {
+            this.feature = feature;
         }
 
-        public int getVersionId() {
-            return versionId;
+        @JoinColumn(name = "version_id", nullable = false)
+        @ManyToOne(fetch = FetchType.LAZY)
+        public Version getVersion() {
+            return version;
         }
 
-        public void setVersionId(int versionId) {
-            this.versionId = versionId;
+        public void setVersion(Version version) {
+            this.version = version;
         }
 
         @Override
@@ -63,21 +79,19 @@ public class FeatureVersion {
                 return false;
             }
             if (obj instanceof FeatureVersionId) {
-                return featureId == ((FeatureVersionId) obj).getFeatureId() && versionId == ((FeatureVersionId) obj).getVersionId();
+                return feature.equals(((FeatureVersionId) obj).getFeature()) && version.equals(((FeatureVersionId) obj).getVersion());
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return featureId * (featureId + versionId);
+            return feature.hashCode() * (feature.hashCode() + version.hashCode());
         }
 
     }
 
     private FeatureVersionId id = new FeatureVersionId();
-    private Feature feature;
-    private Version version;
     private User creator;
     private User owner;
     private Date created = new Date();
@@ -98,26 +112,22 @@ public class FeatureVersion {
         this.id = id;
     }
 
-    @MapsId("featureId")
-    @JoinColumn(nullable = false, updatable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Transient
     public Feature getFeature() {
-        return feature;
+        return id.getFeature();
     }
 
     public void setFeature(Feature feature) {
-        this.feature = feature;
+        this.id.setFeature(feature);
     }
 
-    @MapsId("versionId")
-    @JoinColumn(nullable = true)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Transient
     public Version getVersion() {
-        return version;
+        return id.getVersion();
     }
 
-    public void setVersion(Version project) {
-        this.version = project;
+    public void setVersion(Version version) {
+        this.id.setVersion(version);
     }
 
     @JoinColumn(nullable = false)

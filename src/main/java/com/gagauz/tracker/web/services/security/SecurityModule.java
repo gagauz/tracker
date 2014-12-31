@@ -24,7 +24,7 @@ public class SecurityModule {
     public static void bind(ServiceBinder binder) {
         binder.bind(SecurityChecker.class).withId("SecurityChecker");
         binder.bind(SessionUserCreator.class).withId("SessionUserCreator");
-        binder.bind(SecurityExceptionRequestFilter2.class).withId("SecurityExceptionRequestFilter2");
+        binder.bind(SecurityExceptionInterceptorFilter.class).withId("SecurityExceptionRequestFilter2");
     }
 
     public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration) {
@@ -50,12 +50,12 @@ public class SecurityModule {
     }
 
     public void contributeComponentEventRequestHandler(OrderedConfiguration<ComponentEventRequestFilter> configuration,
-                                                       @Local SecurityExceptionRequestFilter2 filter) {
+                                                       @Local SecurityExceptionInterceptorFilter filter) {
         configuration.add("SecurityExceptionFilterComponent", filter, "after:*");
     }
 
     public void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration,
-                                                   @Local SecurityExceptionRequestFilter2 filter) {
+                                                   @Local SecurityExceptionInterceptorFilter filter) {
         configuration.add("SecurityExceptionFilterPage", filter, "after:*");
     }
 }

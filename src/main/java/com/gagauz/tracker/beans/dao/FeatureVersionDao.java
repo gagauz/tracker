@@ -1,10 +1,12 @@
 package com.gagauz.tracker.beans.dao;
 
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Version;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Version;
 
 @Service
 public class FeatureVersionDao extends AbstractDao<FeatureVersion.FeatureVersionId, FeatureVersion> {
@@ -14,4 +16,10 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersion.FeatureVersion
         return getSession().createQuery("from Task t where version=:version").setEntity("version", version).list();
     }
 
+    public List<FeatureVersion> findByFeature(Feature feature) {
+        List<FeatureVersion> list = getSession().createQuery("from FeatureVersion fv where fv.feature_id=:feature")
+                .setInteger("feature", feature.getId())
+                .list();
+        return list;
+    }
 }

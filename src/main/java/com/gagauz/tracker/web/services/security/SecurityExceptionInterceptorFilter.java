@@ -16,9 +16,9 @@ import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SecurityExceptionRequestFilter2 implements PageRenderRequestFilter, ComponentEventRequestFilter {
+public class SecurityExceptionInterceptorFilter implements PageRenderRequestFilter, ComponentEventRequestFilter {
 
-    protected static Logger logger = LoggerFactory.getLogger(SecurityExceptionRequestFilter2.class);
+    protected static Logger logger = LoggerFactory.getLogger(SecurityExceptionInterceptorFilter.class);
 
     @Inject
     @Value("${" + SecurityModule.SECURITY_LOGIN_FORM_URL + "}")
@@ -50,7 +50,9 @@ public class SecurityExceptionRequestFilter2 implements PageRenderRequestFilter,
                 logger.info("Catch exception SecurityException");
                 Link link = componentEventLinkEncoder.createComponentEventLink(parameters, false);
                 response.sendRedirect(loginFormUrl + '?' + redirectParam + '=' + link.toRedirectURI());
+                return;
             }
+            throw new RuntimeException(e);
         }
 
     }
@@ -71,7 +73,9 @@ public class SecurityExceptionRequestFilter2 implements PageRenderRequestFilter,
                 logger.info("Catch exception SecurityException");
                 Link link = componentEventLinkEncoder.createPageRenderLink(parameters);
                 response.sendRedirect(loginFormUrl + '?' + redirectParam + '=' + link.toRedirectURI());
+                return;
             }
+            throw new RuntimeException(e);
         }
 
     }

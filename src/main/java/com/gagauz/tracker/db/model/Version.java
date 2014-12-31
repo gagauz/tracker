@@ -1,11 +1,22 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import com.gagauz.tracker.db.base.Identifiable;
 
 @Entity
 @Table(name = "version", uniqueConstraints = {
@@ -18,7 +29,7 @@ public class Version implements Identifiable {
     private Date created = new Date();
     private Date updated = new Date();
     private String version;
-    private List<FeatureVersion> tasks;
+    private List<FeatureVersion> featureVersion;
     private Date releaseDate = new Date();
     private boolean released = false;
 
@@ -52,13 +63,13 @@ public class Version implements Identifiable {
         this.version = version;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
-    public List<FeatureVersion> getTasks() {
-        return tasks;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.version")
+    public List<FeatureVersion> getFeatureVersions() {
+        return featureVersion;
     }
 
-    public void setTasks(List<FeatureVersion> tasks) {
-        this.tasks = tasks;
+    public void setFeatureVersions(List<FeatureVersion> featureVersion) {
+        this.featureVersion = featureVersion;
     }
 
     @Column(updatable = false)

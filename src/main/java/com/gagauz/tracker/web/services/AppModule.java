@@ -46,8 +46,6 @@ import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.Bug;
 import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.RoleGroup;
@@ -332,30 +330,30 @@ public class AppModule {
                 };
             }
         });
-
-        configuration.add(FeatureVersion.class, new ValueEncoderFactory<FeatureVersion>() {
-
-            @Override
-            public ValueEncoder<FeatureVersion> create(Class<FeatureVersion> arg0) {
-                return new ValueEncoder<FeatureVersion>() {
+        /*
+                configuration.add(FeatureVersion.class, new ValueEncoderFactory<FeatureVersion>() {
 
                     @Override
-                    public String toClient(FeatureVersion arg0) {
-                        return null == arg0 ? null : String.valueOf(arg0.getId().getFeatureId() + "_" + arg0.getId().getVersionId());
-                    }
+                    public ValueEncoder<FeatureVersion> create(Class<FeatureVersion> arg0) {
+                        return new ValueEncoder<FeatureVersion>() {
 
-                    @Override
-                    public FeatureVersion toValue(String arg0) {
-                        if (null == arg0) {
-                            return null;
-                        }
-                        String[] ids = arg0.split("_");
-                        return taskDao.findById(new FeatureVersionId(Integer.parseInt(ids[0]), Integer.parseInt(ids[1])));
-                    }
-                };
-            }
-        });
+                            @Override
+                            public String toClient(FeatureVersion arg0) {
+                                return null == arg0 ? null : String.valueOf(arg0.getId().getFeatureId() + "_" + arg0.getId().getVersionId());
+                            }
 
+                            @Override
+                            public FeatureVersion toValue(String arg0) {
+                                if (null == arg0) {
+                                    return null;
+                                }
+                                String[] ids = arg0.split("_");
+                                return taskDao.findById(new FeatureVersionId(Integer.parseInt(ids[0]), Integer.parseInt(ids[1])));
+                            }
+                        };
+                    }
+                });
+        */
         configuration.add(Feature.class, new ValueEncoderFactory<Feature>() {
 
             @Override
