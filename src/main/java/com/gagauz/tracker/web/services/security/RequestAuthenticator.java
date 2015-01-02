@@ -25,7 +25,7 @@ public class RequestAuthenticator extends SecurityAuthenticator implements Reque
     @Value("${" + SecurityModule.SECURITY_COOKIE_NAME + "}")
     private String cookieName;
     @Inject
-    @Value("${" + SecurityModule.SECURITY_COOKIE_NAME + "}")
+    @Value("${" + SecurityModule.SECURITY_COOKIE_AGE + "}")
     private String cookieAge;
     @Inject
     @Value("${" + SecurityModule.SECURITY_PASSWORD_PARAMETER + "}")
@@ -45,7 +45,7 @@ public class RequestAuthenticator extends SecurityAuthenticator implements Reque
             String usernameValue = request.getParameter(username);
             String passwordValue = request.getParameter(password);
             if (authenticate(usernameValue, passwordValue)) {
-                if ("true".equalsIgnoreCase(request.getParameter(remember))) {
+                if (request.getParameter(remember) != null) {
                     cookies.writeCookieValue(cookieName, encodeCookieValue(usernameValue, passwordValue), Integer.parseInt(cookieAge));
                 }
                 if (null != redirectPage) {

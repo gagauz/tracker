@@ -13,7 +13,7 @@ public class SecurityAuthenticator {
     @Inject
     private SessionUserService sessionUserService;
 
-    private SecurityEncryptor securityEncryptor;
+    private final SecurityEncryptor securityEncryptor = new SecurityEncryptor("dgfdsgfdsgsdgfsdfg");
 
     public boolean authenticate(final String usernameValue, final String passwordValue) {
         SessionUser user = sessionUserService.loadByCredentials(new Credentials() {

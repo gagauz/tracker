@@ -48,7 +48,6 @@ public class SecurityTransformer implements ComponentClassTransformWorker2 {
                     if (!securityChecker.isCurrentUserHasRoles(annotation.value())) {
                         throw new SecurityException();
                     }
-                    //instance.dispatchComponentEvent(event);
                 }
             });
         }

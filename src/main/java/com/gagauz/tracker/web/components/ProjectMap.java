@@ -52,8 +52,8 @@ public class ProjectMap {
         if (null == map) {
             map = CollectionFactory.newMap();
 
-            for (Feature feature : project.getFeatures()) {
-                for (FeatureVersion task : featureVersionDao.findByFeature(feature)) {
+            for (Version version : project.getVersions()) {
+                for (FeatureVersion task : version.getFeatureVersions()) {
                     map.put(new Tuple(task.getVersion(), feature), task);
                 }
             }

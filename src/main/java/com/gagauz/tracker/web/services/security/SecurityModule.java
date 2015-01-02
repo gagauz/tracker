@@ -25,6 +25,7 @@ public class SecurityModule {
         binder.bind(SecurityChecker.class).withId("SecurityChecker");
         binder.bind(SessionUserCreator.class).withId("SessionUserCreator");
         binder.bind(SecurityExceptionInterceptorFilter.class).withId("SecurityExceptionRequestFilter2");
+        binder.bind(CookieAuthenticator.class).withId("CookieAuthenticator");
     }
 
     public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration) {
@@ -46,16 +47,20 @@ public class SecurityModule {
     public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration) {
         //        configuration.addInstance("SecurityExceptionFilter", SecurityExceptionRequestFilter.class, "after:*");
         configuration.addInstance("RequestAuthenticator", RequestAuthenticator.class, "after:AjaxFilter");
-        configuration.addInstance("CookieAuthenticator", CookieAuthenticator.class, "after:RequestAuthenticator");
+
     }
 
     public void contributeComponentEventRequestHandler(OrderedConfiguration<ComponentEventRequestFilter> configuration,
-                                                       @Local SecurityExceptionInterceptorFilter filter) {
+                                                       @Local SecurityExceptionInterceptorFilter filter,
+                                                       @Local CookieAuthenticator cookieAuthenticator) {
         configuration.add("SecurityExceptionFilterComponent", filter, "after:*");
+        configuration.add("CookieAuthenticator", cookieAuthenticator, "before:*");
     }
 
     public void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration,
-                                                   @Local SecurityExceptionInterceptorFilter filter) {
+                                                   @Local SecurityExceptionInterceptorFilter filter,
+                                                   @Local CookieAuthenticator cookieAuthenticator) {
         configuration.add("SecurityExceptionFilterPage", filter, "after:*");
+        configuration.add("CookieAuthenticator", cookieAuthenticator, "before:*");
     }
 }

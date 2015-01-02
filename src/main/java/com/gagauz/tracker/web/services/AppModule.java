@@ -1,6 +1,5 @@
 package com.gagauz.tracker.web.services;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -11,30 +10,15 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.ServiceId;
 import org.apache.tapestry5.ioc.annotations.Startup;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.services.LibraryMapping;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.RequestFilter;
-import org.apache.tapestry5.services.RequestHandler;
-import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.ValueEncoderFactory;
-import org.hibernate.AssertionFailure;
-import org.hibernate.FlushMode;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.slf4j.Logger;
-import org.springframework.orm.hibernate4.SessionHolder;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.gagauz.tracker.beans.dao.BugDao;
 import com.gagauz.tracker.beans.dao.FeatureDao;
@@ -51,6 +35,7 @@ import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.web.services.hibernate.HibernateModule2;
 import com.gagauz.tracker.web.services.security.Credentials;
 import com.gagauz.tracker.web.services.security.SecurityModule;
 import com.gagauz.tracker.web.services.security.SessionUser;
@@ -60,7 +45,7 @@ import com.gagauz.tracker.web.services.security.SessionUserService;
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
  * configure and extend Tapestry, or to place your own service definitions.
  */
-@SubModule({SecurityModule.class})
+@SubModule({SecurityModule.class, HibernateModule2.class})
 public class AppModule {
 
     @Startup
@@ -97,129 +82,8 @@ public class AppModule {
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
     }
 
-    /**
-     * This is a service definition, the service will be named "TimingFilter". The interface,
-     * RequestFilter, is used within the RequestHandler service pipeline, which is built from the
-     * RequestHandler service configuration. Tapestry IoC is responsible for passing in an
-     * appropriate Logger instance. Requests for static resources are handled at a higher level, so
-     * this filter will only be invoked for Tapestry related requests.
-     * <p/>
-     * <p/>
-     * Service builder methods are useful when the implementation is inline as an inner class
-     * (as here) or require some other kind of special initialization. In most cases,
-     * use the static bind() method instead.
-     * <p/>
-     * <p/>
-     * If this method was named "build", then the service id would be taken from the
-     * service interface and would be "RequestFilter".  Since Tapestry already defines
-     * a service named "RequestFilter" we use an explicit service id that we can reference
-     * inside the contribution method.
-     */
-    @ServiceId("TimingFilter")
-    public RequestFilter buildTimingFilter(final Logger log) {
-        return new RequestFilter() {
-            @Override
-            public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
-                long startTime = System.currentTimeMillis();
-
-                try {
-                    // The responsibility of a filter is to invoke the corresponding method
-                    // in the handler. When you chain multiple filters together, each filter
-                    // received a handler that is a bridge to the next filter.
-
-                    return handler.service(request, response);
-                } finally {
-                    long elapsed = System.currentTimeMillis() - startTime;
-
-                    log.info(String.format("Request time: %d ms", elapsed));
-                }
-            }
-        };
-    }
-
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
         configuration.add(new LibraryMapping("tap", "com.gagauz.tapestry"));
-    }
-
-    @ServiceId("HibernateFilter")
-    public RequestFilter buildHibernateFilter(final Logger log, final SessionFactory sessionFactory) {
-        return new RequestFilter() {
-            @Override
-            public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
-                boolean process = false;
-                boolean participate = false;
-                if (isUseHibernateSessionInRequest(request)) {
-                    process = true;
-                    log.info(String.format("Open hibernate session " + request.getPath()));
-                    if (TransactionSynchronizationManager.hasResource(sessionFactory)) {
-                        // Do not modify the Session: just set the participate flag.
-                        participate = true;
-                        log.warn("Use existing Session in OpenSessionInViewFilter for " + request.getPath());
-                    } else {
-                        log.debug("Opening Hibernate Session in OpenSessionInViewFilter for " + request.getPath());
-                        Session session = sessionFactory.openSession();
-                        session.setFlushMode(FlushMode.MANUAL);
-                        session.beginTransaction();
-                        TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
-                    }
-                }
-
-                try {
-                    // The responsibility of a filter is to invoke the corresponding method
-                    // in the handler. When you chain multiple filters together, each filter
-                    // received a handler that is a bridge to the next filter.
-
-                    return handler.service(request, response);
-                } finally {
-                    if (process) {
-                        if (!participate) {
-                            SessionHolder sessionHolder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
-                            log.debug("Closing Hibernate Session in OpenSessionInViewFilter for " + request.getPath());
-                            Session session = sessionHolder.getSession();
-                            if (null != session && session.isOpen()) {
-
-                                if (session.isDirty()) {
-                                    session.flush();
-                                }
-
-                                Transaction transaction = null;
-                                try {
-                                    transaction = session.getTransaction();
-                                    if (transaction.isActive()) {
-                                        log.debug(String.format("try to commit transaction: %H in session: %H", transaction, session));
-                                        transaction.commit();
-                                    } else {
-                                        log.warn(String.format("session: %H has no active transaction, path = %s!", session, request.getPath()));
-                                    }
-                                    session.close();
-                                } catch (HibernateException e) {
-                                    if (transaction != null) {
-                                        transaction.rollback();
-                                    }
-                                    e.printStackTrace();
-                                } catch (AssertionFailure af) {
-                                    if (transaction != null) {
-                                        transaction.rollback();
-                                    }
-                                    af.printStackTrace();
-                                }
-                            } else {
-                                log.warn(String.format("session: %H is already closed!", session));
-                            }
-
-                        } else {
-                            log.warn("Session used in OpenSessionInViewFilter for {} still open!", request.getPath());
-                        }
-                    }
-
-                }
-            }
-
-            private boolean isUseHibernateSessionInRequest(Request request) {
-                String path = request.getPath();
-                return !(path.startsWith("/assets") || path.startsWith("/ajaxproxy"));
-            }
-        };
     }
 
     @ServiceId("")
@@ -247,24 +111,6 @@ public class AppModule {
                 return null;
             }
         };
-    }
-
-    /**
-     * This is a contribution to the RequestHandler service configuration. This is how we extend
-     * Tapestry using the timing filter. A common use for this kind of filter is transaction
-     * management or security. The @Local annotation selects the desired service by type, but only
-     * from the same module.  Without @Local, there would be an error due to the other service(s)
-     * that implement RequestFilter (defined in other modules).
-     */
-    public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
-                                         @InjectService("TimingFilter") RequestFilter timing,
-                                         @InjectService("HibernateFilter") RequestFilter hibernate) {
-        // Each contribution to an ordered configuration has a name, When necessary, you may
-        // set constraints to precisely control the invocation order of the contributed filter
-        // within the pipeline.
-
-        configuration.add("Hibernate", hibernate, "before:*");
-        configuration.add("Timing", timing);
     }
 
     public static void contributeValueEncoderSource(MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
