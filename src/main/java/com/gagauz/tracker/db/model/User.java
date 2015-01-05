@@ -14,12 +14,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.gagauz.tapestry.security.SecurityUser;
 import com.gagauz.tracker.db.base.Identifiable;
-import com.gagauz.tracker.web.services.security.SessionUser;
 
 @Entity
 @Table(name = "user")
-public class User implements Identifiable, Serializable, SessionUser {
+public class User implements Identifiable, Serializable, SecurityUser {
     private static final long serialVersionUID = 7903294228565311630L;
     private int id;
     private String name;
@@ -99,5 +99,4 @@ public class User implements Identifiable, Serializable, SessionUser {
         }
         return roles;
     }
-
 }

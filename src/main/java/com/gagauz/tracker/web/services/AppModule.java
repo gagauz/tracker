@@ -10,16 +10,29 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.ServiceId;
 import org.apache.tapestry5.ioc.annotations.Startup;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.annotations.Value;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
+import org.apache.tapestry5.services.ComponentEventRequestFilter;
+import org.apache.tapestry5.services.ComponentEventRequestHandler;
 import org.apache.tapestry5.services.LibraryMapping;
+import org.apache.tapestry5.services.PageRenderRequestFilter;
+import org.apache.tapestry5.services.PageRenderRequestHandler;
 import org.apache.tapestry5.services.ValueEncoderFactory;
 
+import com.gagauz.tapestry.security.Credentials;
+import com.gagauz.tapestry.security.LogoutHandler;
+import com.gagauz.tapestry.security.SecurityEncryptor;
+import com.gagauz.tapestry.security.SecurityModule;
+import com.gagauz.tapestry.security.SecurityUser;
+import com.gagauz.tapestry.security.SecurityUserProvider;
 import com.gagauz.tracker.beans.dao.BugDao;
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
@@ -36,10 +49,6 @@ import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule2;
-import com.gagauz.tracker.web.services.security.Credentials;
-import com.gagauz.tracker.web.services.security.SecurityModule;
-import com.gagauz.tracker.web.services.security.SessionUser;
-import com.gagauz.tracker.web.services.security.SessionUserService;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -54,31 +63,15 @@ public class AppModule {
     }
 
     public static void bind(ServiceBinder binder) {
-        // binder.bind(MyServiceInterface.class, MyServiceImpl.class);
-
-        // Make bind() calls on the binder object to define most IoC services.
-        // Use service builder methods (example below) when the implementation
-        // is provided inline, or requires more initialization than simply
-        // invoking the constructor.
+        binder.bind(RememberMeHandler.class);
     }
 
     public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
-        // The application version number is incorprated into URLs for some
-        // assets. Web browsers will cache assets because of the far future expires
-        // header. If existing assets are changed, the version number should also
-        // change, to force the browser to download new versions. This overrides Tapesty's default
-        // (a random hexadecimal number), but may be further overriden by DevelopmentModule or
-        // QaModule.
         configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
         configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
     }
 
     public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
-        // Contributions to ApplicationDefaults will override any contributions to
-        // FactoryDefaults (with the same key). Here we're restricting the supported
-        // locales to just "en" (English). As you add localised message catalogs and other assets,
-        // you can extend this list of locales (it's a comma separated series of locale names;
-        // the first locale name is the default when there's no reasonable match).
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
     }
 
@@ -86,23 +79,34 @@ public class AppModule {
         configuration.add(new LibraryMapping("tap", "com.gagauz.tapestry"));
     }
 
-    @ServiceId("")
-    public SessionUserService buildSessionUserService(@Inject final UserDao userDao) {
-        return new SessionUserService() {
+    public static void contributeLogoutService(OrderedConfiguration<LogoutHandler> configuration, RememberMeHandler handler) {
+        configuration.add("RememberMeLogoutHandler", handler);
+    }
+
+    @Contribute(ComponentEventRequestHandler.class)
+    public static void contributeComponentEventRequestHandler(OrderedConfiguration<ComponentEventRequestFilter> configuration, RememberMeHandler handler) {
+        configuration.add("RememberMeHandler1", handler);
+    }
+
+    @Contribute(PageRenderRequestHandler.class)
+    public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration, RememberMeHandler handler) {
+        configuration.add("RememberMeHandler2", handler);
+    }
+
+    public SecurityEncryptor buildSecurityEncryptor(@Inject @Value("${" + SymbolConstants.HMAC_PASSPHRASE + "}") String passphrase) {
+        return new SecurityEncryptor(passphrase);
+    }
+
+    @ServiceId("SecurityUserProvider")
+    public SecurityUserProvider buildSessionUserService(@Inject final UserDao userDao) {
+        return new SecurityUserProvider() {
 
             @Override
-            public SessionUser loadByCredentials(Credentials credentials) {
-                if (credentials.getToken() != null) {
-                    User user = userDao.findByToken(credentials.getToken());
-                    if (user != null) {
-                        Role[] role = user.getRoles();
-                        userDao.evict(user);
-                    }
-                    return user;
-                }
-                if (credentials.getUsername() != null) {
-                    User user = userDao.findByUsername(credentials.getUsername());
-                    if (null != user && user.getPassword().equals(credentials.getPassword())) {
+            public SecurityUser loadByCredentials(Credentials credentials) {
+                if (credentials instanceof CredentialsImpl) {
+                    CredentialsImpl credentialsImpl = (CredentialsImpl) credentials;
+                    User user = userDao.findByUsername(credentialsImpl.getUsername());
+                    if (null != user && user.getPassword().equals(credentialsImpl.getPassword())) {
                         Role[] role = user.getRoles();
                         userDao.evict(user);
                         return user;

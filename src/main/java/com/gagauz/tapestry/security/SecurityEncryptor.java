@@ -1,4 +1,4 @@
-package com.gagauz.tracker.web.services.security;
+package com.gagauz.tapestry.security;
 
 import java.security.spec.KeySpec;
 
@@ -10,7 +10,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.gagauz.tracker.utils.StringUtils;
+
 public class SecurityEncryptor {
+    private static final char JOIN_STR = '\0';
     private static final String ALGORITHM = "AES";
     private final Cipher encrypt;
     private final Cipher decrypt;
@@ -45,11 +48,21 @@ public class SecurityEncryptor {
     public String decrypt(String encryptedValue) {
         try {
             byte[] decordedValue = Base64.decodeBase64(encryptedValue.getBytes(CH));
-            byte[] decValue;
-            decValue = decrypt.doFinal(decordedValue);
+            byte[] decValue = decrypt.doFinal(decordedValue);
             return new String(decValue);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    public String encryptArray(String... strings) {
+        String joined = StringUtils.join(strings, JOIN_STR);
+        return encrypt(joined);
+    }
+
+    public String[] decryptArray(String string) {
+        string = decrypt(string);
+        return StringUtils.split(string, JOIN_STR);
+    }
+
 }

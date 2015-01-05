@@ -3,22 +3,14 @@
       xmlns:p="tapestry:parameter">
 
     <h2>Login page</h2>
-    <!--
     <t:form t:id="loginForm">
     	<t:label for="username"></t:label>
-    	<t:textfield t:id="username"/><br/>
+    	<t:textfield t:id="username" value="username"/><br/>
     	<t:label for="password"></t:label>
-    	<t:passwordfield t:id="password"/><br/>
+    	<t:passwordfield t:id="password" value="password"/><br/>
     	<t:label for="remember"></t:label>
-    	<t:checkbox t:id="remember"/><br/>
+    	<t:checkbox t:id="remember" value="remember"/><br/>
     	<t:submit/>
     </t:form>
--->
 
-	<form action="" method="post">
-		Username: <input type="text" name="username" value="${username}"/><br/>
-		Password: <input type="password" name="password" /><br/>
-		Remember me: <input type="checkbox" name="remember" value="${remember}"/><br/>
-		<input type="submit" value="login"/>
-	</form>
 </html>
