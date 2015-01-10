@@ -3,27 +3,29 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>${task.name} / ${task.version.version}</p>
-    <p>Owner: ${task.owner.name}</p>
-    <p>Creator: ${task.creator.name}</p>
+
+    <p>${featureVersion.name} / ${featureVersion.version.version}</p>
+    <p>Owner: ${featureVersion.owner.name}</p>
+    <p>Creator: ${featureVersion.creator.name}</p>
     <p>Description</p>
-    <p>${task.description}</p>
+    <p>${featureVersion.description}</p>
     <br/>
     
+    <!-- 
     <p>Subtasks</p>
-    <t:grid source="task.subtasks" row="subtask" add="edit">
+    <t:grid source="featureVersion.tasks" row="task" add="edit">
     	<p:editCell>
     		<t:pagelink page="FeatureVersionInfo" context="subtask">View</t:pagelink>
     	</p:editCell>
     </t:grid>
     
     <p>Bugs</p>
-    <t:grid source="task.bugs" row="bug" add="edit">
+    <t:grid source="featureVersion.bugs" row="bug" add="edit">
     	<p:editCell>
     		<t:pagelink page="FeatureVersionInfo" context="bug">View</t:pagelink>
     	</p:editCell>
     </t:grid>
-    
+     -->
     <p:sidebar>
     
     </p:sidebar>

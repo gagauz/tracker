@@ -1,15 +1,16 @@
 package com.gagauz.tracker.beans.setup;
 
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.JDBC4Connection;
 import com.mysql.jdbc.ResultSetInternalMethods;
 import com.mysql.jdbc.Statement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.util.Properties;
 
 public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor {
 
@@ -23,6 +24,7 @@ public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor
 
     private boolean initialized = false;
 
+    @Override
     public void init(Connection connection, Properties properties) throws SQLException {
         this.connection = (JDBC4Connection) connection;
         this.properties = properties;
@@ -39,6 +41,7 @@ public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor
         }
     }
 
+    @Override
     public ResultSetInternalMethods preProcess(String s, Statement statement, Connection connection) throws SQLException {
         if (!initialized) {
             init(connection, properties);
@@ -49,9 +52,15 @@ public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor
             String content = statement.toString();
             LOGGER.debug(conn_id + content.substring(content.indexOf(':')));
         }
+        try {
+            //throw new RuntimeException();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
+    @Override
     public ResultSetInternalMethods postProcess(String s, Statement statement, ResultSetInternalMethods resultSetInternalMethods, Connection connection)
             throws SQLException {
         SQLWarning warning;
@@ -63,10 +72,12 @@ public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor
         return resultSetInternalMethods;
     }
 
+    @Override
     public boolean executeTopLevelOnly() {
         return false;
     }
 
+    @Override
     public void destroy() {
         LOGGER.debug("Connection: {} destroyed", connection.toString());
     }

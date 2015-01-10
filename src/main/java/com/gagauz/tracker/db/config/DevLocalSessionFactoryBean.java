@@ -1,17 +1,24 @@
 package com.gagauz.tracker.db.config;
 
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.stereotype.Component;
+import static org.hibernate.cfg.AvailableSettings.DEFAULT_BATCH_FETCH_SIZE;
+import static org.hibernate.cfg.AvailableSettings.DIALECT;
+import static org.hibernate.cfg.AvailableSettings.FORMAT_SQL;
+import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
+import static org.hibernate.cfg.AvailableSettings.SHOW_SQL;
+import static org.hibernate.cfg.AvailableSettings.STATEMENT_BATCH_SIZE;
+import static org.hibernate.cfg.AvailableSettings.USE_REFLECTION_OPTIMIZER;
+import static org.hibernate.cfg.AvailableSettings.USE_SQL_COMMENTS;
 
 import java.util.Properties;
 
-import static org.hibernate.cfg.AvailableSettings.*;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
     public DevLocalSessionFactoryBean() {
-        setPackagesToScan(com.gagauz.tracker.db.model.Bug.class.getPackage().getName());
-        setAnnotatedPackages(new String[] {com.gagauz.tracker.db.model.Bug.class.getPackage().getName()});
+        setPackagesToScan(com.gagauz.tracker.db.model.User.class.getPackage().getName());
+        setAnnotatedPackages(new String[] {com.gagauz.tracker.db.model.User.class.getPackage().getName()});
         Properties properties = new Properties();
         properties.put(DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect");
         properties.put(SHOW_SQL, false);

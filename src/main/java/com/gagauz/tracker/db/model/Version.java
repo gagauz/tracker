@@ -16,6 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.ForeignKey;
+
 import com.gagauz.tracker.db.base.Identifiable;
 
 @Entity
@@ -44,6 +46,7 @@ public class Version implements Identifiable {
         this.id = id;
     }
 
+    @ForeignKey(name = "fk_version_project")
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public Project getProject() {
@@ -63,7 +66,8 @@ public class Version implements Identifiable {
         this.version = version;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.version")
+    @ForeignKey(name = "fk_version_features")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
     public List<FeatureVersion> getFeatureVersions() {
         return featureVersion;
     }

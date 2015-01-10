@@ -1,6 +1,8 @@
 package com.gagauz.tracker.web.components;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.tapestry5.annotations.Cached;
@@ -9,12 +11,15 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 
+import com.gagauz.tapestry.security.SecurityUserCreator;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.db.model.Bug;
+import com.gagauz.tracker.beans.dao.TaskDao;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.TaskType;
+import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
 
 public class ProjectMap {
@@ -30,40 +35,58 @@ public class ProjectMap {
 
     private Task task;
 
-    private Bug bug;
+    @Property
+    private int estimated;
 
-    private Map<Tuple, FeatureVersion> map;
-
-    private int estimated = 0;
-    private int progress = 0;
+    @Property
+    private int progress;
 
     @Inject
     private FeatureVersionDao featureVersionDao;
 
-    void onCreateFeatureVersion(Feature feature, Version version) {
-        FeatureVersion featureVersion = new FeatureVersion();
-        featureVersion.setFeature(feature);
-        featureVersion.setVersion(version);
-        featureVersionDao.save(featureVersion);
-    }
+    @Inject
+    private TaskDao taskDao;
 
-    @Cached
-    public Map<Tuple, FeatureVersion> getMap() {
-        if (null == map) {
-            map = CollectionFactory.newMap();
+    @Inject
+    private SecurityUserCreator securityUserCreator;
 
-            for (Version version : project.getVersions()) {
-                for (FeatureVersion task : version.getFeatureVersions()) {
-                    map.put(new Tuple(task.getVersion(), feature), task);
-                }
-            }
-        }
-        return map;
-    }
+    private Map<Version, Map<Feature, FeatureVersion>> featureVersionMap;
+    private Map<Integer, Map<Integer, List<Task>>> bugsMap;
+    private Map<Integer, Map<Integer, List<Task>>> tasksMap;
 
     @Cached
     public Collection<Version> getVersions() {
-        return project.getVersions();
+        List<Version> versions = project.getVersions();
+        if (null == featureVersionMap) {
+            featureVersionMap = CollectionFactory.newMap();
+            bugsMap = CollectionFactory.newMap();
+            tasksMap = CollectionFactory.newMap();
+            for (Version version : versions) {
+                Map<Feature, FeatureVersion> map = CollectionFactory.newMap();
+                Map<Integer, List<Task>> bugMap = CollectionFactory.newMap();
+                Map<Integer, List<Task>> taskMap = CollectionFactory.newMap();
+                for (Feature feature : getFeatures()) {
+                    map.put(feature, null);
+                    bugMap.put(feature.getId(), new ArrayList<Task>());
+                    taskMap.put(feature.getId(), new ArrayList<Task>());
+                }
+                featureVersionMap.put(version, map);
+                bugsMap.put(version.getId(), bugMap);
+                tasksMap.put(version.getId(), taskMap);
+            }
+
+            for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
+                featureVersionMap.get(featureVersion.getVersion()).put(featureVersion.getFeature(), featureVersion);
+            }
+            for (Task task : taskDao.findByProject(project)) {
+                if (task.getType() == TaskType.TASK) {
+                    tasksMap.get(task.getVersion().getId()).get(task.getFeature().getId()).add(task);
+                } else {
+                    bugsMap.get(task.getVersion().getId()).get(task.getFeature().getId()).add(task);
+                }
+            }
+        }
+        return versions;
     }
 
     @Cached
@@ -74,11 +97,26 @@ public class ProjectMap {
     public FeatureVersion getFeatureVersion() {
         estimated = 0;
         progress = 0;
-        return getMap().get(new Tuple(version, feature));
+        return featureVersionMap.get(version).get(feature);
     }
 
-    public String getProgress() {
-        return estimated > 0 ? 100 * (progress / estimated) + "%" : "N/A";
+    void onCreateFeatureVersion(Feature feature, Version version) {
+        FeatureVersion featureVersion = new FeatureVersion();
+        featureVersion.setFeature(feature);
+        featureVersion.setVersion(version);
+        User user = new User();
+        int id = ((User) securityUserCreator.getUserFromContext()).getId();
+        user.setId(id);
+        featureVersion.setCreator(user);
+        featureVersionDao.save(featureVersion);
+    }
+
+    public List<Task> getTasks() {
+        return tasksMap.get(version.getId()).get(feature.getId());
+    }
+
+    public List<Task> getBugs() {
+        return bugsMap.get(version.getId()).get(feature.getId());
     }
 
     public Task getTask() {
@@ -91,36 +129,4 @@ public class ProjectMap {
         this.task = task;
     }
 
-    public Bug getBug() {
-
-        return bug;
-    }
-
-    public void setBug(Bug bug) {
-        estimated += bug.getEstimated();
-        progress += bug.getProgress();
-        this.bug = bug;
-    }
-
-    private class Tuple {
-        private final Version version;
-        private final Feature feature;
-        private final int hash;
-
-        Tuple(Version version, Feature feature) {
-            this.feature = feature;
-            this.version = version;
-            this.hash = feature.hashCode() * version.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return this == obj || (((Tuple) obj).hash == hash);
-        }
-
-        @Override
-        public int hashCode() {
-            return hash;
-        }
-    }
 }

@@ -10,6 +10,8 @@ import org.apache.tapestry5.services.Cookies;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.PageRenderRequestHandler;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.gagauz.tapestry.security.LoginService;
 import com.gagauz.tapestry.security.LogoutHandler;
@@ -18,6 +20,8 @@ import com.gagauz.tapestry.security.SecurityUser;
 import com.gagauz.tapestry.security.SecurityUserCreator;
 
 public class RememberMeHandler implements LogoutHandler, ComponentEventRequestFilter, PageRenderRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(RememberMeHandler.class);
 
     public static final String REMEMBER_ME_COOKIE_NAME = "auth";
     public static final int REMEMBER_ME_COOKIE_AGE = 31536000;
@@ -52,11 +56,12 @@ public class RememberMeHandler implements LogoutHandler, ComponentEventRequestFi
         if (null == securityUserCreator.getUserFromContext()) {
             String cookieValue = cookies.readCookieValue(REMEMBER_ME_COOKIE_NAME);
             if (null != cookieValue) {
+                log.info("Handle remember me cookie [{}]", cookieValue);
                 try {
                     String[] credentials = securityEncryptor.decryptArray(cookieValue);
                     loginService.authenticate(new CredentialsImpl(credentials[0], credentials[1]));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Failed to login with cookie. Remove it.", e);
                     removeRememberMeCookie();
                 }
             }
@@ -72,7 +77,6 @@ public class RememberMeHandler implements LogoutHandler, ComponentEventRequestFi
                 handler.handle(parameters);
             }
         });
-
     }
 
     @Override
@@ -88,5 +92,4 @@ public class RememberMeHandler implements LogoutHandler, ComponentEventRequestFi
     private interface Handler {
         void handle() throws IOException;
     }
-
 }

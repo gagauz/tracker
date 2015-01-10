@@ -8,16 +8,22 @@
 		.project-map .version-col.col, .empty-col.col {width:100px;}
 		.project-map .task-col {background-color:#ffffcc;border:1px solid #ccccaa;}
 		.project-map .task-col-div {width:250px}
-		.project-map .task-col div{margin-bottom:5px;overflow:hidden;}
+		.project-map .task-col div{overflow:hidden;}
 		.project-map .task-col .owner {color:#660000}
 		.project-map .task-col .description {}
-		.project-map .tasks a {border:1px solid	gray;background-color:#dddddd;padding:2px 3px;float:left;margin:0 1px 1px 0;font-size:90%;}
-		.project-map .bugs a {border:1px solid red;background-color:#ffdddd;padding:2px 3px;float:left;margin:0 1px 1px 0;font-size:90%;}
+		.project-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 1px 0;font-size:90%;}
+		.project-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 1px 0;font-size:90%;}
 
-		.project-map .progress {border:green;color:green;}
+		.project-map .progr-bar {border:1px solid gray;background:black;float:right;position:relative;width:70px;color:white;height:100%;}
+		.project-map .progr-bar .progr-bar-fill {background:green;height:100%;position:absolute;left:0;z-index:0;}
+		.project-map .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:80%;padding:1px;}
 
 		.project-map th {padding:5px;white-space:normal;}
 		.project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
+		
+		.project-map th.version-col a {color:white}
+		
+		.project-map .progress {padding:3px 3px;margin:0 1px 1px 0;}
 	</style>
 	<div class="project-map">
 		<div class="project-map-owerflow">
@@ -34,8 +40,10 @@
 					<t:loop source="versions" value="version">
 						<tr>
 							<th class="version-col">
+								<t:pagelink t:page="versioninfo" t:context="version">
 								Name: ${version.version}<br/>
 								Release date: ${version.releaseDate}
+								</t:pagelink>
 							</th>
 							<t:loop source="features" value="feature">
 								<td class="task-col">
@@ -56,23 +64,30 @@
 										</div>
 										
 										<div class="tasks">
-											<div class="left">Tasks:</div>
-											<t:loop source="featureVersion.tasks" value="task">
-												<t:pagelink class="task" t:page="FeatureVersionInfo" t:context="featureVersion">${task.summary}</t:pagelink>
+											<div class="title">Tasks:</div>
+											<t:loop source="tasks" value="task">
+												<div class="row">
+													<t:pagelink t:page="TaskInfo" t:context="task">${task.summary}</t:pagelink>
+													<t:ProgressBar progress="task.progress" estimated="task.estimated"/>
+												</div>
 											</t:loop>
 										</div>
 										<div class="bugs">
-											<div class="left">Bugs:</div>
-											<t:loop source="featureVersion.bugs" value="bug">
-												<t:pagelink class="bug" t:page="FeatureVersionInfo" t:context="featureVersion">${bug.summary}</t:pagelink>
+											<div class="title">Bugs:</div>
+											<t:loop source="bugs" value="task">
+												<div class="row">
+													<t:pagelink t:page="BugInfo" t:context="task">${task.summary}</t:pagelink>
+													<t:ProgressBar progress="task.progress" estimated="task.estimated"/>
+												</div>
 											</t:loop>
 										</div>
 										<div class="progress">
-											Total progress: ${progress}
+											Total progress:
+											<t:ProgressBar progress="progress" estimated="estimated"/>
 										</div>
 										
 									<p:else>
-										<t:eventlink t:event="createFeatureVersion" t:context="[feature, version]">Create</t:eventlink>
+										<t:eventlink t:event="createFeatureVersion" t:context="[feature, version]">Create feature version</t:eventlink>
 									</p:else>
 									</t:if>
 									</div>

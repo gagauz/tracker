@@ -1,17 +1,32 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.gagauz.tracker.db.base.Identifiable;
 
 @Entity
 @Table(name = "task")
 public class Task implements Identifiable {
     private int id;
-    private FeatureVersion featureVersion;
+    //    private FeatureVersion featureVersion;
+    private TaskType type;
+    private Feature feature;
+    private Version version;
     private User creator;
     private User owner;
     private Date created = new Date();
@@ -33,18 +48,48 @@ public class Task implements Identifiable {
         this.id = id;
     }
 
-    @JoinColumns({
-            @JoinColumn(name = "feature_id", updatable = false, referencedColumnName = "feature_id"),
-            @JoinColumn(name = "version_id", updatable = false, referencedColumnName = "version_id")
-    })
-    @ManyToOne(fetch = FetchType.LAZY)
-    public FeatureVersion getFeatureVersion() {
-        return featureVersion;
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    public TaskType getType() {
+        return type;
     }
 
-    public void setFeatureVersion(FeatureVersion featureVersion) {
-        this.featureVersion = featureVersion;
+    public void setType(TaskType type) {
+        this.type = type;
     }
+
+    @JoinColumn(name = "feature_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Feature getFeature() {
+        return feature;
+    }
+
+    public void setFeature(Feature feature) {
+        this.feature = feature;
+    }
+
+    @JoinColumn(name = "version_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Version getVersion() {
+        return version;
+    }
+
+    public void setVersion(Version version) {
+        this.version = version;
+    }
+
+    //    @JoinColumns({
+    //            @JoinColumn(name = "feature_id", insertable = false, updatable = false, referencedColumnName = "feature_id"),
+    //            @JoinColumn(name = "version_id", insertable = false, updatable = false, referencedColumnName = "version_id")
+    //    })
+    //    @ManyToOne(fetch = FetchType.LAZY)
+    //    public FeatureVersion getFeatureVersion() {
+    //        return featureVersion;
+    //    }
+    //
+    //    public void setFeatureVersion(FeatureVersion featureVersion) {
+    //        this.featureVersion = featureVersion;
+    //    }
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)

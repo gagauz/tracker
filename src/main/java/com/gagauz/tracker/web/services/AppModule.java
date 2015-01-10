@@ -33,7 +33,6 @@ import com.gagauz.tapestry.security.SecurityEncryptor;
 import com.gagauz.tapestry.security.SecurityModule;
 import com.gagauz.tapestry.security.SecurityUser;
 import com.gagauz.tapestry.security.SecurityUserProvider;
-import com.gagauz.tracker.beans.dao.BugDao;
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.ProjectDao;
@@ -41,8 +40,8 @@ import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
-import com.gagauz.tracker.db.model.Bug;
 import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.RoleGroup;
@@ -76,7 +75,8 @@ public class AppModule {
     }
 
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
-        configuration.add(new LibraryMapping("tap", "com.gagauz.tapestry"));
+        configuration.add(new LibraryMapping("tap", "com.gagauz.tapestry.common"));
+        configuration.add(new LibraryMapping("security", "com.gagauz.tapestry.security"));
     }
 
     public static void contributeLogoutService(OrderedConfiguration<LogoutHandler> configuration, RememberMeHandler handler) {
@@ -123,8 +123,7 @@ public class AppModule {
                                                     final VersionDao versionDao,
                                                     final FeatureDao featureDao,
                                                     final FeatureVersionDao taskDao,
-                                                    final RoleGroupDao roleGroupDao,
-                                                    final BugDao bugDao) {
+                                                    final RoleGroupDao roleGroupDao) {
         configuration.add(User.class, new ValueEncoderFactory<User>() {
 
             @Override
@@ -180,30 +179,28 @@ public class AppModule {
                 };
             }
         });
-        /*
-                configuration.add(FeatureVersion.class, new ValueEncoderFactory<FeatureVersion>() {
+        configuration.add(FeatureVersion.class, new ValueEncoderFactory<FeatureVersion>() {
+
+            @Override
+            public ValueEncoder<FeatureVersion> create(Class<FeatureVersion> arg0) {
+                return new ValueEncoder<FeatureVersion>() {
 
                     @Override
-                    public ValueEncoder<FeatureVersion> create(Class<FeatureVersion> arg0) {
-                        return new ValueEncoder<FeatureVersion>() {
-
-                            @Override
-                            public String toClient(FeatureVersion arg0) {
-                                return null == arg0 ? null : String.valueOf(arg0.getId().getFeatureId() + "_" + arg0.getId().getVersionId());
-                            }
-
-                            @Override
-                            public FeatureVersion toValue(String arg0) {
-                                if (null == arg0) {
-                                    return null;
-                                }
-                                String[] ids = arg0.split("_");
-                                return taskDao.findById(new FeatureVersionId(Integer.parseInt(ids[0]), Integer.parseInt(ids[1])));
-                            }
-                        };
+                    public String toClient(FeatureVersion arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getFeature().getId() + "_" + arg0.getVersion().getId());
                     }
-                });
-        */
+
+                    @Override
+                    public FeatureVersion toValue(String arg0) {
+                        if (null == arg0) {
+                            return null;
+                        }
+                        String[] ids = arg0.split("_");
+                        return taskDao.findByFeatureAndVersion(Integer.parseInt(ids[0]), Integer.parseInt(ids[1]));
+                    }
+                };
+            }
+        });
         configuration.add(Feature.class, new ValueEncoderFactory<Feature>() {
 
             @Override
@@ -218,25 +215,6 @@ public class AppModule {
                     @Override
                     public Feature toValue(String arg0) {
                         return null == arg0 ? null : featureDao.findById(Integer.parseInt(arg0));
-                    }
-                };
-            }
-        });
-
-        configuration.add(Bug.class, new ValueEncoderFactory<Bug>() {
-
-            @Override
-            public ValueEncoder<Bug> create(Class<Bug> arg0) {
-                return new ValueEncoder<Bug>() {
-
-                    @Override
-                    public String toClient(Bug arg0) {
-                        return null == arg0 ? null : String.valueOf(arg0.getId());
-                    }
-
-                    @Override
-                    public Bug toValue(String arg0) {
-                        return null == arg0 ? null : bugDao.findById(Integer.parseInt(arg0));
                     }
                 };
             }

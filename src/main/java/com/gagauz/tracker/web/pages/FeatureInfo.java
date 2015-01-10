@@ -1,10 +1,8 @@
 package com.gagauz.tracker.web.pages;
 
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.gagauz.tapestry.security.Secured;
-import com.gagauz.tracker.beans.dao.BugDao;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 
@@ -16,9 +14,6 @@ public class FeatureInfo {
 
     @Property
     private FeatureVersion task;
-
-    @Inject
-    private BugDao bugDao;
 
     Object onActivate(Feature feature) {
         if (null == feature) {

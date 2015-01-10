@@ -1,15 +1,22 @@
 package com.gagauz.tracker.web.services;
 
+import static org.hibernate.cfg.AvailableSettings.DEFAULT_BATCH_FETCH_SIZE;
+import static org.hibernate.cfg.AvailableSettings.DIALECT;
+import static org.hibernate.cfg.AvailableSettings.FORMAT_SQL;
+import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
+import static org.hibernate.cfg.AvailableSettings.SHOW_SQL;
+import static org.hibernate.cfg.AvailableSettings.STATEMENT_BATCH_SIZE;
+import static org.hibernate.cfg.AvailableSettings.USE_REFLECTION_OPTIMIZER;
+import static org.hibernate.cfg.AvailableSettings.USE_SQL_COMMENTS;
+
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-
-import javax.sql.DataSource;
-
-import java.util.Properties;
-
-import static org.hibernate.cfg.AvailableSettings.*;
 
 public class DevelopmentModule {
 
@@ -46,8 +53,8 @@ public class DevelopmentModule {
 
     public static LocalSessionFactoryBean buildSessionFactory() {
         LocalSessionFactoryBean annotationSessionFactoryBean = new LocalSessionFactoryBean();
-        annotationSessionFactoryBean.setPackagesToScan(com.gagauz.tracker.db.model.Bug.class.getPackage().getName());
-        annotationSessionFactoryBean.setAnnotatedPackages(new String[] {com.gagauz.tracker.db.model.Bug.class.getPackage().getName()});
+        annotationSessionFactoryBean.setPackagesToScan(com.gagauz.tracker.db.model.User.class.getPackage().getName());
+        annotationSessionFactoryBean.setAnnotatedPackages(new String[] {com.gagauz.tracker.db.model.User.class.getPackage().getName()});
         Properties properties = new Properties();
         properties.put(DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect");
         properties.put(SHOW_SQL, false);

@@ -1,12 +1,29 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import com.gagauz.tracker.beans.dao.*;
-import com.gagauz.tracker.beans.setup.DataBaseScenario;
-import com.gagauz.tracker.db.model.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.beans.setup.DataBaseScenario;
+import com.gagauz.tracker.db.model.Attachment;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.TaskType;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
 
 @Service("ScVersion")
 public class ScVersion extends DataBaseScenario {
@@ -28,9 +45,6 @@ public class ScVersion extends DataBaseScenario {
 
     @Autowired
     private TaskDao taskDao;
-
-    @Autowired
-    private BugDao bugDao;
 
     @Autowired
     private ScUser scUser;
@@ -92,33 +106,39 @@ public class ScVersion extends DataBaseScenario {
                     int stc = rand.nextInt(5) + 1;
                     for (int k = 0; k < stc; k++) {
                         Task st = new Task();
-                        st.setFeatureVersion(t);
+                        st.setType(TaskType.TASK);
+                        //                        st.setFeatureVersion(t);
+                        st.setFeature(t.getFeature());
+                        st.setVersion(t.getVersion());
                         st.setOwner(user1);
                         st.setCreator(user2);
                         st.setSummary("Task #" + k);
                         st.setDescription("Lorem ipsum dolorsit.");
                         if (rand.nextBoolean()) {
-                            int es = rand.nextInt(240) + 60;
+                            int es = 15 * (rand.nextInt(10) + 1);
                             st.setEstimated(es);
-                            st.setProgress(es / (rand.nextInt(es) + 1));
+                            st.setProgress(es / (rand.nextInt(5) + 1));
                         }
                         taskDao.save(st);
                     }
 
                     stc = rand.nextInt(3);
                     for (int k = 0; k < stc; k++) {
-                        Bug st = new Bug();
-                        st.setFeatureVersion(t);
+                        Task st = new Task();
+                        st.setType(TaskType.BUG);
+                        //                        st.setFeatureVersion(t);
+                        st.setFeature(t.getFeature());
+                        st.setVersion(t.getVersion());
                         st.setOwner(user2);
                         st.setCreator(user1);
                         st.setSummary("Bug #" + k);
                         st.setDescription("Lorem ipsum dolorsit.");
                         if (rand.nextBoolean()) {
-                            int es = rand.nextInt(120) + 60;
+                            int es = 15 * (rand.nextInt(10) + 1);
                             st.setEstimated(es);
-                            st.setProgress(es / (rand.nextInt(es) + 1));
+                            st.setProgress(es / (rand.nextInt(5) + 1));
                         }
-                        bugDao.save(st);
+                        taskDao.save(st);
                     }
                 }
             }

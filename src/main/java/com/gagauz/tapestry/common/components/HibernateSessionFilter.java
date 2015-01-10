@@ -1,4 +1,4 @@
-package com.gagauz.tapestry.components;
+package com.gagauz.tapestry.common.components;
 
 import org.hibernate.*;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.gagauz.tapestry.components;
+package com.gagauz.tapestry.common.components;
 
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.BeforeRenderTemplate;

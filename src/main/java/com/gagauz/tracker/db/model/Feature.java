@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ForeignKey;
+
 import com.gagauz.tracker.db.base.Identifiable;
 
 @Entity
@@ -40,6 +42,7 @@ public class Feature implements Identifiable {
         this.id = id;
     }
 
+    @ForeignKey(name = "fk_feature_project")
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public Project getProject() {
@@ -50,6 +53,7 @@ public class Feature implements Identifiable {
         this.project = project;
     }
 
+    @ForeignKey(name = "fk_feature_owner")
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getCreator() {
@@ -80,7 +84,7 @@ public class Feature implements Identifiable {
         this.updated = updated;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.feature")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "feature")
     public List<FeatureVersion> getFeatureVersions() {
         return featureVersions;
     }

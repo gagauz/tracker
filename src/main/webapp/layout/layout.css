@@ -25,6 +25,9 @@ body {
 	top:0;
 }
 
+#header ul {float:right;list-style:none;margin:0}
+#header ul li {float:left;padding:3px 5px;}
+
 #footer {
 	height: 40px;
 	width:100%;

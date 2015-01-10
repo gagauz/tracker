@@ -20,6 +20,7 @@ public class SecurityModule {
         binder.bind(SecurityExceptionInterceptorFilter.class).withId("SecurityExceptionRequestFilter2");
         binder.bind(LoginService.class).withId("LoginService");
         binder.bind(LogoutService.class).withId("LogoutService");
+        binder.bind(RedirectLoginHandler.class);
     }
 
     public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration) {
@@ -40,5 +41,10 @@ public class SecurityModule {
     public void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration,
                                                    @Local SecurityExceptionInterceptorFilter filter) {
         configuration.add("SecurityExceptionFilterPage", filter, "after:*");
+    }
+
+    public void contributeLoginService(OrderedConfiguration<LoginHandler> configuration,
+                                       @Local RedirectLoginHandler handler) {
+        configuration.add("RedirectLoginHandler", handler);
     }
 }
