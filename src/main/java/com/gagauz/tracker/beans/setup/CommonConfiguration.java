@@ -1,7 +1,8 @@
 package com.gagauz.tracker.beans.setup;
 
-import com.gagauz.tracker.db.config.DevDataSource;
-import com.gagauz.tracker.db.config.DevLocalSessionFactoryBean;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,14 +17,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import com.gagauz.tracker.db.config.DevDataSource;
+import com.gagauz.tracker.db.config.DevLocalSessionFactoryBean;
 
 @Configuration
 @EnableScheduling
 @EnableTransactionManagement(proxyTargetClass = true)
 @ComponentScan(basePackages = "com.gagauz.tracker.beans")
-public abstract class CommonConfiguration {
+public class CommonConfiguration {
 
     @Bean(autowire = Autowire.BY_NAME)
     public DataSource dataSource() {

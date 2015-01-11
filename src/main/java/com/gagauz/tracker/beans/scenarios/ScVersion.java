@@ -55,6 +55,7 @@ public class ScVersion extends DataBaseScenario {
         User user2 = userDao.findById(2);
         for (int i = 0; i < 1; i++) {
             Project p = new Project();
+            p.setKey1("TRACKER");
             p.setName("Трекер (этот проект)");
             projectDao.save(p);
 

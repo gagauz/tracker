@@ -1,14 +1,17 @@
 package com.gagauz.tracker.db.model;
 
-import javax.persistence.*;
-
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "commit")
 public class Commit {
     private String hash;
-    private User author;
+    private String author;
     private String comment;
     private Date date;
 
@@ -22,13 +25,12 @@ public class Commit {
         this.hash = hash;
     }
 
-    @JoinColumn
-    @ManyToOne
-    public User getAuthor() {
+    @Column(nullable = false)
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 

@@ -2,6 +2,7 @@ package com.gagauz.tracker.beans.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -42,12 +43,23 @@ public class AbstractDao<Id extends Serializable, Entity> {
     }
 
     @SuppressWarnings("unchecked")
+    public Query createQuery(String queryString) {
+        return getSession().createQuery(queryString);
+    }
+
+    @SuppressWarnings("unchecked")
     public List<Entity> findAll() {
         return getSession().createCriteria(entityClass).list();
     }
 
     public void save(Entity entity) {
         getSession().saveOrUpdate(entity);
+    }
+
+    public void save(Collection<Entity> entities) {
+        for (Entity entity : entities) {
+            getSession().saveOrUpdate(entity);
+        }
     }
 
     public void evict(Entity entity) {

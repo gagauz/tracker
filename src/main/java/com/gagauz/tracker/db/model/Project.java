@@ -17,7 +17,7 @@ import com.gagauz.tracker.db.base.Identifiable;
 public class Project implements Identifiable {
 
     private int id;
-    private String key;
+    private String key1;
     private String name;
     private List<Version> versions;
     private List<Feature> features;
@@ -34,12 +34,12 @@ public class Project implements Identifiable {
     }
 
     @Column(nullable = false, unique = true)
-    public String getKey() {
-        return key;
+    public String getKey1() {
+        return key1;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setKey1(String key1) {
+        this.key1 = key1;
     }
 
     @Column(nullable = false)
