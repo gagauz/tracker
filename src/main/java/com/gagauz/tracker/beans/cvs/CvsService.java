@@ -1,25 +1,23 @@
 package com.gagauz.tracker.beans.cvs;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.gagauz.tracker.beans.dao.CommitDao;
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.db.model.Commit;
+import com.gagauz.tracker.db.model.Project;
+import edu.nyu.cs.javagit.api.DotGit;
+import edu.nyu.cs.javagit.api.JavaGitConfiguration;
+import edu.nyu.cs.javagit.api.JavaGitException;
+import edu.nyu.cs.javagit.api.commands.GitLogOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gagauz.tracker.beans.dao.CommitDao;
-import com.gagauz.tracker.db.model.Commit;
-
-import edu.nyu.cs.javagit.api.DotGit;
-import edu.nyu.cs.javagit.api.JavaGitConfiguration;
-import edu.nyu.cs.javagit.api.JavaGitException;
-import edu.nyu.cs.javagit.api.commands.GitLogOptions;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.*;
 
 @Service
 public class CvsService {
@@ -28,28 +26,35 @@ public class CvsService {
     @Autowired
     private CommitDao commitDao;
 
+    @Autowired
+    private ProjectDao projectDao;
+
     private boolean inited;
     private String gv;
     private Date lastCommitDate;
-    private DotGit dotGit;
+    private Map<Project, DotGit> dotGitMap = new HashMap<Project, DotGit>();
 
     public void init() {
+        for (Project project : projectDao.findAll()) {
+            initProjectRepo(project);
+        }
+    }
+
+    private DotGit initProjectRepo(Project project) {
         try {
-            //            JavaGitConfiguration.setGitPath("/usr/bin/");
             gv = JavaGitConfiguration.getGitVersion();
-            File repositoryDirectory = new File("R:/projects-my/tracker/");
-
-            //get the instance of the dotGit Object
-            dotGit = DotGit.getInstance(repositoryDirectory);
-
-            //Initialize the repository ,similar to git init
+            File repositoryDirectory = new File(project.getCvsRepositoryPath());
+            DotGit dotGit = DotGit.getInstance(repositoryDirectory);
             dotGit.init();
+            dotGitMap.put(project, dotGit);
+            return dotGit;
         } catch (JavaGitException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             inited = true;
         }
+        return null;
     }
 
     @Scheduled(fixedDelay = 10000)
@@ -61,23 +66,29 @@ public class CvsService {
         }
         try {
             List<Commit> commits = new ArrayList<Commit>();
-            GitLogOptions opts = new GitLogOptions();
-            if (lastCommitDate != null) {
-                opts.setOptLimitCommitSince(true, gitFormat.format(lastCommitDate));
-            }
-            for (edu.nyu.cs.javagit.api.commands.GitLogResponse.Commit c : dotGit.getLog(opts)) {
-                Commit commit = new Commit();
-                Date d = gitFormat.parse(c.getDateString());
-                if (null == lastCommitDate || lastCommitDate.before(d)) {
-                    lastCommitDate = d;
+            for (Project project : projectDao.findAll()) {
+                DotGit dotGit = dotGitMap.get(project);
+                if (null == dotGit) {
+                    dotGit = initProjectRepo(project);
                 }
-                commit.setDate(d);
-                commit.setAuthor(c.getAuthor());
-                commit.setComment(c.getMessage());
-                commit.setHash(c.getSha());
-                commits.add(commit);
+                GitLogOptions opts = new GitLogOptions();
+                if (lastCommitDate != null) {
+                    opts.setOptLimitCommitSince(true, gitFormat.format(lastCommitDate));
+                }
+                for (edu.nyu.cs.javagit.api.commands.GitLogResponse.Commit c : dotGit.getLog(opts)) {
+                    Commit commit = new Commit();
+                    Date d = gitFormat.parse(c.getDateString());
+                    if (null == lastCommitDate || lastCommitDate.before(d)) {
+                        lastCommitDate = d;
+                    }
+                    commit.setDate(d);
+                    commit.setAuthor(c.getAuthor());
+                    commit.setComment(c.getMessage().trim());
+                    commit.setHash(c.getSha());
+                    commits.add(commit);
 
-                System.out.println(c.getDateString() + " " + c.getSha() + " " + c.getAuthor() + " " + c.getMessage());
+                    System.out.println(c.getDateString() + " " + c.getSha() + " " + c.getAuthor() + " " + c.getMessage());
+                }
             }
 
             commitDao.save(commits);

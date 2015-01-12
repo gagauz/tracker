@@ -1,0 +1,24 @@
+<html t:type="layout" title="task header info"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+    <h2>${task.summary}</h2>
+    <h3>Description</h3>
+    <div>${task.description}</div>
+    <div>Creator: ${task.creator.name}</div>
+    <div>Created: ${task.created}</div>
+    <div>Version: ${task.version.version} </div>
+    
+    
+    <p:sidebar>
+        <p>
+            
+        </p>
+
+
+        <p>
+            
+        </p>
+    </p:sidebar>
+
+</html>

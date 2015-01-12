@@ -1,16 +1,10 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.gagauz.tracker.db.base.Identifiable;
+
+import javax.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "project")
@@ -19,6 +13,7 @@ public class Project implements Identifiable {
     private int id;
     private String key1;
     private String name;
+    private String cvsRepositoryPath;
     private List<Version> versions;
     private List<Feature> features;
 
@@ -77,6 +72,15 @@ public class Project implements Identifiable {
 
     public void setFeatures(List<Feature> features) {
         this.features = features;
+    }
+
+    @Column
+    public String getCvsRepositoryPath() {
+        return cvsRepositoryPath;
+    }
+
+    public void setCvsRepositoryPath(String cvsRepositoryPath) {
+        this.cvsRepositoryPath = cvsRepositoryPath;
     }
 
 }
