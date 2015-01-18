@@ -1,8 +1,12 @@
 package com.gagauz.tapestry.security;
 
-import java.util.List;
-
+import com.gagauz.tapestry.security.api.Credentials;
+import com.gagauz.tapestry.security.api.LoginHandler;
+import com.gagauz.tapestry.security.api.SecurityUser;
+import com.gagauz.tapestry.security.api.SecurityUserProvider;
 import org.apache.tapestry5.ioc.annotations.Inject;
+
+import java.util.List;
 
 public class LoginService {
 
@@ -22,7 +26,7 @@ public class LoginService {
 
         if (null != newUser) {
             SecurityUser oldUser = sessionUserCreator.createUser(newUser);
-            result = newUser.equals(oldUser) ? LoginResult.IGNORE : LoginResult.SUCCESS;
+            result = LoginResult.SUCCESS;
             for (LoginHandler handler : handlers) {
                 handler.handle(oldUser, newUser, result);
             }

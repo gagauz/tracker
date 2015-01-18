@@ -1,5 +1,7 @@
 package com.gagauz.tracker.db.model;
 
+import com.gagauz.tapestry.security.api.SecurityUser;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,7 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.gagauz.tapestry.security.SecurityUser;
 import com.gagauz.tracker.db.base.Identifiable;
 
 @Entity

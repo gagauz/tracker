@@ -43,13 +43,15 @@
 			<version>${easymock-release-version}</version>
 			<scope>test</scope>
 		</dependency>
- -->
+
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-release-version}</version>
 			<scope>test</scope>
 		</dependency>
+		
+	 -->
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-spring</artifactId>

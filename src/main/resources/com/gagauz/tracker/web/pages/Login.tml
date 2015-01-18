@@ -2,7 +2,12 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <h2>Login page</h2>
+	<t:if test="roles">
+    <h2>You need have ${roles} roles to proceed</h2>
+    <p:else>
+    <h2>You need to login to proceed</h2>
+    </p:else>
+    </t:if>
     <t:form t:id="loginForm">
     	<t:label for="username"></t:label>
     	<t:textfield t:id="username" value="username"/><br/>

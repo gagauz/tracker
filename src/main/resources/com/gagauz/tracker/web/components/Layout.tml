@@ -5,6 +5,15 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>${title}</title>
+<link rel="css/stylesheet" href="/static/js/jquery-ui.css"/>
+<link rel="css/stylesheet" href="/static/js/jquery-ui.structure.css"/>
+<link rel="css/stylesheet" href="/static/js/jquery-ui.theme.css"/>
+<script src="/static/js/external/jquery/jquery.js"></script>
+<script src="/static/js/jquery-ui.min.js"></script>
+<script type="text/javascript">
+jQuery.noConflict();
+var $j = jQuery;
+</script>
 </head>
 <body>
 	<div id="site-wrapper">

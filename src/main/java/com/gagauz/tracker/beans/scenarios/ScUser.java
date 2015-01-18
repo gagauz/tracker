@@ -1,14 +1,13 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.setup.DataBaseScenario;
 import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service("ScUserask")
 public class ScUser extends DataBaseScenario {
@@ -56,6 +55,17 @@ public class ScUser extends DataBaseScenario {
         user1.getRoleGroups().add(roleGroup2);
 
         userDao.save(user1);
+
+        for (int i = 0; i < 10; i++) {
+            User userx = new User();
+            userx.setEmail("email" + i + "@email.com");
+            userx.setUsername("username" + i);
+            userx.setName("User " + i + " Surname");
+            userx.setPassword("111");
+            userx.getRoleGroups().add(roleGroup2);
+
+            userDao.save(userx);
+        }
     }
 
 }

@@ -5,14 +5,13 @@ import com.gagauz.tracker.db.base.Identifiable;
 import javax.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "task")
 public class Task implements Identifiable {
     private int id;
-    //    private FeatureVersion featureVersion;
     private TaskType type;
+    private TaskStatus status = TaskStatus.OPEN;
     private Feature feature;
     private Version version;
     private User creator;
@@ -23,7 +22,7 @@ public class Task implements Identifiable {
     private String description;
     private int estimated;
     private int progress;
-    private List<Commit> commits;
+    private int priority;
 
     @Override
     @Id
@@ -44,6 +43,16 @@ public class Task implements Identifiable {
 
     public void setType(TaskType type) {
         this.type = type;
+    }
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 
     @JoinColumn(name = "feature_id", nullable = false)
@@ -155,13 +164,18 @@ public class Task implements Identifiable {
         this.progress = progress;
     }
 
-    @OneToMany
-    public List<Commit> getCommits() {
-        return commits;
+    @Column
+    public int getPriority() {
+        return priority;
     }
 
-    public void setCommits(List<Commit> commits) {
-        this.commits = commits;
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    @Transient
+    public boolean isBug() {
+        return type == TaskType.BUG;
     }
 
 }

@@ -1,4 +1,6 @@
-package com.gagauz.tapestry.security;
+package com.gagauz.tapestry.security.api;
+
+import com.gagauz.tapestry.security.LoginResult;
 
 public interface LoginHandler {
 

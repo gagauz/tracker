@@ -1,25 +1,16 @@
 package com.gagauz.tracker.web.services;
 
-import java.io.IOException;
-
+import com.gagauz.tapestry.security.*;
+import com.gagauz.tapestry.security.api.LogoutHandler;
+import com.gagauz.tapestry.security.api.SecurityUser;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.ComponentEventRequestFilter;
-import org.apache.tapestry5.services.ComponentEventRequestHandler;
-import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.Cookies;
-import org.apache.tapestry5.services.PageRenderRequestFilter;
-import org.apache.tapestry5.services.PageRenderRequestHandler;
-import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gagauz.tapestry.security.LoginService;
-import com.gagauz.tapestry.security.LogoutHandler;
-import com.gagauz.tapestry.security.SecurityEncryptor;
-import com.gagauz.tapestry.security.SecurityUser;
-import com.gagauz.tapestry.security.SecurityUserCreator;
+import java.io.IOException;
 
-public class RememberMeHandler implements LogoutHandler, ComponentEventRequestFilter, PageRenderRequestFilter {
+public class RememberMeHandler extends AbstractCommonRequestFilter implements LogoutHandler {
 
     private static final Logger log = LoggerFactory.getLogger(RememberMeHandler.class);
 
@@ -52,7 +43,8 @@ public class RememberMeHandler implements LogoutHandler, ComponentEventRequestFi
         cookies.removeCookieValue(REMEMBER_ME_COOKIE_NAME);
     }
 
-    public void service(String page, Handler handler) throws IOException {
+    @Override
+    public void handleInternal(AbstractCommonHandlerWrapper handlerWrapper) throws IOException {
         if (null == securityUserCreator.getUserFromContext()) {
             String cookieValue = cookies.readCookieValue(REMEMBER_ME_COOKIE_NAME);
             if (null != cookieValue) {
@@ -66,30 +58,7 @@ public class RememberMeHandler implements LogoutHandler, ComponentEventRequestFi
                 }
             }
         }
-        handler.handle();
+        handlerWrapper.handle();
     }
 
-    @Override
-    public void handle(final ComponentEventRequestParameters parameters, final ComponentEventRequestHandler handler) throws IOException {
-        service(parameters.getActivePageName(), new Handler() {
-            @Override
-            public void handle() throws IOException {
-                handler.handle(parameters);
-            }
-        });
-    }
-
-    @Override
-    public void handle(final PageRenderRequestParameters parameters, final PageRenderRequestHandler handler) throws IOException {
-        service(parameters.getLogicalPageName(), new Handler() {
-            @Override
-            public void handle() throws IOException {
-                handler.handle(parameters);
-            }
-        });
-    }
-
-    private interface Handler {
-        void handle() throws IOException;
-    }
 }

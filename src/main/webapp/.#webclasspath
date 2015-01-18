@@ -1,5 +1,5 @@
-R:\projects-my\tracker\target\classes
-R:\projects-my\tracker\target\test-classes
+R:\projects\github\tracker\target\classes
+R:\projects\github\tracker\target\test-classes
 R:\maven_repo\javax\inject\javax.inject\1\javax.inject-1.jar
 R:\maven_repo\javax\mail\mail\1.4\mail-1.4.jar
 R:\maven_repo\org\apache\tapestry\tapestry-core\5.3.7\tapestry-core-5.3.7.jar
@@ -69,6 +69,7 @@ R:\maven_repo\org\apache\geronimo\specs\geronimo-jta_1.1_spec\1.1.1\geronimo-jta
 R:\maven_repo\org\eclipse\jetty\jetty-webapp\7.0.0.v20091005\jetty-webapp-7.0.0.v20091005.jar
 R:\maven_repo\org\eclipse\jetty\jetty-xml\7.0.0.v20091005\jetty-xml-7.0.0.v20091005.jar
 R:\maven_repo\org\eclipse\jetty\jetty-util\7.0.0.v20091005\jetty-util-7.0.0.v20091005.jar
+R:\maven_repo\org\eclipse\jetty\jetty-servlet\7.0.0.v20091005\jetty-servlet-7.0.0.v20091005.jar
 R:\maven_repo\org\eclipse\jetty\jetty-security\7.0.0.v20091005\jetty-security-7.0.0.v20091005.jar
 R:\maven_repo\org\eclipse\jetty\jetty-server\7.0.0.v20091005\jetty-server-7.0.0.v20091005.jar
 R:\maven_repo\org\eclipse\jetty\jetty-continuation\7.0.0.v20091005\jetty-continuation-7.0.0.v20091005.jar
@@ -106,3 +107,4 @@ R:\maven_repo\org\springframework\spring-orm\4.0.2.RELEASE\spring-orm-4.0.2.RELE
 R:\maven_repo\org\springframework\spring-jdbc\4.0.2.RELEASE\spring-jdbc-4.0.2.RELEASE.jar
 R:\maven_repo\org\springframework\spring-tx\4.0.2.RELEASE\spring-tx-4.0.2.RELEASE.jar
 R:\maven_repo\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar
+R:\projects\github\tracker\src\main\webapp\WEB-INF\lib\javagit-0.1.0.jar

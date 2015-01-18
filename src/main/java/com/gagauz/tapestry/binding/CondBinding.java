@@ -4,11 +4,6 @@ import org.apache.tapestry5.Binding;
 import org.apache.tapestry5.internal.bindings.AbstractBinding;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 
-/**
- * User: code8
- * Date: 12.06.13
- * Time: 17:32
- */
 public class CondBinding extends AbstractBinding {
     private final Binding conditionBinding;
     private final Binding trueBinding;

@@ -3,6 +3,7 @@ package com.gagauz.tracker.beans.scenarios;
 import com.gagauz.tracker.beans.dao.*;
 import com.gagauz.tracker.beans.setup.DataBaseScenario;
 import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,14 +96,21 @@ public class ScVersion extends DataBaseScenario {
                         //                        st.setFeatureVersion(t);
                         st.setFeature(t.getFeature());
                         st.setVersion(t.getVersion());
-                        st.setOwner(user1);
-                        st.setCreator(user2);
+                        st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
+                        st.setCreator(userDao.findById(RandomUtils.getRandomInt(9) + 1));
                         st.setSummary("Task #" + k);
                         st.setDescription("Lorem ipsum dolorsit.");
+                        st.setPriority(rand.nextInt(30));
+
+                        int es = 15 * (rand.nextInt(30) + 1);
+                        st.setEstimated(es);
                         if (rand.nextBoolean()) {
-                            int es = 15 * (rand.nextInt(10) + 1);
-                            st.setEstimated(es);
                             st.setProgress(es / (rand.nextInt(5) + 1));
+                            if (st.getProgress() < st.getEstimated()) {
+                                st.setStatus(TaskStatus.IN_PROGRESS);
+                            } else {
+                                st.setStatus(TaskStatus.RESOLVED);
+                            }
                         }
                         taskDao.save(st);
                     }
@@ -114,14 +122,21 @@ public class ScVersion extends DataBaseScenario {
                         //                        st.setFeatureVersion(t);
                         st.setFeature(t.getFeature());
                         st.setVersion(t.getVersion());
-                        st.setOwner(user2);
-                        st.setCreator(user1);
+                        st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
+                        st.setCreator(userDao.findById(RandomUtils.getRandomInt(9) + 1));
                         st.setSummary("Bug #" + k);
                         st.setDescription("Lorem ipsum dolorsit.");
+                        st.setPriority(rand.nextInt(10));
+
+                        int es = 15 * (rand.nextInt(10) + 1);
+                        st.setEstimated(es);
                         if (rand.nextBoolean()) {
-                            int es = 15 * (rand.nextInt(10) + 1);
-                            st.setEstimated(es);
                             st.setProgress(es / (rand.nextInt(5) + 1));
+                            if (st.getProgress() < st.getEstimated()) {
+                                st.setStatus(TaskStatus.IN_PROGRESS);
+                            } else {
+                                st.setStatus(TaskStatus.RESOLVED);
+                            }
                         }
                         taskDao.save(st);
                     }

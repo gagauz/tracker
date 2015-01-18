@@ -9,6 +9,7 @@
     <extraInfo></extraInfo>
     <webPath>/</webPath>
     <webClassPathEntries>
+        <webClassPathEntry>/tracker/src/main/webapp/WEB-INF/lib/javagit-0.1.0.jar</webClassPathEntry>
         <webClassPathEntry>/tracker/target/classes</webClassPathEntry>
         <webClassPathEntry>/tracker/target/test-classes</webClassPathEntry>
         <webClassPathEntry>M2_REPO/antlr/antlr/2.7.7/antlr-2.7.7.jar</webClassPathEntry>
@@ -73,6 +74,7 @@
         <webClassPathEntry>M2_REPO/org/eclipse/jetty/jetty-plus/7.0.0.v20091005/jetty-plus-7.0.0.v20091005.jar</webClassPathEntry>
         <webClassPathEntry>M2_REPO/org/eclipse/jetty/jetty-security/7.0.0.v20091005/jetty-security-7.0.0.v20091005.jar</webClassPathEntry>
         <webClassPathEntry>M2_REPO/org/eclipse/jetty/jetty-server/7.0.0.v20091005/jetty-server-7.0.0.v20091005.jar</webClassPathEntry>
+        <webClassPathEntry>M2_REPO/org/eclipse/jetty/jetty-servlet/7.0.0.v20091005/jetty-servlet-7.0.0.v20091005.jar</webClassPathEntry>
         <webClassPathEntry>M2_REPO/org/eclipse/jetty/jetty-util/7.0.0.v20091005/jetty-util-7.0.0.v20091005.jar</webClassPathEntry>
         <webClassPathEntry>M2_REPO/org/eclipse/jetty/jetty-webapp/7.0.0.v20091005/jetty-webapp-7.0.0.v20091005.jar</webClassPathEntry>
         <webClassPathEntry>M2_REPO/org/eclipse/jetty/jetty-xml/7.0.0.v20091005/jetty-xml-7.0.0.v20091005.jar</webClassPathEntry>

@@ -1,6 +1,7 @@
 package com.gagauz.tapestry.security;
 
-import java.security.spec.KeySpec;
+import com.gagauz.tracker.utils.StringUtils;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -8,9 +9,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.codec.binary.Base64;
-
-import com.gagauz.tracker.utils.StringUtils;
+import java.security.spec.KeySpec;
+import java.util.Collection;
 
 public class SecurityEncryptor {
     private static final char JOIN_STR = '\0';
@@ -53,6 +53,11 @@ public class SecurityEncryptor {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String encryptArray(Collection<String> strings) {
+        String joined = StringUtils.join(strings, JOIN_STR);
+        return encrypt(joined);
     }
 
     public String encryptArray(String... strings) {

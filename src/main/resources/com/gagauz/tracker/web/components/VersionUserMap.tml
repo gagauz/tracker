@@ -1,0 +1,111 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<style>
+		.left {float:left}
+		.version-user-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
+		.version-user-map-owerflow {display:inline-block;position:absolute1;}
+		.version-user-map .version-col {background-color:#009900;color:white;border:1px solid #ccffcc;font-size:13px;}
+		.version-user-map .version-col.col, .empty-col.col {width:100px;}
+		.version-user-map .task-col {background-color:#ffffcc;border:1px solid #ccccaa;}
+		.version-user-map .task-cells {font-size:12px;overflow:hidden1;white-space:nowrap;}
+		.version-user-map .task-cell-div {display:inline-block;margin:1px;border:1px solid gray;background-color:#f0f0ff;padding:4px 8px;position:relative;width:100px;}
+		.version-user-map .task-cell-div.bug-true {border:1px solid red;background-color:#fff0d0;}
+		.version-user-map .task-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}
+		.version-user-map .task-cell-div .status {}
+		.version-user-map .version-col .todo {border:1px solid gray;background-color:#f0f0d0;padding:2px 4px;color:black;}
+		.version-user-map .task-cell-div .title a {overflow:hidden;}
+		.version-user-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
+		.version-user-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
+		.version-user-map .nowrap {white-space:nowrap;}
+		.version-user-map .progr-time {float:right;font-size:80%;padding:3px 3px;}
+		.version-user-map .progr-bar {border:1px solid gray;background:black;float:right;position:relative;width:100%;color:white;height:100%;top:0;left:0;margin-top:2px;}
+		.version-user-map .progr-bar .progr-bar-fill {background:green;height:100%;position:absolute;left:0;z-index:0;margin:0;padding:0;}
+		.version-user-map .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:80%;padding:1px;}
+
+		.version-user-map th {padding:5px;white-space:normal;}
+		.version-user-map td {padding:0;vertical-align:top;white-space:normal;}
+		
+		.version-user-map th.version-col a {color:white}
+		
+		.version-user-map .progress .row {border:1px solid silver;background-color:#f0f0d0;padding:3px 3px;margin:5px 1px 1px 0;font-size:90%;}
+		.version-user-map .task-cells.ui-state-hover {background-color:#f0f0f0;}
+		.version-user-map .total-user-time {background:white;clear:left;border:1px solid gray;background:#f0fff0;padding:4px 8px;margin:1px;}
+	</style>
+	<div class="version-user-map">
+		<div class="version-user-map-owerflow">
+			<table width="100%">
+				<thead>
+					<th>User</th>
+					<th width="99%">User tasks</th>
+				</thead>
+				<tbody>
+					<t:loop source="users" value="user">
+						<tr>
+							<th class="version-col">
+								<div class="nowrap">${user.name}</div>
+							</th>
+							
+							<td class="task-col">
+								<div class="task-cells" data-user-id="${user.id}">
+									<t:loop source="userTasks" value="task">
+										<div class="task-cell-div bug-${task.isBug()} ${cond:draggable,drag,}" data-user-id="${user.id}" data-task-id="${task.id}">
+											<div>
+												<div class="title nowrap">
+													<t:pagelink t:page="taskinfo" t:context="task" title="${task.summary}">
+													#${task.id} ${task.summary}
+													</t:pagelink>
+												</div>
+												<div class="status">
+													Status: ${task.status}
+												</div>
+												<div class="status">
+													Remain: ${taskTime}
+												</div>
+											</div>
+											<t:ProgressBar progress="task.progress" estimated="task.estimated" percent="true"/>
+										</div>
+									</t:loop>
+									<div class="total-user-time" style="width:${getTasksWidth()}px">
+										Remain: ${tasksTime}
+									</div>
+								</div>
+							</td>
+						</tr>
+					</t:loop>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	$j(".drag").draggable({
+		appendTo: "div.version-user-map",
+		snap: ".task-cells",
+		helper: "clone",
+		start: function(){
+        	$j(this).hide();             
+	    },
+	    stop: function(){
+	        $j(this).show()
+	    }
+	});
+	$j(".task-cells").droppable({
+		hoverClass: "ui-state-hover",
+		drop: function(event, ui) {
+			if (ui.draggable.data("user-id") != $j(this).data("user-id")) {
+				$j(ui.draggable).detach().appendTo(this);
+				
+				$j.post(
+					"${eventUrl}",
+					{
+						task: ui.draggable.data("task-id"),
+						user: $j(this).data("user-id")
+					},
+					function() {
+						window.location = window.location;
+					} 
+				);
+			}
+		}
+    });
+	</script>
+</div>

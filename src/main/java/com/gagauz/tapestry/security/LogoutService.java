@@ -1,5 +1,9 @@
 package com.gagauz.tapestry.security;
 
+import com.gagauz.tapestry.security.api.LogoutHandler;
+
+import com.gagauz.tapestry.security.api.SecurityUser;
+
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;

@@ -1,6 +1,9 @@
 package com.gagauz.tracker.web.services;
 
+import com.gagauz.tapestry.binding.CondBindingFactory;
 import com.gagauz.tapestry.security.*;
+import com.gagauz.tapestry.security.api.*;
+import com.gagauz.tapestry.security.impl.RedirectLoginHandler;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.Role;
@@ -12,6 +15,8 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.*;
+import org.apache.tapestry5.ioc.services.ServiceOverride;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.services.*;
 
 /**
@@ -28,6 +33,7 @@ public class AppModule {
 
     public static void bind(ServiceBinder binder) {
         binder.bind(RememberMeHandler.class);
+        binder.bind(ToolsService.class);
     }
 
     public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
@@ -37,6 +43,9 @@ public class AppModule {
 
     public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
+        configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
+        configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_PARAMETER, "r");
+        configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_URL, "/login");
     }
 
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
@@ -44,6 +53,17 @@ public class AppModule {
         configuration.add(new LibraryMapping("security", "com.gagauz.tapestry.security"));
     }
 
+    @Contribute(SecurityExceptionInterceptorFilter.class)
+    public void contributeSecurityExceptionInterceptorFilter(OrderedConfiguration<SecurityExceptionHandler> configuration, @Inject RedirectLoginHandler filter) {
+        configuration.add("RedirectLoginHandler", filter);
+    }
+
+    @Contribute(LoginService.class)
+    public void contributeLoginService(OrderedConfiguration<LoginHandler> configuration, @Inject RedirectLoginHandler filter) {
+        configuration.add("RedirectLoginHandler", filter);
+    }
+
+    @Contribute(LogoutService.class)
     public static void contributeLogoutService(OrderedConfiguration<LogoutHandler> configuration, RememberMeHandler handler) {
         configuration.add("RememberMeLogoutHandler", handler);
     }
@@ -60,6 +80,10 @@ public class AppModule {
 
     public SecurityEncryptor buildSecurityEncryptor(@Inject @Value("${" + SymbolConstants.HMAC_PASSPHRASE + "}") String passphrase) {
         return new SecurityEncryptor(passphrase);
+    }
+
+    public static void contributeBindingSource(MappedConfiguration<String, BindingFactory> configuration, BindingSource bindingSource, TypeCoercer typeCoercer) {
+        configuration.add("cond", new CondBindingFactory(bindingSource, typeCoercer));
     }
 
     @ServiceId("SecurityUserProvider")
@@ -80,6 +104,22 @@ public class AppModule {
                 return null;
             }
         };
+    }
+
+    @Contribute(ServiceOverride.class)
+    public static void overrideUrlEncoder(MappedConfiguration<Class<?>, Object> configuration) {
+        configuration.add(URLEncoder.class, new URLEncoder() {
+
+            @Override
+            public String decode(String input) {
+                return input;
+            }
+
+            @Override
+            public String encode(String input) {
+                return input;
+            }
+        });
     }
 
 }

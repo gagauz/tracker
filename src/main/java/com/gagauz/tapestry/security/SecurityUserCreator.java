@@ -1,5 +1,7 @@
 package com.gagauz.tapestry.security;
 
+import com.gagauz.tapestry.security.api.SecurityUser;
+
 import org.apache.tapestry5.services.ApplicationStateManager;
 
 public class SecurityUserCreator {

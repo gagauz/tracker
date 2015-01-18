@@ -1,4 +1,4 @@
-package com.gagauz.tapestry.security;
+package com.gagauz.tapestry.security.api;
 
 import com.gagauz.tracker.db.model.Role;
 

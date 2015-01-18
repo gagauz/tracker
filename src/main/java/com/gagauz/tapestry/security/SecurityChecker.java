@@ -1,5 +1,7 @@
 package com.gagauz.tapestry.security;
 
+import com.gagauz.tapestry.security.api.SecurityUser;
+
 import javax.inject.Inject;
 
 import com.gagauz.tracker.db.model.Role;
