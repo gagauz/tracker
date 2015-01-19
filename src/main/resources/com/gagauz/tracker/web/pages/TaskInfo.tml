@@ -7,8 +7,11 @@
     <div>${task.description}</div>
     <div>Creator: ${task.creator.name}</div>
     <div>Created: ${task.created}</div>
-    <div>Version: ${task.version.version} </div>
-    
+    <div>Version: <t:pagelink t:page="versioninfo" t:context="task.version">${task.version.version}</t:pagelink></div>
+     <div><b>Description</b></div>
+    <div>
+    ${task.description}
+    </div>
     
     <p:sidebar>
         <p>
