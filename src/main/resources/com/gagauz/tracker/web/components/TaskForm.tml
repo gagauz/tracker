@@ -1,0 +1,48 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+	<style>
+	.task-header {padding:10px;border:1px dashed gray;background:#f0f0f0;overflow:hidden;}
+	.task-header .column {width:50%; float:left;}
+	.task-header .row b {width:150px; float:left;}
+	
+	</style>
+      
+	<div class="task-header">
+		<div class="column">
+			<div class="row">
+				<b><t:if test="task.bug">
+				Bug #
+				<p:else>
+				Task #
+				</p:else>
+				</t:if></b>
+				${task.id}
+			</div>
+			<div class="row">
+				<b>Status:</b> ${task.status}
+			</div>
+			<div class="row">
+				<b>Feature:</b> ${task.feature.name}
+			</div>
+			<div class="row">
+				<b>Version:</b> ${task.version.version}
+			</div>
+			<div class="row">
+				<b>Priority:</b> ${task.priority}
+			</div>
+		</div>
+		<div class="column">
+			<div class="row"><b>Creator:</b> ${task.creator.name}</div>
+			<div class="row"><b>Owner:</b> ${cond:task.owner,prop:task.owner.name,Unassigned}</div>
+	    	<div class="row"><b>Created:</b> ${date:task.created}</div>
+	    	<div class="row"><b>Last updated:</b> ${date:task.updated}</div>
+		</div>
+	</div>
+
+    <h2>${task.summary}</h2>
+    <div><b>Description</b></div>
+    <div>
+    ${task.description}
+    </div>
+
+</div>

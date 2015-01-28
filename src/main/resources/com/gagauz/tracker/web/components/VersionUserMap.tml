@@ -6,7 +6,8 @@
 		.version-user-map .version-col {background-color:#009900;color:white;border:1px solid #ccffcc;font-size:13px;}
 		.version-user-map .version-col.col, .empty-col.col {width:100px;}
 		.version-user-map .task-col {background-color:#ffffcc;border:1px solid #ccccaa;}
-		.version-user-map .task-cells {font-size:12px;overflow:hidden1;white-space:nowrap;}
+		.version-user-map .task-col.unassigned {background-color:#d0d0d0;}
+		.version-user-map .task-cells {font-size:12px;overflow:hidden1;white-space:nowrap;min-height:50px;}
 		.version-user-map .task-cell-div {display:inline-block;margin:1px;border:1px solid gray;background-color:#f0f0ff;padding:4px 8px;position:relative;width:100px;}
 		.version-user-map .task-cell-div.bug-true {border:1px solid red;background-color:#fff0d0;}
 		.version-user-map .task-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}
@@ -41,18 +42,23 @@
 					<t:loop source="users" value="user">
 						<tr>
 							<th class="version-col">
-								<div class="nowrap">${user.name}</div>
+								<div class="nowrap">
+									<t:if test="user">
+									${user.name}
+									<p:else>Unassigned</p:else>
+									</t:if>
+								</div>
 							</th>
 							
-							<td class="task-col">
-								<div class="task-cells" data-user-id="${user.id}">
+							<td class="task-col ${cond:user,,unassigned}">
+								<div class="task-cells" data-user-id="${cond:user,prop:user.id,0}">
 									<t:loop source="userTasks" value="task">
-										<div class="task-cell-div bug-${task.isBug()} ${cond:draggable,drag,}" data-user-id="${user.id}" data-task-id="${task.id}">
+										<div class="task-cell-div bug-${task.isBug()} ${cond:draggable,drag,}" data-user-id="${cond:user,prop:user.id,0}" data-task-id="${task.id}">
 											<div>
 												<div class="title nowrap">
-													<t:pagelink t:page="taskinfo" t:context="task" title="${task.summary}">
+													<t:eventlink t:event="viewtask" t:context="task" t:zone="taskZone" title="${task.summary}">
 													#${task.id} ${task.summary}
-													</t:pagelink>
+													</t:eventlink>
 												</div>
 												<div class="status">
 													Status: ${task.status}
@@ -64,15 +70,23 @@
 											<t:ProgressBar progress="task.progress" estimated="task.estimated" percent="true"/>
 										</div>
 									</t:loop>
-									<div class="total-user-time" style="width:${getTasksWidth()}px">
-										Remain: ${tasksTime}
-									</div>
+									<t:if test="tasksTime">
+										<div class="total-user-time" style="width:${getTasksWidth()}px">
+											Remain: ${tasksTime}
+										</div>
+									</t:if>
 								</div>
 							</td>
 						</tr>
 					</t:loop>
 				</tbody>
 			</table>
+		</div>
+	</div>
+	
+	<div style="display:none">
+		<div t:id="taskZone">
+			<t:TaskForm task="viewTask"/>
 		</div>
 	</div>
 	

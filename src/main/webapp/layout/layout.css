@@ -120,3 +120,11 @@ div.page {
 
 /* Content */
 
+.popup-window {
+	background-color:white;padding:10px 10px;
+}
+
+.popup-close {
+	position:absolute;
+	right:5px;top:5px;
+}

@@ -1,6 +1,7 @@
 package com.gagauz.tracker.web.services;
 
 import com.gagauz.tapestry.binding.CondBindingFactory;
+import com.gagauz.tapestry.binding.DateBindingFactory;
 import com.gagauz.tapestry.security.*;
 import com.gagauz.tapestry.security.api.*;
 import com.gagauz.tapestry.security.impl.RedirectLoginHandler;
@@ -18,6 +19,8 @@ import org.apache.tapestry5.ioc.annotations.*;
 import org.apache.tapestry5.ioc.services.ServiceOverride;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.services.*;
+import org.apache.tapestry5.services.javascript.JavaScriptStack;
+import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -53,6 +56,13 @@ public class AppModule {
         configuration.add(new LibraryMapping("security", "com.gagauz.tapestry.security"));
     }
 
+    @Contribute(JavaScriptStackSource.class)
+    public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
+                                                       final AssetSource assetSource) {
+        configuration.add(JQueryStack.NAME, new JQueryStack(assetSource));
+        configuration.add(TrackerStack.NAME, new TrackerStack(assetSource));
+    }
+
     @Contribute(SecurityExceptionInterceptorFilter.class)
     public void contributeSecurityExceptionInterceptorFilter(OrderedConfiguration<SecurityExceptionHandler> configuration, @Inject RedirectLoginHandler filter) {
         configuration.add("RedirectLoginHandler", filter);
@@ -84,6 +94,7 @@ public class AppModule {
 
     public static void contributeBindingSource(MappedConfiguration<String, BindingFactory> configuration, BindingSource bindingSource, TypeCoercer typeCoercer) {
         configuration.add("cond", new CondBindingFactory(bindingSource, typeCoercer));
+        configuration.add("date", new DateBindingFactory(bindingSource, typeCoercer));
     }
 
     @ServiceId("SecurityUserProvider")

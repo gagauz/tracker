@@ -22,36 +22,21 @@
 		</dependency>
 
 		<dependency>
-		    <groupId>org.apache.tapestry</groupId>
-		    <artifactId>tapestry-upload</artifactId>
-		    <version>${tapestry-release-version}</version> 
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-upload</artifactId>
+			<version>${tapestry-release-version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.got5</groupId> <artifactId>tapestry5-jquery</artifactId> <version>3.3.7</version> </dependency> -->
 		<!-- A dependency on either JUnit or TestNG is required, or the surefire plugin (which runs the tests) will fail, preventing Maven from packaging the WAR. Tapestry includes 
 			a large number of testing facilities designed for use with TestNG (http://testng.org/), so it's recommended. -->
-<!-- 
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>${testng-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>${easymock-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-test</artifactId>
-			<version>${tapestry-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-	 -->
+		<!-- <dependency> <groupId>org.testng</groupId> <artifactId>testng</artifactId> <version>${testng-release-version}</version> <scope>test</scope> </dependency> <dependency> 
+			<groupId>org.easymock</groupId> <artifactId>easymock</artifactId> <version>${easymock-release-version}</version> <scope>test</scope> </dependency> <dependency> <groupId>org.apache.tapestry</groupId> 
+			<artifactId>tapestry-test</artifactId> <version>${tapestry-release-version}</version> <scope>test</scope> </dependency> -->
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-spring</artifactId>
@@ -74,29 +59,29 @@
 			<version>${tapestry-release-version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate-release-version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${spring-release-version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring-release-version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
@@ -109,15 +94,15 @@
 			<version>${spring-release-version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.24</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 	</dependencies>
 	<build>
 		<finalName>tracker</finalName>

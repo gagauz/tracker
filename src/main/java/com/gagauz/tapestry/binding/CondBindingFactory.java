@@ -1,23 +1,16 @@
 package com.gagauz.tapestry.binding;
 
-import com.gagauz.tracker.utils.StringUtils;
 import org.apache.tapestry5.Binding;
+import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.ioc.Location;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.services.BindingFactory;
 import org.apache.tapestry5.services.BindingSource;
 
-/**
- * User: code8
- * Date: 12.06.13
- * Time: 18:15
- */
 public class CondBindingFactory implements BindingFactory {
-    private static final String DELIMETER = "\\s*,\\s*";
-    private static final String DEFAULT_VALUE_PREFIX = "literal";
-    private static final String DEFAULT_CONDITION_PREFIX = "prop";
 
+    private static final String DELIMITER = ",";
     private final BindingSource bindingSource;
     private final TypeCoercer resolver;
 
@@ -27,33 +20,24 @@ public class CondBindingFactory implements BindingFactory {
     }
 
     @Override
-    public Binding newBinding(String description, ComponentResources container, ComponentResources component, String expression, Location location) {
-        String[] parts = expression.split(DELIMETER, 3);
+    public Binding newBinding(final String description, final ComponentResources container, final ComponentResources component, String expression, final Location location) {
+        final String[] parts = expression.split(DELIMITER, 3);
 
         if (parts.length < 3) {
             return bindingSource.newBinding(description, container, component, "prop", expression, location);
         }
 
-        String condition = parts[0];
-        String valueTrue = parts[1];
-        String valueFalse = parts[2];
+        return new AbstractContextBinding(bindingSource, resolver, description, container) {
+            @Override
+            public Object get() {
+                Boolean conditionValue = getValue(parts[0], BindingConstants.PROP, Boolean.class);
+                if (conditionValue != null && conditionValue) {
+                    return getValue(parts[1], BindingConstants.LITERAL, String.class);
+                }
+                return getValue(parts[2], BindingConstants.LITERAL, String.class);
+            }
 
-        return new CondBinding(makeBinding(condition, DEFAULT_CONDITION_PREFIX, container, description),
-                makeBinding(valueTrue, DEFAULT_VALUE_PREFIX, container, description),
-                makeBinding(valueFalse, DEFAULT_VALUE_PREFIX, container, description), resolver);
+        };
     }
 
-    private Binding makeBinding(String expression, String defaultPrefix, ComponentResources container, String description) {
-        String prefix = defaultPrefix;
-        String reference = "";
-
-        if (!StringUtils.isEmpty(expression)) {
-            String[] parts = expression.split("\\s*:\\s*", 1);
-
-            prefix = parts.length == 2 ? parts[0] : defaultPrefix;
-            reference = parts.length == 2 ? parts[1] : parts[0];
-        }
-
-        return bindingSource.newBinding(description, container, prefix, reference);
-    }
 }

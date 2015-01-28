@@ -98,7 +98,7 @@ public class Task implements Identifiable {
         this.creator = creator;
     }
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getOwner() {
         return owner;

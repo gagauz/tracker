@@ -1,9 +1,8 @@
 package com.gagauz.tracker.web.pages;
 
-import org.apache.tapestry5.annotations.Property;
-
 import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.db.model.Task;
+import org.apache.tapestry5.annotations.Property;
 
 @Secured
 public class TaskInfo {

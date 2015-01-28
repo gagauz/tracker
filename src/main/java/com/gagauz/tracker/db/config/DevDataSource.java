@@ -1,24 +1,24 @@
 package com.gagauz.tracker.db.config;
 
-import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-public class DevDataSource extends BasicDataSource {
+import javax.sql.DataSource;
+
+import java.util.Properties;
+
+public class DevDataSource extends SimpleDriverDataSource implements DataSource {
 
     public DevDataSource() {
-        setDriverClassName("com.mysql.jdbc.Driver");
+        setDriverClass(com.mysql.jdbc.Driver.class);
         setUrl("jdbc:mysql://localhost:3306/tracker?autoReconnect=true");
         setUsername("b4f");
         setPassword("office");
-        setMaxWait(5000);
-        setMaxActive(5);
-        setMaxIdle(5);
-        setMinEvictableIdleTimeMillis(1800000);
-        setTimeBetweenEvictionRunsMillis(600000);
-        setNumTestsPerEvictionRun(5);
-        setTestWhileIdle(true);
-        setTestOnBorrow(false);
-        setValidationQuery("/* ping */");
-        setConnectionProperties("cacheServerConfiguration=true;characterSetResults=UTF-8;useLocalSessionState=true;statementInterceptors=com.gagauz.tracker.beans.setup.StatementInterceptor");
+        Properties props = new Properties();
+        props.setProperty("cacheServerConfiguration", "true");
+        props.setProperty("characterSetResults", "UTF-8");
+        props.setProperty("useLocalSessionState", "true");
+        props.setProperty("statementInterceptors", "com.gagauz.tracker.beans.setup.StatementInterceptor");
+        setConnectionProperties(props);
     }
 
 }

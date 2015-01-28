@@ -122,7 +122,9 @@ public class ScVersion extends DataBaseScenario {
                         //                        st.setFeatureVersion(t);
                         st.setFeature(t.getFeature());
                         st.setVersion(t.getVersion());
-                        st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
+                        if (rand.nextBoolean()) {
+                            st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
+                        }
                         st.setCreator(userDao.findById(RandomUtils.getRandomInt(9) + 1));
                         st.setSummary("Bug #" + k);
                         st.setDescription("Lorem ipsum dolorsit.");

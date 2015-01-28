@@ -7,10 +7,8 @@ import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.*;
 import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.RequestParameter;
+import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 
@@ -21,12 +19,21 @@ public class VersionUserMap {
     private static final Comparator<User> USER_NAME_COMPARATOR = new Comparator<User>() {
         @Override
         public int compare(User o1, User o2) {
+            if (null == o1) {
+                return 1;
+            }
+            if (null == o2) {
+                return -1;
+            }
             return o1.getName().compareTo(o2.getName());
         }
     };
 
     @Parameter(allowNull = false, required = true, principal = true)
     private Version version;
+
+    @Component(parameters = {"id=literal:taskZone", "show=popup", "update=popup"})
+    private Zone taskZone;
 
     @Property
     private Feature feature;
@@ -40,6 +47,9 @@ public class VersionUserMap {
 
     @Property
     private int progress;
+
+    @Property
+    private Task viewTask;
 
     @Inject
     private FeatureVersionDao featureVersionDao;
@@ -83,6 +93,7 @@ public class VersionUserMap {
         }
         List<User> users = new ArrayList<User>(userTaskMap.keySet());
         Collections.sort(users, USER_NAME_COMPARATOR);
+
         return users;
     }
 
@@ -91,7 +102,7 @@ public class VersionUserMap {
     }
 
     public Collection<Task> getUserTasks() {
-        return null != user ? userTaskMap.get(user) : Collections.<Task>emptyList();
+        return userTaskMap.get(user);
     }
 
     void onCreateFeatureVersion(Feature feature, Version version) {
@@ -144,8 +155,14 @@ public class VersionUserMap {
     void onChange(@RequestParameter(value = "user") Integer userId, @RequestParameter(value = "task") Integer taskId) {
         User user = userDao.findById(userId);
         Task task = taskDao.findById(taskId);
-        if (null != user && null != task) {
+        if (null != task) {
             task.setOwner(user);
         }
     }
+
+    Object onViewTask(Task task) {
+        viewTask = task;
+        return taskZone.getBody();
+    }
+
 }
