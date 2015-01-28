@@ -11,13 +11,15 @@
 		.project-map .task-col div{overflow:hidden;}
 		.project-map .task-col .owner {color:#660000}
 		.project-map .task-col .description {}
-		.project-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
-		.project-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
+		.project-map .row, .project-map .row a {font-size:12px;}
+		.project-map .row a {float:left;margin-top:1px;}
+		.project-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;}
+		.project-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;}
 
-		.project-map .progr-time {float:right;font-size:80%;padding:3px 3px;}
+		.project-map .progr-time {float:right;font-size:11px;padding:3px 3px;}
 		.project-map .progr-bar {border:1px solid gray;background:black;float:right;position:relative;width:60px;color:white;height:100%;}
 		.project-map .progr-bar .progr-bar-fill {background:green;height:100%;position:absolute;left:0;z-index:0;}
-		.project-map .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:80%;padding:1px;}
+		.project-map .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:11px;padding:1px;}
 
 		.project-map th {padding:5px;white-space:normal;}
 		.project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
@@ -69,7 +71,7 @@
 											<t:loop source="tasks" value="task">
 												<div class="row">
 													<t:pagelink t:page="TaskInfo" t:context="task">${task.summary}</t:pagelink>
-													<t:ProgressBar progress="task.progress" estimated="task.estimated"/>
+													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
 												</div>
 											</t:loop>
 										</div>
@@ -78,14 +80,14 @@
 											<t:loop source="bugs" value="task">
 												<div class="row">
 													<t:pagelink t:page="BugInfo" t:context="task">${task.summary}</t:pagelink>
-													<t:ProgressBar progress="task.progress" estimated="task.estimated"/>
+													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
 												</div>
 											</t:loop>
 										</div>
 										<div class="progress">
 											<div class="row">
 												Total progress:
-												<t:ProgressBar progress="progress" estimated="estimated"/>
+												<t:ProgressBar progress="progress" estimate="estimate"/>
 											</div>
 										</div>
 										

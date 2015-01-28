@@ -52,7 +52,7 @@ form {
     padding: 0;
 }
 
-input {
+input, select, textarea {
     padding: 5px;
     background: #FEFEFE url(images/img13.gif) repeat-x;
     border: 1px solid #626262;
@@ -101,6 +101,18 @@ div.page {
 
 #page-content {padding:10px 30px;}
 
+.sidebar ul {clear:both;overflow:hidden;list-style:none;}
+.sidebar ul li {float:left;margin-right:2px;}
+.sidebar ul li a {display:block;padding:2px 5px;border:1px solid gray;background-color:white;text-decoration:none;}
+
+.content .post {margin:10px;}
+
+.task-form {border:1px solid gray; padding:10px; background:white;overflow:hidden;}
+
+/* Bean editor */
+.t-beaneditor-row {padding:4px;}
+.t-beaneditor-row label {float:left;width:200px;text-align:right;padding:5px;}
+.t-beaneditor-row .t-beaneditor-submit {margin-left:210px;}
 .popup-window {
 	background-color:#f0f0f0;padding:10px 10px;
 }

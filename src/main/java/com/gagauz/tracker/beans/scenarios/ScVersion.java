@@ -1,13 +1,32 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import com.gagauz.tracker.beans.dao.*;
-import com.gagauz.tracker.beans.setup.DataBaseScenario;
-import com.gagauz.tracker.db.model.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import com.gagauz.tracker.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.beans.dao.WorkLogDao;
+import com.gagauz.tracker.beans.setup.DataBaseScenario;
+import com.gagauz.tracker.db.model.Attachment;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.TaskType;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.db.model.WorkLog;
 
 @Service("ScVersion")
 public class ScVersion extends DataBaseScenario {
@@ -29,6 +48,9 @@ public class ScVersion extends DataBaseScenario {
 
     @Autowired
     private TaskDao taskDao;
+
+    @Autowired
+    private WorkLogDao workLogDao;
 
     @Autowired
     private TaskCommentDao taskCommentDao;
@@ -110,8 +132,15 @@ public class ScVersion extends DataBaseScenario {
 
                         int es = 15 * (rand.nextInt(30) + 1);
                         st.setEstimated(es);
+
+                        WorkLog wl = null;
                         if (rand.nextBoolean()) {
-                            st.setProgress(es / (rand.nextInt(5) + 1));
+                            wl = new WorkLog();
+                            wl.setTask(st);
+                            int es = 15 * (rand.nextInt(10) + 1);
+                            st.setEstimate(es);
+                            //st.setProgress(es / (rand.nextInt(5) + 1));
+                            wl.setLogTime(es / (rand.nextInt(5) + 1));
                             if (st.getProgress() < st.getEstimated()) {
                                 st.setStatus(TaskStatus.IN_PROGRESS);
                             } else {
@@ -140,6 +169,8 @@ public class ScVersion extends DataBaseScenario {
                             }
                         }
                         taskDao.save(st);
+                        if (wl != null)
+                            workLogDao.save(wl);
                         if (!cms.isEmpty()) {
                             taskCommentDao.save(cms);
                         }
@@ -163,6 +194,8 @@ public class ScVersion extends DataBaseScenario {
                         int es = 15 * (rand.nextInt(10) + 1);
                         st.setEstimated(es);
                         if (rand.nextBoolean()) {
+                            int es = 15 * (rand.nextInt(10) + 1);
+                            st.setEstimate(es);
                             st.setProgress(es / (rand.nextInt(5) + 1));
                             if (st.getProgress() < st.getEstimated()) {
                                 st.setStatus(TaskStatus.IN_PROGRESS);

@@ -1,7 +1,36 @@
-<html t:type="layout" title="task header info"
+<html t:type="layout" title="task info"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
+<div class="task-form">
+
+	<h2>${task.summary}</h2>
+	
+	<t:if test="edit">
+		<t:BeanEditForm t:id="editForm" object="task" exclude="id,created,updated,creator,progress">
+			<p:description>
+				<t:label for="description"/>
+				<t:textarea t:id="description" value="task.description"/>
+			</p:description>
+			<p:estimate>
+				<t:label for="estimate"/>
+				<t:textfield t:id="estimate" value="task.estimate" />
+			</p:estimate>
+			<t:submit class="save" value="Save"/>
+		</t:BeanEditForm>    
+    <p:else>
+	    <div>Creator: ${task.creator.name}</div>
+	    <div>Owner: ${task.owner.name}</div>
+	    <div>Created: ${task.created}</div>
+	    <div>Last modified: ${task.updated}</div>
+	    <div>Version: ${task.version.version} </div>
+	    <div>Progress: ${task.progress} </div>
+	    <div>Estimate: ${task.estimate} </div>
+	    <b>Description</b>
+	    <div>${task.description}</div>
+    </p:else>
+    </t:if>
+</div>    
 <div class="task-info">
     <t:TaskHeader task="task"/>
     
@@ -14,6 +43,21 @@
     ${task.description}
     </div>
     
+    <p:sidebar>
+    	<ul>
+    		<t:security.IfAuthorized roles="TASK_CREATOR">
+	        <li><t:eventlink t:event="edit">Edit</t:eventlink></li>
+	        </t:security.IfAuthorized>
+	        <t:security.IfAuthorized roles="TASK_ASSIGNER">
+	        <li><t:eventlink t:event="assign">Assign</t:eventlink></li>
+	        </t:security.IfAuthorized>
+	        
+	        <t:if test="owner">
+	        <li><t:eventlink t:event="resolve">Resolve</t:eventlink></li>
+	        </t:if>
+        </ul>
+    </p:sidebar>
+
     <h2>Comments</h2>
     <div class="block">
     </div>

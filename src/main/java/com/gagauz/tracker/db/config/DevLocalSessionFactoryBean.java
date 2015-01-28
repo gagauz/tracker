@@ -11,6 +11,7 @@ import static org.hibernate.cfg.AvailableSettings.USE_SQL_COMMENTS;
 
 import java.util.Properties;
 
+import org.hibernate.cfg.Configuration;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,8 @@ public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
         properties.put(USE_REFLECTION_OPTIMIZER, true);
         properties.put(DEFAULT_BATCH_FETCH_SIZE, 50);
         properties.put("current_session_context_class", "thread");
+        properties.put("current_session_context_class", "thread");
         setHibernateProperties(properties);
+        Configuration cfg = new Configuration();
     }
 }

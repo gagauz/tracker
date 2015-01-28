@@ -1,26 +1,41 @@
 package com.gagauz.tracker.web.services;
 
-import com.gagauz.tapestry.binding.CondBindingFactory;
-import com.gagauz.tapestry.binding.DateBindingFactory;
-import com.gagauz.tapestry.security.*;
-import com.gagauz.tapestry.security.api.*;
-import com.gagauz.tapestry.security.impl.RedirectLoginHandler;
+import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.internal.services.javascript.JavaScriptStackPathConstructor;
+import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.ServiceId;
+import org.apache.tapestry5.ioc.annotations.Startup;
+import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.annotations.Value;
+import org.apache.tapestry5.services.ComponentEventRequestFilter;
+import org.apache.tapestry5.services.ComponentEventRequestHandler;
+import org.apache.tapestry5.services.Environment;
+import org.apache.tapestry5.services.LibraryMapping;
+import org.apache.tapestry5.services.MarkupRenderer;
+import org.apache.tapestry5.services.MarkupRendererFilter;
+import org.apache.tapestry5.services.PageRenderRequestFilter;
+import org.apache.tapestry5.services.PageRenderRequestHandler;
+import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.apache.tapestry5.services.javascript.JavaScriptStack;
+import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
+
+import com.gagauz.tapestry.security.Credentials;
+import com.gagauz.tapestry.security.LogoutHandler;
+import com.gagauz.tapestry.security.SecurityEncryptor;
+import com.gagauz.tapestry.security.SecurityModule;
+import com.gagauz.tapestry.security.SecurityUser;
+import com.gagauz.tapestry.security.SecurityUserProvider;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule2;
-import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.ioc.Configuration;
-import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
-import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.*;
-import org.apache.tapestry5.ioc.services.ServiceOverride;
-import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.services.*;
-import org.apache.tapestry5.services.javascript.JavaScriptStack;
-import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -62,7 +77,7 @@ public class AppModule {
         configuration.add(JQueryStack.NAME, new JQueryStack(assetSource));
         configuration.add(TrackerStack.NAME, new TrackerStack(assetSource));
     }
-
+        configuration.override("InjectDefaultStylesheet", null);
     @Contribute(SecurityExceptionInterceptorFilter.class)
     public void contributeSecurityExceptionInterceptorFilter(OrderedConfiguration<SecurityExceptionHandler> configuration, @Inject RedirectLoginHandler filter) {
         configuration.add("RedirectLoginHandler", filter);

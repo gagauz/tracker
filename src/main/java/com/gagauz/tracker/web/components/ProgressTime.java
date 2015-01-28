@@ -13,7 +13,7 @@ public class ProgressTime {
     protected int progress;
 
     @Parameter(required = true)
-    protected int estimated;
+    protected int estimate;
 
     @Inject
     private Messages messages;
@@ -28,8 +28,8 @@ public class ProgressTime {
     @BeginRender
     void beginRender(MarkupWriter writer) {
         writer.writeRaw("<div class=\"progr-time\">");
-        if (estimated > 0) {
-            if (estimated == progress) {
+        if (estimate > 0) {
+            if (estimate == progress) {
                 writer.writeRaw(done);
             } else {
                 writer.writeRaw(toolsService.getTime(progress));

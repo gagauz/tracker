@@ -1,11 +1,23 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
+import java.util.Date;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import java.util.Date;
+import com.gagauz.tracker.db.base.Identifiable;
 import java.util.List;
 
 @Entity
@@ -22,7 +34,7 @@ public class Task implements Identifiable {
     private Date updated;
     private String summary;
     private String description;
-    private int estimated;
+    private int estimate;
     private int progress;
     private int priority;
 
@@ -79,19 +91,6 @@ public class Task implements Identifiable {
     public void setVersion(Version version) {
         this.version = version;
     }
-
-    //    @JoinColumns({
-    //            @JoinColumn(name = "feature_id", insertable = false, updatable = false, referencedColumnName = "feature_id"),
-    //            @JoinColumn(name = "version_id", insertable = false, updatable = false, referencedColumnName = "version_id")
-    //    })
-    //    @ManyToOne(fetch = FetchType.LAZY)
-    //    public FeatureVersion getFeatureVersion() {
-    //        return featureVersion;
-    //    }
-    //
-    //    public void setFeatureVersion(FeatureVersion featureVersion) {
-    //        this.featureVersion = featureVersion;
-    //    }
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -152,12 +151,12 @@ public class Task implements Identifiable {
     }
 
     @Column
-    public int getEstimated() {
-        return estimated;
+    public int getEstimate() {
+        return estimate;
     }
 
-    public void setEstimated(int estimated) {
-        this.estimated = estimated;
+    public void setEstimate(int estimate) {
+        this.estimate = estimate;
     }
 
     @Column

@@ -13,7 +13,7 @@ public class ProgressBar extends ProgressTime {
     @BeginRender
     void beginRender(MarkupWriter writer) {
         writer.writeRaw("<div class=\"progr-bar\">");
-        if (estimated > 0) {
+        if (estimate > 0) {
             writer.writeRaw("<div class=\"progr-bar-fill\" style=\"width:" + getProgressPercent() + "%\"></div>");
             if (percent)
                 writer.writeRaw("<div>" + getProgressPercent() + "%</div>");
@@ -26,7 +26,7 @@ public class ProgressBar extends ProgressTime {
     }
 
     private int getProgressPercent() {
-        return 100 * progress / estimated;
+        return 100 * progress / estimate;
     }
 
 }

@@ -36,7 +36,7 @@ public class ProjectMap {
     private Task task;
 
     @Property
-    private int estimated;
+    private int estimate;
 
     @Property
     private int progress;
@@ -95,7 +95,7 @@ public class ProjectMap {
     }
 
     public FeatureVersion getFeatureVersion() {
-        estimated = 0;
+        estimate = 0;
         progress = 0;
         return featureVersionMap.get(version).get(feature);
     }
@@ -124,7 +124,7 @@ public class ProjectMap {
     }
 
     public void setTask(Task task) {
-        estimated += task.getEstimated();
+        estimate += task.getEstimate();
         progress += task.getProgress();
         this.task = task;
     }

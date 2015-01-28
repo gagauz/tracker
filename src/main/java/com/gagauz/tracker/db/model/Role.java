@@ -12,4 +12,5 @@ public enum Role implements Serializable {
     TASK_ASSIGNER,
     BUG_CREATOR;
 
+    public static final Role[] EMPTY_ARRAY = new Role[] {};
 }

@@ -1,6 +1,15 @@
 package com.gagauz.tracker.web.pages;
 
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.ioc.annotations.Inject;
+
 import com.gagauz.tapestry.security.Secured;
+import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.beans.cvs.CvsService;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.db.model.Commit;
@@ -24,6 +33,18 @@ public class TaskInfo {
     @Property(write = false)
     private Task task;
 
+    @Persist
+    @Property
+    private boolean edit;
+
+    @SessionState
+    private User user;
+
+    @Inject
+    private TaskDao taskDao;
+
+    @Inject
+    private ComponentResources resources;
     @Property
     private Stage stage;
 
@@ -53,6 +74,19 @@ public class TaskInfo {
 
     Object onPassivate() {
         return task;
+    }
+
+    void onEdit() {
+        edit = true;
+    }
+
+    void onSuccessFromEditForm() {
+        taskDao.save(task);
+        resources.discardPersistentFieldChanges();
+    }
+
+    public boolean isOwner() {
+        return user.getId() == task.getOwner().getId();
     }
 
     Object onGetCommits(Task task) {
