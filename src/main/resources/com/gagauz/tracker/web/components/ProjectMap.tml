@@ -70,7 +70,7 @@
 											<div class="title">Tasks:</div>
 											<t:loop source="tasks" value="task">
 												<div class="row">
-													<t:pagelink t:page="TaskInfo" t:context="task">${task.summary}</t:pagelink>
+													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
 													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
 												</div>
 											</t:loop>
@@ -79,7 +79,7 @@
 											<div class="title">Bugs:</div>
 											<t:loop source="bugs" value="task">
 												<div class="row">
-													<t:pagelink t:page="BugInfo" t:context="task">${task.summary}</t:pagelink>
+													<t:pagelink t:page="BugInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
 													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
 												</div>
 											</t:loop>

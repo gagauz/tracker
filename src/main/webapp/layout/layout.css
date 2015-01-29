@@ -53,10 +53,8 @@ form {
 }
 
 input, select, textarea {
-    padding: 5px;
     background: #FEFEFE url(images/img13.gif) repeat-x;
     border: 1px solid #626262;
-    font: normal 1em Arial, Helvetica, sans-serif;
 }
 
 /* Header */
@@ -134,15 +132,23 @@ div.page {
 
 /* Task */
 .task-info h1, .task-info h2{font-size:15px;font-weight:bold;}
-#code-changes .commit, #code-changes .commit a{font: 12px/15px "Courier New" normal; margin-bottom:10px;}
-#code-changes .commit a{color:green;}
-#code-changes .commit div{line-height:150%}
-#code-changes .commit .date{}
-#code-changes .commit .date i{color:blue}
-#code-changes .commit .comm{font-weight:bold;}
-#code-changes .commit .deta {margin-left:25px;}
-#code-changes .commit .deta .a{color:#9b0080}
-#code-changes .commit .deta .m{color:#0032c1}
-#code-changes .commit .deta .d{color:#ff003a}
+#task-commits .commit, #task-commits .commit a{font: 12px/15px "Courier New" normal; margin-bottom:10px;}
+#task-commits .commit a{color:green;}
+#task-commits .commit div{line-height:150%}
+#task-commits .commit .date{}
+#task-commits .commit .date i{color:blue}
+#task-commits .commit .comm{font-weight:bold;}
+#task-commits .commit .deta {margin-left:25px;}
+#task-commits .commit .deta .a{color:#9b0080}
+#task-commits .commit .deta .m{color:#0032c1}
+#task-commits .commit .deta .d{color:#ff003a}
 
 /* Task popup */
+
+
+/* Comments */
+#task-comments .comment {padding:0 0 5px;margin:0 0 6px;border-bottom:1px solid #c0c0c0;}
+#task-comments .comment .date{}
+#task-comments .comment .text{}
+#task-comments textarea{width:100%}
+#task-comments .comment .text img{width:60px}

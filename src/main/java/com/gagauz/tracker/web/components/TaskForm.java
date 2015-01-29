@@ -1,25 +1,21 @@
 package com.gagauz.tracker.web.components;
 
+import java.util.List;
+
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.annotations.Inject;
+
 import com.gagauz.tracker.beans.dao.TaskCommentDao;
 import com.gagauz.tracker.db.model.Attachment;
 import com.gagauz.tracker.db.model.Task;
 import com.gagauz.tracker.db.model.TaskComment;
-import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
-import java.util.List;
 
 public class TaskForm {
 
     @Parameter(name = "task")
     private Task taskParam;
-
-    @Component(parameters = {"id=literal:commentsZone"})
-    private Zone zone;
 
     @Property(write = false)
     private Task task;
@@ -50,8 +46,7 @@ public class TaskForm {
         return componentResources.createEventLink("getComments", task).toRedirectURI();
     }
 
-    Object onGetComments(Task task) {
+    void onGetComments(Task task) {
         comments = taskCommentDao.findByTask(task);
-        return zone.getBody();
     }
 }

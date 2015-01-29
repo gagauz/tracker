@@ -1,0 +1,14 @@
+<div class="task-header" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+     
+	<t:loop source="attachments" value="attachment">
+   		<a href="${attachment.value}" onclick="$j(this).showPopup({popupClone:true});return false;">
+    		<t:if test="attachment.image">
+    			<img src="${attachment.value}" />
+    			<p:else>
+    			${attachment.value}
+    			</p:else>
+    		</t:if>
+   		</a>
+   	</t:loop>
+</div>

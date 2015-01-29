@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.beans.dao.TaskCommentDao;
 import com.gagauz.tracker.beans.dao.TaskDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
@@ -22,6 +25,7 @@ import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.TaskComment;
 import com.gagauz.tracker.db.model.TaskStatus;
 import com.gagauz.tracker.db.model.TaskType;
 import com.gagauz.tracker.db.model.User;
@@ -67,7 +71,7 @@ public class ScVersion extends DataBaseScenario {
             Project p = new Project();
             p.setKey1("TRACKER");
             p.setName("Трекер (этот проект)");
-            p.setCvsRepositoryPath("R:/my-projects/tracker");
+            p.setCvsRepositoryPath("R:\\projects-my\\tracker");
             projectDao.save(p);
 
             List<Feature> theaders = new ArrayList<Feature>();
@@ -167,8 +171,9 @@ public class ScVersion extends DataBaseScenario {
                             }
                         }
                         taskDao.save(st);
-                        if (wl != null)
+                        if (wl != null) {
                             workLogDao.save(wl);
+                        }
                         taskDao.updateTaskProgessTime(st);
                         if (!cms.isEmpty()) {
                             taskCommentDao.save(cms);
@@ -213,7 +218,7 @@ public class ScVersion extends DataBaseScenario {
         }
     }
 
-    private Map<Integer, User> userHash = new HashMap<Integer, User>();
+    private final Map<Integer, User> userHash = new HashMap<Integer, User>();
 
     private User getRandomUser() {
         int r = RandomUtils.getRandomInt(9) + 1;

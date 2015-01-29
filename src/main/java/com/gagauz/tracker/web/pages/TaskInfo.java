@@ -1,34 +1,27 @@
 package com.gagauz.tracker.web.pages;
 
-import org.apache.tapestry5.ComponentResources;
+import java.util.List;
+
+import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.gagauz.tapestry.security.Secured;
-import com.gagauz.tracker.beans.dao.TaskDao;
-import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.db.model.User;
+import com.gagauz.tapestry.security.SecurityUserCreator;
 import com.gagauz.tracker.beans.cvs.CvsService;
 import com.gagauz.tracker.beans.dao.StageDao;
+import com.gagauz.tracker.beans.dao.TaskCommentDao;
+import com.gagauz.tracker.beans.dao.TaskDao;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Task;
-import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
-import java.util.List;
+import com.gagauz.tracker.db.model.TaskComment;
+import com.gagauz.tracker.db.model.User;
 
 @Secured
 public class TaskInfo {
-
-    @Component(parameters = {"id=literal:commitsZone"})
-    private Zone zone;
 
     @Property(write = false)
     private Task task;
@@ -43,8 +36,6 @@ public class TaskInfo {
     @Inject
     private TaskDao taskDao;
 
-    @Inject
-    private ComponentResources resources;
     @Property
     private Stage stage;
 
@@ -54,6 +45,12 @@ public class TaskInfo {
     @Property
     private Commit commit;
 
+    @Property
+    private List<TaskComment> comments;
+
+    @Property
+    private TaskComment comment;
+
     @Inject
     private CvsService cvsService;
 
@@ -61,7 +58,7 @@ public class TaskInfo {
     private StageDao stageDao;
 
     @Inject
-    private ComponentResources componentResources;
+    private TaskCommentDao taskCommentDao;
 
     Object onActivate(Task task) {
         if (null == task) {
@@ -76,22 +73,16 @@ public class TaskInfo {
         return task;
     }
 
-    void onEdit() {
-        edit = true;
-    }
-
-    void onSuccessFromEditForm() {
-        taskDao.save(task);
-        resources.discardPersistentFieldChanges();
-    }
-
     public boolean isOwner() {
         return user.getId() == task.getOwner().getId();
     }
 
-    Object onGetCommits(Task task) {
+    void onGetCommits(Task task) {
         commits = cvsService.getCommits(task);
-        return zone.getBody();
+    }
+
+    void onGetComments(Task task) {
+        comments = taskCommentDao.findByTask(task);
     }
 
     public String formatDetails(String details) {
@@ -111,8 +102,16 @@ public class TaskInfo {
         return task.getStages();
     }
 
-    public String getAjaxUrl() {
-        return componentResources.createEventLink("getCommits", task).toRedirectURI();
-    }
+    private TaskComment newComment;
 
+    @Inject
+    private SecurityUserCreator sessionUserCreator;
+
+    public TaskComment getNewComment() {
+        if (null == newComment) {
+            newComment = new TaskComment();
+            newComment.setUser((User) sessionUserCreator.getUserFromContext());
+        }
+        return newComment;
+    }
 }

@@ -1,10 +1,11 @@
 package com.gagauz.tracker.web.components;
 
-import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+
+import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.web.services.ToolsService;
 
 public class TaskHeader {
     @Parameter(required = true)
@@ -19,6 +20,6 @@ public class TaskHeader {
     }
 
     public String getRemaining() {
-        return toolsService.getTime(task.getEstimated() - task.getProgress());
+        return toolsService.getTime(task.getEstimate() - task.getProgress());
     }
 }

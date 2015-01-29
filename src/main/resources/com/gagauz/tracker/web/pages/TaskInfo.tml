@@ -2,35 +2,6 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-<div class="task-form">
-
-	<h2>${task.summary}</h2>
-	
-	<t:if test="edit">
-		<t:BeanEditForm t:id="editForm" object="task" exclude="id,created,updated,creator,progress">
-			<p:description>
-				<t:label for="description"/>
-				<t:textarea t:id="description" value="task.description"/>
-			</p:description>
-			<p:estimate>
-				<t:label for="estimate"/>
-				<t:textfield t:id="estimate" value="task.estimate" />
-			</p:estimate>
-			<t:submit class="save" value="Save"/>
-		</t:BeanEditForm>    
-    <p:else>
-	    <div>Creator: ${task.creator.name}</div>
-	    <div>Owner: ${task.owner.name}</div>
-	    <div>Created: ${task.created}</div>
-	    <div>Last modified: ${task.updated}</div>
-	    <div>Version: ${task.version.version} </div>
-	    <div>Progress: ${task.progress} </div>
-	    <div>Estimate: ${task.estimate} </div>
-	    <b>Description</b>
-	    <div>${task.description}</div>
-    </p:else>
-    </t:if>
-</div>    
 <div class="task-info">
     <t:TaskHeader task="task"/>
     
@@ -42,8 +13,9 @@
     <div class="block">
     ${task.description}
     </div>
-    
+    <!--
     <p:sidebar>
+    
     	<ul>
     		<t:security.IfAuthorized roles="TASK_CREATOR">
 	        <li><t:eventlink t:event="edit">Edit</t:eventlink></li>
@@ -56,11 +28,31 @@
 	        <li><t:eventlink t:event="resolve">Resolve</t:eventlink></li>
 	        </t:if>
         </ul>
+        
     </p:sidebar>
-
+-->
     <h2>Comments</h2>
-    <div class="block">
-    </div>
+    <t:LazyZone id="task-comments" t:event="getcomments" t:context="task" class="block">
+    	<p:empty>
+    		<img src="/static/i/loading_bar_gray.gif" />
+    	</p:empty>
+    	<t:loop source="comments" value="comment">
+		<div class="comment">
+			<div class="date"><b>${date:comment.updated}</b>&#160;by <a href="#${comment.user.id}">${comment.user.name}</a></div>
+			<div class="text">
+				<t:outputraw value="comment.text"/>
+				<t:AttachmentsBlock attachments="comment.attachments"/>
+			</div>
+		</div>
+		</t:loop>
+		<t:form t:id="commentForm">
+			<t:label for="text">Add comment</t:label><br/>
+			<div>
+			<t:textarea t:id="text" t:value="newComment.text"/>
+			</div>
+			<t:submit/>
+		</t:form>
+    </t:LazyZone>
     
     <h2>Stages</h2>
     <div class="block">
@@ -69,31 +61,18 @@
     </div>
     
     <h2>Code changes</h2>
-    <div id="code-changes" class="block">
-    	<img src="/static/i/loading_bar_gray.gif" />
-    </div>
-    
-    <div t:id="zone">
-		<t:loop source="commits" value="commit">
+    <t:LazyZone id="task-commits" t:event="getcommits" t:context="task" class="block">
+    	<p:empty>
+    		<img src="/static/i/loading_bar_gray.gif" />
+    	</p:empty>
+    	<t:loop source="commits" value="commit">
 		<div class="commit">
 			<div class="date"><b>${date:commit.date}</b>&#160;<i>${commit.hash}</i> by <a href="#${commit.author}">${commit.author}</a></div>
 			<div class="comm">${commit.comment}</div>
 			<ul class="deta"><t:outputraw value="formatDetails(commit.getDetails())"/></ul>
 		</div>
 		</t:loop>
-	</div>
+    </t:LazyZone>
     
-    <script type="text/javascript">
-    	$j(document).ready(function(){
-    		$j.ajax('${ajaxUrl}', {
-    			success: function(json, status) {
-    				$j('#code-changes').html(json["content"]);
-    			},
-    			error: function(xhr, status, error) {
-    				$j('#code-changes').html('<div class="t-error">' + status + ': ' + error + '</div>');
-    			}
-    		});
-    	});
-    </script>
 </div>
 </html>

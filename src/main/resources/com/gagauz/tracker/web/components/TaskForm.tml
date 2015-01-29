@@ -5,16 +5,7 @@
 
     <h2>Attachments</h2>
     <div class="block">
-    	<t:loop source="task.attachments" value="attachment">
-    		<a href="${attachment.value}">
-	    		<t:if test="attachment.image">
-	    			<img src="${attachment.value}" width="200"/>
-	    			<p:else>
-	    			${attachment.value}
-	    			</p:else>
-	    		</t:if>
-    		</a>
-    	</t:loop>
+    	<t:AttachmentsBlock attachments="task.attachments"/>
     </div>
     
     <h2>Description</h2>
@@ -27,26 +18,14 @@
     	<img src="/static/i/loading_bar_gray.gif" />
     </div>
     
-    <div t:id="zone">
+    <t:LazyZone t:event="getcomments" id="comments-block" t:if="comments" t:context="task">
 		<t:loop source="comments" value="comment">
 		<div class="comment">
 			<div class="date"><b>${date:comment.updated}</b>&#160;by&#160;<a href="#${comment.user.id}">${comment.user.name}</a></div>
 			<div class="comm">${comment.text}</div>
 		</div>
 		</t:loop>
-	</div>
+	</t:LazyZone>
 	
-	<script type="text/javascript">
-		alert(1);
-   		$j.ajax("${ajaxUrl}", {
-   			"success": function(json, status) {
-   				$j('#task-comments').html(json["content"]);
-   			},
-   			"error": function(xhr, status, error) {
-   				$j('#task-comments').html('<div class="t-error">' + status + ': ' + error + '</div>');
-   			}
-   		});
-    </script>
 
-</div>
 </div>
