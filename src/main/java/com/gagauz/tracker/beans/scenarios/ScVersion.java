@@ -50,7 +50,7 @@ public class ScVersion extends DataBaseScenario {
                 Feature th = new Feature();
                 th.setProject(p);
                 th.setCreator(user1);
-                th.setName("Feature #" + h);
+                th.setName("Some random feature name");
                 featureDao.save(th);
                 theaders.add(th);
             }
@@ -98,7 +98,7 @@ public class ScVersion extends DataBaseScenario {
                         st.setVersion(t.getVersion());
                         st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
                         st.setCreator(userDao.findById(RandomUtils.getRandomInt(9) + 1));
-                        st.setSummary("Task #" + k);
+                        st.setSummary("Task random name");
                         st.setDescription("Lorem ipsum dolorsit.");
                         st.setPriority(rand.nextInt(30));
 
@@ -126,7 +126,7 @@ public class ScVersion extends DataBaseScenario {
                             st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
                         }
                         st.setCreator(userDao.findById(RandomUtils.getRandomInt(9) + 1));
-                        st.setSummary("Bug #" + k);
+                        st.setSummary("Bug random name");
                         st.setDescription("Lorem ipsum dolorsit.");
                         st.setPriority(rand.nextInt(10));
 

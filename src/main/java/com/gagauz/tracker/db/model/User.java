@@ -1,22 +1,13 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tapestry.security.api.SecurityUser;
+import com.gagauz.tracker.db.base.Identifiable;
+
+import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.gagauz.tracker.db.base.Identifiable;
 
 @Entity
 @Table(name = "user")
@@ -100,4 +91,5 @@ public class User implements Identifiable, Serializable, SecurityUser {
         }
         return roles;
     }
+
 }

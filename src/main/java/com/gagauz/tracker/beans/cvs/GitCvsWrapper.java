@@ -26,13 +26,13 @@ public class GitCvsWrapper implements CvsWrapper {
     }
 
     private String log(String grep) {
-        String log = BashUtils.execute(repoDir, "git", "log", "--pretty=format:>>>%at|%H|%an|%s", "--stat", "--name-status", "--grep=" + grep,
+        String log = BashUtils.execute(repoDir, "git", "log", "--pretty=format:>>>%at|%H|%an <%ae>|%s", "--stat", "--name-status", "--grep=" + grep,
                 "--regexp-ignore-case");
         return log;
     }
 
     private String log() {
-        String log = BashUtils.execute(repoDir, "git", "log", "--pretty=format:>>>%at|%H|%an|%s", "--stat", "--name-status");
+        String log = BashUtils.execute(repoDir, "git", "log", "--pretty=format:>>>%at|%H|%an <%ae>|%s", "--stat", "--name-status");
         return log;
     }
 
@@ -61,7 +61,7 @@ public class GitCvsWrapper implements CvsWrapper {
         GitCommitFilter gitFilter = (GitCommitFilter) filter;
         String log = log(gitFilter.getGrep());
         List<Commit> commits = new ArrayList<Commit>();
-        for (String cl : StringUtils.split(log, ">>>")) {
+        for (String cl : log.split(">>>")) {
             if (!"".equals(cl)) {
                 String[] lines = StringUtils.split(cl, "\n", 2);
                 String[] fields = StringUtils.split(lines[0], "|");

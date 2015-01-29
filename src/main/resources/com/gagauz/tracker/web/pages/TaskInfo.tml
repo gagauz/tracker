@@ -2,7 +2,21 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <h2>${task.summary}</h2>
+<style>
+.task-info h1, .task-info h2{font-size:16px;font-weight:bold;}
+#code-changes .commit {font: 12px/15px "Courier New" normal;}
+#code-changes .commit .date{}
+#code-changes .commit .date{}
+#code-changes .commit .date{}
+#code-changes .commit .deta .A{color:#d000ff}
+#code-changes .commit .deta .M{color:#d000ff}
+#code-changes .commit .deta .D{color:#d00000}
+</style>
+<div class="task-info">
+    <div>
+    	<h1>${task.type} #${task.id}</h1>
+    	<h2>${task.summary}</h2>
+    </div>
     <h3>Description</h3>
     <div>${task.description}</div>
     <div>Creator: ${task.creator.name}</div>
@@ -19,33 +33,34 @@
     	</t:loop>
     </div>
     
-    <div><b>CVS</b></div>
-    <div id="commit-list-container">
+    <h2>Code changes</h2>
+    <div id="code-changes">
     	<img src="/static/i/loading_bar_gray.gif" />
     </div>
     
-    
-    
-    <p:sidebar>
-        <p>
-            
-        </p>
-
-
-        <p>
-            
-        </p>
-    </p:sidebar>
+    <div t:id="zone">
+		<t:loop source="commits" value="commit">
+		<div class="commit">
+			<div class="date">${date:commit.date}</div>
+			<div class="auth">${commit.author}</div>
+			<div class="hash">${commit.hash}</div>
+			<div class="comm">${commit.comment}</div>
+			<div class="deta"><t:outputraw value="formatDetails(commit.getDetails())"/></div>
+		</div>
+		</t:loop>
+	</div>
     
     <script type="text/javascript">
     	$j(document).ready(function(){
     		$j.ajax('${ajaxUrl}', {
-    			dataType : "json",
-    			success: function(json, status, xhr) {
-    				$j('#commit-list-container').html(json.html);
+    			success: function(json, status) {
+    				$j('#code-changes').html(json["content"]);
+    			},
+    			error: function(xhr, status, error) {
+    				$j('#code-changes').html('<div class="t-error">' + status + ': ' + error + '</div>');
     			}
     		});
     	});
     </script>
-
+</div>
 </html>

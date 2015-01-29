@@ -18,15 +18,9 @@
 			</div>
 			<!-- end sidebar -->
 			<!-- start content -->
-			<div class="content">
-				<div class="post">
-					<div class="title">
-						<h2>${title}</h2>
-					</div>
-					<div class="entry">
-						<t:body />
-					</div>
-				</div>
+			<div id="page-content">
+				<div class="title">${title}</div>
+				<t:body />
 			</div>
 			<!-- end content -->
 			<br style="clear: both;" />

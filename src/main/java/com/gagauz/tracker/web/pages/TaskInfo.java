@@ -8,20 +8,31 @@ import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Task;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import java.util.List;
 
 @Secured
 public class TaskInfo {
 
+    @Component(parameters = {"id=literal:commitsZone"})
+    private Zone zone;
+
     @Property(write = false)
     private Task task;
 
     @Property
     private Stage stage;
+
+    @Property
+    private List<Commit> commits;
+
+    @Property
+    private Commit commit;
 
     @Inject
     private CvsService cvsService;
@@ -31,6 +42,9 @@ public class TaskInfo {
 
     @Inject
     private ComponentResources componentResources;
+
+    @Inject
+    private AjaxResponseRenderer ajaxResponseRenderer;
 
     Object onActivate(Task task) {
         if (null == task) {
@@ -45,22 +59,21 @@ public class TaskInfo {
         return task;
     }
 
-    JSONObject onGetCommits(Task task) {
-        StringBuilder sb = new StringBuilder();
-        for (Commit c : cvsService.getCommits(task)) {
-            sb
-                    .append("<div>")
-                    .append(c.getDate()).append(" ")
-                    .append(c.getHash()).append(" ")
-                    .append(c.getAuthor()).append(" ")
-                    .append(c.getComment()).append(" ")
-                    .append("<pre>").append(c.getDetails()).append("</pre>")
-                    .append("</div>\n");
+    Object onGetCommits(Task task) {
+        commits = cvsService.getCommits(task);
+        return zone.getBody();
+    }
+
+    public String formatDetails(String details) {
+        if (null != details) {
+            return details
+                    .replace("\n", "</div>")
+                    .replace("A\t", "<div class=\"A\">")
+                    .replace("M\t", "<div class=\"M\">")
+                    .replace("D\t", "<div class=\"D\">");
         }
-        System.out.println(sb.toString());
-        JSONObject json = new JSONObject();
-        json.put("html", sb.toString());
-        return json;
+
+        return "";
     }
 
     @Cached
