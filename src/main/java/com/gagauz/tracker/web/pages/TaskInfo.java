@@ -12,7 +12,6 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import java.util.List;
 
@@ -43,9 +42,6 @@ public class TaskInfo {
     @Inject
     private ComponentResources componentResources;
 
-    @Inject
-    private AjaxResponseRenderer ajaxResponseRenderer;
-
     Object onActivate(Task task) {
         if (null == task) {
             return Index.class;
@@ -67,10 +63,10 @@ public class TaskInfo {
     public String formatDetails(String details) {
         if (null != details) {
             return details
-                    .replace("\n", "</div>")
-                    .replace("A\t", "<div class=\"A\">")
-                    .replace("M\t", "<div class=\"M\">")
-                    .replace("D\t", "<div class=\"D\">");
+                    .replace("\n", "</li>")
+                    .replace("A\t", "<li class=\"a\">A ")
+                    .replace("M\t", "<li class=\"m\">M ")
+                    .replace("D\t", "<li class=\"d\">D ");
         }
 
         return "";

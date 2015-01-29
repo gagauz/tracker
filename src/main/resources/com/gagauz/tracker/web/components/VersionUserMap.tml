@@ -85,7 +85,7 @@
 	</div>
 	
 	<div style="display:none">
-		<div t:id="taskZone">
+		<div t:id="taskZone" class="task-popup">
 			<t:TaskForm task="viewTask"/>
 		</div>
 	</div>
@@ -108,9 +108,7 @@
 			if (ui.draggable.data("user-id") != $j(this).data("user-id")) {
 				$j(ui.draggable).detach().appendTo(this);
 				
-				$j.post(
-					"${eventUrl}",
-					{
+				$j.post('${eventUrl}', {
 						task: ui.draggable.data("task-id"),
 						user: $j(this).data("user-id")
 					},

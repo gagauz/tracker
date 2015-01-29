@@ -18,6 +18,9 @@ public class ToolsService {
     }
 
     public String getTime(int time) {
+        if (time == 0) {
+            return "0";
+        }
         StringBuffer sb = new StringBuffer();
 
         if (time > 1440) {

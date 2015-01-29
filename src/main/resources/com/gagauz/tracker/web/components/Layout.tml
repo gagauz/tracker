@@ -19,7 +19,6 @@
 			<!-- end sidebar -->
 			<!-- start content -->
 			<div id="page-content">
-				<div class="title">${title}</div>
 				<t:body />
 			</div>
 			<!-- end content -->

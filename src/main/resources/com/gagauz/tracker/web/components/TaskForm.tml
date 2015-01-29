@@ -1,50 +1,51 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-	<style>
-	.task-header {padding:10px;border:1px dashed gray;background:#f0f0f0;overflow:hidden;}
-	.task-header .column {width:50%; float:left;}
-	.task-header .row b {width:150px; float:left;}
-	
-	</style>
-      
-	<div class="task-header">
-		<div class="column">
-			<div class="row">
-				<b><t:if test="task.bug">
-				Bug #
-				<p:else>
-				Task #
-				</p:else>
-				</t:if></b>
-				${task.id}
-			</div>
-			<div class="row">
-				<b>Status:</b> ${task.status}
-			</div>
-			<div class="row">
-				<b>Feature:</b> ${task.feature.name}
-			</div>
-			<div class="row">
-				<b>Version:</b> ${task.version.version}
-			</div>
-			<div class="row">
-				<b>Priority:</b> ${task.priority}
-			</div>
-		</div>
-		<div class="column">
-			<div class="row"><b>Creator:</b> ${task.creator.name}</div>
-			<div class="row"><b>Owner:</b> ${cond:task.owner,prop:task.owner.name,Unassigned}</div>
-	    	<div class="row"><b>Created:</b> ${date:task.created}</div>
-	    	<div class="row"><b>Last updated:</b> ${date:task.updated}</div>
-		</div>
-	</div>
 
-    <h2>${task.summary}</h2>
-    <div><b>Description</b></div>
-    <div>
+	<t:TaskHeader task="task"/>
+
+    <h2>Attachments</h2>
+    <div class="block">
+    	<t:loop source="task.attachments" value="attachment">
+    		<a href="${attachment.value}">
+	    		<t:if test="attachment.image">
+	    			<img src="${attachment.value}" width="200"/>
+	    			<p:else>
+	    			${attachment.value}
+	    			</p:else>
+	    		</t:if>
+    		</a>
+    	</t:loop>
+    </div>
+    
+    <h2>Description</h2>
+    <div class="block">
     ${task.description}
     </div>
+    
+    <h2>Comments</h2>
+    <div id="task-comments" class="block">
+    	<img src="/static/i/loading_bar_gray.gif" />
+    </div>
+    
+    <div t:id="zone">
+		<t:loop source="comments" value="comment">
+		<div class="comment">
+			<div class="date"><b>${date:comment.updated}</b>&#160;by&#160;<a href="#${comment.user.id}">${comment.user.name}</a></div>
+			<div class="comm">${comment.text}</div>
+		</div>
+		</t:loop>
+	</div>
 	
-	
+	<script type="text/javascript">
+		alert(1);
+   		$j.ajax("${ajaxUrl}", {
+   			"success": function(json, status) {
+   				$j('#task-comments').html(json["content"]);
+   			},
+   			"error": function(xhr, status, error) {
+   				$j('#task-comments').html('<div class="t-error">' + status + ': ' + error + '</div>');
+   			}
+   		});
+    </script>
 
 </div>

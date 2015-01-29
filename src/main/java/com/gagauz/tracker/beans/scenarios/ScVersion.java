@@ -31,6 +31,9 @@ public class ScVersion extends DataBaseScenario {
     private TaskDao taskDao;
 
     @Autowired
+    private TaskCommentDao taskCommentDao;
+
+    @Autowired
     private ScUser scUser;
 
     @Override
@@ -84,9 +87,12 @@ public class ScVersion extends DataBaseScenario {
                     t.setCreator(user2);
                     t.setName("#" + th.getId() + "/" + v.getVersion());
                     t.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
-                    Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
-                    Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
-                    t.setAttachments(Arrays.asList(a1, a2));
+                    if (rand.nextBoolean()) {
+                        Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
+                        Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
+                        t.setAttachments(Arrays.asList(a1, a2));
+                    }
+
                     featureVersionDao.save(t);
 
                     int stc = rand.nextInt(5) + 1;
@@ -96,8 +102,8 @@ public class ScVersion extends DataBaseScenario {
                         //                        st.setFeatureVersion(t);
                         st.setFeature(t.getFeature());
                         st.setVersion(t.getVersion());
-                        st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
-                        st.setCreator(userDao.findById(RandomUtils.getRandomInt(9) + 1));
+                        st.setOwner(getRandomUser());
+                        st.setCreator(getRandomUser());
                         st.setSummary("Task random name");
                         st.setDescription("Lorem ipsum dolorsit.");
                         st.setPriority(rand.nextInt(30));
@@ -112,7 +118,31 @@ public class ScVersion extends DataBaseScenario {
                                 st.setStatus(TaskStatus.RESOLVED);
                             }
                         }
+                        if (rand.nextBoolean()) {
+                            Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
+                            Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
+                            st.setAttachments(Arrays.asList(a1, a2));
+                        }
+                        List<TaskComment> cms = new ArrayList<TaskComment>();
+                        if (rand.nextBoolean()) {
+                            for (int x = rand.nextInt(10) + 1; x > 0; x--) {
+                                TaskComment cm = new TaskComment();
+                                cm.setUser(getRandomUser());
+                                cm.setTask(st);
+                                cm.setText("Lorem ipsum dolorsit.");
+
+                                if (rand.nextBoolean()) {
+                                    Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
+                                    Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
+                                    cm.setAttachments(Arrays.asList(a1, a2));
+                                }
+                                cms.add(cm);
+                            }
+                        }
                         taskDao.save(st);
+                        if (!cms.isEmpty()) {
+                            taskCommentDao.save(cms);
+                        }
                     }
 
                     stc = rand.nextInt(3);
@@ -123,9 +153,9 @@ public class ScVersion extends DataBaseScenario {
                         st.setFeature(t.getFeature());
                         st.setVersion(t.getVersion());
                         if (rand.nextBoolean()) {
-                            st.setOwner(userDao.findById(RandomUtils.getRandomInt(9) + 1));
+                            st.setOwner(getRandomUser());
                         }
-                        st.setCreator(userDao.findById(RandomUtils.getRandomInt(9) + 1));
+                        st.setCreator(getRandomUser());
                         st.setSummary("Bug random name");
                         st.setDescription("Lorem ipsum dolorsit.");
                         st.setPriority(rand.nextInt(10));
@@ -140,11 +170,28 @@ public class ScVersion extends DataBaseScenario {
                                 st.setStatus(TaskStatus.RESOLVED);
                             }
                         }
+                        if (rand.nextBoolean()) {
+                            Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
+                            Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
+                            st.setAttachments(Arrays.asList(a1, a2));
+                        }
                         taskDao.save(st);
                     }
                 }
             }
         }
+    }
+
+    private Map<Integer, User> userHash = new HashMap<Integer, User>();
+
+    private User getRandomUser() {
+        int r = RandomUtils.getRandomInt(9) + 1;
+        User u = userHash.get(r);
+        if (null == u) {
+            u = userDao.findById(r);
+            userHash.put(r, u);
+        }
+        return u;
     }
 
     @Override

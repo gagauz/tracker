@@ -11,4 +11,8 @@ public class Attachment {
     public String getValue() {
         return value;
     }
+
+    public boolean isImage() {
+        return value.endsWith(".jpg") || value.endsWith(".png") || value.endsWith(".gif");
+    }
 }

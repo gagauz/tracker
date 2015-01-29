@@ -1,0 +1,52 @@
+<div class="task-header" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+     
+	<div class="title">
+    	<h1>${task.type} #${task.id}</h1>
+    	<h2>${task.summary} 
+    		/ <a href="#" t:type="pagelink" t:page="featureinfo" t:context="task.feature">${task.feature.name}</a>
+    		/ <a href="#" t:type="pagelink" t:page="versioninfo" t:context="task.version">${task.version.version}</a>
+    		/ <a href="#" t:type="pagelink" t:page="projectinfo" t:context="task.version.project">${task.version.project.name}</a></h2>
+    </div>
+    <div class="block">
+		<table border="0">
+			<tr>
+				<th>Status:</th>
+				<td>${task.status}</td>
+				<th>Creator:</th>
+				<td>${task.creator.name}</td>
+				<th>Estimate:</th>
+				<td>${getTime(task.estimated)}</td>
+				<th>Version:</th>
+				<td>${task.version.version}</td>
+			</tr>
+			<tr>
+				<th>Priority:</th>
+				<td>${task.priority}</td>
+				<th>Owner:</th>
+				<td>${cond:task.owner,prop:task.owner.name,Unassigned}</td>
+				<th>Logged:</th>
+				<td>${getTime(task.progress)}</td>
+				<th>Feature:</th>
+				<td>${task.feature.name}</td>
+			</tr>
+			<tr>
+				<th></th>
+				<td></td>
+				<th>Created:</th>
+				<td>${date:task.created}</td>
+				<th>Remaining:</th>
+				<td>${getRemaining()}</td>
+				<th>Project:</th>
+				<td>${task.version.project.name}</td>
+			</tr>
+			<tr>
+				<th></th>
+				<td></td>
+				<th>Last updated:</th>
+				<td>${date:task.updated}</td>
+			</tr>
+		</table>
+	</div>
+
+</div>

@@ -2,50 +2,39 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-<style>
-.task-info h1, .task-info h2{font-size:16px;font-weight:bold;}
-#code-changes .commit {font: 12px/15px "Courier New" normal;}
-#code-changes .commit .date{}
-#code-changes .commit .date{}
-#code-changes .commit .date{}
-#code-changes .commit .deta .A{color:#d000ff}
-#code-changes .commit .deta .M{color:#d000ff}
-#code-changes .commit .deta .D{color:#d00000}
-</style>
 <div class="task-info">
-    <div>
-    	<h1>${task.type} #${task.id}</h1>
-    	<h2>${task.summary}</h2>
+    <t:TaskHeader task="task"/>
+    
+    <h2>Attachments</h2>
+    <div class="block">
     </div>
-    <h3>Description</h3>
-    <div>${task.description}</div>
-    <div>Creator: ${task.creator.name}</div>
-    <div>Created: ${task.created}</div>
-    <div>Version: <t:pagelink t:page="versioninfo" t:context="task.version">${task.version.version}</t:pagelink></div>
-    <div><b>Description</b></div>
-    <div>
+    
+    <h2>Description</h2>
+    <div class="block">
     ${task.description}
     </div>
     
-    <div><b>Stages</b></div>
-    <div>
+    <h2>Comments</h2>
+    <div class="block">
+    </div>
+    
+    <h2>Stages</h2>
+    <div class="block">
     	<t:loop source="stages" value="stage">
     	</t:loop>
     </div>
     
     <h2>Code changes</h2>
-    <div id="code-changes">
+    <div id="code-changes" class="block">
     	<img src="/static/i/loading_bar_gray.gif" />
     </div>
     
     <div t:id="zone">
 		<t:loop source="commits" value="commit">
 		<div class="commit">
-			<div class="date">${date:commit.date}</div>
-			<div class="auth">${commit.author}</div>
-			<div class="hash">${commit.hash}</div>
+			<div class="date"><b>${date:commit.date}</b>&#160;<i>${commit.hash}</i> by <a href="#${commit.author}">${commit.author}</a></div>
 			<div class="comm">${commit.comment}</div>
-			<div class="deta"><t:outputraw value="formatDetails(commit.getDetails())"/></div>
+			<ul class="deta"><t:outputraw value="formatDetails(commit.getDetails())"/></ul>
 		</div>
 		</t:loop>
 	</div>

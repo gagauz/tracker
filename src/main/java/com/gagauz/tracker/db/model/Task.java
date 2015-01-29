@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.Identifiable;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -26,6 +27,7 @@ public class Task implements Identifiable {
     private int priority;
 
     private List<Stage> stages;
+    private List<Attachment> attachments;
 
     @Override
     @Id
@@ -184,6 +186,16 @@ public class Task implements Identifiable {
 
     public void setStages(List<Stage> stages) {
         this.stages = stages;
+    }
+
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "listOf.Attachment")
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 
     @Transient
