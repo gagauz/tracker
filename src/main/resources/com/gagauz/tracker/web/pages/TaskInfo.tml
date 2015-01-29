@@ -21,7 +21,7 @@
     
     <div><b>CVS</b></div>
     <div id="commit-list-container">
-    	
+    	<img src="/static/i/loading_bar_gray.gif" />
     </div>
     
     
@@ -40,9 +40,9 @@
     <script type="text/javascript">
     	$j(document).ready(function(){
     		$j.ajax('${ajaxUrl}', {
-    			dataType : "html",
-    			success: function(html, status, xhr) {
-    				$j('#commit-list-container').html(html);
+    			dataType : "json",
+    			success: function(json, status, xhr) {
+    				$j('#commit-list-container').html(json.html);
     			}
     		});
     	});

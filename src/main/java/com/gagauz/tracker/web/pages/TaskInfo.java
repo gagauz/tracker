@@ -10,6 +10,7 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class TaskInfo {
         return task;
     }
 
-    String onGetCommits(Task task) {
+    JSONObject onGetCommits(Task task) {
         StringBuilder sb = new StringBuilder();
         for (Commit c : cvsService.getCommits(task)) {
             sb
@@ -52,11 +53,14 @@ public class TaskInfo {
                     .append(c.getDate()).append(" ")
                     .append(c.getHash()).append(" ")
                     .append(c.getAuthor()).append(" ")
-                    .append(c.getComment())
+                    .append(c.getComment()).append(" ")
+                    .append("<pre>").append(c.getDetails()).append("</pre>")
                     .append("</div>\n");
         }
         System.out.println(sb.toString());
-        return sb.toString();
+        JSONObject json = new JSONObject();
+        json.put("html", sb.toString());
+        return json;
     }
 
     @Cached
@@ -65,7 +69,7 @@ public class TaskInfo {
     }
 
     public String getAjaxUrl() {
-        return componentResources.createEventLink("getCommits", task).toAbsoluteURI();
+        return componentResources.createEventLink("getCommits", task).toRedirectURI();
     }
 
 }

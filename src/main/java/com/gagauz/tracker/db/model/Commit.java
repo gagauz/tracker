@@ -1,11 +1,11 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "commit")
@@ -14,6 +14,7 @@ public class Commit {
     private String author;
     private String comment;
     private Date date;
+    private String details;
 
     @Id
     @Column(updatable = false, nullable = false)
@@ -50,5 +51,14 @@ public class Commit {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Column
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 }
