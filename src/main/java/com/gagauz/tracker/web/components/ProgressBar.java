@@ -18,7 +18,7 @@ public class ProgressBar extends ProgressTime {
             if (percent)
                 writer.writeRaw("<div>" + getProgressPercent() + "%</div>");
             else
-                writer.writeRaw("<div>" + toolsService.getTime(estimated) + "</div>");
+                writer.writeRaw("<div>" + toolsService.getTime(estimate) + "</div>");
         } else {
             writer.writeRaw("<div>" + n_e + "</div>");
         }

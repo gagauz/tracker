@@ -12,10 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.gagauz.tracker.db.base.Identifiable;
 import java.util.List;
@@ -150,7 +150,7 @@ public class Task implements Identifiable {
         this.updated = updated;
     }
 
-    @Column
+    @Column(nullable = false)
     public int getEstimate() {
         return estimate;
     }
@@ -159,7 +159,7 @@ public class Task implements Identifiable {
         this.estimate = estimate;
     }
 
-    @Column
+    @Column(nullable = false)
     public int getProgress() {
         return progress;
     }
@@ -168,7 +168,7 @@ public class Task implements Identifiable {
         this.progress = progress;
     }
 
-    @Column
+    @Column(nullable = false)
     public int getPriority() {
         return priority;
     }

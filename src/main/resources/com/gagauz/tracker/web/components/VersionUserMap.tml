@@ -67,7 +67,7 @@
 													Remain: ${taskTime}
 												</div>
 											</div>
-											<t:ProgressBar progress="task.progress" estimated="task.estimated" percent="true"/>
+											<t:ProgressBar progress="task.progress" estimate="task.estimate" percent="true"/>
 										</div>
 									</t:loop>
 									<t:if test="tasksTime">

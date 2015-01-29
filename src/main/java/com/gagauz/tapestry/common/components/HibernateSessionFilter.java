@@ -1,6 +1,18 @@
 package com.gagauz.tapestry.common.components;
 
-import org.hibernate.*;
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.AssertionFailure;
+import org.hibernate.FlushMode;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -8,17 +20,10 @@ import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.orm.hibernate4.support.OpenSessionInViewFilter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-
 public class HibernateSessionFilter extends OpenSessionInViewFilter {
     protected Logger logger = LoggerFactory.getLogger("OpenSessionInViewFilter");
 
-    private ThreadLocal<HttpServletRequest> req = new ThreadLocal<HttpServletRequest>();
+    private final ThreadLocal<HttpServletRequest> req = new ThreadLocal<HttpServletRequest>();
 
     public HibernateSessionFilter() {
     }
@@ -59,7 +64,7 @@ public class HibernateSessionFilter extends OpenSessionInViewFilter {
     @Override
     protected Session openSession(SessionFactory sessionFactory) throws DataAccessResourceFailureException {
         Session session = super.openSession(sessionFactory);
-        session.setFlushMode(FlushMode.AUTO);
+        session.setFlushMode(FlushMode.NEVER);
         //session.setFlushMode(FlushMode.MANUAL);
         session.beginTransaction();
         logger.debug(String.format("begin transaction: %H in session: %H", session.getTransaction(), session));

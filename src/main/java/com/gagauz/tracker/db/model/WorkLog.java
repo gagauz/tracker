@@ -15,6 +15,7 @@ public class WorkLog implements Identifiable {
     private int id;
     private Task task;
     private int logTime;
+    private String comment;
 
     @Override
     @Id
@@ -43,6 +44,15 @@ public class WorkLog implements Identifiable {
 
     public void setLogTime(int logTime) {
         this.logTime = logTime;
+    }
+
+    @Column
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
 }

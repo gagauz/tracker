@@ -1,11 +1,12 @@
 package com.gagauz.tracker.web.components;
 
-import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+
+import com.gagauz.tracker.web.services.ToolsService;
 
 public class ProgressTime {
 
@@ -21,8 +22,8 @@ public class ProgressTime {
     @Inject
     protected ToolsService toolsService;
 
-    private String done = messages.get("done");
-    private String of = messages.get("of");
+    private final String done = messages.get("done");
+    private final String of = messages.get("of");
     protected String n_e = messages.get("n_e");
 
     @BeginRender
@@ -34,7 +35,7 @@ public class ProgressTime {
             } else {
                 writer.writeRaw(toolsService.getTime(progress));
                 writer.writeRaw(of);
-                writer.writeRaw(toolsService.getTime(estimated));
+                writer.writeRaw(toolsService.getTime(estimate));
             }
         } else {
             writer.writeRaw(n_e);

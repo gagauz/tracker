@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.gagauz.tracker.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +22,12 @@ import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.TaskStatus;
 import com.gagauz.tracker.db.model.TaskType;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.db.model.WorkLog;
+import com.gagauz.tracker.utils.RandomUtils;
 
 @Service("ScVersion")
 public class ScVersion extends DataBaseScenario {
@@ -127,21 +128,18 @@ public class ScVersion extends DataBaseScenario {
                         st.setOwner(getRandomUser());
                         st.setCreator(getRandomUser());
                         st.setSummary("Task random name");
-                        st.setDescription("Lorem ipsum dolorsit.");
+                        st.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
                         st.setPriority(rand.nextInt(30));
-
-                        int es = 15 * (rand.nextInt(30) + 1);
-                        st.setEstimated(es);
-
+                        int es = 15 * (rand.nextInt(10) + 1);
+                        st.setEstimate(es);
                         WorkLog wl = null;
                         if (rand.nextBoolean()) {
                             wl = new WorkLog();
                             wl.setTask(st);
-                            int es = 15 * (rand.nextInt(10) + 1);
-                            st.setEstimate(es);
+
                             //st.setProgress(es / (rand.nextInt(5) + 1));
                             wl.setLogTime(es / (rand.nextInt(5) + 1));
-                            if (st.getProgress() < st.getEstimated()) {
+                            if (st.getProgress() < st.getEstimate()) {
                                 st.setStatus(TaskStatus.IN_PROGRESS);
                             } else {
                                 st.setStatus(TaskStatus.RESOLVED);
@@ -171,6 +169,7 @@ public class ScVersion extends DataBaseScenario {
                         taskDao.save(st);
                         if (wl != null)
                             workLogDao.save(wl);
+                        taskDao.updateTaskProgessTime(st);
                         if (!cms.isEmpty()) {
                             taskCommentDao.save(cms);
                         }
@@ -188,16 +187,14 @@ public class ScVersion extends DataBaseScenario {
                         }
                         st.setCreator(getRandomUser());
                         st.setSummary("Bug random name");
-                        st.setDescription("Lorem ipsum dolorsit.");
+                        st.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
                         st.setPriority(rand.nextInt(10));
-
                         int es = 15 * (rand.nextInt(10) + 1);
-                        st.setEstimated(es);
+                        st.setEstimate(es);
                         if (rand.nextBoolean()) {
-                            int es = 15 * (rand.nextInt(10) + 1);
-                            st.setEstimate(es);
+
                             st.setProgress(es / (rand.nextInt(5) + 1));
-                            if (st.getProgress() < st.getEstimated()) {
+                            if (st.getProgress() < st.getEstimate()) {
                                 st.setStatus(TaskStatus.IN_PROGRESS);
                             } else {
                                 st.setStatus(TaskStatus.RESOLVED);
@@ -209,6 +206,7 @@ public class ScVersion extends DataBaseScenario {
                             st.setAttachments(Arrays.asList(a1, a2));
                         }
                         taskDao.save(st);
+                        taskDao.updateTaskProgessTime(st);
                     }
                 }
             }
