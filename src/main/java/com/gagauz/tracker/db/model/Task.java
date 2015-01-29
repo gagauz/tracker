@@ -5,6 +5,7 @@ import com.gagauz.tracker.db.base.Identifiable;
 import javax.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "task")
@@ -17,12 +18,14 @@ public class Task implements Identifiable {
     private User creator;
     private User owner;
     private Date created = new Date();
-    private Date updated = new Date();
+    private Date updated;
     private String summary;
     private String description;
     private int estimated;
     private int progress;
     private int priority;
+
+    private List<Stage> stages;
 
     @Override
     @Id
@@ -171,6 +174,16 @@ public class Task implements Identifiable {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    @JoinTable(name = "stage_tasks")
+    @ManyToMany(fetch = FetchType.LAZY)
+    public List<Stage> getStages() {
+        return stages;
+    }
+
+    public void setStages(List<Stage> stages) {
+        this.stages = stages;
     }
 
     @Transient

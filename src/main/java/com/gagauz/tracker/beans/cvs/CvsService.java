@@ -4,6 +4,7 @@ import com.gagauz.tracker.beans.dao.CommitDao;
 import com.gagauz.tracker.beans.dao.ProjectDao;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Task;
 import edu.nyu.cs.javagit.api.DotGit;
 import edu.nyu.cs.javagit.api.JavaGitConfiguration;
 import edu.nyu.cs.javagit.api.JavaGitException;
@@ -37,6 +38,35 @@ public class CvsService {
         for (Project project : projectDao.findAll()) {
             initProjectRepo(project);
         }
+    }
+
+    public List<Commit> getCommits(Task task) {
+        DotGit dotGit = dotGitMap.get(task.getFeature().getProject());
+        if (null == dotGit) {
+            dotGit = initProjectRepo(task.getFeature().getProject());
+        }
+        GitLogOptions opts = new GitLogOptions();
+        opts.setOptLimitGrep(true, task.getType().name() + " #" + task.getId());
+        List<Commit> commits = new ArrayList<Commit>();
+        try {
+            for (edu.nyu.cs.javagit.api.commands.GitLogResponse.Commit c : dotGit.getLog(opts)) {
+                Commit commit = new Commit();
+                Date d = gitFormat.parse(c.getDateString());
+                if (null == lastCommitDate || lastCommitDate.before(d)) {
+                    lastCommitDate = d;
+                }
+                commit.setDate(d);
+                commit.setAuthor(c.getAuthor());
+                commit.setComment(c.getMessage().trim());
+                commit.setHash(c.getSha());
+                commits.add(commit);
+
+                System.out.println(c.getDateString() + " " + c.getSha() + " " + c.getAuthor() + " " + c.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return commits;
     }
 
     private DotGit initProjectRepo(Project project) {

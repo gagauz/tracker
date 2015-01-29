@@ -8,10 +8,23 @@
     <div>Creator: ${task.creator.name}</div>
     <div>Created: ${task.created}</div>
     <div>Version: <t:pagelink t:page="versioninfo" t:context="task.version">${task.version.version}</t:pagelink></div>
-     <div><b>Description</b></div>
+    <div><b>Description</b></div>
     <div>
     ${task.description}
     </div>
+    
+    <div><b>Stages</b></div>
+    <div>
+    	<t:loop source="stages" value="stage">
+    	</t:loop>
+    </div>
+    
+    <div><b>CVS</b></div>
+    <div id="commit-list-container">
+    	
+    </div>
+    
+    
     
     <p:sidebar>
         <p>
@@ -23,5 +36,16 @@
             
         </p>
     </p:sidebar>
+    
+    <script type="text/javascript">
+    	$j(document).ready(function(){
+    		$j.ajax('${ajaxUrl}', {
+    			dataType : "html",
+    			success: function(html, status, xhr) {
+    				$j('#commit-list-container').html(html);
+    			}
+    		});
+    	});
+    </script>
 
 </html>

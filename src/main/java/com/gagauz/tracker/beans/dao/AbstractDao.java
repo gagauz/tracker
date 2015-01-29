@@ -1,16 +1,15 @@
 package com.gagauz.tracker.beans.dao;
 
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-import java.util.List;
-
+import com.gagauz.tracker.db.utils.Param;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gagauz.tracker.db.utils.Param;
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
+import java.util.List;
 
 public class AbstractDao<Id extends Serializable, Entity> {
 
