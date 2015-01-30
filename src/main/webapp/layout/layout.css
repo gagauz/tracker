@@ -25,6 +25,9 @@ body {
 
 .c {width:100%;clear:both;margin:0;padding:0;font-size:0;}
 
+.left {float:left}
+.right {float:right}
+
 #site-wrapper {
 	position:relative;
 }
@@ -56,6 +59,9 @@ input, select, textarea {
     background: #FEFEFE url(images/img13.gif) repeat-x;
     border: 1px solid #626262;
 }
+
+.t-error,.t-error-single{color:red;}
+
 
 /* Header */
 
@@ -147,8 +153,12 @@ div.page {
 
 
 /* Comments */
+#task-comments label {clear:both}
 #task-comments .comment {padding:0 0 5px;margin:0 0 6px;border-bottom:1px solid #c0c0c0;}
-#task-comments .comment .date{}
+#task-comments .comment .date{margin-bottom:3px;}
+#task-comments .comment .date a{color:green;text-decoration:none}
 #task-comments .comment .text{}
-#task-comments textarea{width:100%}
+#task-comments textarea{width:400px;border:1px solid #a0a0a0}
 #task-comments .comment .text img{width:60px}
+#task-comments .edit {display:none}
+#task-comments .comment:hover .edit {display:block}

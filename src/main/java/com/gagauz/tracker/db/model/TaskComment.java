@@ -73,4 +73,16 @@ public class TaskComment {
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (null == obj /*|| !(obj instanceof TaskComment)*/) {
+            return false;
+        }
+        return ((TaskComment) obj).getId() == id;
+    }
 }

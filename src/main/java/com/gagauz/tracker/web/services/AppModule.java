@@ -1,49 +1,26 @@
 package com.gagauz.tracker.web.services;
 
-import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.ioc.Configuration;
-import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
-import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.Contribute;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.ServiceId;
-import org.apache.tapestry5.ioc.annotations.Startup;
-import org.apache.tapestry5.ioc.annotations.SubModule;
-import org.apache.tapestry5.ioc.annotations.Value;
-import org.apache.tapestry5.ioc.services.ServiceOverride;
-import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.services.AssetSource;
-import org.apache.tapestry5.services.BindingFactory;
-import org.apache.tapestry5.services.BindingSource;
-import org.apache.tapestry5.services.ComponentEventRequestFilter;
-import org.apache.tapestry5.services.ComponentEventRequestHandler;
-import org.apache.tapestry5.services.LibraryMapping;
-import org.apache.tapestry5.services.PageRenderRequestFilter;
-import org.apache.tapestry5.services.PageRenderRequestHandler;
-import org.apache.tapestry5.services.URLEncoder;
-import org.apache.tapestry5.services.javascript.JavaScriptStack;
-import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
-
 import com.gagauz.tapestry.binding.CondBindingFactory;
 import com.gagauz.tapestry.binding.DateBindingFactory;
-import com.gagauz.tapestry.security.LoginService;
-import com.gagauz.tapestry.security.LogoutService;
-import com.gagauz.tapestry.security.SecurityEncryptor;
-import com.gagauz.tapestry.security.SecurityExceptionInterceptorFilter;
-import com.gagauz.tapestry.security.SecurityModule;
-import com.gagauz.tapestry.security.api.Credentials;
-import com.gagauz.tapestry.security.api.LoginHandler;
-import com.gagauz.tapestry.security.api.LogoutHandler;
-import com.gagauz.tapestry.security.api.SecurityExceptionHandler;
-import com.gagauz.tapestry.security.api.SecurityUser;
-import com.gagauz.tapestry.security.api.SecurityUserProvider;
+import com.gagauz.tapestry.security.*;
+import com.gagauz.tapestry.security.api.*;
 import com.gagauz.tapestry.security.impl.RedirectLoginHandler;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule2;
+import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.*;
+import org.apache.tapestry5.ioc.services.ServiceOverride;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.services.*;
+import org.apache.tapestry5.services.javascript.JavaScriptStack;
+import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -70,8 +47,12 @@ public class AppModule {
     public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
+        configuration.add(SymbolConstants.DEFAULT_STYLESHEET, "com/gagauz/tracker/web/stack/default.css");
+
+        //Security config
         configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_PARAMETER, "r");
         configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_URL, "/login");
+
     }
 
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
@@ -110,6 +91,11 @@ public class AppModule {
     @Contribute(PageRenderRequestHandler.class)
     public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration, RememberMeHandler handler) {
         configuration.add("RememberMeHandler2", handler);
+    }
+
+    @Decorate(serviceInterface = JavaScriptStackSource.class)
+    public JavaScriptStackSource decorateJavaScriptStackSource(JavaScriptStackSource original) {
+        return new JavaScriptStackSourceFilter(original);
     }
 
     public SecurityEncryptor buildSecurityEncryptor(@Inject @Value("${" + SymbolConstants.HMAC_PASSPHRASE + "}") String passphrase) {

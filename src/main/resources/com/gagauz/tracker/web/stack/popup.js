@@ -64,7 +64,7 @@
 	    		content = $('<iframe scrolling="auto" style="width: 900px; height: 554px;" noresize="noresize" src="'+specs.popupUrl+'" />');
 	    		content.load(_this.setSelfPosition);
 	    	} else if (specs.popupClone) {
-	    		content = $this.clone(true);
+	    		content = $this.clone(true).off();
 	    	} else {
 	    		content = $this.before(_this.placeholder).detach();
 	    	}
@@ -108,7 +108,7 @@
 	    			_this.placeholder.remove()
 	    		}
 	    		_this.closeBtn.remove();
-	    		_this.wrapper.remove();
+	    		_this.wrapper.empty().remove();
 	    	});
 	    	_this.pop();
 	    }

@@ -1,14 +1,14 @@
 package com.gagauz.tracker.web.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.StylesheetLink;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class TrackerStack implements JavaScriptStack {
 
@@ -35,6 +35,7 @@ public class TrackerStack implements JavaScriptStack {
         final List<Asset> javaScriptStack = new ArrayList<Asset>();
         javaScriptStack.add(assetSource.getExpandedAsset("com/gagauz/tracker/web/stack/popup.js"));
         javaScriptStack.add(assetSource.getExpandedAsset("com/gagauz/tracker/web/stack/tapestry.js"));
+        javaScriptStack.add(assetSource.getExpandedAsset("com/gagauz/tracker/web/stack/common.js"));
         return javaScriptStack;
     }
 

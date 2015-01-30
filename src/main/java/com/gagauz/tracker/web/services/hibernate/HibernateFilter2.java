@@ -1,21 +1,16 @@
 package com.gagauz.tracker.web.services.hibernate;
 
-import java.io.IOException;
-
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
-import org.hibernate.AssertionFailure;
-import org.hibernate.FlushMode;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.slf4j.Logger;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import java.io.IOException;
 
 public class HibernateFilter2 implements RequestFilter {
     @Inject
@@ -38,7 +33,7 @@ public class HibernateFilter2 implements RequestFilter {
             } else {
                 log.debug("Opening Hibernate Session in OpenSessionInViewFilter for " + request.getPath());
                 Session session = sessionFactory.openSession();
-                session.setFlushMode(FlushMode.MANUAL);
+                session.setFlushMode(FlushMode.AUTO);
                 session.beginTransaction();
                 TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
             }

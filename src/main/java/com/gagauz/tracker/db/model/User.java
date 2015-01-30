@@ -92,4 +92,20 @@ public class User implements Identifiable, Serializable, SecurityUser {
         return roles;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (null == obj /*|| !(obj instanceof User)*/) {
+            return false;
+        }
+        return ((User) obj).id == id;
+    }
+
+    @Override
+    public String toString() {
+        return "User <id=" + id + ">";
+    }
 }

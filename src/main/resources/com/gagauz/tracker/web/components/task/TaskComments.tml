@@ -1,0 +1,31 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<t:loop source="comments" value="comment">
+		<div class="comment" id="task-comment-${comment.id}">
+			<div class="date">
+				<a href="#${comment.user.id}">${comment.user.name}</a> ${date:comment.updated}
+				<div class="right edit">
+					<t:if test="userComment"> 
+					<t:eventlink t:event="edit" t:context="comment">Edit</t:eventlink>
+					</t:if>
+					<a href="#task-comment-${comment.id}">Link</a>
+				</div>			
+			</div>
+			<div class="text">
+				<t:outputraw value="comment.text"/>
+				<t:AttachmentsBlock attachments="comment.attachments"/>
+			</div>
+		</div>
+	</t:loop>
+	<t:form t:id="commentForm">
+		<t:error for="text" />
+		<div>
+			<t:textarea t:id="text" t:value="newComment.text" t:validate="required"
+				t:mixins="import" 
+				import.stylesheet="/static/js/jquery/tinyeditor/style.css"
+				import.library="/static/js/jquery/tinyeditor/packed.js"
+				import.jqueryFunction="tinyEditor"
+				rows="3"/>
+		</div>
+		<t:submit />
+	</t:form>
+</div>

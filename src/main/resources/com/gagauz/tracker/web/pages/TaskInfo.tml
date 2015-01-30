@@ -32,27 +32,12 @@
     </p:sidebar>
 -->
     <h2>Comments</h2>
-    <t:LazyZone id="task-comments" t:event="getcomments" t:context="task" class="block">
+    <t:DeferredZone id="task-comments" t:event="getcomments" t:context="task" class="block">
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
-    	<t:loop source="comments" value="comment">
-		<div class="comment">
-			<div class="date"><b>${date:comment.updated}</b>&#160;by <a href="#${comment.user.id}">${comment.user.name}</a></div>
-			<div class="text">
-				<t:outputraw value="comment.text"/>
-				<t:AttachmentsBlock attachments="comment.attachments"/>
-			</div>
-		</div>
-		</t:loop>
-		<t:form t:id="commentForm">
-			<t:label for="text">Add comment</t:label><br/>
-			<div>
-			<t:textarea t:id="text" t:value="newComment.text"/>
-			</div>
-			<t:submit/>
-		</t:form>
-    </t:LazyZone>
+    	<t:task.TaskComments task="task"/>
+    </t:DeferredZone>
     
     <h2>Stages</h2>
     <div class="block">
@@ -61,18 +46,12 @@
     </div>
     
     <h2>Code changes</h2>
-    <t:LazyZone id="task-commits" t:event="getcommits" t:context="task" class="block">
+    <t:DeferredZone id="task-commits" t:event="getcommits" t:context="task" class="block">
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
-    	<t:loop source="commits" value="commit">
-		<div class="commit">
-			<div class="date"><b>${date:commit.date}</b>&#160;<i>${commit.hash}</i> by <a href="#${commit.author}">${commit.author}</a></div>
-			<div class="comm">${commit.comment}</div>
-			<ul class="deta"><t:outputraw value="formatDetails(commit.getDetails())"/></ul>
-		</div>
-		</t:loop>
-    </t:LazyZone>
+    	<t:task.TaskCommits task="task"/>
+    </t:DeferredZone>
     
 </div>
 </html>

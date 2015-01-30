@@ -10,6 +10,6 @@ import java.util.List;
 public class TaskCommentDao extends AbstractDao<Integer, TaskComment> {
 
     public List<TaskComment> findByTask(Task task) {
-        return getSession().createQuery("from TaskComment t where task=:task").setEntity("task", task).list();
+        return getSession().createQuery("from TaskComment t where task=:task order by updated asc").setEntity("task", task).list();
     }
 }

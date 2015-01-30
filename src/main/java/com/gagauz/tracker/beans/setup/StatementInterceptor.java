@@ -1,16 +1,15 @@
 package com.gagauz.tracker.beans.setup;
 
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.JDBC4Connection;
 import com.mysql.jdbc.ResultSetInternalMethods;
 import com.mysql.jdbc.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.util.Properties;
 
 public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor {
 
@@ -22,7 +21,7 @@ public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor
 
     private String conn_id;
 
-    private boolean initialized = false;
+    private static boolean initialized = false;
 
     @Override
     public void init(Connection connection, Properties properties) throws SQLException {
@@ -35,7 +34,7 @@ public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor
             conn_id = "Connection [" + connectionId + "] ";
             StringBuilder sb = new StringBuilder(conn_id + "Properties:\n");
             for (String prop : properties.stringPropertyNames()) {
-                sb.append(String.format("%s = %s\n", prop, properties.getProperty(prop)));
+                sb.append("\t").append(prop).append(" = ").append(properties.getProperty(prop)).append("\n");
             }
             LOGGER.debug(sb.toString());
         }
