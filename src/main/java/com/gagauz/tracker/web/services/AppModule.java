@@ -52,7 +52,6 @@ public class AppModule {
         //Security config
         configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_PARAMETER, "r");
         configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_URL, "/login");
-
     }
 
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {

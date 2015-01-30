@@ -2,12 +2,20 @@
 	<t:loop source="comments" value="comment">
 		<div class="comment" id="task-comment-${comment.id}">
 			<div class="date">
-				<a href="#${comment.user.id}">${comment.user.name}</a> ${date:comment.updated}
-				<div class="right edit">
+				<a href="#${comment.user.id}">${comment.user.name}</a> 
+				<t:if test="comment.updated">
+				<span>last edited</span> ${date:comment.updated}
+				<p:else>
+				${date:comment.created}
+				</p:else>
+				</t:if>
+				<div class="edit-row">
+					<a href="#task-comment-${comment.id}" class="link">Link</a>
 					<t:if test="userComment"> 
-					<t:eventlink t:event="edit" t:context="comment">Edit</t:eventlink>
+					<t:eventlink t:event="edit" t:context="comment" t:zone="literal:editZone" class="edit">Edit</t:eventlink>
+					<t:eventlink t:event="drop" t:context="comment" t:zone="${parentZoneId}" class="edit">Drop</t:eventlink>
 					</t:if>
-					<a href="#task-comment-${comment.id}">Link</a>
+					
 				</div>			
 			</div>
 			<div class="text">
@@ -16,16 +24,18 @@
 			</div>
 		</div>
 	</t:loop>
-	<t:form t:id="commentForm">
-		<t:error for="text" />
-		<div>
-			<t:textarea t:id="text" t:value="newComment.text" t:validate="required"
-				t:mixins="import" 
-				import.stylesheet="/static/js/jquery/tinyeditor/style.css"
-				import.library="/static/js/jquery/tinyeditor/packed.js"
-				import.jqueryFunction="tinyEditor"
-				rows="3"/>
-		</div>
-		<t:submit />
-	</t:form>
+	<div t:id="editZone">
+		<t:form t:id="commentForm" context="newComment.id">
+			<t:error for="text" />
+			<div>
+				<t:textarea t:id="text" t:value="newComment.text" t:validate="required"
+					t:mixins="import" 
+					import.stylesheet="/static/js/jquery/tinyeditor/style.css"
+					import.library="/static/js/jquery/tinyeditor/packed.js"
+					import.jqueryFunction="tinyEditor"
+					rows="5"/>
+			</div>
+			<t:submit />
+		</t:form>
+	</div>
 </div>

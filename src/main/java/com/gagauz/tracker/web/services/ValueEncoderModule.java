@@ -1,23 +1,10 @@
 package com.gagauz.tracker.web.services;
 
+import com.gagauz.tracker.beans.dao.*;
+import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.services.ValueEncoderFactory;
-
-import com.gagauz.tracker.beans.dao.FeatureDao;
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.ProjectDao;
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
-import com.gagauz.tracker.beans.dao.TaskDao;
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.model.Version;
 
 public class ValueEncoderModule {
     public static void contributeValueEncoderSource(MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
@@ -27,6 +14,7 @@ public class ValueEncoderModule {
                                                     final FeatureDao featureDao,
                                                     final FeatureVersionDao featureVersionDao,
                                                     final TaskDao taskDao,
+                                                    final TaskCommentDao taskCommentDao,
                                                     final RoleGroupDao roleGroupDao) {
         configuration.add(User.class, new ValueEncoderFactory<User>() {
 
@@ -157,6 +145,25 @@ public class ValueEncoderModule {
                     @Override
                     public Task toValue(String arg0) {
                         return null == arg0 ? null : taskDao.findById(Integer.parseInt(arg0));
+                    }
+                };
+            }
+        });
+
+        configuration.add(TaskComment.class, new ValueEncoderFactory<TaskComment>() {
+
+            @Override
+            public ValueEncoder<TaskComment> create(Class<TaskComment> arg0) {
+                return new ValueEncoder<TaskComment>() {
+
+                    @Override
+                    public String toClient(TaskComment arg0) {
+                        return null == arg0 ? null : String.valueOf(arg0.getId());
+                    }
+
+                    @Override
+                    public TaskComment toValue(String arg0) {
+                        return null == arg0 ? null : taskCommentDao.findById(Integer.parseInt(arg0));
                     }
                 };
             }

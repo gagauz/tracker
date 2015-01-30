@@ -3,7 +3,7 @@
      
 	<div class="title">
     	<h1>${task.type} #${task.id}</h1>
-    	<h2>${task.summary} 
+    	<h2><a href="#" t:type="pagelink" t:page="taskinfo" t:context="task">${task.summary}</a>
     		/ <a href="#" t:type="pagelink" t:page="featureinfo" t:context="task.feature">${task.feature.name}</a>
     		/ <a href="#" t:type="pagelink" t:page="versioninfo" t:context="task.version">${task.version.version}</a>
     		/ <a href="#" t:type="pagelink" t:page="projectinfo" t:context="task.version.project">${task.version.project.name}</a></h2>

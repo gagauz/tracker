@@ -299,10 +299,6 @@
                     this.d = 0
                 }
             }
-        }, edit.prototype.post = function() {
-            if (this.d) {
-                this.toggle(1)
-            }
         };
         return {
             edit: edit

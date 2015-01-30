@@ -160,5 +160,6 @@ div.page {
 #task-comments .comment .text{}
 #task-comments textarea{width:400px;border:1px solid #a0a0a0}
 #task-comments .comment .text img{width:60px}
-#task-comments .edit {display:none}
-#task-comments .comment:hover .edit {display:block}
+#task-comments .edit-row {display:none;float:right;}
+#task-comments .edit-row a {float:left;margin:0 3px;}
+#task-comments .comment:hover .edit-row {display:block}

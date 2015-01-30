@@ -211,6 +211,9 @@
 	    }
 	}
 	T5.ElementEffect.popup = function(e) {
+//	$.effects.popup = function(e) {
 		$(e).showPopup();
+		//console.log('trigger', T5.ZONE_UPDATED_EVENT, ' on ', $(e));
+		$(e).trigger(T5.ZONE_UPDATED_EVENT);
 	}
 })(jQuery, Tapestry);

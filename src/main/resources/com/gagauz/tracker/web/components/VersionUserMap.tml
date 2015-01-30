@@ -11,6 +11,7 @@
 		.version-user-map .task-cell-div {display:inline-block;margin:1px;border:1px solid gray;background-color:#f0f0ff;padding:4px 8px;position:relative;width:100px;}
 		.version-user-map .task-cell-div.bug-true {border:1px solid red;background-color:#fff0d0;}
 		.version-user-map .task-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}
+		.version-user-map .task-cell-div .title a{font-size:12px;}
 		.version-user-map .task-cell-div .status {}
 		.version-user-map .version-col .todo {border:1px solid gray;background-color:#f0f0d0;padding:2px 4px;color:black;}
 		.version-user-map .task-cell-div .title a {overflow:hidden;}

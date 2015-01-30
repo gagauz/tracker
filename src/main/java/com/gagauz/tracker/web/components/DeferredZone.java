@@ -5,6 +5,7 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.InitializationPriority;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
@@ -23,14 +24,21 @@ public class DeferredZone extends Zone {
     @Inject
     private JavaScriptSupport javaScriptSupport;
 
-    Object beginRender() {
-        javaScriptSupport.addScript(InitializationPriority.NORMAL, "TapestryJQuery.updateZoneOnEvent(document, 'ready', '%s', '%s');",
-                getClientId(),
-                getEventLink().toURI());
+    @Inject
+    private Request request;
 
-        //        javaScriptSupport.addScript(InitializationPriority.NORMAL, "Tapestry.Initializer.updateZoneOnEvent(\"onready\", window, \"%s\", \"%s\");",
-        //                getClientId(),
-        //                getEventLink().toURI());
+    Object beginRender() {
+        if (request.isXHR()) {
+            javaScriptSupport.addScript(InitializationPriority.IMMEDIATE,
+                    "TapestryJQuery.updateZoneOnEvent($j('#%s').parents('.t-zone'), Tapestry.ZONE_UPDATED_EVENT, '%s', '%s');",
+                    getClientId(),
+                    getClientId(),
+                    getEventLink().toURI());
+        } else {
+            javaScriptSupport.addScript(InitializationPriority.NORMAL, "TapestryJQuery.updateZoneOnEvent(document, 'ready', '%s', '%s');",
+                    getClientId(),
+                    getEventLink().toURI());
+        }
         return emptyBlock;
     }
 

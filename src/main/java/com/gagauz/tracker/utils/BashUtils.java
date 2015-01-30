@@ -41,10 +41,6 @@ public class BashUtils {
             //            }
             out = readStream(process.getInputStream());
 
-            if (out.length() > 0) {
-                System.out.println(thread + " : out : " + out);
-            }
-
             int exitVal = process.waitFor();
 
             if (exitVal != 0) {

@@ -61,6 +61,10 @@ public class AbstractDao<Id extends Serializable, Entity> {
         }
     }
 
+    public void delete(Entity entity) {
+        getSession().delete(entity);
+    }
+
     public void evict(Entity entity) {
         getSession().evict(entity);
     }

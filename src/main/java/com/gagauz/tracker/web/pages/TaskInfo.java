@@ -6,16 +6,18 @@ import com.gagauz.tracker.beans.dao.TaskDao;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Task;
 import com.gagauz.tracker.db.model.User;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Persist;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
+import com.gagauz.tracker.web.components.DeferredZone;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
 
 @Secured
 public class TaskInfo {
+
+    @Component
+    @Property(write = false)
+    private DeferredZone commentsZone;
 
     @Property(write = false)
     private Task task;

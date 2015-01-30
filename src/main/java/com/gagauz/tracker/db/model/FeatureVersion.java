@@ -1,30 +1,18 @@
 package com.gagauz.tracker.db.model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
-
 import com.gagauz.tracker.db.base.ArrayListType;
 import com.gagauz.tracker.db.base.CollectionType;
 import com.gagauz.tracker.db.base.Identifiable;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Parameter;
+
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "feature_version", uniqueConstraints = {
@@ -175,5 +163,10 @@ public class FeatureVersion implements Identifiable, Serializable {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
     }
 }

@@ -1,23 +1,12 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import com.gagauz.tracker.db.base.Identifiable;
 import org.hibernate.annotations.ForeignKey;
 
-import com.gagauz.tracker.db.base.Identifiable;
+import javax.persistence.*;
+
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "feature")
@@ -109,6 +98,11 @@ public class Feature implements Identifiable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
     }
 
 }

@@ -13,7 +13,8 @@ public class TaskComment {
     private int id;
     private User user;
     private Task task;
-    private Date updated = new Date();
+    private Date created = new Date();
+    private Date updated;
     private String text;
     private List<Attachment> attachments;
 
@@ -43,6 +44,16 @@ public class TaskComment {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     @Column
@@ -84,5 +95,10 @@ public class TaskComment {
             return false;
         }
         return ((TaskComment) obj).getId() == id;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
     }
 }

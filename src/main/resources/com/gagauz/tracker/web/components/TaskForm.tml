@@ -14,18 +14,12 @@
     </div>
     
     <h2>Comments</h2>
-    <div id="task-comments" class="block">
-    	<img src="/static/i/loading_bar_gray.gif" />
-    </div>
-    
-    <t:DeferredZone t:event="getcomments" id="comments-block" t:if="comments" t:context="task">
-		<t:loop source="comments" value="comment">
-		<div class="comment">
-			<div class="date"><b>${date:comment.updated}</b>&#160;by&#160;<a href="#${comment.user.id}">${comment.user.name}</a></div>
-			<div class="comm">${comment.text}</div>
-		</div>
-		</t:loop>
-	</t:DeferredZone>
+    <t:DeferredZone id="task-comments" t:event="getcomments" t:context="task" class="block">
+    	<p:empty>
+    		<img src="/static/i/loading_bar_gray.gif" />
+    	</p:empty>
+    	<t:task.TaskComments task="task"/>
+    </t:DeferredZone>
 	
 
 </div>

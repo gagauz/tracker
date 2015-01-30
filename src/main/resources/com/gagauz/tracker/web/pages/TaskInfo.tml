@@ -6,9 +6,10 @@
     <t:TaskHeader task="task"/>
     
     <h2>Attachments</h2>
-    <div class="block">
-    </div>
+    <div class="block" id="dropzone">
     
+    </div>
+
     <h2>Description</h2>
     <div class="block">
     ${task.description}
@@ -32,11 +33,11 @@
     </p:sidebar>
 -->
     <h2>Comments</h2>
-    <t:DeferredZone id="task-comments" t:event="getcomments" t:context="task" class="block">
+    <t:DeferredZone t:id="commentsZone" id="task-comments" t:context="task" class="block">
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
-    	<t:task.TaskComments task="task"/>
+    	<t:task.TaskComments task="task" zone="commentsZone"/>
     </t:DeferredZone>
     
     <h2>Stages</h2>
@@ -46,7 +47,7 @@
     </div>
     
     <h2>Code changes</h2>
-    <t:DeferredZone id="task-commits" t:event="getcommits" t:context="task" class="block">
+    <t:DeferredZone id="task-commits" t:context="task" class="block">
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
