@@ -1,33 +1,4 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-	<style>
-		.left {float:left}
-		.project-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
-		.project-map-owerflow {display:inline-block;position:absolute1;}
-		.project-map .feature-col {background-color:#990000;color:white;border:1px solid #ccaaaa;}
-		.project-map .version-col {background-color:#009900;color:white;border:1px solid #ccffcc;}
-		.project-map .version-col.col, .empty-col.col {width:100px;}
-		.project-map .task-col {background-color:#ffffcc;border:1px solid #ccccaa;}
-		.project-map .task-col-div {width:250px}
-		.project-map .task-col div{overflow:hidden;}
-		.project-map .task-col .owner {color:#660000}
-		.project-map .task-col .description {}
-		.project-map .row, .project-map .row a {font-size:12px;}
-		.project-map .row a {float:left;margin-top:1px;}
-		.project-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;}
-		.project-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;}
-
-		.project-map .progr-time {float:right;font-size:11px;padding:3px 3px;}
-		.project-map .progr-bar {border:1px solid gray;background:black;float:right;position:relative;width:60px;color:white;height:100%;}
-		.project-map .progr-bar .progr-bar-fill {background:green;height:100%;position:absolute;left:0;z-index:0;}
-		.project-map .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:11px;padding:1px;}
-
-		.project-map th {padding:5px;white-space:normal;}
-		.project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
-		
-		.project-map th.version-col a {color:white}
-		
-		.project-map .progress .row {border:1px solid silver;background-color:#f0f0d0;padding:3px 3px;margin:5px 1px 1px 0;font-size:90%;}
-	</style>
 	<div class="project-map">
 		<div class="project-map-owerflow">
 			<table>
@@ -79,7 +50,7 @@
 											<div class="title">Bugs:</div>
 											<t:loop source="bugs" value="task">
 												<div class="row">
-													<t:pagelink t:page="BugInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
+													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
 													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
 												</div>
 											</t:loop>

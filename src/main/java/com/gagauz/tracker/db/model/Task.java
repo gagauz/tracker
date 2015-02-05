@@ -16,7 +16,7 @@ public class Task implements Identifiable {
     private TaskStatus status = TaskStatus.OPEN;
     private Feature feature;
     private Version version;
-    private User creator;
+    private User author;
     private User owner;
     private Date created = new Date();
     private Date updated;
@@ -82,12 +82,12 @@ public class Task implements Identifiable {
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    public User getCreator() {
-        return creator;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @JoinColumn(nullable = true)

@@ -13,8 +13,8 @@
 			<tr>
 				<th>Status:</th>
 				<td>${task.status}</td>
-				<th>Creator:</th>
-				<td>${task.creator.name}</td>
+				<th>Author:</th>
+				<td>${task.author.name}</td>
 				<th>Estimate:</th>
 				<td>${getTime(task.estimate)}</td>
 				<th>Version:</th>

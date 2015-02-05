@@ -68,11 +68,7 @@
 	    	} else {
 	    		content = $this.before(_this.placeholder).detach();
 	    	}
-	    	
-	    	if (content.hasClass('popup')) {
-	    		content.removeClass('popup');
-	    	}
-	    	
+	    	    	
 	    	if (specs.popupCloseButton) {
 	    		_this.closeBtn.click(_this.hidePopup);
 	    		_this.wrapper.append(_this.closeBtn);

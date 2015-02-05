@@ -37,8 +37,9 @@
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
-    	<t:task.TaskComments task="task" zone="commentsZone"/>
+    	
     </t:DeferredZone>
+    <t:task.TaskComments task="task" zone="commentsZone"/>
     
     <h2>Stages</h2>
     <div class="block">

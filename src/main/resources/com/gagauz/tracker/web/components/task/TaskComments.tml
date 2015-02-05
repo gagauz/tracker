@@ -24,8 +24,8 @@
 			</div>
 		</div>
 	</t:loop>
-	<div t:id="editZone">
-		<t:form t:id="commentForm" context="newComment.id">
+	<div t:id="editZone" data-popup-class="comment-popup">
+		<t:form id="literal:commentForm" t:id="commentForm" class="comment-form" t:context="newComment.id" t:zone="${parentZoneId}">
 			<t:error for="text" />
 			<div>
 				<t:textarea t:id="text" t:value="newComment.text" t:validate="required"

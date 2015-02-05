@@ -11,7 +11,7 @@
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-core</artifactId>
-			<version>${tapestry-release-version}</version>
+			<version>${tapestry-release-version}-patched</version>
 		</dependency>
 
 		<!-- This adds automatic compression of JavaScript and CSS when in production mode. -->
@@ -167,7 +167,7 @@
 	</repositories>
 
 	<properties>
-		<tapestry-release-version>5.3.8</tapestry-release-version>
+		<tapestry-release-version>5.3.6</tapestry-release-version>
 		<servlet-api-release-version>2.5</servlet-api-release-version>
 		<testng-release-version>5.14.10</testng-release-version>
 		<easymock-release-version>3.0</easymock-release-version>

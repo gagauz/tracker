@@ -44,12 +44,17 @@ public class TaskComments {
     @Inject
     private Request request;
 
-    void onSuccessFromCommentForm(int id) {
+    Object onSuccessFromCommentForm(int id) {
         newComment.setId(id);
         newComment.setUser((User) securityUser);
         newComment.setTask(task);
         taskCommentDao.save(newComment);
         newComment = null;
+
+        if (null != zone && request.isXHR()) {
+            return zone.getBody();
+        }
+        return null;
     }
 
     Object onEdit(TaskComment comment) {
@@ -68,10 +73,6 @@ public class TaskComments {
         return null;
     }
 
-    public String getParentZoneId() {
-        return null != zone ? zone.getClientId() : null;
-    }
-
     public List<TaskComment> getComments() {
         if (null != task && null == comments) {
             comments = taskCommentDao.findByTask(task);
@@ -88,5 +89,9 @@ public class TaskComments {
 
     public boolean isUserComment() {
         return null != securityUser && comment.getUser().equals(securityUser);
+    }
+
+    public String getParentZoneId() {
+        return null != zone ? zone.getClientId() : null;
     }
 }

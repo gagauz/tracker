@@ -106,7 +106,7 @@ public class ScVersion extends DataBaseScenario {
                         st.setFeature(t.getFeature());
                         st.setVersion(t.getVersion());
                         st.setOwner(getRandomUser());
-                        st.setCreator(getRandomUser());
+                        st.setAuthor(getRandomUser());
                         st.setSummary("Task random name");
                         st.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
                         st.setPriority(rand.nextInt(30));
@@ -166,7 +166,7 @@ public class ScVersion extends DataBaseScenario {
                         if (rand.nextBoolean()) {
                             st.setOwner(getRandomUser());
                         }
-                        st.setCreator(getRandomUser());
+                        st.setAuthor(getRandomUser());
                         st.setSummary("Bug random name");
                         st.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
                         st.setPriority(rand.nextInt(10));

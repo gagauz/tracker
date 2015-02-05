@@ -14,4 +14,4 @@ body1 {margin:0; font:12px Verdana,Arial}
 .toggle {float:left; background:url(images/icons.png) -34px 2px no-repeat; padding:9px 13px 0 31px; height:23px; border-right:1px solid #ccc; cursor:pointer; color:#666}
 .toggle:hover {background-color:#fff}
 .resize {float:right; height:32px; width:32px; background:url(images/resize.gif) 15px 15px no-repeat; cursor:s-resize}
-#editor {cursor:text; margin:10px}
+#editor1 {cursor:text; margin:10px}
