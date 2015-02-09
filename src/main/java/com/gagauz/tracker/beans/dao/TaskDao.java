@@ -1,14 +1,10 @@
 package com.gagauz.tracker.beans.dao;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.gagauz.tracker.db.model.*;
 import org.springframework.stereotype.Service;
 
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.db.model.TaskStatus;
-import com.gagauz.tracker.db.model.Version;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class TaskDao extends AbstractDao<Integer, Task> {
@@ -19,6 +15,10 @@ public class TaskDao extends AbstractDao<Integer, Task> {
 
     public List<Task> findByVersion(Version version) {
         return getSession().createQuery("from Task t where version=:version").setEntity("version", version).list();
+    }
+
+    public List<Task> findByFeature(Feature feature) {
+        return getSession().createQuery("from Task t where feature=:feature").setEntity("feature", feature).list();
     }
 
     public List<Task> findOpen(Version version) {

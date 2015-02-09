@@ -56,7 +56,8 @@ public class ScVersion extends DataBaseScenario {
                 Feature th = new Feature();
                 th.setProject(p);
                 th.setCreator(user1);
-                th.setName("Some random feature name");
+                th.setName("Название фичи, например, Авторизация.");
+                th.setDescription("Общее описание фичи, например, Авторизация на сайте для доступа к защищенным разделам.");
                 featureDao.save(th);
                 theaders.add(th);
             }
@@ -88,8 +89,7 @@ public class ScVersion extends DataBaseScenario {
                     t.setVersion(v);
                     t.setOwner(user1);
                     t.setCreator(user2);
-                    t.setName("#" + th.getId() + "/" + v.getVersion());
-                    t.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
+                    t.setDescription("Название имплементации фичи в данной версии, например, реализовать простую защиту страниц без разделения ролей и форму авторизации с хранением признака авторизованного пользователя в сессии.");
                     if (rand.nextBoolean()) {
                         Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
                         Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
@@ -107,8 +107,8 @@ public class ScVersion extends DataBaseScenario {
                         st.setVersion(t.getVersion());
                         st.setOwner(getRandomUser());
                         st.setAuthor(getRandomUser());
-                        st.setSummary("Task random name");
-                        st.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
+                        st.setSummary("Название задачи, например, сделать форму авторизации.");
+                        st.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
                         st.setPriority(rand.nextInt(30));
                         int es = 15 * (rand.nextInt(10) + 1);
                         st.setEstimate(es);
@@ -167,8 +167,8 @@ public class ScVersion extends DataBaseScenario {
                             st.setOwner(getRandomUser());
                         }
                         st.setAuthor(getRandomUser());
-                        st.setSummary("Bug random name");
-                        st.setDescription("Lorem ipsum — dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.");
+                        st.setSummary("Заголовок бага");
+                        st.setDescription("Подробное описание бага, с шагами воспроизведения скриншотами и т.д.");
                         st.setPriority(rand.nextInt(10));
                         int es = 15 * (rand.nextInt(10) + 1);
                         st.setEstimate(es);

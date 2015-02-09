@@ -160,9 +160,10 @@ div.page {
 .project-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
 .project-map-owerflow {display:inline-block;position:absolute1;}
 .project-map .feature-col {background-color:#990000;color:white;border:1px solid gray;}
+.project-map .feature-col a {color:white;float:left;font-weight:bold;text-decoration:none;text-align:left;}
 .project-map .version-col {background-color:#009900;color:white;border:1px solid gray;}
 .project-map .version-col.col, .empty-col.col {width:100px;}
-.project-map .task-col {background-color:#ffffff;border:1px solid silver;}
+.project-map .task-col {background-color:#ffffff;border:1px solid silver;padding:6px 8px;}
 .project-map .task-col-div {width:250px}
 .project-map .task-col div{overflow:hidden;}
 .project-map .task-col .owner {color:#660000}
@@ -172,10 +173,10 @@ div.page {
 .project-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;}
 .project-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;}
 
-.project-map .progr-time {float:right;font-size:11px;padding:3px 3px;}
-.project-map .progr-bar {border:1px solid gray;background:white;float:right;position:relative;width:60px;height:100%;}
-.project-map .progr-bar .progr-bar-fill {background:#9b9;height:100%;position:absolute;left:0;z-index:0;}
-.project-map .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:11px;padding:1px;}
+.progr-time {float:right;font-size:11px;padding:3px 3px;}
+.progr-bar {border:1px solid gray;background:white;float:right;position:relative;width:60px;height:100%;}
+.progr-bar .progr-bar-fill {background:#9b9;height:100%;position:absolute;left:0;z-index:0;}
+.progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:11px;padding:1px;}
 
 .project-map th {padding:5px;white-space:normal;}
 .project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
@@ -216,4 +217,9 @@ body.tiny {background:#fff}
 .tiny .toggle:hover {background-color:#fff}
 .tiny .resize {float:right; height:32px; width:32px; background:url(images/resize.gif) 15px 15px no-repeat; cursor:s-resize}
 
-
+.feature-info .desc-div {margin:0 0 15px;}
+.feature-info .task-div a.TASK {color:navy;}
+.feature-info .task-div a.BUG {color:#990000;}
+.feature-info .task-div {margin:0 0 5px;}
+fieldset {background-color:#fff;border:1px solid gray;margin:0 0 10px 0;}
+fieldset legend {background-color:#fff;padding:2px 5px;border:1px solid gray;}

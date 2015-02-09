@@ -6,7 +6,9 @@
 					<tr>
 						<td></td>
 						<t:loop source="features" value="feature">
-							<th class="feature-col">${feature.name}</th>
+							<th class="feature-col">
+								<t:pagelink t:page="featureinfo" t:context="feature">${feature.name}</t:pagelink>
+							</th>
 						</t:loop>
 					</tr>
 				</thead>
@@ -23,9 +25,6 @@
 								<td class="task-col">
 									<div class="task-col-div">
 									<t:if test="featureVersion">
-										<b>
-											<t:pagelink t:page="FeatureVersionInfo" t:context="featureVersion">${featureVersion.name}</t:pagelink>
-										</b>
 										<div class="description">
 											${featureVersion.description}
 										</div>

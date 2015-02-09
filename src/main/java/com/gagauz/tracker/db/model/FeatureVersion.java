@@ -38,7 +38,6 @@ public class FeatureVersion implements Identifiable, Serializable {
     private Date created = new Date();
     private Date updated = new Date();
     //    private List<Task> tasks;
-    private String name;
     private String description;
 
     private List<Attachment> attachments;
@@ -96,15 +95,6 @@ public class FeatureVersion implements Identifiable, Serializable {
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    @Column
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Column(columnDefinition = "text")

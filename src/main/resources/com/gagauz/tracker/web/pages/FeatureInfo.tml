@@ -8,28 +8,24 @@
     <p>Creator: ${feature.creator.name}</p>
     <p>Created: ${feature.created}</p>
     <p>Versions changes</p>
-    <t:loop source="feature.tasks" value="task">
-    	<div>
-    		<b>${task.name}</b>
-    		<div>
-    			${task.description}
-    		</div>
-    		<div>
-    			${task.version.version}
-    		</div>
-    	</div>
+    
+    <div class="feature-info">
+    <t:loop source="feature.featureVersions" value="featureVersion">
+    	<fieldset> 
+    		<legend>${message:version}: ${featureVersion.version.version} ${message:release-date}: ${date:featureVersion.version.releaseDate}</legend>
+	    	<div class="desc-div">${featureVersion.description}</div>
+	    	
+		    <t:loop source="getMap().get(featureVersion.getVersion())" value="task">
+		    	<div class="task-div">
+		    		<t:pagelink t:page="TaskInfo" t:context="task" class="${task.type}">${task.type} #${task.id} ${task.summary}</t:pagelink>
+		    		<div>
+		    			${task.description}
+		    		</div>
+		    	</div>
+		    </t:loop>
+	    </fieldset>
+	    
     </t:loop>
-    
-    
-    <p:sidebar>
-        <p>
-            
-        </p>
-
-
-        <p>
-            
-        </p>
-    </p:sidebar>
+	</div>    
 
 </html>

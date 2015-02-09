@@ -18,11 +18,7 @@
 		.version-user-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
 		.version-user-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
 		.version-user-map .nowrap {white-space:nowrap;}
-		.version-user-map .progr-time {float:right;font-size:80%;padding:3px 3px;}
-		.version-user-map .progr-bar {border:1px solid gray;background:black;float:right;position:relative;width:100%;color:white;height:100%;top:0;left:0;margin-top:2px;}
-		.version-user-map .progr-bar .progr-bar-fill {background:green;height:100%;position:absolute;left:0;z-index:0;margin:0;padding:0;}
-		.version-user-map .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:80%;padding:1px;}
-
+		
 		.version-user-map th {padding:5px;white-space:normal;}
 		.version-user-map td {padding:0;vertical-align:top;white-space:normal;}
 		

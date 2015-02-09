@@ -4,7 +4,6 @@
       xmlns:p="tapestry:parameter">
 
 
-    <p>${featureVersion.name} / ${featureVersion.version.version}</p>
     <p>Owner: ${featureVersion.owner.name}</p>
     <p>Creator: ${featureVersion.creator.name}</p>
     <p>Description</p>
