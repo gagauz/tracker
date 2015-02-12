@@ -1,4 +1,4 @@
-package com.gagauz.tracker.web.components.forms;
+package com.gagauz.tracker.web.components.version;
 
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.Project;
@@ -19,7 +19,7 @@ public class VersionForm {
     @Property
     private Version version;
 
-    @Component(parameters = {"object=version", "exclude=id"})
+    @Component(parameters = {"object=version", "exclude=id,created,updated"})
     private BeanEditForm versionForm;
 
     @Inject

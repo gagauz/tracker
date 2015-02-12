@@ -1,13 +1,10 @@
-/*
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
-*/
-
 body, h1, h2, h3, h4, h5, h6, a, input, select, textarea {
-	font: 14px Arial, Helvetica, sans-serif;
+	font: 13px Arial, Helvetica, sans-serif;
 	color: #000;
 }
+
+a {text-decoration:none;color:navy;}
+a:hover {text-decoration:underline}
 
 h1, h2, h3, h4, h5, h6 {
 	margin:0 0 3px 0;
@@ -89,7 +86,6 @@ div.menu li {
 div.menu a {
     display: block;
     padding: 8px 20px 0px 20px;
-    text-decoration: none;
     text-align: center;
     text-transform: lowercase;
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -111,7 +107,7 @@ div.page {
 
 .sidebar ul {clear:both;overflow:hidden;list-style:none;}
 .sidebar ul li {float:left;margin-right:2px;}
-.sidebar ul li a {display:block;padding:2px 5px;border:1px solid gray;background-color:white;text-decoration:none;}
+.sidebar ul li a {display:block;padding:2px 5px;border:1px solid gray;background-color:white;}
 
 .content .post {margin:10px;}
 
@@ -135,7 +131,7 @@ div.page {
 
 /* Task Header */
 .task-header .title {margin-bottom:15px;}
-.task-header .title a {color:blue;font-size:15px}
+.task-header .title a {color:navy;font-size:15px}
 .task-header .column {width:50%; float:left;}
 .task-header .row b {width:150px; float:left;}
 .task-header table th {text-align:right;}
@@ -159,31 +155,32 @@ div.page {
 /* Project Map */
 .project-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
 .project-map-owerflow {display:inline-block;position:absolute1;}
+.project-map a {color:navy}
 .project-map .feature-col {background-color:#990000;color:white;border:1px solid gray;}
-.project-map .feature-col a {color:white;float:left;font-weight:bold;text-decoration:none;text-align:left;}
-.project-map .version-col {background-color:#009900;color:white;border:1px solid gray;}
+.project-map .feature-col a {color:white;float:left;font-weight:bold;text-align:left;}
+.project-map .version-col {background-color:#006600;color:white;border:1px solid gray;}
 .project-map .version-col.col, .empty-col.col {width:100px;}
 .project-map .task-col {background-color:#ffffff;border:1px solid silver;padding:6px 8px;}
 .project-map .task-col-div {width:250px}
 .project-map .task-col div{overflow:hidden;}
 .project-map .task-col .owner {color:#660000}
 .project-map .task-col .description {}
-.project-map .row, .project-map .row a {font-size:12px;}
-.project-map .row a {float:left;margin-top:1px;}
-.project-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;}
-.project-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;}
+.project-map .title {margin:5px 0 3px;}
+.project-map ul {list-style:none}
+.project-map li, .project-map li a {font-size:12px;text-align:left;display:bloc;}
+.project-map li {padding:0 0 5px;}
 
 .progr-time {float:right;font-size:11px;padding:3px 3px;}
 .progr-bar {border:1px solid gray;background:white;float:right;position:relative;width:60px;height:100%;}
 .progr-bar .progr-bar-fill {background:#9b9;height:100%;position:absolute;left:0;z-index:0;}
-.progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:11px;padding:1px;}
+.progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:11px;}
 
 .project-map th {padding:5px;white-space:normal;}
 .project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
 
 .project-map th.version-col a {color:white}
 
-.project-map .progress .row {border:1px solid silver;background-color:#f0f0d0;padding:3px 3px;margin:5px 1px 1px 0;font-size:90%;}
+.project-map .progress .row {padding:3px 0;margin:5px 0 1px 0;font-size:90%;}
 
 /* Comments */
 .comment-form label {clear:both}
@@ -223,3 +220,10 @@ body.tiny {background:#fff}
 .feature-info .task-div {margin:0 0 5px;}
 fieldset {background-color:#fff;border:1px solid gray;margin:0 0 10px 0;}
 fieldset legend {background-color:#fff;padding:2px 5px;border:1px solid gray;}
+
+.t-autocomplete-menu {border:1px solid silver;border-top:none;background:white;}
+.t-autocomplete-menu ul {list-style:none;cursor:pointer;}
+.t-autocomplete-menu ul li:hover {background:#d0d0f0;}
+
+.datePicker {background:#fff;padding:10px;border:1px solid silver;}
+

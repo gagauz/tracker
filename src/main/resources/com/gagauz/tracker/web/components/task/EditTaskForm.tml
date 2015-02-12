@@ -1,0 +1,68 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+<div t:id="zone">
+	<form t:id="form">
+		<t:hidden t:value="task.feature"/>
+		<t:hidden t:value="task.version"/>
+		<div class="title">
+	    	<h1><a href="#" t:type="pagelink" t:page="featureinfo" t:context="task.feature">${task.feature.name}</a>
+	    		/ <a href="#" t:type="pagelink" t:page="versioninfo" t:context="task.version">${task.version.version}</a>
+	    		/ <a href="#" t:type="pagelink" t:page="projectinfo" t:context="task.version.project">${task.version.project.name}</a></h1>
+	    	<h2>New <t:select value="task.type" blankOption="never"/></h2>
+	    </div>
+	    <div class="block">
+			<table border="0">
+				<tr>
+					<th>Summary:</th>
+					<td colspan="5"><t:textfield t:value="task.summary" /></td>
+				</tr>
+				<tr>
+					<th>Status:</th>
+					<td><t:select t:value="task.status" blankOption="never"/></td>
+					<th>Estimate:</th>
+					<td><t:textfield t:value="task.estimate" size="4"/></td>
+					<th>Version:</th>
+					<td>${task.version.version}</td>
+				</tr>
+				<tr>
+					<th>Priority:</th>
+					<td><t:textfield t:value="task.priority" size="4"/></td>
+					<th>Owner:</th>
+					<td><t:textfield t:value="task.author"
+						translate="prop:usernametranslator" 
+						t:mixins="coolautocompleter"
+						minChars="2"/></td>
+					<th>Feature:</th>
+					<td>${task.feature.name}</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td></td>
+					<th>Remaining:</th>
+					<td></td>
+					<th>Project:</th>
+					<td>${task.version.project.name}</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td></td>
+					<th>Last updated:</th>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	
+	    <h2>Attachments</h2>
+	    <div class="block">
+	    	<t:AttachmentsBlock attachments="task.attachments"/>
+	    </div>
+	    
+	    <h2>Description</h2>
+	    <div class="block">
+	    	<t:textarea t:value="task.description"/>
+	    </div>
+	    <t:submit/>
+	</form>
+</div>
+</div>

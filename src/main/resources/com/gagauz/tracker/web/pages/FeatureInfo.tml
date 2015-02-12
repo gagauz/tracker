@@ -3,16 +3,22 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>${feature.name}</p>
-    <p>${feature.description}</p>
-    <p>Creator: ${feature.creator.name}</p>
-    <p>Created: ${feature.created}</p>
-    <p>Versions changes</p>
-    
+	<fieldset>
+    	<legend>${feature.name}</legend>
+    	<div>
+		    <p>${feature.description}</p>
+		    <p>Creator: ${feature.creator.name}</p>
+		    <p>Created: ${date:feature.created}</p>
+		    <p>Versions changes</p>
+		</div>
+    </fieldset>
     <div class="feature-info">
     <t:loop source="feature.featureVersions" value="featureVersion">
     	<fieldset> 
-    		<legend>${message:version}: ${featureVersion.version.version} ${message:release-date}: ${date:featureVersion.version.releaseDate}</legend>
+    		<legend>
+    			<t:pagelink t:page="versioninfo" t:context="featureVersion.version">${message:version}: ${featureVersion.version.version}</t:pagelink>
+    			 ${message:release-date}: ${date:featureVersion.version.releaseDate,d.MM.yyyy}
+    		</legend>
 	    	<div class="desc-div">${featureVersion.description}</div>
 	    	
 		    <t:loop source="getMap().get(featureVersion.getVersion())" value="task">

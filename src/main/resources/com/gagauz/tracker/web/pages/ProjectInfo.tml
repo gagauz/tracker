@@ -13,30 +13,31 @@
 
 	<hr/>
 
-    <h3>Project versions <t:pagelink page="rolegrouplist" context="[project,null]">Manage</t:pagelink></h3>
+    <h3>Project versions</h3>
 
 	<t:eventlink t:event="createVersion">Create new version</t:eventlink>
+	
 	<div t:id="versionForm" project="project" version="newVersion" />
 
-    <t:grid source="versions" row="version" add="tasks">
+    <t:grid source="versions" row="version" add="tasks" exclude="created,updated">
     	<p:tasksCell>
-    		<t:pagelink page="tasklist" context="version">Tasks</t:pagelink>
+    		<t:pagelink t:page="versioninfo" t:context="version">Tasks</t:pagelink>
     	</p:tasksCell>
+    </t:grid>
+    
+    <h3>Project stages</h3>
+    <t:eventlink t:event="createStage">Create new stage</t:eventlink>
+    
+    <div t:id="stageForm" project="project" />
+    
+    <t:grid source="stages" row="stage" exclude="created,updated" add="view">
+    	<p:viewCell>
+    		<t:pagelink t:page="stageinfo" t:context="stage">View</t:pagelink>
+    	</p:viewCell>
     </t:grid>
     
     <hr/>
     
     <t:ProjectMap project="project"/>
-    
-    <p:sidebar>
-        <p>
-            
-        </p>
-
-
-        <p>
-            
-        </p>
-    </p:sidebar>
 
 </html>

@@ -5,10 +5,16 @@
 			console.log('binding', event, 'on', element, zone, url);
 			
 			zone = $$(zone);
-			
-			var zoneObject = Tapestry.findZoneManager(zone);
+			var zoneObject = null;
+			try {
+				zoneObject = $$(element).getStorage().zoneManager;
+			} catch(e) {}
 			if (!zoneObject) {
-				zoneObject = new Tapestry.ZoneManager({element: zone, parameters:{}});
+				try {
+					zoneObject = new Tapestry.ZoneManager({element: zone, parameters:{}});
+				}catch(e) {
+					console.error(e);
+				}
 			}
 
 			$$(element).fire(Tapestry.TRIGGER_ZONE_UPDATE_EVENT);

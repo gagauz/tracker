@@ -1,2 +1,8 @@
 .t-error, .t-error-single {color:red}
 .t-error ul {list-style:none}
+
+.t-data-grid table {border:0;}
+.t-data-grid table th {background-color:#900;padding:3px 5px;color:white;}
+.t-data-grid table th a{color:white;}
+.t-data-grid table td {background-color:#fff;padding:2px 5px;}
+.t-data-grid table th, .t-data-grid table td {border:1px solid silver;}

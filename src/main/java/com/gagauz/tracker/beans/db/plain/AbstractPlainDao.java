@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class AbstractDao {
+public abstract class AbstractPlainDao {
     @Autowired
     private DataSource dataSource;
 

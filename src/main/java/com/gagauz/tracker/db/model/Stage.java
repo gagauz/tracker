@@ -12,11 +12,14 @@ import java.util.List;
 public class Stage implements Identifiable {
     private int id;
     private Project project;
-    private List<Task> tasks;
     private Date created = new Date();
     private Date updated;
     private String name;
     private String description;
+    private Stage parent;
+    private List<StageTrigger> triggers;
+    private List<StageAction> beforeActions;
+    private List<StageAction> afterActions;
 
     @Id
     @GeneratedValue
@@ -38,14 +41,17 @@ public class Stage implements Identifiable {
         this.project = project;
     }
 
-    @JoinTable(name = "stage_tasks")
-    @ManyToMany(fetch = FetchType.LAZY)
-    public List<Task> getTasks() {
-        return tasks;
+    @JoinColumn(nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Stage getParent() {
+        return parent;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setParent(Stage parent) {
+        if (null != parent && parent.hasParent(this)) {
+            throw new IllegalStateException("Circular parent reference!");
+        }
+        this.parent = parent;
     }
 
     @Column
@@ -84,6 +90,43 @@ public class Stage implements Identifiable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @JoinColumn(nullable = true)
+    @OneToMany(fetch = FetchType.LAZY)
+    public List<StageTrigger> getTriggers() {
+        return triggers;
+    }
+
+    public void setTriggers(List<StageTrigger> triggers) {
+        this.triggers = triggers;
+    }
+
+    @JoinColumn(nullable = true)
+    @OneToMany(fetch = FetchType.LAZY)
+    public List<StageAction> getBeforeActions() {
+        return beforeActions;
+    }
+
+    public void setBeforeActions(List<StageAction> beforeActions) {
+        this.beforeActions = beforeActions;
+    }
+
+    @JoinColumn(nullable = true)
+    @OneToMany(fetch = FetchType.LAZY)
+    public List<StageAction> getAfterActions() {
+        return afterActions;
+    }
+
+    public void setAfterActions(List<StageAction> afterActions) {
+        this.afterActions = afterActions;
+    }
+
+    private boolean hasParent(Stage stage) {
+        if (this.parent == stage) {
+            return true;
+        }
+        return null != parent ? parent.hasParent(stage) : false;
     }
 
 }

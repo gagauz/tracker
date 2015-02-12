@@ -1,0 +1,10 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<div t:id="stageForm" add="parent">
+		<p:parent>
+			<div class="t-beaneditor-row">
+				<t:label for="parent"/>
+				<t:select t:id="parent" t:model="stageSelectModel" t:value="stage.parent"/>
+			</div>
+		</p:parent>
+	</div>
+</div>

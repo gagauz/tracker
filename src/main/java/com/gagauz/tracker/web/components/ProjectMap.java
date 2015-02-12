@@ -1,28 +1,26 @@
 package com.gagauz.tracker.web.components;
 
+import com.gagauz.tapestry.security.SecurityUserCreator;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.db.model.*;
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-
-import com.gagauz.tapestry.security.SecurityUserCreator;
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TaskDao;
-import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.db.model.TaskType;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.model.Version;
-
 public class ProjectMap {
+
+    @Component(parameters = {"id=literal:taskZone", "show=popup", "update=popup"})
+    private Zone taskZone;
 
     @Parameter(allowNull = false, required = true, principal = true)
     private Project project;
@@ -34,6 +32,9 @@ public class ProjectMap {
     private Feature feature;
 
     private Task task;
+
+    @Property
+    private Task newTask;
 
     @Property
     private int estimate;
@@ -109,6 +110,15 @@ public class ProjectMap {
         user.setId(id);
         featureVersion.setCreator(user);
         featureVersionDao.save(featureVersion);
+    }
+
+    Object onCreateTask(Feature feature, Version version) {
+
+        newTask = new Task();
+        newTask.setFeature(feature);
+        newTask.setVersion(version);
+
+        return taskZone.getBody();
     }
 
     public List<Task> getTasks() {

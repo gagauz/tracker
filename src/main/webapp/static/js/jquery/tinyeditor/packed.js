@@ -61,10 +61,9 @@
         
         this.i.width = '100%';
         
-        this.t.form.onsubmit = function(e) {
-        	console.log('submit');
+        this.t.form.parentNode.addEventListener('submit', function(e) {
         	that.toggle(1);
-        }
+        }, true);
         
         for (i; i < l; i++) {
             var b = a.controls[i];

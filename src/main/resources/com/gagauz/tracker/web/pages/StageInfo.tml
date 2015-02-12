@@ -1,0 +1,58 @@
+<html t:type="layout" title="task header info"
+      t:sidebarTitle="Framework Version"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+	<fieldset>
+    	<legend>${stage.name}</legend>
+    	<div>
+		    <p>${stage.description}</p>
+		    <hr/>
+		    <div class="feature-info">
+		    	<t:loop source="childStages" value="stageRow">
+		    		<div>${stageRow.name}</div>
+		    	</t:loop> 
+			</div>
+		</div>
+    </fieldset>
+    
+    <fieldset>
+    	<legend>Triggers</legend>
+    	<div>
+		    <div class="feature-info">
+		    	<t:loop source="stage.triggers" value="trigger">
+		    		<div>${trigger}</div>
+		    	</t:loop> 
+			</div>
+			<t:eventlink t:event="createTrigger">Create</t:eventlink>
+		</div>
+    </fieldset>
+    
+    <fieldset>
+    	<legend>Before actions</legend>
+    	<div>
+		    <div class="feature-info">
+		    	<t:loop source="stage.beforeActions" value="action">
+		    		<div>${action}</div>
+		    	</t:loop> 
+			</div>
+			<t:eventlink t:event="createBeforeAction">Create</t:eventlink>
+		</div>
+    </fieldset>
+    
+    <fieldset>
+    	<legend>After actions</legend>
+    	<div>
+		    <div class="feature-info">
+		    	<t:loop source="stage.afterActions" value="action">
+		    		<div>${action}</div>
+		    	</t:loop> 
+			</div>
+			<t:eventlink t:event="createAfterAction">Create</t:eventlink>
+		</div>
+    </fieldset>
+    
+    
+    
+
+</html>

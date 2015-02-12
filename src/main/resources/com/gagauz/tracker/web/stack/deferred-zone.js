@@ -5,6 +5,8 @@
 	        this.listenerURI = spec.listenerURI;
 	        $(this.element).getStorage().zoneId = spec.zoneId;
 	        
+	        console.log(spec);
+	        
 	        if (spec.clientEvent) {
 	            this.clientEvent = spec.clientEvent;
 	            this.element.observe(this.clientEvent, this.updateZone.bindAsEventListener(this));

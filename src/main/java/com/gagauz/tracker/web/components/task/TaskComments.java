@@ -9,13 +9,18 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import java.util.List;
 
 public class TaskComments {
+
+    @Component
+    private Form commentForm;
 
     @Parameter
     private Task task;
@@ -44,12 +49,18 @@ public class TaskComments {
     @Inject
     private Request request;
 
-    Object onSuccessFromCommentForm(int id) {
-        newComment.setId(id);
-        newComment.setUser((User) securityUser);
-        newComment.setTask(task);
-        taskCommentDao.save(newComment);
-        newComment = null;
+    @Inject
+    private JavaScriptSupport javaScriptSupport;
+
+    Object onSubmitFromCommentForm(int id) {
+        if (!commentForm.getHasErrors()) {
+            newComment.setId(id);
+            newComment.setUser((User) securityUser);
+            newComment.setTask(task);
+            taskCommentDao.save(newComment);
+            newComment = null;
+            javaScriptSupport.addInitializerCall("$j('%s').parent('popup').trigger('popupHide');", editZone.getClientId());
+        }
 
         if (null != zone && request.isXHR()) {
             return zone.getBody();

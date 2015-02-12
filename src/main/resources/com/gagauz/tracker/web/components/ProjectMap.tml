@@ -28,38 +28,38 @@
 										<div class="description">
 											${featureVersion.description}
 										</div>
-										<div class="owner">
-											Owner:
-											<t:if test="featureVersion.owner">
-												${featureVersion.owner.name}
-												<p:else>Unassigned</p:else>
-											</t:if>
-										</div>
 										
-										<div class="tasks">
+										<div class="tasks" t:type="if" t:test="tasks">
 											<div class="title">Tasks:</div>
-											<t:loop source="tasks" value="task">
-												<div class="row">
+											<ul>
+												<li t:type="loop" source="tasks" value="task">
 													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
+													<!-- 
 													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
-												</div>
-											</t:loop>
+													 -->
+												</li>
+											</ul>
 										</div>
-										<div class="bugs">
+										<div class="bugs" t:type="if" t:test="bugs">
 											<div class="title">Bugs:</div>
-											<t:loop source="bugs" value="task">
-												<div class="row">
+											<ul>
+												<li t:type="loop" source="bugs" value="task">
 													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
+													<!-- 
 													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
-												</div>
-											</t:loop>
+													 -->
+												</li>
+											</ul>
 										</div>
+										<t:eventlink t:event="createTask" t:context="[feature, version]" t:zone="taskZone">Create task or bug</t:eventlink>
 										<div class="progress">
 											<div class="row">
 												Total progress:
 												<t:ProgressBar progress="progress" estimate="estimate"/>
 											</div>
 										</div>
+										
+										
 										
 									<p:else>
 										<t:eventlink t:event="createFeatureVersion" t:context="[feature, version]">Create feature version</t:eventlink>
@@ -74,4 +74,13 @@
 			</table>
 		</div>
 	</div>
+	
+	<div style="display:none">
+		<div t:id="taskZone" class="task-popup">
+			<t:if test="newTask">
+				<t:task.EditTaskForm task="newTask"/>
+			</t:if>
+		</div>
+	</div>
+	
 </div>
