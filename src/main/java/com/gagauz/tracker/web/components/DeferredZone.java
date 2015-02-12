@@ -1,15 +1,15 @@
 package com.gagauz.tracker.web.components;
 
 import org.apache.tapestry5.*;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.ClientBehaviorSupport;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.InitializationPriority;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-@Import(stack = "tracker-stack")
 public class DeferredZone extends Zone {
 
     @Parameter(name = "empty", defaultPrefix = BindingConstants.LITERAL)
@@ -27,17 +27,31 @@ public class DeferredZone extends Zone {
     @Inject
     private Request request;
 
-    Object beginRender() {
+    @Inject
+    private ClientBehaviorSupport clientBehaviorSupport;
+
+    Object beginRender(MarkupWriter writer) {
+        Link link = getEventLink();
+        Element element = writer.element("a", "href", link.toURI(), "style", "display:none");
+        String linkId = getClientId() + "-trigger-link";
+        element.forceAttributes("id", linkId);
+        writer.write("sdfsdfas");
+        writer.end();
+        clientBehaviorSupport.linkZone(linkId, getClientId(), link);
         if (request.isXHR()) {
             javaScriptSupport.addScript(InitializationPriority.IMMEDIATE,
-                    "TapestryJQuery.updateZoneOnEvent($j('#%s').parents('.t-zone'), Tapestry.ZONE_UPDATED_EVENT, '%s', '%s');",
-                    getClientId(),
-                    getClientId(),
-                    getEventLink().toURI());
+                    "$('%s').up('.t-zone').observe(Tapestry.ZONE_UPDATED_EVENT, function(){" +
+                            "document.getElementById('%s').dispatchEvent(new MouseEvent('click', {view:window, bubbles:true, cancelable:true}));" +
+                            "});", getClientId(), linkId);
+            return getBody();
         } else {
-            javaScriptSupport.addScript(InitializationPriority.NORMAL, "TapestryJQuery.updateZoneOnEvent(document, 'ready', '%s', '%s');",
-                    getClientId(),
-                    getEventLink().toURI());
+            javaScriptSupport
+                    .addScript(
+                            InitializationPriority.LATE,
+                            "$j(document).ready(function(){" +
+                                    "document.getElementById('%s').dispatchEvent(new MouseEvent('click', {view:window, bubbles:true, cancelable:true}));" +
+                                    "});",
+                            linkId);
         }
         return emptyBlock;
     }
@@ -47,7 +61,10 @@ public class DeferredZone extends Zone {
     }
 
     Block onEvent(EventContext context) {
-        return getBody();
+        if (request.isXHR()) {
+            return getBody();
+        }
+        return null;
     }
 
     public Link getEventLink() {
