@@ -29,7 +29,7 @@
     </fieldset>
     
     <fieldset>
-    	<legend>Before actions</legend>
+    	<legend>Before actions (i.e. clean directories)</legend>
     	<div>
 		    <div class="feature-info">
 		    	<t:loop source="stage.beforeActions" value="action">
@@ -41,7 +41,15 @@
     </fieldset>
     
     <fieldset>
-    	<legend>After actions</legend>
+    	<legend>Stage implementation (i.e. call for build scripts)</legend>
+    	<div>
+		    
+			<t:eventlink t:event="createBeforeAction">Create</t:eventlink>
+		</div>
+    </fieldset>
+    
+    <fieldset>
+    	<legend>After actions (i.e. copy artifacts)</legend>
     	<div>
 		    <div class="feature-info">
 		    	<t:loop source="stage.afterActions" value="action">

@@ -1,7 +1,6 @@
 package com.gagauz.tracker.beans.dao;
 
 import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.StageAction;
 import org.springframework.stereotype.Service;
 

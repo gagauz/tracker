@@ -4,9 +4,7 @@ import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.StageActionDao;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.StageTriggerDao;
-import com.gagauz.tracker.db.model.Stage;
-import com.gagauz.tracker.db.model.StageAction;
-import com.gagauz.tracker.db.model.StageTrigger;
+import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -23,7 +21,7 @@ public class StageInfo {
     private Stage stageRow;
 
     @Property
-    private StageAction action;
+    private AbstractStageAction action;
 
     @Property
     private StageTrigger trigger;
@@ -57,15 +55,21 @@ public class StageInfo {
     }
 
     void onCreateBeforeAction() {
-        StageAction action = new StageAction();
-        stageActionDao.save(action);
+        BeforeAction action = new BeforeAction();
+        //stageActionDao.save(action);
         stage.getBeforeActions().add(action);
     }
 
     void onCreateAfterAction() {
+        AfterAction action = new AfterAction();
+        //stageActionDao.save(action);
+        stage.getAfterActions().add(action);
+    }
+
+    void onCreateStageAction() {
         StageAction action = new StageAction();
         stageActionDao.save(action);
-        stage.getAfterActions().add(action);
+        stage.getStageActions().add(action);
     }
 
     @Cached

@@ -18,8 +18,9 @@ public class Stage implements Identifiable {
     private String description;
     private Stage parent;
     private List<StageTrigger> triggers;
-    private List<StageAction> beforeActions;
-    private List<StageAction> afterActions;
+    private List<BeforeAction> beforeActions;
+    private List<StageAction> stageActions;
+    private List<AfterAction> afterActions;
 
     @Id
     @GeneratedValue
@@ -102,23 +103,30 @@ public class Stage implements Identifiable {
         this.triggers = triggers;
     }
 
-    @JoinColumn(nullable = true)
-    @OneToMany(fetch = FetchType.LAZY)
-    public List<StageAction> getBeforeActions() {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", targetEntity = BeforeAction.class)
+    public List<BeforeAction> getBeforeActions() {
         return beforeActions;
     }
 
-    public void setBeforeActions(List<StageAction> beforeActions) {
+    public void setBeforeActions(List<BeforeAction> beforeActions) {
         this.beforeActions = beforeActions;
     }
 
-    @JoinColumn(nullable = true)
-    @OneToMany(fetch = FetchType.LAZY)
-    public List<StageAction> getAfterActions() {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", targetEntity = StageAction.class)
+    public List<StageAction> getStageActions() {
+        return stageActions;
+    }
+
+    public void setStageActions(List<StageAction> stageActions) {
+        this.stageActions = stageActions;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", targetEntity = AfterAction.class)
+    public List<AfterAction> getAfterActions() {
         return afterActions;
     }
 
-    public void setAfterActions(List<StageAction> afterActions) {
+    public void setAfterActions(List<AfterAction> afterActions) {
         this.afterActions = afterActions;
     }
 
