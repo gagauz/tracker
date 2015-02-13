@@ -6,10 +6,11 @@ import com.gagauz.tapestry.security.*;
 import com.gagauz.tapestry.security.api.*;
 import com.gagauz.tapestry.security.impl.RedirectLoginHandler;
 import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.web.services.hibernate.HibernateModule2;
+import com.gagauz.tracker.web.services.hibernate.HibernateModule;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -26,12 +27,13 @@ import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
  * configure and extend Tapestry, or to place your own service definitions.
  */
-@SubModule({SecurityModule.class, HibernateModule2.class, TypeCoercerModule.class, ValueEncoderModule.class})
+@SubModule({SecurityModule.class, HibernateModule.class, TypeCoercerModule.class, ValueEncoderModule.class})
 public class AppModule {
 
     @Startup
-    public static void initScenarios(@Inject TestDataInitializer ai) {
+    public static void initScenarios(@Inject TestDataInitializer ai, @Inject SchedulerService schedulerService) {
         ai.execute();
+        schedulerService.update();
     }
 
     public static void bind(ServiceBinder binder) {

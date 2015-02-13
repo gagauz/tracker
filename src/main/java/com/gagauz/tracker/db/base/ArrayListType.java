@@ -3,10 +3,10 @@ package com.gagauz.tracker.db.base;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class ArrayListType extends CollectionType {
+public class ArrayListType<E> extends CollectionType<E> {
 
     @Override
-    public Collection createCollection(Class class1, int size) {
-        return new ArrayList(size);
+    public Collection<E> createCollection(Class<E> class1, int size) {
+        return new ArrayList<E>(size);
     }
 }

@@ -11,29 +11,39 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.List;
 
-public class AbstractDao<Id extends Serializable, Entity> {
+//@Transactional
+public class AbstractDao<I extends Serializable, E> {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    protected Class<Entity> entityClass;
+    protected Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
     public AbstractDao() {
-        entityClass = (Class<Entity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
     protected Session getSession() {
         return sessionFactory.getCurrentSession();
     }
 
-    @SuppressWarnings("unchecked")
-    public Entity findById(Id id) {
-        return (Entity) getSession().get(entityClass, id);
+    public void setSession(Session session) {
+
     }
 
     @SuppressWarnings("unchecked")
-    public List<Entity> findByQuery(String hql, Param... params) {
+    public I getIdentifier(E entity) {
+        return (I) getSession().getIdentifier(entity);
+    }
+
+    @SuppressWarnings("unchecked")
+    public E findById(I id) {
+        return (E) getSession().get(entityClass, id);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<E> findByQuery(String hql, Param... params) {
         Query query = getSession().createQuery(hql);
         for (Param param : params) {
             param.update(query);
@@ -47,26 +57,30 @@ public class AbstractDao<Id extends Serializable, Entity> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Entity> findAll() {
+    public List<E> findAll() {
         return getSession().createCriteria(entityClass).list();
     }
 
-    public void save(Entity entity) {
+    public void save(E entity) {
         getSession().saveOrUpdate(entity);
     }
 
-    public void save(Collection<Entity> entities) {
-        for (Entity entity : entities) {
+    public void save(Collection<E> entities) {
+        for (E entity : entities) {
             getSession().saveOrUpdate(entity);
         }
     }
 
-    public void delete(Entity entity) {
+    public void delete(E entity) {
         getSession().delete(entity);
     }
 
-    public void evict(Entity entity) {
+    public void evict(E entity) {
         getSession().evict(entity);
+    }
+
+    public void flush() {
+        getSession().flush();
     }
 
 }

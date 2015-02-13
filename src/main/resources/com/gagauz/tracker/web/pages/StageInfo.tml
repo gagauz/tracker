@@ -2,15 +2,34 @@
       t:sidebarTitle="Framework Version"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
+    
+    <h1>
+    <t:pagelink t:page="projectinfo" t:context="stage.project">${stage.project.name}</t:pagelink>
+    </h1>
 
 	<fieldset>
     	<legend>${stage.name}</legend>
+    	<t:if test="stage.parent">
+    		<div>
+    			Parent: <t:pagelink t:page="stageinfo" t:context="stage.parent">${stage.parent.name}</t:pagelink>
+    		</div>
+    		<hr/>
+    	</t:if>
     	<div>
-		    <p>${stage.description}</p>
+    		<t:beaneditform t:id="editForm" t:object="stage" exclude="id, created, updated">
+				<p:name>
+					<t:label for="stagename"/>
+					<t:textfield t:id="stagename" value="stage.name" validate="required"/>
+				</p:name>
+				<p:description>
+					<t:label for="description"/>
+					<t:textarea t:id="description" value="stage.description" />
+				</p:description>
+			</t:beaneditform>
 		    <hr/>
 		    <div class="feature-info">
 		    	<t:loop source="childStages" value="stageRow">
-		    		<div>${stageRow.name}</div>
+		    		<div><t:pagelink t:page="stageinfo" t:context="stageRow">${stageRow.name}</t:pagelink></div>
 		    	</t:loop> 
 			</div>
 		</div>
@@ -21,46 +40,57 @@
     	<div>
 		    <div class="feature-info">
 		    	<t:loop source="stage.triggers" value="trigger">
-		    		<div>${trigger}</div>
+		    		<div>${trigger.name} 
+		    		<t:eventlink t:event="editTrigger" t:context="trigger">Edit</t:eventlink>
+		    		<t:eventlink t:event="dropTrigger" t:context="trigger">Drop</t:eventlink>
+		    		</div>
 		    	</t:loop> 
 			</div>
+			<t:if test="newTrigger">
+				<t:beaneditform t:id="createTriggerForm" t:object="newTrigger" exclude="id" add="reset">
+					<p:name>
+						<t:label for="name"/>
+						<t:textfield t:id="name" value="newTrigger.name" validate="required"/>
+					</p:name>
+					<p:data>
+						<t:label for="data"/>
+						<t:textarea t:id="data" value="newTrigger.data" validate="required"/>
+					</p:data>
+					<p:reset>
+						<t:eventlink t:event="cancelTrigger">Cancel</t:eventlink>
+					</p:reset>
+				</t:beaneditform>
+			</t:if>
 			<t:eventlink t:event="createTrigger">Create</t:eventlink>
 		</div>
     </fieldset>
     
     <fieldset>
-    	<legend>Before actions (i.e. clean directories)</legend>
+    	<legend>Stage actions (i.e. call for build scripts)</legend>
     	<div>
 		    <div class="feature-info">
-		    	<t:loop source="stage.beforeActions" value="action">
-		    		<div>${action}</div>
+		    	<t:loop source="stage.actions" value="action">
+		    		<div>${action.name}</div>
 		    	</t:loop> 
 			</div>
-			<t:eventlink t:event="createBeforeAction">Create</t:eventlink>
+			<t:if test="newAction">
+				<t:beaneditform t:id="createActionForm" t:object="newAction" exclude="id" add="reset">
+					<p:name>
+						<t:label for="name1"/>
+						<t:textfield t:id="name1" value="newAction.name" validate="required"/>
+					</p:name>
+					<p:data>
+						<t:label for="data1"/>
+						<t:textarea t:id="data1" value="newAction.data" validate="required"/>
+					</p:data>
+					<p:reset>
+						<t:eventlink t:event="cancelAction">Cancel</t:eventlink>
+					</p:reset>
+				</t:beaneditform>
+			</t:if>
+			<t:eventlink t:event="createStageAction">Create</t:eventlink>
 		</div>
     </fieldset>
-    
-    <fieldset>
-    	<legend>Stage implementation (i.e. call for build scripts)</legend>
-    	<div>
-		    
-			<t:eventlink t:event="createBeforeAction">Create</t:eventlink>
-		</div>
-    </fieldset>
-    
-    <fieldset>
-    	<legend>After actions (i.e. copy artifacts)</legend>
-    	<div>
-		    <div class="feature-info">
-		    	<t:loop source="stage.afterActions" value="action">
-		    		<div>${action}</div>
-		    	</t:loop> 
-			</div>
-			<t:eventlink t:event="createAfterAction">Create</t:eventlink>
-		</div>
-    </fieldset>
-    
-    
     
 
 </html>

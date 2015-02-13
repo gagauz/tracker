@@ -194,4 +194,14 @@ public class Task implements Identifiable {
     protected void onUpdate() {
         updated = new Date();
     }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (null != obj && obj.hashCode() == hashCode());
+    }
 }

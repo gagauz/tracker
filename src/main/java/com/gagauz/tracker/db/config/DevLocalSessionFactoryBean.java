@@ -1,20 +1,11 @@
 package com.gagauz.tracker.db.config;
 
-import static org.hibernate.cfg.AvailableSettings.DEFAULT_BATCH_FETCH_SIZE;
-import static org.hibernate.cfg.AvailableSettings.DIALECT;
-import static org.hibernate.cfg.AvailableSettings.FORMAT_SQL;
-import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
-import static org.hibernate.cfg.AvailableSettings.SHOW_SQL;
-import static org.hibernate.cfg.AvailableSettings.STATEMENT_BATCH_SIZE;
-import static org.hibernate.cfg.AvailableSettings.USE_REFLECTION_OPTIMIZER;
-import static org.hibernate.cfg.AvailableSettings.USE_SQL_COMMENTS;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
 import java.util.Properties;
 
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.stereotype.Component;
+import static org.hibernate.cfg.AvailableSettings.*;
 
-@Component
 public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
     public DevLocalSessionFactoryBean() {
         setPackagesToScan(com.gagauz.tracker.db.model.User.class.getPackage().getName());
@@ -31,6 +22,5 @@ public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
         properties.put(DEFAULT_BATCH_FETCH_SIZE, 50);
         properties.put("current_session_context_class", "thread");
         setHibernateProperties(properties);
-
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public class StageActionDao extends AbstractDao<Integer, StageAction> {
 
     public List<StageAction> findByProject(Project project) {
-        return createQuery("from Stage v where project=:project").setEntity("project", project).list();
+        return createQuery("from StageAction v where project=:project").setEntity("project", project).list();
     }
 
 }

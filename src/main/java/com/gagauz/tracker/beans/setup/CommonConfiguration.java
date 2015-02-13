@@ -1,8 +1,7 @@
 package com.gagauz.tracker.beans.setup;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
+import com.gagauz.tracker.db.config.DevDataSource;
+import com.gagauz.tracker.db.config.DevLocalSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,8 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import com.gagauz.tracker.db.config.DevDataSource;
-import com.gagauz.tracker.db.config.DevLocalSessionFactoryBean;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableScheduling
@@ -38,7 +37,9 @@ public class CommonConfiguration {
 
     @Bean(autowire = Autowire.BY_NAME)
     public PlatformTransactionManager transactionManager() {
-        return new HibernateTransactionManager();
+        HibernateTransactionManager tm = new HibernateTransactionManager();
+        tm.setNestedTransactionAllowed(true);
+        return tm;
     }
 
     @Bean(autowire = Autowire.BY_NAME)

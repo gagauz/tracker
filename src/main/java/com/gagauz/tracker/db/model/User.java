@@ -93,15 +93,13 @@ public class User implements Identifiable, Serializable, SecurityUser {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+    public int hashCode() {
+        return id;
+    }
 
-        if (null == obj /*|| !(obj instanceof User)*/) {
-            return false;
-        }
-        return ((User) obj).id == id;
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
     @Override

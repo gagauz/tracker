@@ -86,15 +86,13 @@ public class TaskComment {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
+    public int hashCode() {
+        return id;
+    }
 
-        if (null == obj /*|| !(obj instanceof TaskComment)*/) {
-            return false;
-        }
-        return ((TaskComment) obj).getId() == id;
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
     @PreUpdate

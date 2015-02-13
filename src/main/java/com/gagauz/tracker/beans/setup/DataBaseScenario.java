@@ -6,7 +6,7 @@ import java.util.Set;
 
 public abstract class DataBaseScenario {
 
-    private static final Set<Class> executedScenarios = new HashSet<Class>();
+    private static final Set<Class<?>> executedScenarios = new HashSet<Class<?>>();
 
     protected Random rand = new Random(System.currentTimeMillis());
 

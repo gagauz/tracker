@@ -16,7 +16,9 @@ public class ValueEncoderModule {
                                                     final TaskDao taskDao,
                                                     final TaskCommentDao taskCommentDao,
                                                     final RoleGroupDao roleGroupDao,
-                                                    final StageDao stageDao
+                                                    final StageDao stageDao,
+                                                    final StageTriggerDao stageTriggerDao,
+                                                    final StageActionDao stageActionDao
             ) {
         configuration.add(User.class, new CommonEntityValueEncoderFactory(userDao));
         configuration.add(Project.class, new CommonEntityValueEncoderFactory(projectDao));
@@ -26,6 +28,8 @@ public class ValueEncoderModule {
         configuration.add(TaskComment.class, new CommonEntityValueEncoderFactory(taskCommentDao));
         configuration.add(RoleGroup.class, new CommonEntityValueEncoderFactory(roleGroupDao));
         configuration.add(Stage.class, new CommonEntityValueEncoderFactory(stageDao));
+        configuration.add(StageAction.class, new CommonEntityValueEncoderFactory(stageActionDao));
+        configuration.add(StageTrigger.class, new CommonEntityValueEncoderFactory(stageTriggerDao));
     }
 
 }

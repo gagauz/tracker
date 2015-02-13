@@ -3,10 +3,10 @@ package com.gagauz.tracker.db.base;
 import java.util.Collection;
 import java.util.EnumSet;
 
-public class EnumSetType extends CollectionType {
+public class EnumSetType<E extends Enum<E>> extends CollectionType<E> {
 
     @Override
-    public Collection createCollection(Class class1, int size) {
+    public Collection<E> createCollection(Class<E> class1, int size) {
         return EnumSet.noneOf(class1);
     }
 }

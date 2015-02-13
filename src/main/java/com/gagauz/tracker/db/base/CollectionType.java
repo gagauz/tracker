@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Properties;
 
-public abstract class CollectionType implements UserType, ParameterizedType {
+public abstract class CollectionType<T> implements UserType, ParameterizedType {
 
     public static final String CLASS = "class";
     public static final String SERIALIZER = "serializer";
@@ -25,19 +25,8 @@ public abstract class CollectionType implements UserType, ParameterizedType {
     private static final String SEPARATOR_STRING = ",";
 
     // Default is string collection
-    private Class<?> entityClass = String.class;
-    private Serializer<Object> serializer = new Serializer<Object>() {
-
-        @Override
-        public String serialize(Object object) {
-            return (String) object;
-        }
-
-        @Override
-        public Object unserialize(String string) {
-            return string;
-        }
-    };
+    private Class<T> entityClass;
+    private Serializer<T> serializer;
 
     @Override
     public int[] sqlTypes() {
@@ -49,7 +38,7 @@ public abstract class CollectionType implements UserType, ParameterizedType {
         final String clazzName = parameters.getProperty(CLASS);
         if (null != clazzName) {
             try {
-                entityClass = Class.forName(clazzName);
+                entityClass = (Class<T>) Class.forName(clazzName);
             } catch (Exception e) {
                 throw new IllegalArgumentException("Class " + clazzName + " not found", e);
             }
@@ -58,7 +47,7 @@ public abstract class CollectionType implements UserType, ParameterizedType {
         final String serializerName = parameters.getProperty(SERIALIZER);
         if (null != serializerName) {
             try {
-                serializer = (Serializer<Object>) Class.forName(serializerName).newInstance();
+                serializer = (Serializer<T>) Class.forName(serializerName).newInstance();
             } catch (Exception e) {
                 throw new IllegalArgumentException("Serializer class " + serializerName + " not found", e);
             }
@@ -66,7 +55,7 @@ public abstract class CollectionType implements UserType, ParameterizedType {
     }
 
     @Override
-    public Class<?> returnedClass() {
+    public Class<T> returnedClass() {
         return entityClass;
     }
 
@@ -77,7 +66,7 @@ public abstract class CollectionType implements UserType, ParameterizedType {
             return null;
         }
         String[] strings = string.split(SEPARATOR_STRING);
-        Collection<Object> result = createCollection(entityClass, strings.length);
+        Collection<T> result = createCollection(entityClass, strings.length);
         for (String str : strings) {
             result.add(serializer.unserialize(str));
         }
@@ -109,7 +98,7 @@ public abstract class CollectionType implements UserType, ParameterizedType {
         } else if (!(value instanceof Collection)) {
             throw new HibernateException("Type of value [" + value.getClass() + "] is not Collection");
         } else {
-            Iterator i = ((Collection) value).iterator();
+            Iterator<T> i = ((Collection<T>) value).iterator();
             if (i.hasNext()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(serializer.serialize(i.next()));
@@ -126,8 +115,8 @@ public abstract class CollectionType implements UserType, ParameterizedType {
     @Override
     public Object deepCopy(Object value) throws HibernateException {
         if (null != value) {
-            Collection source = (Collection) value;
-            Collection destination = createCollection(entityClass, source.size());
+            Collection<T> source = (Collection<T>) value;
+            Collection<T> destination = createCollection(entityClass, source.size());
             destination.addAll(source);
             return destination;
         }
@@ -155,5 +144,5 @@ public abstract class CollectionType implements UserType, ParameterizedType {
         return deepCopy(original);
     }
 
-    public abstract Collection createCollection(Class class1, int size);
+    public abstract Collection<T> createCollection(Class<T> class1, int size);
 }

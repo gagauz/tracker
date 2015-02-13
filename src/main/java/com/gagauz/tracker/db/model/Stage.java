@@ -18,9 +18,7 @@ public class Stage implements Identifiable {
     private String description;
     private Stage parent;
     private List<StageTrigger> triggers;
-    private List<BeforeAction> beforeActions;
-    private List<StageAction> stageActions;
-    private List<AfterAction> afterActions;
+    private List<StageAction> actions;
 
     @Id
     @GeneratedValue
@@ -93,8 +91,7 @@ public class Stage implements Identifiable {
         this.description = description;
     }
 
-    @JoinColumn(nullable = true)
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = {CascadeType.ALL}, orphanRemoval = true)
     public List<StageTrigger> getTriggers() {
         return triggers;
     }
@@ -103,31 +100,13 @@ public class Stage implements Identifiable {
         this.triggers = triggers;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", targetEntity = BeforeAction.class)
-    public List<BeforeAction> getBeforeActions() {
-        return beforeActions;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    public List<StageAction> getActions() {
+        return actions;
     }
 
-    public void setBeforeActions(List<BeforeAction> beforeActions) {
-        this.beforeActions = beforeActions;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", targetEntity = StageAction.class)
-    public List<StageAction> getStageActions() {
-        return stageActions;
-    }
-
-    public void setStageActions(List<StageAction> stageActions) {
-        this.stageActions = stageActions;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", targetEntity = AfterAction.class)
-    public List<AfterAction> getAfterActions() {
-        return afterActions;
-    }
-
-    public void setAfterActions(List<AfterAction> afterActions) {
-        this.afterActions = afterActions;
+    public void setActions(List<StageAction> stageActions) {
+        this.actions = stageActions;
     }
 
     private boolean hasParent(Stage stage) {
@@ -135,6 +114,16 @@ public class Stage implements Identifiable {
             return true;
         }
         return null != parent ? parent.hasParent(stage) : false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
 }

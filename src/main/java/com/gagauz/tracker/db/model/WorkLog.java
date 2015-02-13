@@ -1,13 +1,8 @@
 package com.gagauz.tracker.db.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.gagauz.tracker.db.base.Identifiable;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "work_log")
@@ -55,4 +50,13 @@ public class WorkLog implements Identifiable {
         this.comment = comment;
     }
 
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (null != obj && obj.hashCode() == hashCode());
+    }
 }

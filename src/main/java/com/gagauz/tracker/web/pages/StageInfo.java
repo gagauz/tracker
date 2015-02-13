@@ -4,8 +4,12 @@ import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.StageActionDao;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.StageTriggerDao;
-import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.beans.scheduler.SchedulerService;
+import com.gagauz.tracker.db.model.Stage;
+import com.gagauz.tracker.db.model.StageAction;
+import com.gagauz.tracker.db.model.StageTrigger;
 import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -21,10 +25,18 @@ public class StageInfo {
     private Stage stageRow;
 
     @Property
-    private AbstractStageAction action;
+    private StageAction action;
+
+    @Property
+    @Persist
+    private StageAction newAction;
 
     @Property
     private StageTrigger trigger;
+
+    @Property
+    @Persist
+    private StageTrigger newTrigger;
 
     @Inject
     private StageDao stageDao;
@@ -34,6 +46,9 @@ public class StageInfo {
 
     @Inject
     private StageActionDao stageActionDao;
+
+    @Inject
+    private SchedulerService schedulerService;
 
     Object onActivate(Stage stage) {
         if (null == stage) {
@@ -48,28 +63,51 @@ public class StageInfo {
         return stage;
     }
 
+    void onSuccessFromEditForm() {
+        stageDao.save(stage);
+    }
+
     void onCreateTrigger() {
-        StageTrigger trigger = new StageTrigger();
-        stageTriggerDao.save(trigger);
-        stage.getTriggers().add(trigger);
+        newTrigger = new StageTrigger();
     }
 
-    void onCreateBeforeAction() {
-        BeforeAction action = new BeforeAction();
-        //stageActionDao.save(action);
-        stage.getBeforeActions().add(action);
+    void onEditTrigger(StageTrigger trigger) {
+        newTrigger = trigger;
     }
 
-    void onCreateAfterAction() {
-        AfterAction action = new AfterAction();
-        //stageActionDao.save(action);
-        stage.getAfterActions().add(action);
+    void onCancelTrigger() {
+        newTrigger = null;
+    }
+
+    void onDropTrigger(StageTrigger trigger) {
+        stage.getTriggers().remove(trigger);
+        stageDao.save(stage);
+        schedulerService.updateNonTransactional();
+    }
+
+    void onSuccessFromCreateTriggerForm() {
+        newTrigger.setParent(stage);
+        stageTriggerDao.save(newTrigger);
+        stageTriggerDao.flush();
+        if (newTrigger.getCron() != null) {
+            schedulerService.updateNonTransactional();
+        }
+        newTrigger = null;
+
     }
 
     void onCreateStageAction() {
-        StageAction action = new StageAction();
-        stageActionDao.save(action);
-        stage.getStageActions().add(action);
+        newAction = new StageAction();
+    }
+
+    void onCancelAction() {
+        newAction = null;
+    }
+
+    void onSuccessFromCreateActionForm() {
+        stage.getActions().add(newAction);
+        stageActionDao.save(newAction);
+        newAction = null;
     }
 
     @Cached

@@ -13,4 +13,8 @@ public class StageTriggerDao extends AbstractDao<Integer, StageTrigger> {
         return createQuery("from StageTrigger v where project=:project").setEntity("project", project).list();
     }
 
+    public List<StageTrigger> findEnabled() {
+        return createQuery("from StageTrigger v where enabled=true").list();
+    }
+
 }

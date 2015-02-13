@@ -105,4 +105,12 @@ public class Feature implements Identifiable {
         updated = new Date();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        return obj instanceof Feature && ((Feature) obj).id == id;
+    }
+
 }
