@@ -1,15 +1,26 @@
 package com.gagauz.tracker.db.model;
 
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Type;
+
+import com.gagauz.tracker.db.base.Identifiable;
+
 @Entity
 @Table(name = "task_comment")
-public class TaskComment {
+public class TaskComment implements Identifiable {
     private int id;
     private User user;
     private Task task;
@@ -18,6 +29,7 @@ public class TaskComment {
     private String text;
     private List<Attachment> attachments;
 
+    @Override
     @Id
     @GeneratedValue
     public int getId() {
