@@ -4,13 +4,18 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
 
+import java.sql.Driver;
 import java.util.Properties;
 
 public class DevDataSource extends SimpleDriverDataSource implements DataSource {
 
     public DevDataSource() {
-        setDriverClass(com.mysql.jdbc.Driver.class);
-        setUrl("jdbc:mysql://localhost:3306/tracker?autoReconnect=true");
+        try {
+            setDriverClass((Class<? extends Driver>) Class.forName(System.getProperty("tracker.jdbc-driver")));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        setUrl(System.getProperty("tracker.jdbc-url"));
         setUsername("b4f");
         setPassword("office");
         Properties props = new Properties();

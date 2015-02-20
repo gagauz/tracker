@@ -19,7 +19,9 @@ public class Project implements Identifiable {
 
     @Override
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "id_sequence", sequenceName = "project_id_seq", allocationSize = 50)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_sequence")
+    @Column(unique = true, nullable = false)
     public int getId() {
         return id;
     }

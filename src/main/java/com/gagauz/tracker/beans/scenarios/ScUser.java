@@ -37,6 +37,8 @@ public class ScUser extends DataBaseScenario {
 
         roleGroupDao.save(roleGroup2);
 
+        roleGroupDao.flush();
+
         User user = new User();
         user.setEmail("user1@email.com");
         user.setName("Dev Null");
@@ -66,6 +68,7 @@ public class ScUser extends DataBaseScenario {
 
             userDao.save(userx);
         }
+        userDao.flush();
     }
 
 }

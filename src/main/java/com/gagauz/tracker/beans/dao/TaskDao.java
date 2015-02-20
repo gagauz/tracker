@@ -29,7 +29,7 @@ public class TaskDao extends AbstractDao<Integer, Task> {
     }
 
     public void updateTaskProgessTime(Task task) {
-        getSession().createSQLQuery("update task set progress=ifnull((select sum(logTime) from work_log where task_id="
+        getSession().createSQLQuery("update task set progress=COALESCE((select sum(logTime) from work_log where task_id="
                 + task.getId() + " group by task_id), 0) where id=" + task.getId()).executeUpdate();
     }
 }

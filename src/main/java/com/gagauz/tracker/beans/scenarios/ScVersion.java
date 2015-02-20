@@ -50,17 +50,17 @@ public class ScVersion extends DataBaseScenario {
             p.setCvsRepositoryPath(System.getProperty("test.repo-path", "R:\\projects-my\\tracker"));
             projectDao.save(p);
 
-            List<Feature> theaders = new ArrayList<Feature>();
+            List<Feature> features = new ArrayList<Feature>();
 
             for (int h = 0; h < 10; h++) {
-                Feature th = new Feature();
-                th.setProject(p);
-                th.setCreator(user1);
-                th.setName("Название фичи, например, Авторизация.");
-                th.setDescription("Общее описание фичи, например, Авторизация на сайте для доступа к защищенным разделам.");
-                featureDao.save(th);
-                theaders.add(th);
+                Feature feature = new Feature();
+                feature.setProject(p);
+                feature.setCreator(user1);
+                feature.setName("Название фичи, например, Авторизация.");
+                feature.setDescription("Общее описание фичи, например, Авторизация на сайте для доступа к защищенным разделам.");
+                features.add(feature);
             }
+            featureDao.save(features);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, -4);
             for (int j = 0; j < 5; j++) {
@@ -80,12 +80,13 @@ public class ScVersion extends DataBaseScenario {
                 }
 
                 versionDao.save(v);
-                for (Feature th : theaders) {
+                for (Feature feature : features) {
                     if (rand.nextBoolean() && rand.nextBoolean()) {
                         continue;
                     }
+
                     FeatureVersion t = new FeatureVersion();
-                    t.setFeature(th);
+                    t.setFeature(feature);
                     t.setVersion(v);
                     t.setOwner(user1);
                     t.setCreator(user2);

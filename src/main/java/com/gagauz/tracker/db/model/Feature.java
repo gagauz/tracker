@@ -22,7 +22,9 @@ public class Feature implements Identifiable {
 
     @Override
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "id_sequence", sequenceName = "feature_id_seq", allocationSize = 50)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_sequence")
+    @Column(unique = true, nullable = false)
     public int getId() {
         return id;
     }

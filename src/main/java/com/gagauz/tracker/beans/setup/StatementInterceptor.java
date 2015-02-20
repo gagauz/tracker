@@ -51,11 +51,7 @@ public class StatementInterceptor implements com.mysql.jdbc.StatementInterceptor
             String content = statement.toString();
             LOGGER.debug(conn_id + content.substring(content.indexOf(':')));
         }
-        try {
-            //throw new RuntimeException();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         return null;
     }
 

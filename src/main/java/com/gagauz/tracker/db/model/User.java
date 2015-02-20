@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "user")
+@Table(name = "`user`")
 public class User implements Identifiable, Serializable, SecurityUser {
     private static final long serialVersionUID = 7903294228565311630L;
     private int id;
@@ -23,7 +23,9 @@ public class User implements Identifiable, Serializable, SecurityUser {
 
     @Override
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "id_sequence", sequenceName = "user_id_seq", allocationSize = 50)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_sequence")
+    @Column(unique = true, nullable = false)
     public int getId() {
         return id;
     }

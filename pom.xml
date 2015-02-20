@@ -1,6 +1,6 @@
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://maven.apache.org/POM/4.0.0"
->
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gagauz</groupId>
 	<artifactId>tracker</artifactId>
@@ -11,10 +11,11 @@
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-core</artifactId>
-			<version>${tapestry-release-version}-patched</version>
+			<version>${tapestry-release-version}</version>
 		</dependency>
 
-		<!-- This adds automatic compression of JavaScript and CSS when in production mode. -->
+		<!-- This adds automatic compression of JavaScript and CSS when in production 
+			mode. -->
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-yuicompressor</artifactId>
@@ -26,7 +27,7 @@
 			<artifactId>tapestry-upload</artifactId>
 			<version>${tapestry-release-version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -40,7 +41,8 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Provided by the servlet container, but sometimes referenced in the application code. -->
+		<!-- Provided by the servlet container, but sometimes referenced in the 
+			application code. -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -48,7 +50,8 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Provide dependency to the Tapestry javadoc taglet which replaces the Maven component report -->
+		<!-- Provide dependency to the Tapestry javadoc taglet which replaces the 
+			Maven component report -->
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-javadoc</artifactId>
@@ -96,6 +99,12 @@
 			<version>5.1.24</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.3-1100-jdbc4</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>tracker</finalName>
@@ -141,7 +150,8 @@
 				<configuration>
 					<!-- Log to the console. -->
 					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
-						<!-- This doesn't do anything for Jetty, but is a workaround for a Maven bug that prevents the requestLog from being set. -->
+						<!-- This doesn't do anything for Jetty, but is a workaround for a 
+							Maven bug that prevents the requestLog from being set. -->
 						<append>true</append>
 					</requestLog>
 					<systemProperties>
@@ -159,7 +169,8 @@
 
 	<repositories>
 
-		<!-- This repository is only needed when the Tapestry version is a preview release, rather than a final release. -->
+		<!-- This repository is only needed when the Tapestry version is a preview 
+			release, rather than a final release. -->
 		<repository>
 			<id>apache-staging</id>
 			<url>https://repository.apache.org/content/groups/staging/</url>

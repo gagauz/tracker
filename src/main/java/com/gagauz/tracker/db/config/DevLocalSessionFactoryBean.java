@@ -11,7 +11,7 @@ public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
         setPackagesToScan(com.gagauz.tracker.db.model.User.class.getPackage().getName());
         setAnnotatedPackages(new String[] {com.gagauz.tracker.db.model.User.class.getPackage().getName()});
         Properties properties = new Properties();
-        properties.put(DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect");
+        properties.put(DIALECT, System.getProperty("tracker.jdbc-dialect"));
         properties.put(SHOW_SQL, false);
         properties.put(FORMAT_SQL, false);
         properties.put(USE_SQL_COMMENTS, false);

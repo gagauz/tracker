@@ -63,6 +63,7 @@ public class AbstractDao<I extends Serializable, E> {
 
     public void save(E entity) {
         getSession().saveOrUpdate(entity);
+        getSession().flush();
     }
 
     public void save(Collection<E> entities) {
