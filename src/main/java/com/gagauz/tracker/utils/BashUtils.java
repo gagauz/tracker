@@ -3,6 +3,7 @@ package com.gagauz.tracker.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 public class BashUtils {
 
@@ -19,33 +20,37 @@ public class BashUtils {
         return commandArgs.toString();
     }
 
-    public static String execute(File directory, String... lines) {
+    public static String execute(File directory, String format, Object... args) {
         Process process = null;
 
         String out = "";
         try {
 
-            ProcessBuilder builder = new ProcessBuilder(lines);
+            if (args.length > 0) {
+                format = String.format(format, args);
+            }
+
+            ProcessBuilder builder = new ProcessBuilder();
+            for (Map.Entry<String, String> e : System.getenv().entrySet()) {
+                builder.environment().put(e.getKey(), e.getValue());
+            }
+            builder.command(format.split(" "));
             builder.redirectErrorStream(true);
             builder.directory(directory);
             process = builder.start();
 
-            String thread = "thread " + Thread.currentThread().getId();
-            System.out.println(thread + " : " + lines[0]);
+            //process = Runtime.getRuntime().exec(format);
 
-            //            for (int i = 1; i < lines.length; i++) {
-            //                String line = lines[i] + NL;
-            //                System.out.print(">" + line);
-            //                process.getOutputStream().write(line.getBytes());
-            //                process.getOutputStream().flush();
-            //            }
+            String thread = "thread " + Thread.currentThread().getId();
+            System.out.println(thread + " : " + format);
+
             out = readStream(process.getInputStream());
 
             int exitVal = process.waitFor();
 
             if (exitVal != 0) {
                 out = out + readStream(process.getErrorStream());
-                throw new IllegalStateException("Error [" + exitVal + "] " + out);
+                //throw new IllegalStateException("Error [" + exitVal + "] " + out);
             }
 
         } catch (InterruptedException e) {

@@ -2,7 +2,9 @@ package com.gagauz.tracker.beans.cvs;
 
 import com.gagauz.tracker.beans.cvs.git.GitCommitFilter;
 import com.gagauz.tracker.db.model.Commit;
+import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.utils.BashUtils;
+import com.gagauz.tracker.utils.PathUtils;
 import com.gagauz.tracker.utils.StringUtils;
 
 import java.io.File;
@@ -12,17 +14,50 @@ import java.util.List;
 
 public class GitCvsWrapper implements CvsWrapper {
 
+    private static String SOURCES_DIR = "sources";
     private File repoDir;
 
     @Override
-    public void init(String repo) {
+    public void init(Project project) {
 
         String str = BashUtils.execute("git", "--version");
         if (!str.contains("git version")) {
             throw new RuntimeException("Failed to init Git wrapper. Chek if git executable exits and available via system Path variable.");
         }
 
-        this.repoDir = new File(repo);
+        File repoDir = new File(PathUtils.getProjectBaseDir(project) + '/' + SOURCES_DIR);
+        if (!repoDir.exists() || !repoDir.isDirectory()) {
+            System.err.println("Directory doesn't exists, create new.");
+            repoDir.mkdirs();
+        }
+
+        if (!checkIfIsRepo(repoDir)) {
+            System.err.println("Directory is not repo, clone into directory.");
+            cloneGitRepo(repoDir, project);
+        }
+
+        this.repoDir = repoDir;
+    }
+
+    private void cloneGitRepo(File directory, Project project) {
+        String url = project.getCvsRepo().getUrl();
+        if (project.getCvsRepo().getUsername() != null) {
+            String cred = project.getCvsRepo().getUsername();
+            if (project.getCvsRepo().getPassword() != null) {
+                cred += ':' + project.getCvsRepo().getPassword();
+            }
+            cred += '@';
+
+            url = url.replace("://", "://" + cred);
+        }
+        String out = BashUtils.execute(directory.getParentFile(), "git clone %s %s", url, SOURCES_DIR);
+        System.out.println(out);
+    }
+
+    private boolean checkIfIsRepo(File directory) {
+        String res = BashUtils.execute(directory, "git rev-parse --is-inside-work-tree");
+        System.out.println(res);
+        return "true".equals(res);
     }
 
     private String log(String grep) {
@@ -65,21 +100,18 @@ public class GitCvsWrapper implements CvsWrapper {
             if (!"".equals(cl)) {
                 String[] lines = StringUtils.split(cl, "\n", 2);
                 String[] fields = StringUtils.split(lines[0], "|");
-                Commit commit = new Commit();
-                commit.setHash(fields[1]);
-                commit.setDate(new Date(Long.parseLong(fields[0]) * 1000));
-                commit.setAuthor(fields[2]);
-                commit.setComment(fields[3]);
-                commit.setDetails(lines[1]);
-                commits.add(commit);
+                if (fields.length > 1) {
+                    Commit commit = new Commit();
+                    commit.setHash(fields[1]);
+                    commit.setDate(new Date(Long.parseLong(fields[0]) * 1000));
+                    commit.setAuthor(fields[2]);
+                    commit.setComment(fields[3]);
+                    commit.setDetails(lines[1]);
+                    commits.add(commit);
+                }
             }
         }
         return commits;
     }
 
-    public static void main(String[] args) {
-        GitCvsWrapper w = new GitCvsWrapper();
-        w.init("R:\\my-projects\\tracker\\");
-        w.log("Task");
-    }
 }

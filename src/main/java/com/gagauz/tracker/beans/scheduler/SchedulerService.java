@@ -5,6 +5,7 @@ import com.gagauz.tracker.beans.dao.StageTriggerDao;
 import com.gagauz.tracker.db.model.StageTrigger;
 import com.gagauz.tracker.db.model.StageTrigger.Type;
 import com.gagauz.tracker.utils.BashUtils;
+import com.gagauz.tracker.utils.PathUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TriggerContext;
@@ -62,8 +63,11 @@ public class SchedulerService extends HibernateSessionManager {
                         System.out.println("Execute trigger " + trigger.getData());
                         if (trigger.getType() == Type.SCRIPT) {
                             StringBuilder sb = new StringBuilder();
-                            BashUtils.execute(new File(trigger.getParent().getProject().getCvsRepositoryPath()),
-                                    sb, trigger.getData().split("\n"));
+
+                            String projectDir = PathUtils.getProjectBaseDir(trigger.getParent().getProject());
+                            File dir = new File(projectDir);
+
+                            BashUtils.execute(dir, sb, trigger.getData().split("\n"));
                             System.out.println("--------------------------------------------------------------------");
                             System.out.println(sb.toString());
                             System.out.println("--------------------------------------------------------------------");

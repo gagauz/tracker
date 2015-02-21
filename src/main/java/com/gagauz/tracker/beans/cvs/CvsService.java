@@ -40,7 +40,7 @@ public class CvsService {
     private CvsWrapper initProjectRepo(Project project) {
         try {
             CvsWrapper dotGit = new GitCvsWrapper();
-            dotGit.init(project.getCvsRepositoryPath());
+            dotGit.init(project);
             dotGitMap.put(project, dotGit);
             return dotGit;
         } catch (Exception e) {

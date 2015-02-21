@@ -13,7 +13,7 @@ public class Project implements Identifiable {
     private int id;
     private String key1;
     private String name;
-    private String cvsRepositoryPath;
+    private CvsRepo cvsRepo;
     private List<Version> versions;
     private List<Feature> features;
 
@@ -76,13 +76,13 @@ public class Project implements Identifiable {
         this.features = features;
     }
 
-    @Column
-    public String getCvsRepositoryPath() {
-        return cvsRepositoryPath;
+    @Embedded
+    public CvsRepo getCvsRepo() {
+        return cvsRepo;
     }
 
-    public void setCvsRepositoryPath(String cvsRepositoryPath) {
-        this.cvsRepositoryPath = cvsRepositoryPath;
+    public void setCvsRepo(CvsRepo cvsRepo) {
+        this.cvsRepo = cvsRepo;
     }
 
 }
