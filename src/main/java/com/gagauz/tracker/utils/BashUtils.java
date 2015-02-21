@@ -21,9 +21,14 @@ public class BashUtils {
     }
 
     public static String execute(File directory, String format, Object... args) {
+        StringBuilder output = new StringBuilder();
+        execute(directory, output, format, args);
+        return output.toString();
+    }
+
+    public static int execute(File directory, StringBuilder output, String format, Object... args) {
         Process process = null;
 
-        String out = "";
         try {
 
             if (args.length > 0) {
@@ -39,68 +44,19 @@ public class BashUtils {
             builder.directory(directory);
             process = builder.start();
 
-            //process = Runtime.getRuntime().exec(format);
-
             String thread = "thread " + Thread.currentThread().getId();
             System.out.println(thread + " : " + format);
 
-            out = readStream(process.getInputStream());
-
-            int exitVal = process.waitFor();
-
-            if (exitVal != 0) {
-                out = out + readStream(process.getErrorStream());
-                //throw new IllegalStateException("Error [" + exitVal + "] " + out);
-            }
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (process != null) {
-                process.destroy(); // Close process streams                
-            }
-        }
-
-        return out;
-    }
-
-    public static int execute(File directory, StringBuilder output, String... lines) {
-        Process process = null;
-
-        try {
-            //            if (lines[0].indexOf(' ') > 0) {
-            //                List<String> cmd = new LinkedList<String>(Arrays.asList(lines));
-            //                String[] strs = lines[0].split(" ", 2);
-            //                cmd.add(0, strs[0].trim());
-            //                cmd.set(1, strs[1].trim());
-            //                lines = cmd.toArray(new String[cmd.size()]);
-            //            }
-
-            process = Runtime.getRuntime().exec(lines[0]);
-            /*
-            ProcessBuilder builder = new ProcessBuilder(lines);
-            for (Map.Entry<String, String> e : System.getenv().entrySet()) {
-                builder.environment().put(e.getKey(), e.getValue());
-            }
-            builder.redirectErrorStream(true);
-            builder.directory(directory);
-            process = builder.start();
-            */
-
-            String thread = "thread " + Thread.currentThread().getId();
-            System.out.println(thread + " : " + lines[0]);
             readStream(process.getInputStream(), output);
 
             return process.waitFor();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-            return -11;
+            return -1001;
         } catch (IOException e) {
             e.printStackTrace();
-            return -1;
+            return -1002;
         } finally {
             if (process != null) {
                 process.destroy(); // Close process streams                

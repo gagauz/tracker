@@ -67,7 +67,7 @@ public class SchedulerService extends HibernateSessionManager {
                             String projectDir = PathUtils.getProjectBaseDir(trigger.getParent().getProject());
                             File dir = new File(projectDir);
 
-                            BashUtils.execute(dir, sb, trigger.getData().split("\n"));
+                            BashUtils.execute(dir, sb, trigger.getData());
                             System.out.println("--------------------------------------------------------------------");
                             System.out.println(sb.toString());
                             System.out.println("--------------------------------------------------------------------");

@@ -184,5 +184,6 @@
 		<easymock-release-version>3.0</easymock-release-version>
 		<hibernate-release-version>4.1.7.Final</hibernate-release-version>
 		<spring-release-version>4.0.2.RELEASE</spring-release-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 </project>

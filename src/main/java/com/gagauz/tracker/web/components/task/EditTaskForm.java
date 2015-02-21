@@ -89,6 +89,10 @@ public class EditTaskForm {
         };
     }
 
+    public User getUser() {
+        return (User) user;
+    }
+
     public Task getTask() {
         if (null == task) {
             task = new Task();

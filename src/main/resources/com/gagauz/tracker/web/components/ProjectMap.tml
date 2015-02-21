@@ -1,10 +1,10 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-	<div class="project-map">
+	<div class="project-map" t:id="zone">
 		<div class="project-map-owerflow">
-			<table>
+			<table cellspacing="10">
 				<thead>
 					<tr>
-						<td></td>
+						<td style="border:none;box-shadow:none;"></td>
 						<t:loop source="features" value="feature">
 							<th class="feature-col">
 								<t:pagelink t:page="featureinfo" t:context="feature">${feature.name}</t:pagelink>
@@ -14,7 +14,7 @@
 				</thead>
 				<tbody>
 					<t:loop source="versions" value="version">
-						<tr>
+						<tr class="released-${cond:version,prop:version.released,unknown}">
 							<th class="version-col">
 								<t:if test="version">
 								<t:pagelink t:page="versioninfo" t:context="version">
@@ -56,7 +56,11 @@
 												</li>
 											</ul>
 										</div>
-										<t:eventlink t:event="createTask" t:context="[feature, version]" t:zone="taskZone">${message:create-bug-or-task}</t:eventlink>
+										<t:if test="notReleased">
+											<t:eventlink class="add button" t:event="createTask" t:context="featureVersion" t:zone="taskZone">
+												${message:create-bug-or-task}
+											</t:eventlink>
+										</t:if>
 										<div class="progress">
 											<div class="row">
 												${message:total-progress}
@@ -68,9 +72,11 @@
 										
 									<p:else>
 										<t:if test="version">
-											<t:eventlink t:event="createFeatureVersion" t:context="[feature, version]">
-												${message:create-feature-version} 
-											</t:eventlink>
+											<t:if test="!version.released">
+												<t:eventlink class="add button" t:event="createFeatureVersion" t:context="[feature, version]" t:zone="prop:zoneId">
+													${message:create-feature-version} 
+												</t:eventlink>
+											</t:if>
 										</t:if>
 									</p:else>
 									</t:if>

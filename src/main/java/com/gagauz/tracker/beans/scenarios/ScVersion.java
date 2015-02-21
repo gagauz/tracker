@@ -67,18 +67,16 @@ public class ScVersion extends DataBaseScenario {
             }
             featureDao.save(features);
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.MONTH, -4);
+            cal.add(Calendar.MONTH, -1);
             for (int j = 0; j < 3; j++) {
                 Version version = new Version();
                 version.setReleased(j == 0);
                 version.setProject(project);
                 if (j != 4) {
-                    version.setReleased(true);
                     version.setName("1." + j);
                     version.setReleaseDate(cal.getTime());
                     cal.add(Calendar.MONTH, 1);
                 } else {
-                    version.setReleased(false);
                     version.setName("1." + j + "-SNAPSHOT");
                     cal.setTime(new Date());
                     cal.add(Calendar.MONTH, 1);

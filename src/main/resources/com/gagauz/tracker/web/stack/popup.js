@@ -15,7 +15,7 @@
 			return this;
 		}
 
-		var _this = this, $popupwrap = $('#popup-wrapper'), $overlay = $('#popup-overlay');
+		var _this = this, $popupwrap = $('#popup-wrapper'), $overlay = $('#popup-overlay'), $sitewrap = $('#site-wrapper');
 		
 		_this._id_ = $this.attr('id');
 		
@@ -30,7 +30,7 @@
 		}
 		
     	if (!$overlay.length) {
-    		var $overlay = $('<div id="popup-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;background:#000;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=40);opacity:0.4;">');
+    		var $overlay = $('<div id="popup-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;">');
     		$popupwrap.append($overlay);
     	}
 

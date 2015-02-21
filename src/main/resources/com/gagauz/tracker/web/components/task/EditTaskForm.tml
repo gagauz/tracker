@@ -3,12 +3,8 @@
 
 <div t:id="zone">
 	<form t:id="form">
-		<t:hidden t:value="task.feature"/>
-		<t:hidden t:value="task.version"/>
+		<t:hidden t:value="task.featureVersion"/>
 		<div class="title">
-	    	<h1><a href="#" t:type="pagelink" t:page="featureinfo" t:context="task.feature">${task.feature.name}</a>
-	    		/ <a href="#" t:type="pagelink" t:page="versioninfo" t:context="task.version">${task.version.name}</a>
-	    		/ <a href="#" t:type="pagelink" t:page="projectinfo" t:context="task.version.project">${task.version.project.name}</a></h1>
 	    	<h2>New <t:select value="task.type" blankOption="never"/></h2>
 	    </div>
 	    <div class="block">
@@ -23,7 +19,7 @@
 					<th>Estimate:</th>
 					<td><t:textfield t:value="task.estimate" size="4"/></td>
 					<th>Version:</th>
-					<td>${task.version.name}</td>
+					<td>${cond:task.version,prop:task.version.name,}</td>
 				</tr>
 				<tr>
 					<th>Priority:</th>
@@ -37,12 +33,12 @@
 					<td>${task.feature.name}</td>
 				</tr>
 				<tr>
-					<th></th>
-					<td></td>
+					<th>Author:</th>
+					<td>${user.name}</td>
 					<th>Remaining:</th>
 					<td></td>
 					<th>Project:</th>
-					<td>${task.version.project.name}</td>
+					<td>${task.feature.project.name}</td>
 				</tr>
 				<tr>
 					<th></th>
@@ -62,7 +58,7 @@
 	    <div class="block">
 	    	<t:textarea t:value="task.description"/>
 	    </div>
-	    <t:submit/>
+	    <t:linksubmit class="save button">${message:save}</t:linksubmit>
 	</form>
 </div>
 </div>

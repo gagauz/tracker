@@ -16,7 +16,7 @@ body, ul, ol, li{
 }
 
 body {
-    background-color: #f0f0f0;
+    background-color: #fff;
     text-align: justify;
 }
 
@@ -63,6 +63,80 @@ input, select, textarea {
 
 .t-error,.t-error-single{color:red;}
 
+.button {        
+    display: inline-block;
+    white-space: nowrap;
+    background-color: #ccc;
+    background-image: linear-gradient(to bottom, #eee, #ccc);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#eeeeee', EndColorStr='#cccccc');
+    border: 1px solid #777;
+    padding: 6px 10px;
+    margin: 5px 0;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333 !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,.8);
+    border-radius: 4px;
+    box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+}
+
+.button:hover {
+	text-decoration: none;
+    background-color: #ddd;        
+    background-image: linear-gradient(top, #fafafa, #ddd);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fafafa', EndColorStr='#dddddd');        
+}
+
+.button:active {
+    box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+    position: relative;
+    top: 1px;
+}
+
+.button:focus {
+    outline: 0;
+    background: #fafafa;
+}    
+
+.button:before {
+    background: #ccc;
+    background: rgba(0,0,0,.1);
+    float: left;        
+    text-align: center;
+    font-size: 160%;
+    margin:-6px 10px -6px -10px;
+    padding: 0 7px;
+    box-shadow: 1px 0 0 0 rgba(0,0,0,.5), 2px 0 0 0 rgba(255,255,255,.5);
+    pointer-events: none;        
+}
+
+.button.add:before {
+    content: "\271A";
+}
+
+.button.edit:before {
+    content: "\270E";        
+}
+
+.button.delete:before {
+    content: "\2718";        
+}
+
+.button.save:before {
+    content: "\2714";        
+}
+
+.button.email:before {
+    content: "\2709";        
+}
+
+.button.like:before {
+    content: "\2764";        
+}
+
+.button.next:before {
+    content: "\279C";
+}
 
 /* Header */
 
@@ -118,16 +192,23 @@ div.page {
 .t-beaneditor-row label {float:left;width:200px;text-align:right;padding:5px;}
 .t-beaneditor-row .t-beaneditor-submit {margin-left:210px;}
 .popup-window {
-	background-color:#f0f0f0;padding:10px 10px;
+	background-color:#f0f0f0;
+	padding:10px 10px;
 	min-width:500px;
+	border:1px solid gray;
+	box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.5);
 }
-
+#popup-overlay {
+	background:#fff;
+	opacity:.8;
+	filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+}
 .popup-close {
 	position:absolute;
 	right:5px;top:5px;
 }
 
-.block {border:1px dashed gray;background:#ffffff;padding:10px 15px;margin-bottom:20px;overflow:hidden;}
+.block {border:1px solid gray;background:#ffffff;padding:10px 15px;margin-bottom:20px;overflow:hidden;}
 
 /* Task Header */
 .task-header .title {margin-bottom:15px;}
@@ -160,23 +241,27 @@ div.page {
 .project-map .feature-col a {color:white;float:left;font-weight:bold;text-align:left;}
 .project-map .version-col {background-color:#006600;color:white;border:1px solid gray;}
 .project-map .version-col.col, .empty-col.col {width:100px;}
-.project-map .task-col {background-color:#ffffff;border:1px solid silver;padding:6px 8px;}
+.project-map .task-col {padding:6px 8px;}
 .project-map .task-col-div {width:250px}
 .project-map .task-col div{overflow:hidden;}
 .project-map .task-col .owner {color:#660000}
 .project-map .task-col .description {}
-.project-map .title {margin:5px 0 3px;}
+.project-map .title {margin:5px 0 3px;font-weight:bold;}
 .project-map ul {list-style:none}
 .project-map li, .project-map li a {font-size:12px;text-align:left;display:bloc;}
 .project-map li {padding:0 0 5px;}
+
 
 .progr-time {float:right;font-size:11px;padding:3px 3px;}
 .progr-bar {border:1px solid gray;background:white;float:right;position:relative;width:60px;height:100%;}
 .progr-bar .progr-bar-fill {background:#9b9;height:100%;position:absolute;left:0;z-index:0;}
 .progr-bar div {font-weight:normal;z-index:1;text-align:center;position:relative;font-size:11px;}
 
-.project-map th {padding:5px;white-space:normal;}
-.project-map td {padding:3px 5px;vertical-align:top;white-space:normal;}
+.project-map th {padding:5px;white-space:normal;border:1px solid silver;box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
+.project-map td {padding:3px 5px;vertical-align:top;white-space:normal;border:1px solid silver;box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
+.project-map tr.released-true td {background-color:#f0f0f0;}
+.project-map tr.released-false td {background-color:#fff;}
+.project-map tr.released-unknown td {background-color:#fffaf0;}
 
 .project-map th.version-col a {color:white}
 

@@ -11,6 +11,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+import org.apache.tapestry5.services.Request;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectMap {
+
+    @Component(parameters = {"id=prop:zoneId", "show=", "update="})
+    private Zone zone;
 
     @Component(parameters = {"id=literal:taskZone", "show=popup", "update=popup"})
     private Zone taskZone;
@@ -54,15 +58,17 @@ public class ProjectMap {
     @Inject
     private SecurityUserCreator securityUserCreator;
 
+    @Inject
+    private Request request;
+
     private Map<Version, Map<Feature, FeatureVersion>> featureVersionMap;
     private Map<FeatureVersion, List<Task>> bugsMap;
     private Map<FeatureVersion, List<Task>> tasksMap;
 
-    private void initMap() {
+    private void initMap(List<Version> versions) {
         featureVersionMap = CollectionFactory.newMap();
         bugsMap = CollectionFactory.newMap();
         tasksMap = CollectionFactory.newMap();
-        List<Version> versions = project.getVersions();
         versions.add(null);
         for (Version version : versions) {
             Map<Feature, FeatureVersion> map = CollectionFactory.newMap();
@@ -77,7 +83,7 @@ public class ProjectMap {
     public Collection<Version> getVersions() {
         List<Version> versions = project.getVersions();
         if (null == featureVersionMap) {
-            initMap();
+            initMap(versions);
 
             for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
                 featureVersionMap.get(featureVersion.getVersion()).put(featureVersion.getFeature(), featureVersion);
@@ -110,7 +116,7 @@ public class ProjectMap {
         }
     }
 
-    void onCreateFeatureVersion(Feature feature, Version version) {
+    Object onCreateFeatureVersion(Feature feature, Version version) {
         FeatureVersion featureVersion = new FeatureVersion();
         featureVersion.setFeature(feature);
         featureVersion.setVersion(version);
@@ -119,6 +125,7 @@ public class ProjectMap {
         user.setId(id);
         featureVersion.setCreator(user);
         featureVersionDao.save(featureVersion);
+        return request.isXHR() ? zone.getBody() : null;
     }
 
     Object onCreateTask(FeatureVersion featureVersion) {
@@ -146,6 +153,14 @@ public class ProjectMap {
         estimate += task.getEstimate();
         progress += task.getProgress();
         this.task = task;
+    }
+
+    public boolean isNotReleased() {
+        return null == version || !version.isReleased();
+    }
+
+    public String getZoneId() {
+        return "ProjectMapZone";
     }
 
 }

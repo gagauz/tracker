@@ -20,7 +20,7 @@ public class GitCvsWrapper implements CvsWrapper {
     @Override
     public void init(Project project) {
 
-        String str = BashUtils.execute("git", "--version");
+        String str = BashUtils.execute("git --version");
         if (!str.contains("git version")) {
             throw new RuntimeException("Failed to init Git wrapper. Chek if git executable exits and available via system Path variable.");
         }
@@ -61,13 +61,18 @@ public class GitCvsWrapper implements CvsWrapper {
     }
 
     private String log(String grep) {
-        String log = BashUtils.execute(repoDir, "git", "log", "--pretty=format:>>>%at|%H|%an <%ae>|%s", "--stat", "--name-status", "--grep=" + grep,
-                "--regexp-ignore-case");
-        return log;
+        StringBuilder log = new StringBuilder();
+        int res = BashUtils.execute(repoDir, log, "git log --pretty=format:'>>>%at|%H|%an|%s' --stat --name-status --grep=" + grep +
+                " --regexp-ignore-case");
+        if (0 != res) {
+            System.err.println(log.toString());
+            return "";
+        }
+        return log.toString();
     }
 
     private String log() {
-        String log = BashUtils.execute(repoDir, "git", "log", "--pretty=format:>>>%at|%H|%an <%ae>|%s", "--stat", "--name-status");
+        String log = BashUtils.execute(repoDir, "git log --pretty=format:'>>>%at|%H|%an <%ae>|%s' --stat --name-status");
         return log;
     }
 
