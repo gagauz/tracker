@@ -9,9 +9,8 @@ import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.StageTrigger;
 import com.gagauz.tracker.db.model.StageTrigger.Type;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class ScScheduler extends DataBaseScenario {
 
     @Autowired

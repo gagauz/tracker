@@ -7,7 +7,6 @@ import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
 import com.gagauz.tracker.web.components.stage.StageForm;
-import com.gagauz.tracker.web.components.version.VersionForm;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -17,9 +16,6 @@ import java.util.List;
 
 @Secured({Role.PROJECT_USER, Role.PROJECT_ADMIN})
 public class ProjectInfo {
-
-    @Component
-    private VersionForm versionForm;
 
     @Component
     private StageForm stageForm;

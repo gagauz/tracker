@@ -44,17 +44,22 @@ public class ScVersion extends DataBaseScenario {
         User user1 = userDao.findById(1);
         User user2 = userDao.findById(2);
         for (int i = 0; i < 1; i++) {
-            Project p = new Project();
-            p.setKey1("TRACKER");
-            p.setName("Трекер (этот проект)");
-            p.setCvsRepositoryPath(System.getProperty("test.repo-path", "R:\\projects-my\\tracker"));
-            projectDao.save(p);
+            Project project = new Project();
+            project.setKey1("TRACKER");
+            project.setName("Трекер (этот проект)");
+            CvsRepo repo = new CvsRepo();
+            repo.setUrl("https://github.com/gagauz/tracker.git");
+            repo.setUsername("gagauz");
+            repo.setPassword("p35neog0d");
+            repo.setBranch("master");
+            project.setCvsRepo(repo);
+            projectDao.save(project);
 
             List<Feature> features = new ArrayList<Feature>();
 
             for (int h = 0; h < 10; h++) {
                 Feature feature = new Feature();
-                feature.setProject(p);
+                feature.setProject(project);
                 feature.setCreator(user1);
                 feature.setName("Название фичи, например, Авторизация.");
                 feature.setDescription("Общее описание фичи, например, Авторизация на сайте для доступа к защищенным разделам.");
@@ -63,80 +68,75 @@ public class ScVersion extends DataBaseScenario {
             featureDao.save(features);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, -4);
-            for (int j = 0; j < 5; j++) {
-                Version v = new Version();
-                v.setProject(p);
+            for (int j = 0; j < 3; j++) {
+                Version version = new Version();
+                version.setReleased(j == 0);
+                version.setProject(project);
                 if (j != 4) {
-                    v.setReleased(true);
-                    v.setVersion("1." + j);
-                    v.setReleaseDate(cal.getTime());
+                    version.setReleased(true);
+                    version.setName("1." + j);
+                    version.setReleaseDate(cal.getTime());
                     cal.add(Calendar.MONTH, 1);
                 } else {
-                    v.setReleased(false);
-                    v.setVersion("1." + j + "-SNAPSHOT");
+                    version.setReleased(false);
+                    version.setName("1." + j + "-SNAPSHOT");
                     cal.setTime(new Date());
                     cal.add(Calendar.MONTH, 1);
-                    v.setReleaseDate(cal.getTime());
+                    version.setReleaseDate(cal.getTime());
                 }
 
-                versionDao.save(v);
+                versionDao.save(version);
                 for (Feature feature : features) {
                     if (rand.nextBoolean() && rand.nextBoolean()) {
                         continue;
                     }
 
-                    FeatureVersion t = new FeatureVersion();
-                    t.setFeature(feature);
-                    t.setVersion(v);
-                    t.setOwner(user1);
-                    t.setCreator(user2);
-                    t.setDescription("Название имплементации фичи в данной версии, например, реализовать простую защиту страниц без разделения ролей и форму авторизации с хранением признака авторизованного пользователя в сессии.");
-                    if (rand.nextBoolean()) {
-                        Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
-                        Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
-                        t.setAttachments(Arrays.asList(a1, a2));
-                    }
+                    FeatureVersion featureVersion = new FeatureVersion();
+                    featureVersion.setFeature(feature);
+                    featureVersion.setVersion(rand.nextBoolean() ? version : null);
+                    featureVersion.setOwner(user1);
+                    featureVersion.setCreator(user2);
+                    featureVersion
+                            .setDescription("Название имплементации фичи в данной версии, например, реализовать простую защиту страниц без разделения ролей и форму авторизации с хранением признака авторизованного пользователя в сессии.");
 
-                    featureVersionDao.save(t);
+                    featureVersionDao.save(featureVersion);
 
                     int stc = rand.nextInt(5) + 1;
                     for (int k = 0; k < stc; k++) {
-                        Task st = new Task();
-                        st.setType(TaskType.TASK);
-                        //                        st.setFeatureVersion(t);
-                        st.setFeature(t.getFeature());
-                        st.setVersion(t.getVersion());
-                        st.setOwner(getRandomUser());
-                        st.setAuthor(getRandomUser());
-                        st.setSummary("Название задачи, например, сделать форму авторизации.");
-                        st.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
-                        st.setPriority(rand.nextInt(30));
+                        Task task = new Task();
+                        task.setType(rand.nextBoolean() ? TaskType.TASK : TaskType.BUG);
+                        task.setFeatureVersion(featureVersion);
+                        task.setOwner(getRandomUser());
+                        task.setAuthor(getRandomUser());
+                        task.setSummary("Название задачи, например, сделать форму авторизации.");
+                        task.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
+                        task.setPriority(rand.nextInt(30));
                         int es = 15 * (rand.nextInt(10) + 1);
-                        st.setEstimate(es);
+                        task.setEstimate(es);
                         WorkLog wl = null;
-                        if (rand.nextBoolean()) {
+                        if (version.isReleased() || rand.nextBoolean()) {
                             wl = new WorkLog();
-                            wl.setTask(st);
-
-                            //st.setProgress(es / (rand.nextInt(5) + 1));
-                            wl.setLogTime(es / (rand.nextInt(5) + 1));
-                            if (st.getProgress() < st.getEstimate()) {
-                                st.setStatus(TaskStatus.IN_PROGRESS);
+                            wl.setTask(task);
+                            wl.setUser(task.getAuthor());
+                            if (!version.isReleased()) {
+                                wl.setLogTime(es / (rand.nextInt(5) + 1));
+                                task.setStatus(TaskStatus.IN_PROGRESS);
                             } else {
-                                st.setStatus(TaskStatus.RESOLVED);
+                                wl.setLogTime(es);
+                                task.setStatus(TaskStatus.RESOLVED);
                             }
                         }
                         if (rand.nextBoolean()) {
                             Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
                             Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
-                            st.setAttachments(Arrays.asList(a1, a2));
+                            task.setAttachments(Arrays.asList(a1, a2));
                         }
                         List<TaskComment> cms = new ArrayList<TaskComment>();
                         if (rand.nextBoolean()) {
                             for (int x = rand.nextInt(10) + 1; x > 0; x--) {
                                 TaskComment cm = new TaskComment();
                                 cm.setUser(getRandomUser());
-                                cm.setTask(st);
+                                cm.setTask(task);
                                 cm.setText("Lorem ipsum dolorsit.");
 
                                 if (rand.nextBoolean()) {
@@ -147,48 +147,14 @@ public class ScVersion extends DataBaseScenario {
                                 cms.add(cm);
                             }
                         }
-                        taskDao.save(st);
+                        taskDao.save(task);
                         if (wl != null) {
                             workLogDao.save(wl);
                         }
-                        taskDao.updateTaskProgessTime(st);
+                        taskDao.updateTaskProgessTime(task);
                         if (!cms.isEmpty()) {
                             taskCommentDao.save(cms);
                         }
-                    }
-
-                    stc = rand.nextInt(3);
-                    for (int k = 0; k < stc; k++) {
-                        Task st = new Task();
-                        st.setType(TaskType.BUG);
-                        //                        st.setFeatureVersion(t);
-                        st.setFeature(t.getFeature());
-                        st.setVersion(t.getVersion());
-                        if (rand.nextBoolean()) {
-                            st.setOwner(getRandomUser());
-                        }
-                        st.setAuthor(getRandomUser());
-                        st.setSummary("Заголовок бага");
-                        st.setDescription("Подробное описание бага, с шагами воспроизведения скриншотами и т.д.");
-                        st.setPriority(rand.nextInt(10));
-                        int es = 15 * (rand.nextInt(10) + 1);
-                        st.setEstimate(es);
-                        if (rand.nextBoolean()) {
-
-                            st.setProgress(es / (rand.nextInt(5) + 1));
-                            if (st.getProgress() < st.getEstimate()) {
-                                st.setStatus(TaskStatus.IN_PROGRESS);
-                            } else {
-                                st.setStatus(TaskStatus.RESOLVED);
-                            }
-                        }
-                        if (rand.nextBoolean()) {
-                            Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
-                            Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
-                            st.setAttachments(Arrays.asList(a1, a2));
-                        }
-                        taskDao.save(st);
-                        taskDao.updateTaskProgessTime(st);
                     }
                 }
             }

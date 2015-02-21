@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.Identifiable;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 @Table(name = "work_log")
 public class WorkLog implements Identifiable {
     private int id;
+    private User user;
     private Task task;
     private int logTime;
     private String comment;
@@ -23,7 +25,20 @@ public class WorkLog implements Identifiable {
         this.id = id;
     }
 
-    @ManyToOne
+    @ForeignKey(name = "fk_worklog_user")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false, nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ForeignKey(name = "fk_worklog_task")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(updatable = false, nullable = false)
     public Task getTask() {
         return task;
     }

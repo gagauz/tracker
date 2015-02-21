@@ -28,8 +28,11 @@ public class ProjectMap {
     @Property
     private Version version;
 
-    @Property
+    @Property(write = false)
     private Feature feature;
+
+    @Property(write = false)
+    private FeatureVersion featureVersion;
 
     private Task task;
 
@@ -52,38 +55,40 @@ public class ProjectMap {
     private SecurityUserCreator securityUserCreator;
 
     private Map<Version, Map<Feature, FeatureVersion>> featureVersionMap;
-    private Map<Integer, Map<Integer, List<Task>>> bugsMap;
-    private Map<Integer, Map<Integer, List<Task>>> tasksMap;
+    private Map<FeatureVersion, List<Task>> bugsMap;
+    private Map<FeatureVersion, List<Task>> tasksMap;
+
+    private void initMap() {
+        featureVersionMap = CollectionFactory.newMap();
+        bugsMap = CollectionFactory.newMap();
+        tasksMap = CollectionFactory.newMap();
+        List<Version> versions = project.getVersions();
+        versions.add(null);
+        for (Version version : versions) {
+            Map<Feature, FeatureVersion> map = CollectionFactory.newMap();
+            for (Feature feature : getFeatures()) {
+                map.put(feature, null);
+            }
+            featureVersionMap.put(version, map);
+        }
+    }
 
     @Cached
     public Collection<Version> getVersions() {
         List<Version> versions = project.getVersions();
         if (null == featureVersionMap) {
-            featureVersionMap = CollectionFactory.newMap();
-            bugsMap = CollectionFactory.newMap();
-            tasksMap = CollectionFactory.newMap();
-            for (Version version : versions) {
-                Map<Feature, FeatureVersion> map = CollectionFactory.newMap();
-                Map<Integer, List<Task>> bugMap = CollectionFactory.newMap();
-                Map<Integer, List<Task>> taskMap = CollectionFactory.newMap();
-                for (Feature feature : getFeatures()) {
-                    map.put(feature, null);
-                    bugMap.put(feature.getId(), new ArrayList<Task>());
-                    taskMap.put(feature.getId(), new ArrayList<Task>());
-                }
-                featureVersionMap.put(version, map);
-                bugsMap.put(version.getId(), bugMap);
-                tasksMap.put(version.getId(), taskMap);
-            }
+            initMap();
 
             for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
                 featureVersionMap.get(featureVersion.getVersion()).put(featureVersion.getFeature(), featureVersion);
+                bugsMap.put(featureVersion, new ArrayList<Task>());
+                tasksMap.put(featureVersion, new ArrayList<Task>());
             }
             for (Task task : taskDao.findByProject(project)) {
                 if (task.getType() == TaskType.TASK) {
-                    tasksMap.get(task.getVersion().getId()).get(task.getFeature().getId()).add(task);
+                    tasksMap.get(task.getFeatureVersion()).add(task);
                 } else {
-                    bugsMap.get(task.getVersion().getId()).get(task.getFeature().getId()).add(task);
+                    bugsMap.get(task.getFeatureVersion()).add(task);
                 }
             }
         }
@@ -95,10 +100,14 @@ public class ProjectMap {
         return project.getFeatures();
     }
 
-    public FeatureVersion getFeatureVersion() {
+    public void setFeature(Feature featureLoop) {
         estimate = 0;
         progress = 0;
-        return featureVersionMap.get(version).get(feature);
+        feature = featureLoop;
+        if (featureVersionMap != null) {
+            Map<Feature, FeatureVersion> map = featureVersionMap.get(version);
+            featureVersion = null != map ? map.get(feature) : null;
+        }
     }
 
     void onCreateFeatureVersion(Feature feature, Version version) {
@@ -112,21 +121,21 @@ public class ProjectMap {
         featureVersionDao.save(featureVersion);
     }
 
-    Object onCreateTask(Feature feature, Version version) {
+    Object onCreateTask(FeatureVersion featureVersion) {
 
         newTask = new Task();
-        newTask.setFeature(feature);
-        newTask.setVersion(version);
+        newTask.setFeatureVersion(featureVersion);
+        //        newTask.setVersion(version);
 
         return taskZone.getBody();
     }
 
     public List<Task> getTasks() {
-        return tasksMap.get(version.getId()).get(feature.getId());
+        return tasksMap.get(featureVersion);
     }
 
     public List<Task> getBugs() {
-        return bugsMap.get(version.getId()).get(feature.getId());
+        return bugsMap.get(featureVersion);
     }
 
     public Task getTask() {

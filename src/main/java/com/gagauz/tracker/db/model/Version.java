@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "version", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"project_id", "version"})
+        @UniqueConstraint(columnNames = {"project_id", "name"})
 })
 public class Version implements Identifiable {
 
@@ -18,7 +18,7 @@ public class Version implements Identifiable {
     private Project project;
     private Date created = new Date();
     private Date updated = new Date();
-    private String version;
+    private String name;
     private List<FeatureVersion> featureVersion;
     private Date releaseDate = new Date();
     private boolean released = false;
@@ -48,12 +48,12 @@ public class Version implements Identifiable {
     }
 
     @Column(nullable = false)
-    public String getVersion() {
-        return version;
+    public String getName() {
+        return name;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @ForeignKey(name = "fk_version_features")

@@ -1,31 +1,16 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.ArrayListType;
-import com.gagauz.tracker.db.base.CollectionType;
 import com.gagauz.tracker.db.base.Identifiable;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "feature_version", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"feature_id", "version_id"})
-})
-@TypeDefs({
-        @TypeDef(name = "listOf.Attachment",
-                typeClass = ArrayListType.class,
-                parameters = {
-                        @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
-                        @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
-                }
-        )
 })
 public class FeatureVersion implements Identifiable, Serializable {
 
@@ -37,10 +22,7 @@ public class FeatureVersion implements Identifiable, Serializable {
     private User owner;
     private Date created = new Date();
     private Date updated = new Date();
-    //    private List<Task> tasks;
     private String description;
-
-    private List<Attachment> attachments;
 
     @Override
     @Id
@@ -65,7 +47,7 @@ public class FeatureVersion implements Identifiable, Serializable {
     }
 
     @ForeignKey(name = "fk_featureVersion_version")
-    @JoinColumn(name = "version_id", nullable = false)
+    @JoinColumn(name = "version_id", nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public Version getVersion() {
         return version;
@@ -134,16 +116,6 @@ public class FeatureVersion implements Identifiable, Serializable {
     //    public void setTasks(List<Task> tasks) {
     //        this.tasks = tasks;
     //    }
-
-    @Column(columnDefinition = "TEXT")
-    @Type(type = "listOf.Attachment")
-    public List<Attachment> getAttachments() {
-        return attachments;
-    }
-
-    public void setAttachments(List<Attachment> attachments) {
-        this.attachments = attachments;
-    }
 
     @Override
     public boolean equals(Object obj) {

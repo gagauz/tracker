@@ -16,10 +16,15 @@
 					<t:loop source="versions" value="version">
 						<tr>
 							<th class="version-col">
+								<t:if test="version">
 								<t:pagelink t:page="versioninfo" t:context="version">
-								Name: ${version.version}<br/>
-								Release date: ${version.releaseDate}
+								${message:version}: ${version.name}<br/>
+								${message:release-date}: ${version.releaseDate}
 								</t:pagelink>
+								<p:else>
+								${message:future-versions}
+								</p:else>
+								</t:if>
 							</th>
 							<t:loop source="features" value="feature">
 								<td class="task-col">
@@ -30,7 +35,7 @@
 										</div>
 										
 										<div class="tasks" t:type="if" t:test="tasks">
-											<div class="title">Tasks:</div>
+											<div class="title">${message:tasks-list}</div>
 											<ul>
 												<li t:type="loop" source="tasks" value="task">
 													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
@@ -41,7 +46,7 @@
 											</ul>
 										</div>
 										<div class="bugs" t:type="if" t:test="bugs">
-											<div class="title">Bugs:</div>
+											<div class="title">${message:bugs-list}</div>
 											<ul>
 												<li t:type="loop" source="bugs" value="task">
 													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
@@ -51,10 +56,10 @@
 												</li>
 											</ul>
 										</div>
-										<t:eventlink t:event="createTask" t:context="[feature, version]" t:zone="taskZone">Create task or bug</t:eventlink>
+										<t:eventlink t:event="createTask" t:context="[feature, version]" t:zone="taskZone">${message:create-bug-or-task}</t:eventlink>
 										<div class="progress">
 											<div class="row">
-												Total progress:
+												${message:total-progress}
 												<t:ProgressBar progress="progress" estimate="estimate"/>
 											</div>
 										</div>
@@ -62,7 +67,11 @@
 										
 										
 									<p:else>
-										<t:eventlink t:event="createFeatureVersion" t:context="[feature, version]">Create feature version</t:eventlink>
+										<t:if test="version">
+											<t:eventlink t:event="createFeatureVersion" t:context="[feature, version]">
+												${message:create-feature-version} 
+											</t:eventlink>
+										</t:if>
 									</p:else>
 									</t:if>
 									</div>

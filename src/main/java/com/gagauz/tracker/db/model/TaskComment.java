@@ -1,22 +1,13 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import com.gagauz.tracker.db.base.Identifiable;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 
-import com.gagauz.tracker.db.base.Identifiable;
+import javax.persistence.*;
+
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "task_comment")
@@ -40,6 +31,7 @@ public class TaskComment implements Identifiable {
         this.id = id;
     }
 
+    @ForeignKey(name = "fk_taskcomment_user")
     @ManyToOne(fetch = FetchType.LAZY)
     public User getUser() {
         return user;
@@ -49,6 +41,7 @@ public class TaskComment implements Identifiable {
         this.user = user;
     }
 
+    @ForeignKey(name = "fk_taskcomment_task")
     @ManyToOne(fetch = FetchType.LAZY)
     public Task getTask() {
         return task;

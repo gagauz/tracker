@@ -13,18 +13,6 @@
 
 	<hr/>
 
-    <h3>Project versions</h3>
-
-	<t:eventlink t:event="createVersion">Create new version</t:eventlink>
-	
-	<div t:id="versionForm" project="project" version="newVersion" />
-
-    <t:grid source="versions" row="version" add="tasks" exclude="created,updated">
-    	<p:tasksCell>
-    		<t:pagelink t:page="versioninfo" t:context="version">Tasks</t:pagelink>
-    	</p:tasksCell>
-    </t:grid>
-    
     <h3>Project stages</h3>
     <t:eventlink t:event="createStage">Create new stage</t:eventlink>
     

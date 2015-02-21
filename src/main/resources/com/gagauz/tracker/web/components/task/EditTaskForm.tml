@@ -7,7 +7,7 @@
 		<t:hidden t:value="task.version"/>
 		<div class="title">
 	    	<h1><a href="#" t:type="pagelink" t:page="featureinfo" t:context="task.feature">${task.feature.name}</a>
-	    		/ <a href="#" t:type="pagelink" t:page="versioninfo" t:context="task.version">${task.version.version}</a>
+	    		/ <a href="#" t:type="pagelink" t:page="versioninfo" t:context="task.version">${task.version.name}</a>
 	    		/ <a href="#" t:type="pagelink" t:page="projectinfo" t:context="task.version.project">${task.version.project.name}</a></h1>
 	    	<h2>New <t:select value="task.type" blankOption="never"/></h2>
 	    </div>
@@ -23,7 +23,7 @@
 					<th>Estimate:</th>
 					<td><t:textfield t:value="task.estimate" size="4"/></td>
 					<th>Version:</th>
-					<td>${task.version.version}</td>
+					<td>${task.version.name}</td>
 				</tr>
 				<tr>
 					<th>Priority:</th>

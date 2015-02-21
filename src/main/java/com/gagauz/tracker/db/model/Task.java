@@ -1,21 +1,35 @@
 package com.gagauz.tracker.db.model;
 
+import com.gagauz.tracker.db.base.ArrayListType;
 import com.gagauz.tracker.db.base.Identifiable;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "task")
+@TypeDefs({
+        @TypeDef(name = "listOf.Attachment",
+                typeClass = ArrayListType.class,
+                parameters = {
+                        @Parameter(name = com.gagauz.tracker.db.base.CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
+                        @Parameter(name = com.gagauz.tracker.db.base.CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
+                }
+        )
+})
 public class Task implements Identifiable {
     private int id;
     private TaskType type;
     private TaskStatus status = TaskStatus.OPEN;
-    private Feature feature;
-    private Version version;
+    private FeatureVersion featureVersion;
+    //    private Feature feature;
+    //    private Version version;
     private User author;
     private User owner;
     private Date created = new Date();
@@ -62,26 +76,42 @@ public class Task implements Identifiable {
         this.status = status;
     }
 
-    @JoinColumn(name = "feature_id", nullable = false)
+    @ForeignKey(name = "fk_task_featureVersion")
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    public FeatureVersion getFeatureVersion() {
+        return featureVersion;
+    }
+
+    public void setFeatureVersion(FeatureVersion featureVersion) {
+        this.featureVersion = featureVersion;
+    }
+
+    //    @ForeignKey(name = "fk_task_feature")
+    //    @JoinColumn(nullable = false)
+    //    @ManyToOne(fetch = FetchType.LAZY)
+    @Transient
     public Feature getFeature() {
-        return feature;
+        return featureVersion.getFeature();
     }
 
-    public void setFeature(Feature feature) {
-        this.feature = feature;
-    }
+    //    public void setFeature(Feature feature) {
+    //        this.feature = feature;
+    //    }
 
-    @JoinColumn(name = "version_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    //    @ForeignKey(name = "fk_task_version")
+    //    @JoinColumn(nullable = true)
+    //    @ManyToOne(fetch = FetchType.LAZY)
+    @Transient
     public Version getVersion() {
-        return version;
+        return featureVersion.getVersion();
     }
 
-    public void setVersion(Version version) {
-        this.version = version;
-    }
+    //    public void setVersion(Version version) {
+    //        this.version = version;
+    //    }
 
+    @ForeignKey(name = "fk_task_author")
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getAuthor() {
@@ -92,6 +122,7 @@ public class Task implements Identifiable {
         this.author = author;
     }
 
+    @ForeignKey(name = "fk_task_owner")
     @JoinColumn(nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getOwner() {
