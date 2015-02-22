@@ -49,4 +49,6 @@
   <classpathentry kind="var" path="M2_REPO/org/springframework/spring-tx/4.0.2.RELEASE/spring-tx-4.0.2.RELEASE.jar" sourcepath="M2_REPO/org/springframework/spring-tx/4.0.2.RELEASE/spring-tx-4.0.2.RELEASE-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/postgresql/postgresql/9.3-1100-jdbc4/postgresql-9.3-1100-jdbc4.jar" sourcepath="M2_REPO/org/postgresql/postgresql/9.3-1100-jdbc4/postgresql-9.3-1100-jdbc4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/mchange/c3p0/0.9.5/c3p0-0.9.5.jar" sourcepath="M2_REPO/com/mchange/c3p0/0.9.5/c3p0-0.9.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/mchange/mchange-commons-java/0.2.9/mchange-commons-java-0.2.9.jar" sourcepath="M2_REPO/com/mchange/mchange-commons-java/0.2.9/mchange-commons-java-0.2.9-sources.jar"/>
 </classpath>

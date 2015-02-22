@@ -16,7 +16,7 @@ public class DevDataSource extends SimpleDriverDataSource implements DataSource 
             throw new RuntimeException(e);
         }
         setUrl(System.getProperty("tracker.jdbc-url"));
-        setUsername("b4f");
+        setUsername(System.getProperty("tracker.db-username", "b4f"));
         setPassword("office");
         Properties props = new Properties();
         props.setProperty("cacheServerConfiguration", "true");
@@ -25,5 +25,4 @@ public class DevDataSource extends SimpleDriverDataSource implements DataSource 
         props.setProperty("statementInterceptors", "com.gagauz.tracker.beans.setup.StatementInterceptor");
         setConnectionProperties(props);
     }
-
 }
