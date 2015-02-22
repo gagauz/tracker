@@ -5,11 +5,15 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import javax.sql.DataSource;
 
 import java.sql.Driver;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 public class DevDataSource extends SimpleDriverDataSource implements DataSource {
 
     public DevDataSource() {
+        for (Entry e : System.getProperties().entrySet()) {
+            System.out.format("%1$40s = %2$s\n", e.getKey(), e.getValue());
+        }
         try {
             setDriverClass((Class<? extends Driver>) Class.forName(System.getProperty("tracker.jdbc-driver")));
         } catch (ClassNotFoundException e) {
