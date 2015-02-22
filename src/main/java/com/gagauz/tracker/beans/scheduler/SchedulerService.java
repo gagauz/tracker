@@ -73,6 +73,7 @@ public class SchedulerService extends HibernateSessionManager {
                             System.out.println("--------------------------------------------------------------------");
                         }
                     }
+                    Thread.sleep(15000);
                 } catch (Exception e) {
                     //TODO: Record error
                     e.printStackTrace();

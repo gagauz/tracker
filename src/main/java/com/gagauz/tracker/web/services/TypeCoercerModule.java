@@ -1,19 +1,12 @@
 package com.gagauz.tracker.web.services;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 
-import com.gagauz.tracker.db.model.Role;
+import java.util.*;
 
 public class TypeCoercerModule {
 
@@ -34,20 +27,5 @@ public class TypeCoercerModule {
             }
         }));
 
-        configuration.add(CoercionTuple.create(Collections.<String>emptyList().getClass(), Role[].class,
-                new Coercion<List<String>, Role[]>() {
-
-                    @Override
-                    public Role[] coerce(List<String> input) {
-                        if (null == input || input.isEmpty()) {
-                            return Role.EMPTY_ARRAY;
-                        }
-                        Role[] array = new Role[input.size()];
-                        for (int i = 0; i < input.size(); i++) {
-                            array[i] = Role.valueOf(input.get(i));
-                        }
-                        return array;
-                    }
-                }));
     }
 }

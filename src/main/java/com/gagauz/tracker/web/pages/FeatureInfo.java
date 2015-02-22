@@ -6,14 +6,12 @@ import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Task;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.utils.Comparators;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Secured
 public class FeatureInfo {
@@ -43,6 +41,12 @@ public class FeatureInfo {
 
     Object onPassivate() {
         return feature;
+    }
+
+    public List<FeatureVersion> getFeatureVersions() {
+        List<FeatureVersion> list = feature.getFeatureVersions();
+        Collections.sort(list, Comparators.FEATURE_VERSION_BY_VERSION_COMPARATOR);
+        return list;
     }
 
     @Cached

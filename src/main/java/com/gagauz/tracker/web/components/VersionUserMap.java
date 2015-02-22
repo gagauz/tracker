@@ -5,6 +5,7 @@ import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TaskDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.utils.Comparators;
 import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.*;
@@ -15,19 +16,6 @@ import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import java.util.*;
 
 public class VersionUserMap {
-
-    private static final Comparator<User> USER_NAME_COMPARATOR = new Comparator<User>() {
-        @Override
-        public int compare(User o1, User o2) {
-            if (null == o1) {
-                return 1;
-            }
-            if (null == o2) {
-                return -1;
-            }
-            return o1.getName().compareTo(o2.getName());
-        }
-    };
 
     @Parameter(allowNull = false, required = true, principal = true)
     private Version version;
@@ -92,7 +80,7 @@ public class VersionUserMap {
             minTime = 80 / (minTime + 1);
         }
         List<User> users = new ArrayList<User>(userTaskMap.keySet());
-        Collections.sort(users, USER_NAME_COMPARATOR);
+        Collections.sort(users, Comparators.USER_BY_NAME_COMPARATOR);
 
         return users;
     }
