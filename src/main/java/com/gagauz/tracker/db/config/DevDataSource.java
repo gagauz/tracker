@@ -17,7 +17,7 @@ public class DevDataSource extends SimpleDriverDataSource implements DataSource 
         }
         setUrl(System.getProperty("tracker.jdbc-url"));
         setUsername(System.getProperty("tracker.db-username", "b4f"));
-        setPassword("office");
+        setPassword(System.getProperty("tracker.db-password", "office"));
         Properties props = new Properties();
         props.setProperty("cacheServerConfiguration", "true");
         props.setProperty("characterSetResults", "UTF-8");
