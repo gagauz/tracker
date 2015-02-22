@@ -1,2 +1,2 @@
-call mvn dependency:tree > tree.txt
+call mvn -v dependency:tree > tree.txt
 pause
