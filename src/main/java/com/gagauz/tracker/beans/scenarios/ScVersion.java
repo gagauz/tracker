@@ -48,10 +48,17 @@ public class ScVersion extends DataBaseScenario {
             project.setKey1("TRACKER");
             project.setName("Трекер (этот проект)");
             CvsRepo repo = new CvsRepo();
-            repo.setUrl("https://github.com/gagauz/tracker.git");
-            repo.setUsername("gagauz");
-            repo.setPassword("p35neog0d");
-            repo.setBranch("master");
+            if (rand.nextBoolean()) {
+                repo.setType(CvsType.GIT);
+                repo.setUrl("https://github.com/gagauz/tracker.git");
+                repo.setUsername("gagauz");
+                repo.setPassword("p35neog0d");
+                repo.setBranch("master");
+            } else {
+                repo.setType(CvsType.SVN);
+                repo.setUrl("file:///R:/projects-my/tracker-svn-repo");
+                repo.setBranch("trunk");
+            }
             project.setCvsRepo(repo);
             projectDao.save(project);
 

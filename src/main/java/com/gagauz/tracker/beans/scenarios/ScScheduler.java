@@ -2,7 +2,6 @@ package com.gagauz.tracker.beans.scenarios;
 
 import com.gagauz.tracker.beans.dao.ProjectDao;
 import com.gagauz.tracker.beans.dao.StageDao;
-import com.gagauz.tracker.beans.dao.StageTriggerDao;
 import com.gagauz.tracker.beans.setup.DataBaseScenario;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Stage;
@@ -22,9 +21,6 @@ public class ScScheduler extends DataBaseScenario {
     @Autowired
     private StageDao stageDao;
 
-    @Autowired
-    private StageTriggerDao stageTriggerDao;
-
     @Override
     protected DataBaseScenario[] getDependsOn() {
         return new DataBaseScenario[] {scVersion};
@@ -40,13 +36,10 @@ public class ScScheduler extends DataBaseScenario {
             stageDao.save(s);
 
             StageTrigger t = new StageTrigger();
-            t.setName("Scheduler every 10 sec");
             t.setData("git ");
-            t.setParent(s);
             t.setEnabled(true);
             t.setType(Type.SCRIPT);
             t.setCron("0/10 * * ? * ?");
-            stageTriggerDao.save(t);
 
         }
     }

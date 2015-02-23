@@ -3,7 +3,6 @@ package com.gagauz.tracker.web.pages;
 import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.StageActionDao;
 import com.gagauz.tracker.beans.dao.StageDao;
-import com.gagauz.tracker.beans.dao.StageTriggerDao;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.StageAction;
@@ -42,9 +41,6 @@ public class StageInfo {
     private StageDao stageDao;
 
     @Inject
-    private StageTriggerDao stageTriggerDao;
-
-    @Inject
     private StageActionDao stageActionDao;
 
     @Inject
@@ -77,23 +73,6 @@ public class StageInfo {
 
     void onCancelTrigger() {
         newTrigger = null;
-    }
-
-    void onDropTrigger(StageTrigger trigger) {
-        stage.getTriggers().remove(trigger);
-        stageDao.save(stage);
-        schedulerService.updateNonTransactional();
-    }
-
-    void onSuccessFromCreateTriggerForm() {
-        newTrigger.setParent(stage);
-        stageTriggerDao.save(newTrigger);
-        stageTriggerDao.flush();
-        if (newTrigger.getCron() != null) {
-            schedulerService.updateNonTransactional();
-        }
-        newTrigger = null;
-
     }
 
     void onCreateStageAction() {

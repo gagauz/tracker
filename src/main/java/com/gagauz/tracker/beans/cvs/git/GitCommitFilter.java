@@ -1,8 +1,8 @@
 package com.gagauz.tracker.beans.cvs.git;
 
-import com.gagauz.tracker.beans.cvs.CommitFilter;
+import com.gagauz.tracker.beans.cvs.CvsCommitFilter;
 
-public class GitCommitFilter implements CommitFilter {
+public class GitCommitFilter implements CvsCommitFilter {
     private String grep;
 
     public String getGrep() {

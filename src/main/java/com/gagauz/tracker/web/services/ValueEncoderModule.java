@@ -1,30 +1,9 @@
 package com.gagauz.tracker.web.services;
 
+import com.gagauz.tracker.beans.dao.*;
+import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.services.ValueEncoderFactory;
-
-import com.gagauz.tracker.beans.dao.FeatureDao;
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.ProjectDao;
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
-import com.gagauz.tracker.beans.dao.StageActionDao;
-import com.gagauz.tracker.beans.dao.StageDao;
-import com.gagauz.tracker.beans.dao.StageTriggerDao;
-import com.gagauz.tracker.beans.dao.TaskCommentDao;
-import com.gagauz.tracker.beans.dao.TaskDao;
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.db.model.Stage;
-import com.gagauz.tracker.db.model.StageAction;
-import com.gagauz.tracker.db.model.StageTrigger;
-import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.db.model.TaskComment;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.model.Version;
 
 public class ValueEncoderModule {
 
@@ -38,7 +17,6 @@ public class ValueEncoderModule {
                                                     final TaskCommentDao taskCommentDao,
                                                     final RoleGroupDao roleGroupDao,
                                                     final StageDao stageDao,
-                                                    final StageTriggerDao stageTriggerDao,
                                                     final StageActionDao stageActionDao
             ) {
         configuration.add(User.class, new CommonEntityValueEncoderFactory(userDao));
@@ -51,7 +29,6 @@ public class ValueEncoderModule {
         configuration.add(RoleGroup.class, new CommonEntityValueEncoderFactory(roleGroupDao));
         configuration.add(Stage.class, new CommonEntityValueEncoderFactory(stageDao));
         configuration.add(StageAction.class, new CommonEntityValueEncoderFactory(stageActionDao));
-        configuration.add(StageTrigger.class, new CommonEntityValueEncoderFactory(stageTriggerDao));
     }
 
 }

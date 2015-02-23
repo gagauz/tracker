@@ -28,14 +28,13 @@ public class Task implements Identifiable {
     private TaskType type;
     private TaskStatus status = TaskStatus.OPEN;
     private FeatureVersion featureVersion;
-    //    private Feature feature;
-    //    private Version version;
     private User author;
     private User owner;
     private Date created = new Date();
     private Date updated;
     private String summary;
     private String description;
+    private String cvsVersion;
     private int estimate;
     private int progress;
     private int priority;
@@ -85,6 +84,9 @@ public class Task implements Identifiable {
 
     public void setFeatureVersion(FeatureVersion featureVersion) {
         this.featureVersion = featureVersion;
+        if (featureVersion != null) {
+            cvsVersion = featureVersion.getFeature().getProject().getCurrentCvsVersion();
+        }
     }
 
     //    @ForeignKey(name = "fk_task_feature")
@@ -149,6 +151,15 @@ public class Task implements Identifiable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(updatable = false)
+    public String getCvsVersion() {
+        return cvsVersion;
+    }
+
+    public void setCvsVersion(String cvsVersion) {
+        this.cvsVersion = cvsVersion;
     }
 
     @Column(updatable = false)

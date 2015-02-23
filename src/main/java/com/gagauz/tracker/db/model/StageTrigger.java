@@ -1,52 +1,14 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Child;
-import com.gagauz.tracker.db.base.Identifiable;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "stage_trigger")
-public class StageTrigger implements Identifiable, Child<Stage> {
-    private int id;
-    private Stage parent;
-    private String name;
+@Embeddable
+public class StageTrigger {
     private String data;
     private String cron;
     private boolean enabled = true;
     private Type type;
-
-    @Id
-    @GeneratedValue
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    public Stage getParent() {
-        return parent;
-    }
-
-    @Override
-    public void setParent(Stage parent) {
-        this.parent = parent;
-    }
-
-    @Column(nullable = false)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Column(nullable = true)
     public String getData() {
@@ -82,16 +44,6 @@ public class StageTrigger implements Identifiable, Child<Stage> {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
     public enum Type {

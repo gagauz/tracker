@@ -17,7 +17,7 @@ public class Stage implements Identifiable {
     private String name;
     private String description;
     private Stage parent;
-    private List<StageTrigger> triggers;
+    private StageTrigger trigger;
     private List<StageAction> actions;
 
     @Id
@@ -91,13 +91,13 @@ public class Stage implements Identifiable {
         this.description = description;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    public List<StageTrigger> getTriggers() {
-        return triggers;
+    @Embedded
+    public StageTrigger getTrigger() {
+        return trigger;
     }
 
-    public void setTriggers(List<StageTrigger> triggers) {
-        this.triggers = triggers;
+    public void setTrigger(StageTrigger trigger) {
+        this.trigger = trigger;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = {CascadeType.ALL}, orphanRemoval = true)

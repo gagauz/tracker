@@ -1,11 +1,8 @@
 package com.gagauz.tracker.beans.scheduler;
 
 import com.gagauz.tracker.beans.common.HibernateSessionManager;
-import com.gagauz.tracker.beans.dao.StageTriggerDao;
-import com.gagauz.tracker.db.model.StageTrigger;
-import com.gagauz.tracker.db.model.StageTrigger.Type;
-import com.gagauz.tracker.utils.BashUtils;
-import com.gagauz.tracker.utils.PathUtils;
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.db.model.Project;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TriggerContext;
@@ -13,7 +10,6 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -24,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class SchedulerService extends HibernateSessionManager {
 
     @Autowired
-    private StageTriggerDao stageTriggerDao;
+    private ProjectDao projectDao;
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -38,10 +34,10 @@ public class SchedulerService extends HibernateSessionManager {
 
     public void updateNonTransactional() {
         executor.shutdownNow();
-        List<StageTrigger> schedulers = stageTriggerDao.findEnabled();
+        List<Project> schedulers = projectDao.findAll();
         executor = Executors.newScheduledThreadPool(schedulers.size(), this);
-        for (final StageTrigger scheduler : schedulers) {
-            executor.execute(createRunnable(scheduler.getId(), new CronTrigger(scheduler.getCron())));
+        for (final Project scheduler : schedulers) {
+            executor.execute(createRunnable(scheduler.getId(), new CronTrigger("*/1 * * ? * ?")));
         }
     }
 
@@ -59,19 +55,19 @@ public class SchedulerService extends HibernateSessionManager {
                     //Skip first execution
                     if (scheduledExecTime != null) {
                         System.out.println("Execute [" + schedulerId + "]");
-                        StageTrigger trigger = stageTriggerDao.findById(schedulerId);
-                        System.out.println("Execute trigger " + trigger.getData());
-                        if (trigger.getType() == Type.SCRIPT) {
-                            StringBuilder sb = new StringBuilder();
-
-                            String projectDir = PathUtils.getProjectBaseDir(trigger.getParent().getProject());
-                            File dir = new File(projectDir);
-
-                            BashUtils.execute(dir, sb, trigger.getData());
-                            System.out.println("--------------------------------------------------------------------");
-                            System.out.println(sb.toString());
-                            System.out.println("--------------------------------------------------------------------");
-                        }
+                        //                        StageTrigger trigger = stageTriggerDao.findById(schedulerId);
+                        //                        System.out.println("Execute trigger " + trigger.getData());
+                        //                        if (trigger.getType() == Type.SCRIPT) {
+                        //                            StringBuilder sb = new StringBuilder();
+                        //
+                        //                            String projectDir = PathUtils.getProjectBaseDir(trigger.getParent().getProject());
+                        //                            File dir = new File(projectDir);
+                        //
+                        //                            BashUtils.execute(dir, sb, trigger.getData());
+                        //                            System.out.println("--------------------------------------------------------------------");
+                        //                            System.out.println(sb.toString());
+                        //                            System.out.println("--------------------------------------------------------------------");
+                        //                        }
                     }
                     Thread.sleep(15000);
                 } catch (Exception e) {

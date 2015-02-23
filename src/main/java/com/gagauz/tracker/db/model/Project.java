@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.Identifiable;
+import com.gagauz.tracker.utils.PathUtils;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ public class Project implements Identifiable {
     private CvsRepo cvsRepo;
     private List<Version> versions;
     private List<Feature> features;
+    private String currentCvsVersion;
 
     @Override
     @Id
@@ -78,11 +80,26 @@ public class Project implements Identifiable {
 
     @Embedded
     public CvsRepo getCvsRepo() {
+        if (null == cvsRepo) {
+            cvsRepo = new CvsRepo();
+        }
+        if (null == cvsRepo.getRepoPath()) {
+            cvsRepo.setRepoPath(PathUtils.getProjectBaseDir(this));
+        }
         return cvsRepo;
     }
 
     public void setCvsRepo(CvsRepo cvsRepo) {
         this.cvsRepo = cvsRepo;
+    }
+
+    @Column
+    public String getCurrentCvsVersion() {
+        return currentCvsVersion;
+    }
+
+    public void setCurrentCvsVersion(String currentCvsVersion) {
+        this.currentCvsVersion = currentCvsVersion;
     }
 
 }

@@ -1,10 +1,11 @@
-package com.gagauz.tracker.beans.cvs;
+package com.gagauz.tracker.beans.cvs.wrapper;
 
+import com.gagauz.tracker.beans.cvs.CvsCommitFilter;
+import com.gagauz.tracker.beans.cvs.CvsWrapper;
 import com.gagauz.tracker.beans.cvs.git.GitCommitFilter;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.utils.BashUtils;
-import com.gagauz.tracker.utils.PathUtils;
 import com.gagauz.tracker.utils.StringUtils;
 
 import java.io.File;
@@ -14,7 +15,6 @@ import java.util.List;
 
 public class GitCvsWrapper implements CvsWrapper {
 
-    private static String SOURCES_DIR = "sources";
     private File repoDir;
 
     @Override
@@ -25,7 +25,7 @@ public class GitCvsWrapper implements CvsWrapper {
             throw new RuntimeException("Failed to init Git wrapper. Chek if git executable exits and available via system Path variable.");
         }
 
-        File repoDir = new File(PathUtils.getProjectBaseDir(project) + '/' + SOURCES_DIR);
+        File repoDir = new File(project.getCvsRepo().getRepoPath());
         if (!repoDir.exists() || !repoDir.isDirectory()) {
             System.err.println("Directory doesn't exists, create new.");
             repoDir.mkdirs();
@@ -50,7 +50,7 @@ public class GitCvsWrapper implements CvsWrapper {
 
             url = url.replace("://", "://" + cred);
         }
-        String out = BashUtils.execute(directory.getParentFile(), "git clone %s %s", url, SOURCES_DIR);
+        String out = BashUtils.execute(directory.getParentFile(), "git clone %s %s", url, directory.getName());
         System.out.println(out);
     }
 
@@ -97,7 +97,7 @@ public class GitCvsWrapper implements CvsWrapper {
     }
 
     @Override
-    public List<Commit> getCommits(CommitFilter filter) {
+    public List<Commit> getCommits(CvsCommitFilter filter) {
         GitCommitFilter gitFilter = (GitCommitFilter) filter;
         String log = log(gitFilter.getGrep());
         List<Commit> commits = new ArrayList<Commit>();
