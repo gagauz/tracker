@@ -167,6 +167,11 @@ public class BashUtils {
         int r = 0;
         while ((r = is.read(charArray)) > 0) {
             sb.append(new String(charArray, 0, r - 1));
+            //            try {
+            //                Thread.sleep(10);
+            //            } catch (InterruptedException e) {
+            //                e.printStackTrace();
+            //            }
         }
     }
 }

@@ -1,10 +1,9 @@
 package com.gagauz.tracker.beans.cvs.wrapper;
 
-import com.gagauz.tracker.beans.cvs.CvsCommitFilter;
 import com.gagauz.tracker.beans.cvs.CvsWrapper;
-import com.gagauz.tracker.beans.cvs.git.GitCommitFilter;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Task;
 import com.gagauz.tracker.utils.BashUtils;
 import com.gagauz.tracker.utils.StringUtils;
 
@@ -97,9 +96,9 @@ public class GitCvsWrapper implements CvsWrapper {
     }
 
     @Override
-    public List<Commit> getCommits(CvsCommitFilter filter) {
-        GitCommitFilter gitFilter = (GitCommitFilter) filter;
-        String log = log(gitFilter.getGrep());
+    public List<Commit> getCommits(Task task) {
+        String grep = task.getType() + " #" + task.getId();
+        String log = log(grep);
         List<Commit> commits = new ArrayList<Commit>();
         for (String cl : log.split(">>>")) {
             if (!"".equals(cl)) {

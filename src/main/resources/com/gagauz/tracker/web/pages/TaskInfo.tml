@@ -43,8 +43,6 @@
     
     <h2>Stages</h2>
     <div class="block">
-    	<t:loop source="stages" value="stage">
-    	</t:loop>
     </div>
     
     <h2>Code changes</h2>

@@ -12,19 +12,7 @@
     </t:grid>
 
 	<hr/>
-
-    <h3>Project stages</h3>
-    <t:eventlink t:event="createStage">Create new stage</t:eventlink>
     
-    <div t:id="stageForm" project="project" />
-    
-    <t:grid source="stages" row="stage" exclude="created,updated" add="view">
-    	<p:viewCell>
-    		<t:pagelink t:page="stageinfo" t:context="stage">View</t:pagelink>
-    	</p:viewCell>
-    </t:grid>
-    
-    <hr/>
     
     <t:ProjectMap project="project"/>
 

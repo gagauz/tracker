@@ -6,8 +6,6 @@ import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.web.components.stage.StageForm;
-import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -16,9 +14,6 @@ import java.util.List;
 
 @Secured({Role.PROJECT_USER, Role.PROJECT_ADMIN})
 public class ProjectInfo {
-
-    @Component
-    private StageForm stageForm;
 
     @Property
     private Project project;
@@ -78,11 +73,6 @@ public class ProjectInfo {
         newVersion.setProject(project);
     }
 
-    void onCreateStage() {
-        newStage = new Stage();
-        newStage.setProject(project);
-    }
-
     public List<Feature> getUserStories() {
         return featureDao.findByProject(project);
     }
@@ -93,10 +83,6 @@ public class ProjectInfo {
 
     public List<RoleGroup> getRoleGroups() {
         return roleGroupDao.findByProject(project);
-    }
-
-    public List<Stage> getStages() {
-        return stageDao.findByProject(project);
     }
 
 }

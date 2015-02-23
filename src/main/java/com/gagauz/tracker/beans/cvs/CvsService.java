@@ -1,6 +1,5 @@
 package com.gagauz.tracker.beans.cvs;
 
-import com.gagauz.tracker.beans.cvs.git.GitCommitFilter;
 import com.gagauz.tracker.beans.cvs.wrapper.GitCvsWrapper;
 import com.gagauz.tracker.beans.cvs.wrapper.SvnCvsWrapper;
 import com.gagauz.tracker.beans.dao.ProjectDao;
@@ -35,9 +34,7 @@ public class CvsService {
             wrapper = initProjectRepo(task.getFeature().getProject());
         }
 
-        GitCommitFilter filter = new GitCommitFilter();
-        filter.setGrep(task.getType().name() + "\\s#" + task.getId());
-        return wrapper.getCommits(filter);
+        return wrapper.getCommits(task);
     }
 
     private CvsWrapper initProjectRepo(Project project) {
