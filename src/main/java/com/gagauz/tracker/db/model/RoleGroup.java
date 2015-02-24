@@ -75,7 +75,7 @@ public class RoleGroup implements Identifiable {
 
     @Override
     public int hashCode() {
-        return (null == project ? 0 : project.getId()) + name.hashCode();
+        return id;
     }
 
     @Override

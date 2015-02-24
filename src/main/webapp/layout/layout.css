@@ -242,7 +242,7 @@ div.menu a {
 .project-map table {}
 .project-map a {color:navy}
 .project-map .feature-col {border:1px solid gray;}
-.project-map .feature-col a {padding:5px;background-color:#990000;color:white;display:block;font-weight:bold;text-align:left;}
+.project-map .feature-col a {padding:5px;background-color:#006;color:white;display:block;font-weight:bold;text-align:left;}
 .project-map .feature-col a:hover {background-color:#CC0000;}
 .project-map .version-col {}
 .project-map .version-col a{background-color:#006600;color:white;display:block;padding:10px;font-weight:bold;text-align:left;height:100%;}

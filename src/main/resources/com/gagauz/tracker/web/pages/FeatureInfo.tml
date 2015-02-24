@@ -10,12 +10,11 @@
 		<t:if test="editMode">
 			<t:BeanEditForm t:id="editForm" object="feature" exclude="id, created, updated" />
 			<p:else>
-				<t:eventlink t:event="edit">Edit</t:eventlink>
+				<t:eventlink class="edit button" t:event="edit">Edit</t:eventlink>
 		    	<div>
 				    <p>${feature.description}</p>
 				    <p>Creator: ${feature.creator.name}</p>
 				    <p>Created: ${date:feature.created}</p>
-				    <p>Versions changes</p>
 				</div>
 				</p:else>
 		</t:if>

@@ -17,11 +17,11 @@
 			</p:roles>
 		
 		</t:beaneditform>
-		<t:eventlink event="reset">${message:reset}</t:eventlink>
+		<t:eventlink t:event="reset">${message:reset}</t:eventlink>
 	</div>
 	<br/>
 	<p:else>
-	<t:eventlink event="create" context="[project]">${message:create}</t:eventlink>
+	<t:eventlink class="add button" t:event="create" context="[project]">${message:create}</t:eventlink>
 	</p:else>
 	</t:if>
 
