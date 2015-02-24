@@ -11,22 +11,35 @@
 		<div id="header" class="header">
 			<t:MainMenu />
 		</div>
-		<div class="page">
-			<!-- start sidebar -->
-			<div class="sidebar">
-				<t:delegate to="sidebar" />
-			</div>
-			<!-- end sidebar -->
-			<!-- start content -->
-			<div id="page-content">
-				<t:body />
-			</div>
-			<!-- end content -->
-			<br style="clear: both;" />
-		</div>
-		<div id="footer" class="footer">
-			
-		</div>
+		<table id="page-wrapper">
+			<tr>
+				<td valign="top">
+					<div id="page-menu">
+						<t:delegate to="sidebar" />
+						<ul>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+							<li><a href="#">Menu item</a></li>
+						
+						</ul>
+					</div>
+				</td>
+				<td valign="top">
+					<div id="page-content"> 
+						<t:body />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="footer" class="footer" colspan="2"></td>		
+			</tr>
+		</table>
 	</div>
 </body>
 </html>

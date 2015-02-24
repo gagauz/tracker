@@ -38,7 +38,7 @@
 											<div class="title">${message:tasks-list}</div>
 											<ul>
 												<li t:type="loop" source="tasks" value="task">
-													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
+													<t:pagelink class="${task.type}" t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
 													<!-- 
 													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
 													 -->
@@ -49,7 +49,7 @@
 											<div class="title">${message:bugs-list}</div>
 											<ul>
 												<li t:type="loop" source="bugs" value="task">
-													<t:pagelink t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
+													<t:pagelink class="${task.type}" t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
 													<!-- 
 													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
 													 -->

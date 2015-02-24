@@ -2,7 +2,7 @@
 	<t:loop source="comments" value="comment">
 		<div class="comment" id="task-comment-${comment.id}">
 			<div class="date">
-				<a href="#${comment.user.id}">${comment.author.name}</a> 
+				<a href="#${comment.author.id}">${comment.author.name}</a> 
 				<t:if test="comment.updated">
 				<span>last edited</span> ${date:comment.updated}
 				<p:else>
