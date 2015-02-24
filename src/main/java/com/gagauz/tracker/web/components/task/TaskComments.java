@@ -55,7 +55,7 @@ public class TaskComments {
     Object onSubmitFromCommentForm(int id) {
         if (!commentForm.getHasErrors()) {
             newComment.setId(id);
-            newComment.setUser((User) securityUser);
+            newComment.setAuthor((User) securityUser);
             newComment.setTask(task);
             taskCommentDao.save(newComment);
             newComment = null;
@@ -99,7 +99,7 @@ public class TaskComments {
     }
 
     public boolean isUserComment() {
-        return null != securityUser && comment.getUser().equals(securityUser);
+        return null != securityUser && comment.getAuthor().equals(securityUser);
     }
 
     public String getParentZoneId() {

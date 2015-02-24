@@ -56,7 +56,7 @@ public class Task implements Identifiable {
     }
 
     @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     public TaskType getType() {
         return type;
     }
@@ -66,7 +66,7 @@ public class Task implements Identifiable {
     }
 
     @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     public TaskStatus getStatus() {
         return status;
     }

@@ -1,14 +1,10 @@
 package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tapestry.security.Secured;
-import com.gagauz.tracker.beans.dao.StageActionDao;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.db.model.Stage;
-import com.gagauz.tracker.db.model.StageAction;
-import com.gagauz.tracker.db.model.StageTrigger;
 import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -23,25 +19,8 @@ public class StageInfo {
     @Property
     private Stage stageRow;
 
-    @Property
-    private StageAction action;
-
-    @Property
-    @Persist
-    private StageAction newAction;
-
-    @Property
-    private StageTrigger trigger;
-
-    @Property
-    @Persist
-    private StageTrigger newTrigger;
-
     @Inject
     private StageDao stageDao;
-
-    @Inject
-    private StageActionDao stageActionDao;
 
     @Inject
     private SchedulerService schedulerService;
@@ -61,32 +40,6 @@ public class StageInfo {
 
     void onSuccessFromEditForm() {
         stageDao.save(stage);
-    }
-
-    void onCreateTrigger() {
-        newTrigger = new StageTrigger();
-    }
-
-    void onEditTrigger(StageTrigger trigger) {
-        newTrigger = trigger;
-    }
-
-    void onCancelTrigger() {
-        newTrigger = null;
-    }
-
-    void onCreateStageAction() {
-        newAction = new StageAction();
-    }
-
-    void onCancelAction() {
-        newAction = null;
-    }
-
-    void onSuccessFromCreateActionForm() {
-        stage.getActions().add(newAction);
-        stageActionDao.save(newAction);
-        newAction = null;
     }
 
     @Cached

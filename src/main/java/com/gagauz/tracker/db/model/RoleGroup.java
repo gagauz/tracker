@@ -3,12 +3,12 @@ package com.gagauz.tracker.db.model;
 import com.gagauz.tracker.db.base.CollectionType;
 import com.gagauz.tracker.db.base.EnumSetType;
 import com.gagauz.tracker.db.base.Identifiable;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import java.util.EnumSet;
 
@@ -49,7 +49,8 @@ public class RoleGroup implements Identifiable {
         this.name = name;
     }
 
-    @JoinColumn
+    @ForeignKey(name = "fk_roleGroup_project")
+    @JoinColumn(nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public Project getProject() {
         return project;

@@ -1,11 +1,11 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.Identifiable;
+import org.hibernate.annotations.ForeignKey;
 
 import javax.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "stage")
@@ -17,8 +17,6 @@ public class Stage implements Identifiable {
     private String name;
     private String description;
     private Stage parent;
-    private StageTrigger trigger;
-    private List<StageAction> actions;
 
     @Id
     @GeneratedValue
@@ -31,6 +29,8 @@ public class Stage implements Identifiable {
         this.id = id;
     }
 
+    @ForeignKey(name = "fk_stage_project")
+    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public Project getProject() {
         return project;
@@ -40,6 +40,7 @@ public class Stage implements Identifiable {
         this.project = project;
     }
 
+    @ForeignKey(name = "fk_stage_stage")
     @JoinColumn(nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public Stage getParent() {
@@ -89,24 +90,6 @@ public class Stage implements Identifiable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Embedded
-    public StageTrigger getTrigger() {
-        return trigger;
-    }
-
-    public void setTrigger(StageTrigger trigger) {
-        this.trigger = trigger;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    public List<StageAction> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<StageAction> stageActions) {
-        this.actions = stageActions;
     }
 
     private boolean hasParent(Stage stage) {

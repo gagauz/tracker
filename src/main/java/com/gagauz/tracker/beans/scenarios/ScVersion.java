@@ -140,7 +140,7 @@ public class ScVersion extends DataBaseScenario {
                         if (rand.nextBoolean()) {
                             for (int x = rand.nextInt(10) + 1; x > 0; x--) {
                                 TaskComment cm = new TaskComment();
-                                cm.setUser(getRandomUser());
+                                cm.setAuthor(getRandomUser());
                                 cm.setTask(task);
                                 cm.setText("Lorem ipsum dolorsit.");
 

@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "task_comment")
 public class TaskComment implements Identifiable {
     private int id;
-    private User user;
+    private User author;
     private Task task;
     private Date created = new Date();
     private Date updated;
@@ -31,17 +31,17 @@ public class TaskComment implements Identifiable {
         this.id = id;
     }
 
-    @ForeignKey(name = "fk_taskcomment_user")
+    @ForeignKey(name = "fk_taskComment_author")
     @ManyToOne(fetch = FetchType.LAZY)
-    public User getUser() {
-        return user;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthor(User user) {
+        this.author = user;
     }
 
-    @ForeignKey(name = "fk_taskcomment_task")
+    @ForeignKey(name = "fk_taskComment_task")
     @ManyToOne(fetch = FetchType.LAZY)
     public Task getTask() {
         return task;

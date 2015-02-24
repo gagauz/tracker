@@ -25,7 +25,7 @@ public class WorkLog implements Identifiable {
         this.id = id;
     }
 
-    @ForeignKey(name = "fk_worklog_user")
+    @ForeignKey(name = "fk_workLog_user")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, nullable = false)
     public User getUser() {
@@ -36,7 +36,7 @@ public class WorkLog implements Identifiable {
         this.user = user;
     }
 
-    @ForeignKey(name = "fk_worklog_task")
+    @ForeignKey(name = "fk_workLog_task")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, nullable = false)
     public Task getTask() {
