@@ -16,6 +16,9 @@ public class ScVersion extends DataBaseScenario {
     private UserDao userDao;
 
     @Autowired
+    private TicketStatusDao statusDao;
+
+    @Autowired
     private ProjectDao projectDao;
 
     @Autowired
@@ -28,16 +31,19 @@ public class ScVersion extends DataBaseScenario {
     private FeatureVersionDao featureVersionDao;
 
     @Autowired
-    private TaskDao taskDao;
+    private TicketDao ticketDao;
 
     @Autowired
     private WorkLogDao workLogDao;
 
     @Autowired
-    private TaskCommentDao taskCommentDao;
+    private TicketCommentDao ticketCommentDao;
 
     @Autowired
     private ScUser scUser;
+
+    @Autowired
+    private ScStatus scStatus;
 
     @Override
     protected void execute() {
@@ -108,40 +114,39 @@ public class ScVersion extends DataBaseScenario {
 
                     int stc = rand.nextInt(5) + 1;
                     for (int k = 0; k < stc; k++) {
-                        Task task = new Task();
-                        task.setType(rand.nextBoolean() ? TaskType.TASK : TaskType.BUG);
-                        task.setFeatureVersion(featureVersion);
-                        task.setOwner(getRandomUser());
-                        task.setAuthor(getRandomUser());
-                        task.setSummary("Название задачи, например, сделать форму авторизации.");
-                        task.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
-                        task.setPriority(rand.nextInt(30));
+                        Ticket ticket = new Ticket();
+                        ticket.setType(rand.nextBoolean() ? TicketType.TASK : TicketType.BUG);
+                        ticket.setFeatureVersion(featureVersion);
+                        ticket.setOwner(getRandomUser());
+                        ticket.setAuthor(getRandomUser());
+                        ticket.setSummary("Название задачи, например, сделать форму авторизации.");
+                        ticket.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
+                        ticket.setPriority(rand.nextInt(30));
                         int es = 15 * (rand.nextInt(10) + 1);
-                        task.setEstimate(es);
+                        ticket.setEstimate(es);
                         WorkLog wl = null;
+                        ticket.setStatus(getRandomStatus());
                         if (version.isReleased() || rand.nextBoolean()) {
                             wl = new WorkLog();
-                            wl.setTask(task);
-                            wl.setUser(task.getAuthor());
+                            wl.setTicket(ticket);
+                            wl.setUser(ticket.getAuthor());
                             if (!version.isReleased()) {
                                 wl.setLogTime(es / (rand.nextInt(5) + 1));
-                                task.setStatus(TaskStatus.IN_PROGRESS);
                             } else {
                                 wl.setLogTime(es);
-                                task.setStatus(TaskStatus.RESOLVED);
                             }
                         }
                         if (rand.nextBoolean()) {
                             Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
                             Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
-                            task.setAttachments(Arrays.asList(a1, a2));
+                            ticket.setAttachments(Arrays.asList(a1, a2));
                         }
-                        List<TaskComment> cms = new ArrayList<TaskComment>();
+                        List<TicketComment> cms = new ArrayList<TicketComment>();
                         if (rand.nextBoolean()) {
                             for (int x = rand.nextInt(10) + 1; x > 0; x--) {
-                                TaskComment cm = new TaskComment();
+                                TicketComment cm = new TicketComment();
                                 cm.setAuthor(getRandomUser());
-                                cm.setTask(task);
+                                cm.setTicket(ticket);
                                 cm.setText("Lorem ipsum dolorsit.");
 
                                 if (rand.nextBoolean()) {
@@ -152,18 +157,30 @@ public class ScVersion extends DataBaseScenario {
                                 cms.add(cm);
                             }
                         }
-                        taskDao.save(task);
+                        ticketDao.save(ticket);
                         if (wl != null) {
                             workLogDao.save(wl);
                         }
-                        taskDao.updateTaskProgessTime(task);
+                        ticketDao.updateTicketProgessTime(ticket);
                         if (!cms.isEmpty()) {
-                            taskCommentDao.save(cms);
+                            ticketCommentDao.save(cms);
                         }
                     }
                 }
             }
         }
+    }
+
+    private final Map<Integer, TicketStatus> statusHash = new HashMap<Integer, TicketStatus>();
+
+    private TicketStatus getRandomStatus() {
+        int r = RandomUtils.getRandomInt(8) + 1;
+        TicketStatus u = statusHash.get(r);
+        if (null == u) {
+            u = statusDao.findById(r);
+            statusHash.put(r, u);
+        }
+        return u;
     }
 
     private final Map<Integer, User> userHash = new HashMap<Integer, User>();
@@ -180,6 +197,6 @@ public class ScVersion extends DataBaseScenario {
 
     @Override
     protected DataBaseScenario[] getDependsOn() {
-        return new DataBaseScenario[] {scUser};
+        return new DataBaseScenario[] {scUser, scStatus};
     }
 }

@@ -8,16 +8,16 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
 
-public class TaskList {
+public class TicketList {
 
     @Property
-    private FeatureVersion task;
+    private FeatureVersion ticket;
 
     @Property(write = false)
     private Version version;
 
     @Inject
-    private FeatureVersionDao taskDao;
+    private FeatureVersionDao ticketDao;
 
     Object onActivate(Version version) {
         if (null == version) {
@@ -29,8 +29,8 @@ public class TaskList {
         return null;
     }
 
-    public List<FeatureVersion> getTasks() {
-        return taskDao.findByVersion(version);
+    public List<FeatureVersion> getTickets() {
+        return ticketDao.findByVersion(version);
     }
 
 }

@@ -4,13 +4,13 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.web.services.ToolsService;
 
-public class TaskHeader {
+public class TicketHeader {
     @Parameter(required = true)
     @Property(write = false)
-    private Task task;
+    private Ticket ticket;
 
     @Inject
     protected ToolsService toolsService;
@@ -20,6 +20,6 @@ public class TaskHeader {
     }
 
     public String getRemaining() {
-        return toolsService.getTime(task.getEstimate() - task.getProgress());
+        return toolsService.getTime(ticket.getEstimate() - ticket.getProgress());
     }
 }

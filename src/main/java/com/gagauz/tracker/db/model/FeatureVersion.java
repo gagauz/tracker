@@ -109,12 +109,12 @@ public class FeatureVersion implements Identifiable, Serializable {
     }
 
     //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "featureVersion")
-    //    public List<Task> getTasks() {
-    //        return tasks;
+    //    public List<Ticket> getTickets() {
+    //        return tickets;
     //    }
     //
-    //    public void setTasks(List<Task> tasks) {
-    //        this.tasks = tasks;
+    //    public void setTickets(List<Ticket> tickets) {
+    //        this.tickets = tickets;
     //    }
 
     @Override

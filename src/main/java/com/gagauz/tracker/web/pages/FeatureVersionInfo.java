@@ -3,7 +3,7 @@ package com.gagauz.tracker.web.pages;
 import org.apache.tapestry5.annotations.Property;
 
 import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Ticket;
 
 public class FeatureVersionInfo {
 
@@ -11,7 +11,7 @@ public class FeatureVersionInfo {
     private FeatureVersion featureVersion;
 
     @Property
-    private Task task;
+    private Ticket ticket;
 
     Object onActivate(FeatureVersion featureVersion) {
         if (null == featureVersion) {

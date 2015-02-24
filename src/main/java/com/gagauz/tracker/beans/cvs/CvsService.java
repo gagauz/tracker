@@ -6,7 +6,7 @@ import com.gagauz.tracker.beans.dao.ProjectDao;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.CvsType;
 import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +28,13 @@ public class CvsService {
         }
     }
 
-    public List<Commit> getCommits(Task task) {
-        CvsWrapper wrapper = wrapperMap.get(task.getFeature().getProject());
+    public List<Commit> getCommits(Ticket ticket) {
+        CvsWrapper wrapper = wrapperMap.get(ticket.getFeature().getProject());
         if (null == wrapper) {
-            wrapper = initProjectRepo(task.getFeature().getProject());
+            wrapper = initProjectRepo(ticket.getFeature().getProject());
         }
 
-        return wrapper.getCommits(task);
+        return wrapper.getCommits(ticket);
     }
 
     private CvsWrapper initProjectRepo(Project project) {

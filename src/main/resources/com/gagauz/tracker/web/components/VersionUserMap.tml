@@ -5,43 +5,44 @@
 			<table width="100%">
 				<tr>
 					<t:loop source="users" value="user">
-						<th class="">
+						<td class="">
 							<div class="version-col shadow">
 								<t:if test="user">
 									<div>${message:owner}: ${user.name}</div>
-									<div>${message:tasks-by-status}: </div>
-									<div class="status OPEN">12</div>
-									<div class="status IN_PROGRESS">1</div>
-									<div class="status RESOLVED">1</div>
-									<div>${message:readiness}:</div>
-									<div>${message:remaining-time}:</div>
-								
 								<p:else>Unassigned</p:else>
 								</t:if>
+								<div>${message:tickets-by-status}: </div>
+								<ul>
+								<t:loop source="Statuses" value="entry">
+									<li>${entry.key.name}: ${entry.value}</li>
+								</t:loop>
+								</ul>
+								<div>${message:remaining-time}: ${remainTime}</div>
+								<div>${message:readiness}: <t:ProgressBar progress="getTotalProgress()" estimate="getTotalEstimate()" percent="true"/></div>
 							</div>
-						</th>
+						</td>
 					</t:loop>
 				</tr>
 				<tr>
 					<t:loop source="users" value="user">
-						<td class="task-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}">
-							<div class="task-cells">
-								<t:loop source="userTasks" value="task">
-									<div class="task-cell-div bug-${task.isBug()} ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-task-id="${task.id}">
+						<td class="ticket-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}">
+							<div class="ticket-cells">
+								<t:loop source="userTickets" value="ticket">
+									<div class="ticket-cell-div bug-${ticket.isBug()} ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">
 										<div>
 											<div class="title">
-												<t:eventlink class="${task.type}" t:event="viewtask" t:context="task" t:zone="literal:taskZone" title="${task.summary}">
-													#${task.id} ${task.summary}
+												<t:eventlink class="${ticket.type}" t:event="viewticket" t:context="ticket" t:zone="literal:ticketZone" title="${ticket.summary}">
+													#${ticket.id} ${ticket.summary}
 												</t:eventlink>
 											</div>
-											<div class="status ${task.status}">
-												${message:status}: ${task.status}
+											<div class="status ${ticket.status}">
+												${message:status}: ${ticket.status.name}
 											</div>
 											<div class="status">
-												${message:remaining-time}: ${taskTime}
+												${message:remaining-time}: ${ticketTime}
 											</div>
 										</div>
-										<t:ProgressBar progress="task.progress" estimate="task.estimate" percent="true"/>
+										<t:ProgressBar progress="ticket.progress" estimate="ticket.estimate" percent="true"/>
 										<div class="c"></div>
 									</div>
 								</t:loop>
@@ -54,15 +55,15 @@
 	</div>
 	
 	<div style="display:none">
-		<div t:id="taskZone" class="task-popup">
-			<t:TaskForm task="viewTask"/>
+		<div t:id="ticketZone" class="ticket-popup">
+			<t:TicketForm ticket="viewTicket"/>
 		</div>
 	</div>
 	
 	<script type="text/javascript">
 	$j(".drag").draggable({
 		appendTo: "div.version-user-map",
-		snap: ".task-col",
+		snap: ".ticket-col",
 		helper: "clone",
 		start: function(){
         	$j(this).hide();             
@@ -71,14 +72,14 @@
 	        $j(this).show()
 	    }
 	});
-	$j(".task-col").droppable({
+	$j(".ticket-col").droppable({
 		hoverClass: "ui-state-hover",
 		drop: function(event, ui) {
 			if (ui.draggable.data("user-id") != $j(this).data("user-id")) {
 				$j(ui.draggable).detach().appendTo(this);
 				
 				$j.post('${eventUrl}', {
-						task: ui.draggable.data("task-id"),
+						ticket: ui.draggable.data("ticket-id"),
 						user: $j(this).data("user-id")
 					},
 					function() {

@@ -13,9 +13,10 @@ public class ValueEncoderModule {
                                                     final VersionDao versionDao,
                                                     final FeatureDao featureDao,
                                                     final FeatureVersionDao featureVersionDao,
-                                                    final TaskDao taskDao,
-                                                    final TaskCommentDao taskCommentDao,
+                                                    final TicketDao ticketDao,
+                                                    final TicketCommentDao ticketCommentDao,
                                                     final RoleGroupDao roleGroupDao,
+                                                    final TicketStatusDao ticketStatusDao,
                                                     final StageDao stageDao
             ) {
         configuration.add(User.class, new CommonEntityValueEncoderFactory(userDao));
@@ -23,9 +24,10 @@ public class ValueEncoderModule {
         configuration.add(Version.class, new CommonEntityValueEncoderFactory(versionDao));
         configuration.add(Feature.class, new CommonEntityValueEncoderFactory(featureDao));
         configuration.add(FeatureVersion.class, new CommonEntityValueEncoderFactory(featureVersionDao));
-        configuration.add(Task.class, new CommonEntityValueEncoderFactory(taskDao));
-        configuration.add(TaskComment.class, new CommonEntityValueEncoderFactory(taskCommentDao));
+        configuration.add(Ticket.class, new CommonEntityValueEncoderFactory(ticketDao));
+        configuration.add(TicketComment.class, new CommonEntityValueEncoderFactory(ticketCommentDao));
         configuration.add(RoleGroup.class, new CommonEntityValueEncoderFactory(roleGroupDao));
+        configuration.add(TicketStatus.class, new CommonEntityValueEncoderFactory(ticketStatusDao));
         configuration.add(Stage.class, new CommonEntityValueEncoderFactory(stageDao));
     }
 

@@ -1,18 +1,18 @@
-package com.gagauz.tracker.web.components.task;
+package com.gagauz.tracker.web.components.ticket;
 
 import com.gagauz.tracker.beans.cvs.CvsService;
 import com.gagauz.tracker.db.model.Commit;
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Ticket;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
 
-public class TaskCommits {
+public class TicketCommits {
 
     @Parameter
-    private Task task;
+    private Ticket ticket;
 
     private List<Commit> commits;
 
@@ -24,7 +24,7 @@ public class TaskCommits {
 
     public List<Commit> getCommits() {
         if (null == commits) {
-            commits = cvsService.getCommits(task);
+            commits = cvsService.getCommits(ticket);
         }
         return commits;
     }

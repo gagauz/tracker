@@ -10,10 +10,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Task;
-import com.gagauz.tracker.db.model.TaskType;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketType;
 import com.gagauz.tracker.db.model.Version;
 
 @Secured
@@ -26,13 +26,13 @@ public class VersionInfo {
     private FeatureVersion featureVersion;
 
     @Property
-    private Task task;
+    private Ticket ticket;
 
     @Inject
     private FeatureVersionDao featureVersionDao;
 
     @Inject
-    private TaskDao taskDao;
+    private TicketDao ticketDao;
 
     Object onActivate(Version version) {
         if (null == version) {
@@ -53,26 +53,26 @@ public class VersionInfo {
     }
 
     @Cached
-    public List<Task> getAllTasks() {
-        return taskDao.findByVersion(version);
+    public List<Ticket> getAllTickets() {
+        return ticketDao.findByVersion(version);
     }
 
     @Cached
-    public List<Task> getTasks() {
-        return F.flow(getAllTasks()).filter(new Predicate<Task>() {
+    public List<Ticket> getTickets() {
+        return F.flow(getAllTickets()).filter(new Predicate<Ticket>() {
             @Override
-            public boolean accept(Task element) {
-                return element.getType() == TaskType.TASK;
+            public boolean accept(Ticket element) {
+                return element.getType() == TicketType.TASK;
             }
         }).toList();
     }
 
     @Cached
-    public List<Task> getBugs() {
-        return F.flow(getAllTasks()).filter(new Predicate<Task>() {
+    public List<Ticket> getBugs() {
+        return F.flow(getAllTickets()).filter(new Predicate<Ticket>() {
             @Override
-            public boolean accept(Task element) {
-                return element.getType() == TaskType.BUG;
+            public boolean accept(Ticket element) {
+                return element.getType() == TicketType.BUG;
             }
         }).toList();
     }

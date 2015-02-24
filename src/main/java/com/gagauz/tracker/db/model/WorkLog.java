@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class WorkLog implements Identifiable {
     private int id;
     private User user;
-    private Task task;
+    private Ticket ticket;
     private int logTime;
     private String comment;
 
@@ -36,15 +36,15 @@ public class WorkLog implements Identifiable {
         this.user = user;
     }
 
-    @ForeignKey(name = "fk_workLog_task")
+    @ForeignKey(name = "fk_workLog_ticket")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, nullable = false)
-    public Task getTask() {
-        return task;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     @Column

@@ -1,5 +1,6 @@
 package com.gagauz.tapestry.common.components;
 
+import com.gagauz.tracker.utils.StringUtils;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.BeforeRenderTemplate;
 import org.apache.tapestry5.annotations.Environmental;
@@ -54,6 +55,9 @@ public class MultiSelect extends AbstractField {
     protected ValueEncoder encoder;
     protected ValueEncoder encoderValue;
 
+    @Parameter(defaultPrefix = BindingConstants.NULLFIELDSTRATEGY, value = "default")
+    private NullFieldStrategy nulls;
+
     @Inject
     private ComponentDefaultProvider defaultProvider;
 
@@ -100,7 +104,7 @@ public class MultiSelect extends AbstractField {
     @Override
     protected void processSubmission(String controlName) {
         String[] params = request.getParameters(controlName);
-        Collection submittedValue = toValue(params);
+        Collection submittedValue = toValue(null == params ? new String[0] : params);
 
         putPropertyNameIntoBeanValidationContext("value");
 
@@ -147,6 +151,9 @@ public class MultiSelect extends AbstractField {
         return F.flow(values).map(new Mapper<String, Object>() {
             @Override
             public Object map(String element) {
+                if (StringUtils.isEmpty(element)) {
+                    element = nulls.replaceFromClient();
+                }
                 return getEncoder().toValue(element);
             }
 
@@ -189,7 +196,7 @@ public class MultiSelect extends AbstractField {
     @BeforeRenderTemplate
     protected void options(MarkupWriter writer) {
         if (showBlankOption()) {
-            writer.element("option", "value", "");
+            writer.element("option", "value", getEncoder().toClient(null));
             writer.write(blankLabel);
             writer.end();
         }

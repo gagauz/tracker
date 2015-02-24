@@ -1,11 +1,15 @@
-package com.gagauz.tracker.web.components.task;
+package com.gagauz.tracker.web.components.ticket;
 
 import com.gagauz.tapestry.security.api.SecurityUser;
-import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.Predicate;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.utils.Param;
+import com.gagauz.tracker.utils.Filter;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
@@ -14,11 +18,12 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
 
 import java.util.List;
 
-public class EditTaskForm {
+public class EditTicketForm {
 
     @Component
     private Zone zone;
@@ -26,16 +31,16 @@ public class EditTaskForm {
     @Component
     private Form form;
 
-    @Parameter(name = "task")
-    private Task taskParam;
+    @Parameter(name = "ticket")
+    private Ticket ticketParam;
 
-    private Task task;
-
-    @Inject
-    private ComponentResources componentResources;
+    private Ticket ticket;
 
     @Inject
-    private TaskDao taskDao;
+    private TicketDao ticketDao;
+
+    @Inject
+    private TicketStatusDao ticketStatusDao;
 
     @Inject
     private UserDao userDao;
@@ -43,19 +48,22 @@ public class EditTaskForm {
     @Inject
     private ValueEncoderSource valueEncoderSource;
 
+    @Inject
+    private SelectModelFactory selectModelFactory;
+
     @SessionState
     private SecurityUser user;
 
     boolean setupRender() {
-        if (null != taskParam) {
-            task = taskParam;
+        if (null != ticketParam) {
+            ticket = ticketParam;
         }
-        return task != null;
+        return ticket != null;
     }
 
     void onSubmitFromForm() {
-        getTask().setAuthor((User) user);
-        taskDao.save(getTask());
+        getTicket().setAuthor((User) user);
+        ticketDao.save(getTicket());
     }
 
     List<User> onProvideCompletions(String username) {
@@ -93,14 +101,27 @@ public class EditTaskForm {
         return (User) user;
     }
 
-    public Task getTask() {
-        if (null == task) {
-            task = new Task();
+    public Ticket getTicket() {
+        if (null == ticket) {
+            ticket = new Ticket();
         }
-        return task;
+        return ticket;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
+
+    @Cached
+    public SelectModel getStatusModel() {
+        List<TicketStatus> list = ticketStatusDao.findByProject(ticket.getFeature().getProject());
+        final TicketStatus from = ticket.getStatus();
+        list = Filter.filter(list, new Predicate<TicketStatus>() {
+            @Override
+            public boolean apply(TicketStatus element) {
+                return element.getAllowedFrom().contains(from);
+            }
+        });
+        return selectModelFactory.create(list, "name");
     }
 }

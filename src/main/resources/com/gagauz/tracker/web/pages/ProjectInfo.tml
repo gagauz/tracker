@@ -3,15 +3,6 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-	
-	<h3>Project roles <t:pagelink page="rolegrouplist" context="[project,null]">Manage</t:pagelink></h3>
-	<t:grid source="roleGroups" row="roleGroup" add="edit">
-    	<p:editCell>
-    		<t:pagelink page="rolegrouplist" context="[project, roleGroup]">edit</t:pagelink>
-    	</p:editCell>
-    </t:grid>
-
-	<hr/>
 	<div>
 		<t:if test="newFeature">
 			<t:BeanEditForm t:id="featureForm" object="newFeature" exclude="id, created, updated"/>
@@ -37,5 +28,9 @@
     
     
     <t:ProjectMap project="project"/>
+
+	<p:sidebar>
+        <t:ProjectMenu project="project"/>
+    </p:sidebar>
 
 </html>

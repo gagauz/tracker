@@ -1,9 +1,9 @@
-<html t:type="layout" title="task info"
+<html t:type="layout" title="ticket info"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-<div class="task-info">
-    <t:TaskHeader task="task"/>
+<div class="ticket-info">
+    <t:TicketHeader ticket="ticket"/>
     
     <h2>Attachments</h2>
     <div class="block" id="dropzone">
@@ -12,7 +12,7 @@
 
     <h2>Description</h2>
     <div class="block">
-    ${task.description}
+    ${ticket.description}
     </div>
     <!--
     <p:sidebar>
@@ -33,11 +33,11 @@
     </p:sidebar>
 -->
     <h2>Comments</h2>
-    <t:DeferredZone t:id="commentsZone" id="task-comments" t:context="task" class="block">
+    <t:DeferredZone t:id="commentsZone" id="ticket-comments" t:context="ticket" class="block">
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
-		 <t:task.TaskComments task="task" zone="commentsZone"/>
+		 <t:ticket.TicketComments ticket="ticket" zone="commentsZone"/>
     </t:DeferredZone>
    
     
@@ -46,11 +46,11 @@
     </div>
     
     <h2>Code changes</h2>
-    <t:DeferredZone id="task-commits" t:context="task" class="block">
+    <t:DeferredZone id="ticket-commits" t:context="ticket" class="block">
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
-    	<t:task.TaskCommits task="task"/>
+    	<t:ticket.TicketCommits ticket="ticket"/>
     </t:DeferredZone>
     
 </div>

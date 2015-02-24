@@ -3,34 +3,34 @@
 
 <div t:id="zone">
 	<form t:id="form">
-		<t:hidden t:value="task.featureVersion"/>
+		<t:hidden t:value="ticket.featureVersion"/>
 		<div class="title">
-	    	<h2>New <t:select value="task.type" blankOption="never"/></h2>
+	    	<h2>New <t:select value="ticket.type" blankOption="never"/></h2>
 	    </div>
 	    <div class="block">
 			<table border="0">
 				<tr>
 					<th>Summary:</th>
-					<td colspan="5"><t:textfield t:value="task.summary" /></td>
+					<td colspan="5"><t:textfield t:value="ticket.summary" /></td>
 				</tr>
 				<tr>
 					<th>Status:</th>
-					<td><t:select t:value="task.status" blankOption="never"/></td>
+					<td><t:select t:value="ticket.status" model="statusModel" blankOption="never"/></td>
 					<th>Estimate:</th>
-					<td><t:textfield t:value="task.estimate" size="4"/></td>
+					<td><t:textfield t:value="ticket.estimate" size="4"/></td>
 					<th>Version:</th>
-					<td>${cond:task.version,prop:task.version.name,}</td>
+					<td>${cond:ticket.version,prop:ticket.version.name,}</td>
 				</tr>
 				<tr>
 					<th>Priority:</th>
-					<td><t:textfield t:value="task.priority" size="4"/></td>
+					<td><t:textfield t:value="ticket.priority" size="4"/></td>
 					<th>Owner:</th>
-					<td><t:textfield t:value="task.author"
+					<td><t:textfield t:value="ticket.author"
 						translate="prop:usernametranslator" 
 						t:mixins="coolautocompleter"
 						minChars="2"/></td>
 					<th>Feature:</th>
-					<td>${task.feature.name}</td>
+					<td>${ticket.feature.name}</td>
 				</tr>
 				<tr>
 					<th>Author:</th>
@@ -38,7 +38,7 @@
 					<th>Remaining:</th>
 					<td></td>
 					<th>Project:</th>
-					<td>${task.feature.project.name}</td>
+					<td>${ticket.feature.project.name}</td>
 				</tr>
 				<tr>
 					<th></th>
@@ -51,12 +51,12 @@
 	
 	    <h2>Attachments</h2>
 	    <div class="block">
-	    	<t:AttachmentsBlock attachments="task.attachments"/>
+	    	<t:AttachmentsBlock attachments="ticket.attachments"/>
 	    </div>
 	    
 	    <h2>Description</h2>
 	    <div class="block">
-	    	<t:textarea t:value="task.description"/>
+	    	<t:textarea t:value="ticket.description"/>
 	    </div>
 	    <t:linksubmit class="save button">${message:save}</t:linksubmit>
 	</form>

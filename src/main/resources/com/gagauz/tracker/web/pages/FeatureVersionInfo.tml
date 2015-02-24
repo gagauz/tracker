@@ -11,10 +11,10 @@
     <br/>
     
     <!-- 
-    <p>Subtasks</p>
-    <t:grid source="featureVersion.tasks" row="task" add="edit">
+    <p>Subtickets</p>
+    <t:grid source="featureVersion.tickets" row="ticket" add="edit">
     	<p:editCell>
-    		<t:pagelink page="FeatureVersionInfo" context="subtask">View</t:pagelink>
+    		<t:pagelink page="FeatureVersionInfo" context="subticket">View</t:pagelink>
     	</p:editCell>
     </t:grid>
     

@@ -2,9 +2,10 @@ package com.gagauz.tracker.web.components;
 
 import com.gagauz.tapestry.security.SecurityUserCreator;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.utils.CollectionUtils;
 import com.gagauz.tracker.utils.Comparators;
 import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.ComponentResources;
@@ -14,21 +15,22 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class VersionUserMap {
 
     @Parameter(allowNull = false, required = true, principal = true)
     private Version version;
 
-    @Component(parameters = {"id=literal:taskZone", "show=popup", "update=popup"})
-    private Zone taskZone;
+    @Component(parameters = {"id=literal:ticketZone", "show=popup", "update=popup"})
+    private Zone ticketZone;
 
     @Property
     private Feature feature;
 
     private User user;
 
-    private Task task;
+    private Ticket ticket;
 
     @Property
     private int estimated;
@@ -37,13 +39,16 @@ public class VersionUserMap {
     private int progress;
 
     @Property
-    private Task viewTask;
+    private Ticket viewTicket;
+
+    @Property
+    private Entry<TicketStatus, Integer> entry;
 
     @Inject
     private FeatureVersionDao featureVersionDao;
 
     @Inject
-    private TaskDao taskDao;
+    private TicketDao ticketDao;
 
     @Inject
     private UserDao userDao;
@@ -61,36 +66,83 @@ public class VersionUserMap {
     private int rowEndTime;
     private int minTime;
 
-    private Map<User, List<Task>> userTaskMap;
+    private Map<User, List<Ticket>> userTicketMap;
+    private Map<User, Map<TicketStatus, Integer>> userTicketStatus;
+
+    private Map<User, Integer[]> userTotalTimes;
 
     @Cached
     public Collection<User> getUsers() {
-        if (null == userTaskMap) {
-            userTaskMap = CollectionFactory.newMap();
+        if (null == userTicketMap) {
+            userTicketMap = CollectionFactory.newMap();
+            userTicketStatus = CollectionFactory.newMap();
+            userTotalTimes = CollectionFactory.newMap();
             minTime = Integer.MAX_VALUE;
-            for (Task task : taskDao.findByVersion(version)) {
-                List<Task> tasks = userTaskMap.get(task.getOwner());
-                if (null == tasks) {
-                    tasks = new ArrayList<Task>();
-                    userTaskMap.put(task.getOwner(), tasks);
+            for (Ticket ticket : ticketDao.findByVersion(version)) {
+                List<Ticket> tickets = userTicketMap.get(ticket.getOwner());
+
+                Integer[] times = userTotalTimes.get(ticket.getOwner());
+                if (null == times) {
+                    times = new Integer[] {0, 0};
+                    userTotalTimes.put(ticket.getOwner(), times);
                 }
-                tasks.add(task);
-                minTime = Math.min(minTime, task.getEstimate() - task.getProgress());
+
+                times[0] += ticket.getEstimate();
+                times[1] += ticket.getProgress();
+
+                Map<TicketStatus, Integer> statusMap = userTicketStatus.get(ticket.getOwner());
+                if (null == statusMap) {
+                    statusMap = CollectionFactory.newMap();
+                    userTicketStatus.put(ticket.getOwner(), statusMap);
+                }
+                Integer i = statusMap.get(ticket.getStatus());
+                if (null == i) {
+                    i = 0;
+                }
+                ++i;
+                statusMap.put(ticket.getStatus(), i);
+
+                if (null == tickets) {
+                    tickets = CollectionUtils.newArrayList();
+                    userTicketMap.put(ticket.getOwner(), tickets);
+                }
+                tickets.add(ticket);
+                minTime = Math.min(minTime, ticket.getEstimate() - ticket.getProgress());
             }
             minTime = 80 / (minTime + 1);
         }
-        List<User> users = new ArrayList<User>(userTaskMap.keySet());
+        List<User> users = new ArrayList<User>(userTicketMap.keySet());
         Collections.sort(users, Comparators.USER_BY_NAME_COMPARATOR);
 
         return users;
     }
 
-    public int getTasksWidth() {
+    public int getTicketsWidth() {
         return rowEndTime;
     }
 
-    public Collection<Task> getUserTasks() {
-        return userTaskMap.get(user);
+    public Collection<Ticket> getUserTickets() {
+        return userTicketMap.get(user);
+    }
+
+    public Set<Entry<TicketStatus, Integer>> getStatuses() {
+        return userTicketStatus.get(user).entrySet();
+    }
+
+    public Integer getTotalEstimate() {
+        return userTotalTimes.get(user)[0];
+    }
+
+    public Integer getTotalProgress() {
+        return userTotalTimes.get(user)[1];
+    }
+
+    public String getRemainTime() {
+        Integer[] times = userTotalTimes.get(user);
+        if (times[0] == 0) {
+            return times[1] == 0 ? "0" : "∞";
+        }
+        return toolsService.getTime(times[0] - times[1]);
     }
 
     void onCreateFeatureVersion(Feature feature, Version version) {
@@ -105,15 +157,15 @@ public class VersionUserMap {
     }
 
     public boolean isDraggable() {
-        return task.getStatus() != TaskStatus.IN_PROGRESS;
+        return true;
     }
 
-    public String getTasksTime() {
+    public String getTicketsTime() {
         return toolsService.getTime(rowEndTime);
     }
 
-    public String getTaskTime() {
-        return toolsService.getTime(task.getEstimate() - task.getProgress());
+    public String getTicketTime() {
+        return toolsService.getTime(ticket.getEstimate() - ticket.getProgress());
     }
 
     public String getEventUrl() {
@@ -131,26 +183,26 @@ public class VersionUserMap {
         this.user = user;
     }
 
-    public Task getTask() {
-        return task;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setTask(Task task) {
-        rowEndTime += task.getEstimate() - task.getProgress();
-        this.task = task;
+    public void setTicket(Ticket ticket) {
+        rowEndTime += ticket.getEstimate() - ticket.getProgress();
+        this.ticket = ticket;
     }
 
-    void onChange(@RequestParameter(value = "user") Integer userId, @RequestParameter(value = "task") Integer taskId) {
+    void onChange(@RequestParameter(value = "user") Integer userId, @RequestParameter(value = "ticket") Integer ticketId) {
         User user = userDao.findById(userId);
-        Task task = taskDao.findById(taskId);
-        if (null != task) {
-            task.setOwner(user);
+        Ticket ticket = ticketDao.findById(ticketId);
+        if (null != ticket) {
+            ticket.setOwner(user);
         }
     }
 
-    Object onViewTask(Task task) {
-        viewTask = task;
-        return taskZone.getBody();
+    Object onViewTicket(Ticket ticket) {
+        viewTicket = ticket;
+        return ticketZone.getBody();
     }
 
 }

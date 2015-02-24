@@ -34,6 +34,7 @@
 	    	</p:editCell>
 	    </t:grid>
 	</div>
+	
     <p:sidebar>
         <t:UserMenu/>
     </p:sidebar>

@@ -1,0 +1,9 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<ul>
+	<li><t:pagelink page="ProjectInfo" context="project">Road map</t:pagelink></li>
+	<li><t:pagelink page="RoleGroupList" context="[project, null]">Roles</t:pagelink></li>
+	<li><t:pagelink page="UserList">Users</t:pagelink></li>
+	<li><t:pagelink page="WorkflowInfo" context="project">Workflow</t:pagelink></li>
+	<t:body/>
+</ul>
+</div>

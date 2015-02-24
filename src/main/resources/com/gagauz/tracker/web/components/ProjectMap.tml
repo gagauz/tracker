@@ -27,20 +27,20 @@
 								</t:if>
 							</th>
 							<t:loop source="features" value="feature">
-								<td class="task-col">
-									<div class="task-col-div">
+								<td class="ticket-col">
+									<div class="ticket-col-div">
 									<t:if test="featureVersion">
 										<div class="description">
 											${featureVersion.description}
 										</div>
 										
-										<div class="tasks" t:type="if" t:test="tasks">
-											<div class="title">${message:tasks-list}</div>
+										<div class="tickets" t:type="if" t:test="tickets">
+											<div class="title">${message:tickets-list}</div>
 											<ul>
-												<li t:type="loop" source="tasks" value="task">
-													<t:pagelink class="${task.type}" t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
+												<li t:type="loop" source="tickets" value="ticket">
+													<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
 													<!-- 
-													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
+													<t:ProgressBar progress="ticket.progress" estimate="ticket.estimate"/>
 													 -->
 												</li>
 											</ul>
@@ -48,26 +48,27 @@
 										<div class="bugs" t:type="if" t:test="bugs">
 											<div class="title">${message:bugs-list}</div>
 											<ul>
-												<li t:type="loop" source="bugs" value="task">
-													<t:pagelink class="${task.type}" t:page="TaskInfo" t:context="task">${task.type} #${task.id} ${task.summary}</t:pagelink>
+												<li t:type="loop" source="bugs" value="ticket">
+													<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
 													<!-- 
-													<t:ProgressBar progress="task.progress" estimate="task.estimate"/>
+													<t:ProgressBar progress="ticket.progress" estimate="ticket.estimate"/>
 													 -->
 												</li>
 											</ul>
 										</div>
 										<t:if test="notReleased">
-											<t:eventlink class="add button" t:event="createTask" t:context="featureVersion" t:zone="taskZone">
-												${message:create-bug-or-task}
+											<t:eventlink class="add button" t:event="createTicket" t:context="featureVersion" t:zone="ticketZone">
+												${message:create-bug-or-ticket}
 											</t:eventlink>
 										</t:if>
+										<!-- 
 										<div class="progress">
 											<div class="row">
 												${message:total-progress}
 												<t:ProgressBar progress="progress" estimate="estimate"/>
 											</div>
 										</div>
-										
+										 -->
 										
 										
 									<p:else>
@@ -91,9 +92,9 @@
 	</div>
 	
 	<div style="display:none">
-		<div t:id="taskZone" class="task-popup">
-			<t:if test="newTask">
-				<t:task.EditTaskForm task="newTask"/>
+		<div t:id="ticketZone" class="ticket-popup">
+			<t:if test="newTicket">
+				<t:ticket.EditTicketForm ticket="newTicket"/>
 			</t:if>
 		</div>
 	</div>

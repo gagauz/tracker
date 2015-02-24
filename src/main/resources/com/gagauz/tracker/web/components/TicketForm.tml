@@ -1,24 +1,24 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-	<t:TaskHeader task="task"/>
+	<t:TicketHeader ticket="ticket"/>
 
     <h2>Attachments</h2>
     <div class="block">
-    	<t:AttachmentsBlock attachments="task.attachments"/>
+    	<t:AttachmentsBlock attachments="ticket.attachments"/>
     </div>
     
     <h2>Description</h2>
     <div class="block">
-    ${task.description}
+    ${ticket.description}
     </div>
     
     <h2>Comments</h2>
-    <t:DeferredZone id="task-comments" t:event="getcomments" t:context="task" class="block">
+    <t:DeferredZone id="ticket-comments" t:event="getcomments" t:context="ticket" class="block">
     	<p:empty>
     		<img src="/static/i/loading_bar_gray.gif" />
     	</p:empty>
-    	<t:task.TaskComments task="task"/>
+    	<t:ticket.TicketComments ticket="ticket"/>
     </t:DeferredZone>
 	
 

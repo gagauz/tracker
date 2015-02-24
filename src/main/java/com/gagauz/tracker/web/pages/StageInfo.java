@@ -48,15 +48,15 @@ public class StageInfo {
     }
 
     //    @Cached
-    //    public Map<Version, List<Task>> getMap() {
-    //        Map<Version, List<Task>> map = new HashMap<Version, List<Task>>(feature.getFeatureVersions().size());
-    //        for (Task task : taskDao.findByFeature(feature)) {
-    //            List<Task> tasks = map.get(task.getVersion());
-    //            if (null == tasks) {
-    //                tasks = new LinkedList<Task>();
-    //                map.put(task.getVersion(), tasks);
+    //    public Map<Version, List<Ticket>> getMap() {
+    //        Map<Version, List<Ticket>> map = new HashMap<Version, List<Ticket>>(feature.getFeatureVersions().size());
+    //        for (Ticket ticket : ticketDao.findByFeature(feature)) {
+    //            List<Ticket> tickets = map.get(ticket.getVersion());
+    //            if (null == tickets) {
+    //                tickets = new LinkedList<Ticket>();
+    //                map.put(ticket.getVersion(), tickets);
     //            }
-    //            tasks.add(task);
+    //            tickets.add(ticket);
     //        }
     //        return map;
     //    }

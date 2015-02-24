@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "task")
+@Table(name = "ticket")
 @TypeDefs({
         @TypeDef(name = "listOf.Attachment",
                 typeClass = ArrayListType.class,
@@ -23,10 +23,10 @@ import java.util.List;
                 }
         )
 })
-public class Task implements Identifiable {
+public class Ticket implements Identifiable {
     private int id;
-    private TaskType type;
-    private TaskStatus status = TaskStatus.OPEN;
+    private TicketType type;
+    private TicketStatus status;
     private FeatureVersion featureVersion;
     private User author;
     private User owner;
@@ -35,16 +35,16 @@ public class Task implements Identifiable {
     private String summary;
     private String description;
     private String cvsVersion;
-    private int estimate;
-    private int progress;
-    private int priority;
+    private int estimate = 0;
+    private int progress = 0;
+    private int priority = 0;
 
     private List<Stage> stages;
     private List<Attachment> attachments;
 
     @Override
     @Id
-    @SequenceGenerator(name = "id_sequence", sequenceName = "task_id_seq", allocationSize = 50)
+    @SequenceGenerator(name = "id_sequence", sequenceName = "ticket_id_seq", allocationSize = 50)
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_sequence")
     @Column(unique = true, nullable = false)
     public int getId() {
@@ -57,25 +57,26 @@ public class Task implements Identifiable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    public TaskType getType() {
+    public TicketType getType() {
         return type;
     }
 
-    public void setType(TaskType type) {
+    public void setType(TicketType type) {
         this.type = type;
     }
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    public TaskStatus getStatus() {
+    @ForeignKey(name = "fk_ticket_status")
+    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    public TicketStatus getStatus() {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    public void setStatus(TicketStatus status) {
         this.status = status;
     }
 
-    @ForeignKey(name = "fk_task_featureVersion")
+    @ForeignKey(name = "fk_ticket_featureVersion")
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public FeatureVersion getFeatureVersion() {
@@ -89,7 +90,7 @@ public class Task implements Identifiable {
         }
     }
 
-    //    @ForeignKey(name = "fk_task_feature")
+    //    @ForeignKey(name = "fk_ticket_feature")
     //    @JoinColumn(nullable = false)
     //    @ManyToOne(fetch = FetchType.LAZY)
     @Transient
@@ -101,7 +102,7 @@ public class Task implements Identifiable {
     //        this.feature = feature;
     //    }
 
-    //    @ForeignKey(name = "fk_task_version")
+    //    @ForeignKey(name = "fk_ticket_version")
     //    @JoinColumn(nullable = true)
     //    @ManyToOne(fetch = FetchType.LAZY)
     @Transient
@@ -113,7 +114,7 @@ public class Task implements Identifiable {
     //        this.version = version;
     //    }
 
-    @ForeignKey(name = "fk_task_author")
+    @ForeignKey(name = "fk_ticket_author")
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getAuthor() {
@@ -124,7 +125,7 @@ public class Task implements Identifiable {
         this.author = author;
     }
 
-    @ForeignKey(name = "fk_task_owner")
+    @ForeignKey(name = "fk_ticket_owner")
     @JoinColumn(nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public User getOwner() {
@@ -209,7 +210,7 @@ public class Task implements Identifiable {
         this.priority = priority;
     }
 
-    @JoinTable(name = "stage_tasks")
+    @JoinTable(name = "stage_tickets")
     @ManyToMany(fetch = FetchType.LAZY)
     public List<Stage> getStages() {
         return stages;
@@ -231,7 +232,7 @@ public class Task implements Identifiable {
 
     @Transient
     public boolean isBug() {
-        return type == TaskType.BUG;
+        return type == TicketType.BUG;
     }
 
     @PreUpdate

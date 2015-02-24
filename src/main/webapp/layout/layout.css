@@ -186,7 +186,7 @@ div.menu a {
 
 .content .post {margin:10px;}
 
-.task-form {border:1px solid gray; padding:10px; background:white;overflow:hidden;}
+.ticket-form {border:1px solid gray; padding:10px; background:white;overflow:hidden;}
 
 /* Bean editor */
 .t-beaneditor-row {padding:4px;}
@@ -214,25 +214,25 @@ div.menu a {
 .block {border:1px solid gray;background:#ffffff;padding:10px 15px;margin-bottom:20px;overflow:hidden;}
 
 /* Task Header */
-.task-header .title {margin-bottom:15px;}
-.task-header .title a {color:navy;font-size:15px}
-.task-header .column {width:50%; float:left;}
-.task-header .row b {width:150px; float:left;}
-.task-header table th {text-align:right;}
-.task-header table td {padding:2px 20px 2px 0;}
+.ticket-header .title {margin-bottom:15px;}
+.ticket-header .title a {color:navy;font-size:15px}
+.ticket-header .column {width:50%; float:left;}
+.ticket-header .row b {width:150px; float:left;}
+.ticket-header table th {text-align:right;}
+.ticket-header table td {padding:2px 20px 2px 0;}
 
 /* Task */
-.task-info h1, .task-info h2{font-size:15px;font-weight:bold;}
-#task-commits .commit, #task-commits .commit a{font: 12px/15px "Courier New" normal; margin-bottom:10px;}
-#task-commits .commit a{color:green;}
-#task-commits .commit div{line-height:150%}
-#task-commits .commit .date{}
-#task-commits .commit .date i{color:blue}
-#task-commits .commit .comm{font-weight:bold;}
-#task-commits .commit .deta {margin-left:25px;}
-#task-commits .commit .deta .a{color:#9b0080}
-#task-commits .commit .deta .m{color:#0032c1}
-#task-commits .commit .deta .d{color:#ff003a}
+.ticket-info h1, .ticket-info h2{font-size:15px;font-weight:bold;}
+#ticket-commits .commit, #ticket-commits .commit a{font: 12px/15px "Courier New" normal; margin-bottom:10px;}
+#ticket-commits .commit a{color:green;}
+#ticket-commits .commit div{line-height:150%}
+#ticket-commits .commit .date{}
+#ticket-commits .commit .date i{color:blue}
+#ticket-commits .commit .comm{font-weight:bold;}
+#ticket-commits .commit .deta {margin-left:25px;}
+#ticket-commits .commit .deta .a{color:#9b0080}
+#ticket-commits .commit .deta .m{color:#0032c1}
+#ticket-commits .commit .deta .d{color:#ff003a}
 
 .shadow {box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
 
@@ -248,11 +248,11 @@ div.menu a {
 .project-map .version-col a{background-color:#006600;color:white;display:block;padding:10px;font-weight:bold;text-align:left;height:100%;}
 .project-map .version-col a:hover{background-color:#008800}
 .project-map .version-col.col, .empty-col.col {width:100px;}
-.project-map .task-col {padding:6px 8px;}
-.project-map .task-col-div {width:250px}
-.project-map .task-col div{overflow:hidden;}
-.project-map .task-col .owner {color:#660000}
-.project-map .task-col .description {}
+.project-map .ticket-col {padding:6px 8px;}
+.project-map .ticket-col-div {width:250px}
+.project-map .ticket-col div{overflow:hidden;}
+.project-map .ticket-col .owner {color:#660000}
+.project-map .ticket-col .description {}
 .project-map .title {margin:5px 0 3px;font-weight:bold;}
 .project-map ul {list-style:none}
 .project-map li, .project-map li a {font-size:12px;text-align:left;display:bloc;}
@@ -276,43 +276,46 @@ div.menu a {
 
 .version-user-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
 .version-user-map-owerflow {display:inline-block1;position:absolute1;}
-.version-user-map .version-col {padding:7px;border:1px solid gray;font-size:13px;margin:0 10px 10px 0;}
+.version-user-map .version-col {padding:7px;border:1px solid gray;font-size:13px;margin:0 10px 10px 0;background-color:#006;color:white;}
 .version-user-map .version-col.col, .empty-col.col {width:100px;}
-.version-user-map .task-col {}
-.version-user-map .task-col.unassigned {background-color:#d0d0d0;}
-.version-user-map .task-cells {font-size:12px;width:270px;}
-.version-user-map .task-cell-div {border:1px solid gray;padding:7px;margin:0 10px 10px 0;}
-.version-user-map .task-cell-div.ui-draggable-dragging {width:270px;}
-.version-user-map .task-cell-div.bug-true {background-color:#fff0d0;}
-.version-user-map .task-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}
-.version-user-map .task-cell-div .title a{font-size:12px;}
-.version-user-map .task-cell-div .status {}
+.version-user-map .ticket-col {}
+.version-user-map .ticket-col.unassigned {background-color:#d0d0d0;}
+.version-user-map .ticket-cells {font-size:12px;width:270px;}
+.version-user-map .ticket-cell-div {border:1px solid gray;padding:7px;margin:0 10px 10px 0;}
+.version-user-map .ticket-cell-div.ui-draggable-dragging {width:270px;}
+.version-user-map .ticket-cell-div.bug-true {background-color:#fff0d0;}
+.version-user-map .ticket-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}
+.version-user-map .ticket-cell-div .title a{font-size:12px;}
+.version-user-map .ticket-cell-div .status {}
 .version-user-map .version-col .todo {border:1px solid gray;background-color:#f0f0d0;padding:2px 4px;color:black;}
-.version-user-map .tasks .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
+.version-user-map .tickets .row {border:1px solid gray;background-color:#dddddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
 .version-user-map .bugs .row {border:1px solid red;background-color:#ffdddd;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
 .version-user-map .nowrap {white-space:nowrap;}
 .version-user-map td {padding:0;vertical-align:top;white-space:normal;}
 
 .version-user-map th.version-col a {color:white}
 
-.version-user-map .task-col.ui-state-hover {background-color:#fff;}
+.version-user-map .ticket-col.ui-state-hover {background-color:#fff;}
 .version-user-map .total-user-time {float:right;clear:right;border:1px solid gray;background:#f0fff0;padding:4px 8px;width:30px;}
 
+.version-user-map .version-col ul {list-style:none}
+.version-user-map .version-col ul li {padding-left:10px;}
 
+.title a {text-align:left;}
 
 /* Comments */
 .comment-form label {clear:both}
 .comment-form textarea{width:100%;border:1px solid #a0a0a0;padding:0}
 .comment-form input {margin-top:10px;}
-#task-comments .comment {padding:0 0 5px;margin:0 0 6px;border-bottom:1px solid #c0c0c0;}
-#task-comments .comment .date{margin-bottom:3px;}
-#task-comments .comment .date a{color:green;text-decoration:none}
-#task-comments .comment .text{}
-#task-comments .comment .text img{width:60px}
-#task-comments .edit-row {display:none;float:right;}
-#task-comments .edit-row a {float:left;margin:0 3px;}
-#task-comments .comment:hover {background:#ffe;}
-#task-comments .comment:hover .edit-row {display:block}
+#ticket-comments .comment {padding:0 0 5px;margin:0 0 6px;border-bottom:1px solid #c0c0c0;}
+#ticket-comments .comment .date{margin-bottom:3px;}
+#ticket-comments .comment .date a{color:green;text-decoration:none}
+#ticket-comments .comment .text{}
+#ticket-comments .comment .text img{width:60px}
+#ticket-comments .edit-row {display:none;float:right;}
+#ticket-comments .edit-row a {float:left;margin:0 3px;}
+#ticket-comments .comment:hover {background:#ffe;}
+#ticket-comments .comment:hover .edit-row {display:block}
 
 .comment-popup {width:700px;background:#fff;border:1px solid gray;}
 
@@ -333,9 +336,9 @@ body.tiny {background:#fff}
 .tiny .resize {float:right; height:32px; width:32px; background:url(images/resize.gif) 15px 15px no-repeat; cursor:s-resize}
 
 .feature-info .desc-div {margin:0 0 15px;}
-.feature-info .task-div a.TASK {color:navy;}
-.feature-info .task-div a.BUG {color:#990000;}
-.feature-info .task-div {margin:0 0 5px;}
+.feature-info .ticket-div a.TASK {color:navy;}
+.feature-info .ticket-div a.BUG {color:#990000;}
+.feature-info .ticket-div {margin:0 0 5px;}
 fieldset {background-color:#fff;border:1px solid gray;margin:0 0 10px 0;}
 fieldset legend {background-color:#fff;padding:2px 5px;border:1px solid gray;}
 

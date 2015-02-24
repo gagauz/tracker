@@ -32,6 +32,9 @@
     </t:grid>
 
     <p:sidebar>
+    	<t:if test="project">
+    	<t:ProjectMenu project="project"/>
+    	</t:if>
         <t:UserMenu/>
     </p:sidebar>
 

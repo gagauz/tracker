@@ -10,11 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "task_comment")
-public class TaskComment implements Identifiable {
+@Table(name = "ticket_comment")
+public class TicketComment implements Identifiable {
     private int id;
     private User author;
-    private Task task;
+    private Ticket ticket;
     private Date created = new Date();
     private Date updated;
     private String text;
@@ -31,7 +31,7 @@ public class TaskComment implements Identifiable {
         this.id = id;
     }
 
-    @ForeignKey(name = "fk_taskComment_author")
+    @ForeignKey(name = "fk_ticketComment_author")
     @ManyToOne(fetch = FetchType.LAZY)
     public User getAuthor() {
         return author;
@@ -41,14 +41,14 @@ public class TaskComment implements Identifiable {
         this.author = user;
     }
 
-    @ForeignKey(name = "fk_taskComment_task")
+    @ForeignKey(name = "fk_ticketComment_ticket")
     @ManyToOne(fetch = FetchType.LAZY)
-    public Task getTask() {
-        return task;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     @Column

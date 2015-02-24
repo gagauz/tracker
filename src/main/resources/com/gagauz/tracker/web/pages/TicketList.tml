@@ -6,9 +6,9 @@
     <p>Release scope ${version.project.name} ${version.name}</p>
 
 
-    <t:grid source="tasks" row="task" add="edit">
+    <t:grid source="tickets" row="ticket" add="edit">
     	<p:editCell>
-    		<t:pagelink page="FeatureVersionInfo" context="task">View</t:pagelink>
+    		<t:pagelink page="FeatureVersionInfo" context="ticket">View</t:pagelink>
     	</p:editCell>
     </t:grid>
     

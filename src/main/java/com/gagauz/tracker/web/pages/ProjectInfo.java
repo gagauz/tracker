@@ -39,10 +39,10 @@ public class ProjectInfo {
     private Version version;
 
     @Property
-    private FeatureVersion task;
+    private FeatureVersion ticket;
 
     @Property
-    private Task subtask;
+    private Ticket subticket;
 
     @Property
     private Feature feature;

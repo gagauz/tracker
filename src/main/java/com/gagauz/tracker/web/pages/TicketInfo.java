@@ -2,9 +2,9 @@ package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.StageDao;
-import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.Stage;
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.components.DeferredZone;
 import org.apache.tapestry5.annotations.*;
@@ -13,14 +13,14 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import java.util.List;
 
 @Secured
-public class TaskInfo {
+public class TicketInfo {
 
     @Component
     @Property(write = false)
     private DeferredZone commentsZone;
 
     @Property(write = false)
-    private Task task;
+    private Ticket ticket;
 
     @Persist
     @Property
@@ -30,7 +30,7 @@ public class TaskInfo {
     private User user;
 
     @Inject
-    private TaskDao taskDao;
+    private TicketDao ticketDao;
 
     @Property
     private Stage stage;
@@ -38,26 +38,26 @@ public class TaskInfo {
     @Inject
     private StageDao stageDao;
 
-    Object onActivate(Task task) {
-        if (null == task) {
+    Object onActivate(Ticket ticket) {
+        if (null == ticket) {
             return Index.class;
         }
-        this.task = task;
+        this.ticket = ticket;
 
         return null;
     }
 
     Object onPassivate() {
-        return task;
+        return ticket;
     }
 
     public boolean isOwner() {
-        return user.getId() == task.getOwner().getId();
+        return user.getId() == ticket.getOwner().getId();
     }
 
     @Cached
     public List<Stage> getStages() {
-        return task.getStages();
+        return ticket.getStages();
     }
 
 }

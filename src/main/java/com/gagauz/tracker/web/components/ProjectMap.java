@@ -2,7 +2,7 @@ package com.gagauz.tracker.web.components;
 
 import com.gagauz.tapestry.security.SecurityUserCreator;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
@@ -23,8 +23,8 @@ public class ProjectMap {
     @Component(parameters = {"id=prop:zoneId", "show=", "update="})
     private Zone zone;
 
-    @Component(parameters = {"id=literal:taskZone", "show=popup", "update=popup"})
-    private Zone taskZone;
+    @Component(parameters = {"id=literal:ticketZone", "show=popup", "update=popup"})
+    private Zone ticketZone;
 
     @Parameter(allowNull = false, required = true, principal = true)
     private Project project;
@@ -38,10 +38,10 @@ public class ProjectMap {
     @Property(write = false)
     private FeatureVersion featureVersion;
 
-    private Task task;
+    private Ticket ticket;
 
     @Property
-    private Task newTask;
+    private Ticket newTicket;
 
     @Property
     private int estimate;
@@ -53,7 +53,7 @@ public class ProjectMap {
     private FeatureVersionDao featureVersionDao;
 
     @Inject
-    private TaskDao taskDao;
+    private TicketDao ticketDao;
 
     @Inject
     private SecurityUserCreator securityUserCreator;
@@ -62,13 +62,13 @@ public class ProjectMap {
     private Request request;
 
     private Map<Version, Map<Feature, FeatureVersion>> featureVersionMap;
-    private Map<FeatureVersion, List<Task>> bugsMap;
-    private Map<FeatureVersion, List<Task>> tasksMap;
+    private Map<FeatureVersion, List<Ticket>> bugsMap;
+    private Map<FeatureVersion, List<Ticket>> ticketsMap;
 
     private void initMap(List<Version> versions) {
         featureVersionMap = CollectionFactory.newMap();
         bugsMap = CollectionFactory.newMap();
-        tasksMap = CollectionFactory.newMap();
+        ticketsMap = CollectionFactory.newMap();
         versions.add(null);
         for (Version version : versions) {
             Map<Feature, FeatureVersion> map = CollectionFactory.newMap();
@@ -87,14 +87,14 @@ public class ProjectMap {
 
             for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
                 featureVersionMap.get(featureVersion.getVersion()).put(featureVersion.getFeature(), featureVersion);
-                bugsMap.put(featureVersion, new ArrayList<Task>());
-                tasksMap.put(featureVersion, new ArrayList<Task>());
+                bugsMap.put(featureVersion, new ArrayList<Ticket>());
+                ticketsMap.put(featureVersion, new ArrayList<Ticket>());
             }
-            for (Task task : taskDao.findByProject(project)) {
-                if (task.getType() == TaskType.TASK) {
-                    tasksMap.get(task.getFeatureVersion()).add(task);
+            for (Ticket ticket : ticketDao.findByProject(project)) {
+                if (ticket.getType() == TicketType.TASK) {
+                    ticketsMap.get(ticket.getFeatureVersion()).add(ticket);
                 } else {
-                    bugsMap.get(task.getFeatureVersion()).add(task);
+                    bugsMap.get(ticket.getFeatureVersion()).add(ticket);
                 }
             }
         }
@@ -128,31 +128,31 @@ public class ProjectMap {
         return request.isXHR() ? zone.getBody() : null;
     }
 
-    Object onCreateTask(FeatureVersion featureVersion) {
+    Object onCreateTicket(FeatureVersion featureVersion) {
 
-        newTask = new Task();
-        newTask.setFeatureVersion(featureVersion);
-        //        newTask.setVersion(version);
+        newTicket = new Ticket();
+        newTicket.setFeatureVersion(featureVersion);
+        //        newTicket.setVersion(version);
 
-        return taskZone.getBody();
+        return ticketZone.getBody();
     }
 
-    public List<Task> getTasks() {
-        return tasksMap.get(featureVersion);
+    public List<Ticket> getTickets() {
+        return ticketsMap.get(featureVersion);
     }
 
-    public List<Task> getBugs() {
+    public List<Ticket> getBugs() {
         return bugsMap.get(featureVersion);
     }
 
-    public Task getTask() {
-        return task;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setTask(Task task) {
-        estimate += task.getEstimate();
-        progress += task.getProgress();
-        this.task = task;
+    public void setTicket(Ticket ticket) {
+        estimate += ticket.getEstimate();
+        progress += ticket.getProgress();
+        this.ticket = ticket;
     }
 
     public boolean isNotReleased() {

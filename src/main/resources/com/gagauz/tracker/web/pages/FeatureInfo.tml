@@ -1,4 +1,4 @@
-<html t:type="layout" title="task header info"
+<html t:type="layout" title="ticket header info"
       t:sidebarTitle="Framework Version"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
@@ -6,13 +6,19 @@
 	<t:pagelink t:page="projectinfo" t:context="feature.project">${feature.project.name}</t:pagelink>
 
 	<fieldset>
-    	<legend>${feature.name}</legend>
-    	<div>
-		    <p>${feature.description}</p>
-		    <p>Creator: ${feature.creator.name}</p>
-		    <p>Created: ${date:feature.created}</p>
-		    <p>Versions changes</p>
-		</div>
+		<legend>${feature.name}</legend>
+		<t:if test="editMode">
+			<t:BeanEditForm t:id="editForm" object="feature" exclude="id, created, updated" />
+			<p:else>
+				<t:eventlink t:event="edit">Edit</t:eventlink>
+		    	<div>
+				    <p>${feature.description}</p>
+				    <p>Creator: ${feature.creator.name}</p>
+				    <p>Created: ${date:feature.created}</p>
+				    <p>Versions changes</p>
+				</div>
+				</p:else>
+		</t:if>
     </fieldset>
     <div class="feature-info">
     <t:loop source="featureVersions" value="featureVersion">
@@ -29,11 +35,11 @@
     		
 	    	<div class="desc-div">${featureVersion.description}</div>
 	    	
-		    <t:loop source="getMap().get(featureVersion.getVersion())" value="task">
-		    	<div class="task-div">
-		    		<t:pagelink t:page="TaskInfo" t:context="task" class="${task.type}">${task.type} #${task.id} ${task.summary}</t:pagelink>
+		    <t:loop source="getMap().get(featureVersion.getVersion())" value="ticket">
+		    	<div class="ticket-div">
+		    		<t:pagelink t:page="TicketInfo" t:context="ticket" class="${ticket.type}">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
 		    		<div>
-		    			${task.description}
+		    			${ticket.description}
 		    		</div>
 		    	</div>
 		    </t:loop>

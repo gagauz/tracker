@@ -1,13 +1,15 @@
 package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tapestry.security.Secured;
-import com.gagauz.tracker.beans.dao.TaskDao;
+import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Task;
+import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.Comparators;
 import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -23,10 +25,17 @@ public class FeatureInfo {
     private FeatureVersion featureVersion;
 
     @Property
-    private Task task;
+    @Persist
+    private boolean editMode;
+
+    @Property
+    private Ticket ticket;
 
     @Inject
-    private TaskDao taskDao;
+    private TicketDao ticketDao;
+
+    @Inject
+    private FeatureDao featureDao;
 
     Object onActivate(Feature feature) {
         if (null == feature) {
@@ -43,6 +52,15 @@ public class FeatureInfo {
         return feature;
     }
 
+    void onSuccessFromEditForm() {
+        editMode = false;
+        featureDao.save(feature);
+    }
+
+    void onEdit() {
+        editMode = true;
+    }
+
     public List<FeatureVersion> getFeatureVersions() {
         List<FeatureVersion> list = feature.getFeatureVersions();
         Collections.sort(list, Comparators.FEATURE_VERSION_BY_VERSION_COMPARATOR);
@@ -50,15 +68,15 @@ public class FeatureInfo {
     }
 
     @Cached
-    public Map<Version, List<Task>> getMap() {
-        Map<Version, List<Task>> map = new HashMap<Version, List<Task>>(feature.getFeatureVersions().size());
-        for (Task task : taskDao.findByFeature(feature)) {
-            List<Task> tasks = map.get(task.getVersion());
-            if (null == tasks) {
-                tasks = new LinkedList<Task>();
-                map.put(task.getVersion(), tasks);
+    public Map<Version, List<Ticket>> getMap() {
+        Map<Version, List<Ticket>> map = new HashMap<Version, List<Ticket>>(feature.getFeatureVersions().size());
+        for (Ticket ticket : ticketDao.findByFeature(feature)) {
+            List<Ticket> tickets = map.get(ticket.getVersion());
+            if (null == tickets) {
+                tickets = new LinkedList<Ticket>();
+                map.put(ticket.getVersion(), tickets);
             }
-            tasks.add(task);
+            tickets.add(ticket);
         }
         return map;
     }
