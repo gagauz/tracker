@@ -1,5 +1,6 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 <ul>
+	<li><t:pagelink page="index">Index</t:pagelink></li>
 	<li><t:pagelink page="userlist">Users list</t:pagelink></li>
 	<li><t:pagelink page="rolegrouplist">Groups</t:pagelink></li>
 	<t:security.IfAuthorized>

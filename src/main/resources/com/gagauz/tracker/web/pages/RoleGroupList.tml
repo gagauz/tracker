@@ -3,8 +3,6 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <p>${message:greeting}</p>
-
 	<t:if test="editRoleGroup">
 	<h2>Roles Group</h2>
 	<div>

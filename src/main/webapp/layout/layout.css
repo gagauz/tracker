@@ -276,7 +276,7 @@ div.menu a {
 
 .version-user-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;position:relative1;}
 .version-user-map-owerflow {display:inline-block1;position:absolute1;}
-.version-user-map .version-col {padding:7px;background-color:#009900;color:white;border:1px solid gray;font-size:13px;margin:0 10px 10px 0;}
+.version-user-map .version-col {padding:7px;border:1px solid gray;font-size:13px;margin:0 10px 10px 0;}
 .version-user-map .version-col.col, .empty-col.col {width:100px;}
 .version-user-map .task-col {}
 .version-user-map .task-col.unassigned {background-color:#d0d0d0;}
@@ -347,6 +347,6 @@ fieldset legend {background-color:#fff;padding:2px 5px;border:1px solid gray;}
 
 a.TASK {display:inline-block;padding-left:20px;min-height:16px;background:transparent url('/static/i/task.gif') 0 0px no-repeat;}
 a.BUG {display:inline-block;padding-left:20px;min-height:16px;background:transparent url('/static/i/bug.gif') 0 0px no-repeat;}
-.IN_PROGRESS{padding-left:20px;min-height:16px;background:transparent url('/static/i/status_inprogress.gif') 0 0 no-repeat;}
-.OPEN{padding-left:20px;min-height:16px;background:transparent url('/static/i/status_open.gif') 0 0 no-repeat;}
-.RESOLVED{padding-left:20px;min-height:16px;background:transparent url('/static/i/status_resolved.gif') 0 0 no-repeat;}
+.status.IN_PROGRESS{padding-left:20px;min-height:16px;background:transparent url('/static/i/status_inprogress.gif') 0 0 no-repeat;}
+.status.OPEN{padding-left:20px;min-height:16px;background:transparent url('/static/i/status_open.gif') 0 0 no-repeat;}
+.status.RESOLVED{padding-left:20px;min-height:16px;background:transparent url('/static/i/status_resolved.gif') 0 0 no-repeat;}

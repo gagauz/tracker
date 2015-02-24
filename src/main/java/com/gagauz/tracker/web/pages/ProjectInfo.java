@@ -1,6 +1,7 @@
 package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tapestry.security.Secured;
+import com.gagauz.tapestry.security.api.SecurityUser;
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.StageDao;
@@ -8,6 +9,7 @@ import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
@@ -21,6 +23,10 @@ public class ProjectInfo {
     @Property
     @Persist("flash")
     private Version newVersion;
+
+    @Property
+    @Persist("flash")
+    private Feature newFeature;
 
     @Property
     @Persist("flash")
@@ -56,6 +62,9 @@ public class ProjectInfo {
     @Inject
     private RoleGroupDao roleGroupDao;
 
+    @SessionState
+    private SecurityUser securityUser;
+
     Object onActivate(Project project) {
         if (null == project) {
             return Index.class;
@@ -70,7 +79,23 @@ public class ProjectInfo {
 
     void onCreateVersion() {
         newVersion = new Version();
+    }
+
+    void onSuccessFromVersionForm() {
         newVersion.setProject(project);
+        versionDao.save(newVersion);
+        newVersion = null;
+    }
+
+    void onCreateFeature() {
+        newFeature = new Feature();
+    }
+
+    void onSuccessFromFeatureForm() {
+        newFeature.setCreator((User) securityUser);
+        newFeature.setProject(project);
+        featureDao.save(newFeature);
+        newFeature = null;
     }
 
     public List<Feature> getUserStories() {

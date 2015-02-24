@@ -9,8 +9,12 @@
 							<div class="version-col shadow">
 								<t:if test="user">
 									<div>${message:owner}: ${user.name}</div>
-									<div>${message:resolved-tasks}: </div>
-									<div>${message:unresolved-tasks}: total time</div>
+									<div>${message:tasks-by-status}: </div>
+									<div class="status OPEN">12</div>
+									<div class="status IN_PROGRESS">1</div>
+									<div class="status RESOLVED">1</div>
+									<div>${message:readiness}:</div>
+									<div>${message:remaining-time}:</div>
 								
 								<p:else>Unassigned</p:else>
 								</t:if>
@@ -31,10 +35,10 @@
 												</t:eventlink>
 											</div>
 											<div class="status ${task.status}">
-												Status: ${task.status}
+												${message:status}: ${task.status}
 											</div>
 											<div class="status">
-												Remain: ${taskTime}
+												${message:remaining-time}: ${taskTime}
 											</div>
 										</div>
 										<t:ProgressBar progress="task.progress" estimate="task.estimate" percent="true"/>
