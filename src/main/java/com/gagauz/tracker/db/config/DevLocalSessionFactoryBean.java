@@ -21,6 +21,9 @@ public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
         properties.put(USE_REFLECTION_OPTIMIZER, true);
         properties.put(DEFAULT_BATCH_FETCH_SIZE, 50);
         properties.put("current_session_context_class", "thread");
+        properties.put("hibernate.connection.CharSet", "utf8");
+        properties.put("hibernate.connection.characterEncoding", "utf8");
+        properties.put("hibernate.connection.useUnicode", "true");
         setHibernateProperties(properties);
     }
 }
