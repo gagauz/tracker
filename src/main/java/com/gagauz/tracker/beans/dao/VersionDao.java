@@ -14,4 +14,12 @@ public class VersionDao extends AbstractDao<Integer, Version> {
         return getSession().createQuery("from Version v where project=:project").setEntity("project", project).list();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Version> findByProject(Project project, boolean released) {
+        return getSession().createQuery("from Version v where project=:project and released=:released")
+                .setEntity("project", project)
+                .setBoolean("released", released)
+                .list();
+    }
+
 }

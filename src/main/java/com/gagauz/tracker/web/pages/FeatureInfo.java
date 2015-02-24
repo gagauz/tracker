@@ -9,6 +9,7 @@ import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.Comparators;
 import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -18,6 +19,7 @@ import java.util.*;
 @Secured
 public class FeatureInfo {
 
+    @Parameter
     @Property(write = false)
     private Feature feature;
 

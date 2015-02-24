@@ -21,8 +21,11 @@ public class Login {
     @Property
     private boolean remember;
 
+    //    @Inject
+    //    @Value("${" + RedirectLoginHandler.SECURITY_REDIRECT_PARAMETER + "}")
+    //TODO
     @ActivationRequestParameter
-    private Object r;
+    private Object redirect;
 
     @ActivationRequestParameter
     private Object n;
@@ -43,9 +46,10 @@ public class Login {
         SecurityUser user = loginService.authenticate(new CredentialsImpl(username, password));
         if (null != user) {
             rememberMeHandler.addRememberMeCookie(username, password);
+            return Index.class;
         }
+        return null;
 
-        return Index.class;
     }
 
     public String getRoles() {

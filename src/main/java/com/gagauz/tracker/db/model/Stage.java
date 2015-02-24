@@ -8,14 +8,13 @@ import java.util.Date;
 
 @Entity
 @Table(name = "stage")
-public class Stage implements StageTrigger, Identifiable {
+public class Stage implements Identifiable {
     private int id;
     private Project project;
     private Date created = new Date();
     private Date updated;
     private String name;
     private String description;
-    private StageTrigger trigger;
 
     @Id
     @GeneratedValue
@@ -75,23 +74,6 @@ public class Stage implements StageTrigger, Identifiable {
         this.description = description;
     }
 
-    @Column
-    public StageTrigger getTrigger() {
-        return trigger;
-    }
-
-    public void setTrigger(StageTrigger trigger) {
-        if (null == trigger) {
-            if (null != this.trigger) {
-                this.trigger.removeStage(this);
-            }
-        } else if (null != trigger) {
-            trigger.addStage(this);
-        }
-        this.trigger = trigger;
-
-    }
-
     @Override
     public int hashCode() {
         return id;
@@ -100,24 +82,6 @@ public class Stage implements StageTrigger, Identifiable {
     @Override
     public boolean equals(Object obj) {
         return this == obj || (null != obj && obj.hashCode() == hashCode());
-    }
-
-    @Override
-    public void triggerStages() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addStage(Stage stage) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void removeStage(Stage stage) {
-        // TODO Auto-generated method stub
-
     }
 
 }

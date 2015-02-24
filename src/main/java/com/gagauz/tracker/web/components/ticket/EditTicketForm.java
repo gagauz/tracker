@@ -18,6 +18,7 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
 
@@ -51,8 +52,15 @@ public class EditTicketForm {
     @Inject
     private SelectModelFactory selectModelFactory;
 
+    @Inject
+    private Request request;
+
     @SessionState
     private SecurityUser user;
+
+    public String getZoneId() {
+        return zone.getClientId();
+    }
 
     boolean setupRender() {
         if (null != ticketParam) {
@@ -61,9 +69,12 @@ public class EditTicketForm {
         return ticket != null;
     }
 
-    void onSubmitFromForm() {
-        getTicket().setAuthor((User) user);
-        ticketDao.save(getTicket());
+    Object onSubmitFromForm() {
+        if (!form.getHasErrors()) {
+            getTicket().setAuthor((User) user);
+            ticketDao.save(getTicket());
+        }
+        return request.isXHR() ? zone.getBody() : null;
     }
 
     List<User> onProvideCompletions(String username) {

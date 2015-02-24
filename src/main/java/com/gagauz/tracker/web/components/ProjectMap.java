@@ -3,20 +3,15 @@ package com.gagauz.tracker.web.components;
 import com.gagauz.tapestry.security.SecurityUserCreator;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.Request;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ProjectMap {
 
@@ -50,6 +45,9 @@ public class ProjectMap {
     private int progress;
 
     @Inject
+    private VersionDao versionDao;
+
+    @Inject
     private FeatureVersionDao featureVersionDao;
 
     @Inject
@@ -69,7 +67,6 @@ public class ProjectMap {
         featureVersionMap = CollectionFactory.newMap();
         bugsMap = CollectionFactory.newMap();
         ticketsMap = CollectionFactory.newMap();
-        versions.add(null);
         for (Version version : versions) {
             Map<Feature, FeatureVersion> map = CollectionFactory.newMap();
             for (Feature feature : getFeatures()) {
@@ -81,24 +78,42 @@ public class ProjectMap {
 
     @Cached
     public Collection<Version> getVersions() {
-        List<Version> versions = project.getVersions();
+        List<Version> versions = releasedVersions
+                ? versionDao.findByProject(project, true)
+                : versionDao.findByProject(project, false);
+        if (activeVersions) {
+            versions.add(null);
+        }
         if (null == featureVersionMap) {
             initMap(versions);
 
             for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
-                featureVersionMap.get(featureVersion.getVersion()).put(featureVersion.getFeature(), featureVersion);
+                Map<Feature, FeatureVersion> map = featureVersionMap.get(featureVersion.getVersion());
+                if (null == map) {
+                    continue;
+                }
+                map.put(featureVersion.getFeature(), featureVersion);
                 bugsMap.put(featureVersion, new ArrayList<Ticket>());
                 ticketsMap.put(featureVersion, new ArrayList<Ticket>());
             }
             for (Ticket ticket : ticketDao.findByProject(project)) {
                 if (ticket.getType() == TicketType.TASK) {
-                    ticketsMap.get(ticket.getFeatureVersion()).add(ticket);
+                    addToMap(ticketsMap, ticket.getFeatureVersion(), ticket);
                 } else {
-                    bugsMap.get(ticket.getFeatureVersion()).add(ticket);
+                    addToMap(bugsMap, ticket.getFeatureVersion(), ticket);
                 }
             }
         }
         return versions;
+    }
+
+    private <K, V> void addToMap(Map<K, List<V>> map, K key, V value) {
+        List<V> l = map.get(key);
+        if (null == l) {
+            l = new LinkedList<V>();
+            map.put(key, l);
+        }
+        l.add(value);
     }
 
     @Cached
@@ -163,4 +178,22 @@ public class ProjectMap {
         return "ProjectMapZone";
     }
 
+    @Persist
+    @Property
+    private boolean activeVersions;
+
+    @Persist
+    @Property
+    private boolean releasedVersions;
+
+    void onViewMode(String mode) {
+        if ("a".equals(mode)) {
+            releasedVersions = false;
+            activeVersions = true;
+        }
+        if ("r".equals(mode)) {
+            releasedVersions = true;
+            activeVersions = false;
+        }
+    }
 }

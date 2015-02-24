@@ -1,17 +1,22 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-<div t:id="zone">
-	<form t:id="form">
+<div t:id="zone" class="edit-ticket-form">
+	<form t:id="form" clientvalidation="false" zone="prop:zoneId">
 		<t:hidden t:value="ticket.featureVersion"/>
 		<div class="title">
-	    	<h2>New <t:select value="ticket.type" blankOption="never"/></h2>
+	    	<h2>New <t:select class="" value="ticket.type" blankOption="never"/></h2>
 	    </div>
 	    <div class="block">
 			<table border="0">
 				<tr>
-					<th>Summary:</th>
-					<td colspan="5"><t:textfield t:value="ticket.summary" /></td>
+					<th>
+						Summary:
+						<t:error for="summary"/>
+					</th>
+					<td colspan="5">
+						<t:textfield class="text" t:id="summary" t:value="ticket.summary" required="true" validate="required" />
+					</td>
 				</tr>
 				<tr>
 					<th>Status:</th>
@@ -55,9 +60,9 @@
 	    </div>
 	    
 	    <h2>Description</h2>
-	    <div class="block">
-	    	<t:textarea t:value="ticket.description"/>
-	    </div>
+    	<div>
+    		<t:textarea t:value="ticket.description" rows="4"/>
+    	</div>
 	    <t:linksubmit class="save button">${message:save}</t:linksubmit>
 	</form>
 </div>

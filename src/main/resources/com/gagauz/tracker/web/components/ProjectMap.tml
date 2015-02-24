@@ -1,6 +1,10 @@
-<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<t:eventlink t:event="viewMode" t:context="literal:a" class="on_${activeVersions}">Active versions</t:eventlink>
+    <t:eventlink t:event="viewMode" t:context="literal:r" class="on_${releasedVersions}">Released versions</t:eventlink>
+
 	<div class="project-map" t:id="zone">
 		<div class="project-map-owerflow">
+			<div>
 			<table cellspacing="10">
 				<thead>
 					<tr>
@@ -88,7 +92,9 @@
 					</t:loop>
 				</tbody>
 			</table>
+			</div>
 		</div>
+		<div class="c"></div>
 	</div>
 	
 	<div style="display:none">
@@ -99,4 +105,4 @@
 		</div>
 	</div>
 	
-</div>
+</t:container>

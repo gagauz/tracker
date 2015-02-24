@@ -3,7 +3,11 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-	<t:pagelink t:page="projectinfo" t:context="feature.project">${feature.project.name}</t:pagelink>
+	<h1>
+	${feature.name}
+	/ <t:pagelink t:page="FeaturesList" t:context="feature.project">Features</t:pagelink>
+	/ <t:pagelink t:page="ProjectInfo" t:context="feature.project">${feature.project.name}</t:pagelink>
+	</h1>
 
 	<fieldset>
 		<legend>${feature.name}</legend>

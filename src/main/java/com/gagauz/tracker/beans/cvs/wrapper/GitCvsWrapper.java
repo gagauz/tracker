@@ -61,7 +61,7 @@ public class GitCvsWrapper implements CvsWrapper {
 
     private String log(String grep) {
         StringBuilder log = new StringBuilder();
-        int res = BashUtils.execute(repoDir, log, "git log --pretty=format:'>>>%at|%H|%an|%s' --stat --name-status --grep=" + grep +
+        int res = BashUtils.execute(repoDir, log, "git log --pretty=format:>>>%at|%H|%an|%s --stat --name-status --grep=" + grep +
                 " --regexp-ignore-case");
         if (0 != res) {
             System.err.println(log.toString());
@@ -97,7 +97,7 @@ public class GitCvsWrapper implements CvsWrapper {
 
     @Override
     public List<Commit> getCommits(Ticket ticket) {
-        String grep = ticket.getType() + " #" + ticket.getId();
+        String grep = ticket.getType() + "\\s#" + ticket.getId();
         String log = log(grep);
         List<Commit> commits = new ArrayList<Commit>();
         for (String cl : log.split(">>>")) {
@@ -117,5 +117,4 @@ public class GitCvsWrapper implements CvsWrapper {
         }
         return commits;
     }
-
 }

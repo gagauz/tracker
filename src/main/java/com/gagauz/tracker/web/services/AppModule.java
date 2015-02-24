@@ -52,7 +52,7 @@ public class AppModule {
         configuration.add(SymbolConstants.DEFAULT_STYLESHEET, "com/gagauz/tracker/web/stack/default.css");
 
         //Security config
-        configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_PARAMETER, "r");
+        configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_PARAMETER, "redirect");
         configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_URL, "/login");
     }
 

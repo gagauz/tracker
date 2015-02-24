@@ -4,6 +4,7 @@
 	<li><t:pagelink page="RoleGroupList" context="[project, null]">Roles</t:pagelink></li>
 	<li><t:pagelink page="UserList">Users</t:pagelink></li>
 	<li><t:pagelink page="WorkflowInfo" context="project">Workflow</t:pagelink></li>
+	<li><t:pagelink page="FeaturesList" context="project">Features</t:pagelink></li>
 	<t:body/>
 </ul>
 </div>
