@@ -2,7 +2,7 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter" hideLeftMenu="true">
 
 
-	<div class="container">
+	<div class="container" style="width:400px;">
 
 		<t:form t:id="loginForm" class="form-signin">
 			<h2 class="form-signin-heading">Please sign in</h2>

@@ -1,7 +1,7 @@
 .popup-window {
 	background-color:#f0f0f0;
-	padding:10px 10px;
-	min-width:500px;
+	padding:10px 10px 20px;
+	min-width:700px;
 	border:1px solid gray;
 	box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.5);
 }
@@ -11,6 +11,7 @@
 	filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
 }
 .popup-close {
-	position:absolute;
-	right:5px;top:5px;
+	clear:both;
+	float:right;
+	margin:0 0 10px 100%;
 }

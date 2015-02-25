@@ -23,9 +23,6 @@
 				${ticket.description}
 			</div>
 		</div>
-		<!-- <p:sidebar> <ul> <t:security.IfAuthorized roles="TASK_CREATOR"> <li><t:eventlink t:event="edit">Edit</t:eventlink></li> </t:security.IfAuthorized> <t:security.IfAuthorized 
-			roles="TASK_ASSIGNER"> <li><t:eventlink t:event="assign">Assign</t:eventlink></li> </t:security.IfAuthorized> <t:if test="owner"> <li><t:eventlink t:event="resolve">Resolve</t:eventlink></li> 
-			</t:if> </ul> </p:sidebar> -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">Comments</h3>

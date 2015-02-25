@@ -1,4 +1,4 @@
-package com.gagauz.tapestry.common.components;
+package org.gagauz.tapestry.common.components;
 
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.SelectModel;

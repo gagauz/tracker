@@ -1,4 +1,4 @@
-package com.gagauz.tapestry.common.components;
+package org.gagauz.tapestry.common.components;
 
 import com.gagauz.tracker.utils.StringUtils;
 import org.apache.tapestry5.*;

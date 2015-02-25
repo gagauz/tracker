@@ -8,7 +8,7 @@
 .project-map .version-col a, .project-map .version-col div{display:block;padding:10px;font-weight:bold;text-align:left;height:100%;}
 .project-map .version-col.col, .empty-col.col {width:100px;}
 .project-map td.empty-col {border:none;box-shadow:none;}
-.project-map .ticket-col {padding:6px 8px;}
+.project-map .ticket-col {padding:10px;}
 .project-map .ticket-col div{overflow:hidden;}
 .project-map .ticket-col .description {}
 .project-map .title {margin:5px 0 3px;font-weight:bold;}

@@ -15,12 +15,12 @@ import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
+import org.gagauz.tapestry.common.components.MyBeanEditForm;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class EditTicketForm {
     private Zone zone;
 
     @Component
-    private Form form;
+    private MyBeanEditForm form;
 
     @Parameter(name = "ticket")
     private Ticket ticketParam;

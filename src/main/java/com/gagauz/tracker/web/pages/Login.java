@@ -7,12 +7,10 @@ import com.gagauz.tracker.utils.StringUtils;
 import com.gagauz.tracker.web.services.CredentialsImpl;
 import com.gagauz.tracker.web.services.RememberMeHandler;
 import org.apache.tapestry5.annotations.ActivationRequestParameter;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 
-@Import(stylesheet = "context:/static/bootstrap/css/login.css")
 public class Login {
     @Property
     private String username;

@@ -13,7 +13,7 @@
 			</p:project>
 			<p:roles>
 				<t:label for="roles"></t:label>
-				<t:tap.MultiSelect t:id="roles" model="model" value="editRoleGroup.roles" size="10" blankLabel="message:select"/>
+				<t:MultiSelect t:id="roles" model="model" value="editRoleGroup.roles" size="10" blankLabel="message:select"/>
 			</p:roles>
 		
 		</t:beaneditform>

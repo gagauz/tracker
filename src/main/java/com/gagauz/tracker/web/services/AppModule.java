@@ -13,6 +13,7 @@ import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule;
 import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -59,7 +60,7 @@ public class AppModule {
     }
 
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
-        configuration.add(new LibraryMapping("tap", "com.gagauz.tapestry.common"));
+        configuration.add(new LibraryMapping(InternalConstants.CORE_LIBRARY, "org.gagauz.tapestry.common"));
         configuration.add(new LibraryMapping("security", "com.gagauz.tapestry.security"));
     }
 
@@ -145,5 +146,4 @@ public class AppModule {
             }
         });
     }
-
 }

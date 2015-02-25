@@ -1,4 +1,4 @@
-package com.gagauz.tapestry.common.components;
+package org.gagauz.tapestry.common.components;
 
 import com.gagauz.tapestry.encoder.AbstractCollectionValueEncoder;
 import com.gagauz.tapestry.encoder.CollectionValueEncoder;

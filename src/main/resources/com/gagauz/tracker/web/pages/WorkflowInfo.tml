@@ -13,12 +13,12 @@
 			</p:project>
 			<p:allowFrom>
 				<t:label for="allowFrom"></t:label>
-				<t:tap.MultiSelect t:id="allowFrom" model="modelFrom" value="editEntity.allowedFrom" size="10" blankLabel="message:select"/>
+				<t:MultiSelect t:id="allowFrom" model="modelFrom" value="editEntity.allowedFrom" size="10" blankLabel="message:select"/>
 			</p:allowFrom>
 			
 			<p:allowTo>
 				<t:label for="allowTo"></t:label>
-				<t:tap.MultiSelect t:id="allowTo" model="modelTo" value="editEntity.allowedTo" size="10" blankLabel="message:select"/>
+				<t:MultiSelect t:id="allowTo" model="modelTo" value="editEntity.allowedTo" size="10" blankLabel="message:select"/>
 			</p:allowTo>
 		
 		</t:beaneditform>

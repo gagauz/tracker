@@ -1,6 +1,6 @@
 package com.gagauz.tapestry.encoder;
 
-import com.gagauz.tapestry.common.components.MultiSelect;
+import org.gagauz.tapestry.common.components.MultiSelect;
 
 import org.apache.tapestry5.OptionGroupModel;
 import org.apache.tapestry5.OptionModel;
