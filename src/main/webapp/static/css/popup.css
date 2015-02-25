@@ -1,0 +1,16 @@
+.popup-window {
+	background-color:#f0f0f0;
+	padding:10px 10px;
+	min-width:500px;
+	border:1px solid gray;
+	box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.5);
+}
+#popup-overlay {
+	background:#fff;
+	opacity:.8;
+	filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+}
+.popup-close {
+	position:absolute;
+	right:5px;top:5px;
+}

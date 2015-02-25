@@ -1,57 +1,71 @@
-<html t:type="layout" title="ticket info"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
+<html t:type="layout" title="ticket info" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-<div class="ticket-info">
-    <t:TicketHeader ticket="ticket"/>
-    
-    <h2>Attachments</h2>
-    <div class="block" id="dropzone">
-    
-    </div>
+	<p:header>
+  		${ticket.type} #${ticket.id}
+  	</p:header>
 
-    <h2>Description</h2>
-    <div class="block">
-    ${ticket.description}
-    </div>
-    <!--
-    <p:sidebar>
-    
-    	<ul>
-    		<t:security.IfAuthorized roles="TASK_CREATOR">
-	        <li><t:eventlink t:event="edit">Edit</t:eventlink></li>
-	        </t:security.IfAuthorized>
-	        <t:security.IfAuthorized roles="TASK_ASSIGNER">
-	        <li><t:eventlink t:event="assign">Assign</t:eventlink></li>
-	        </t:security.IfAuthorized>
-	        
-	        <t:if test="owner">
-	        <li><t:eventlink t:event="resolve">Resolve</t:eventlink></li>
-	        </t:if>
-        </ul>
-        
-    </p:sidebar>
--->
-    <h2>Comments</h2>
-    <t:DeferredZone t:id="commentsZone" id="ticket-comments" t:context="ticket" class="block">
-    	<p:empty>
-    		<img src="/static/i/loading_bar_gray.gif" />
-    	</p:empty>
-		 <t:ticket.TicketComments ticket="ticket" zone="commentsZone"/>
-    </t:DeferredZone>
-   
-    
-    <h2>Stages</h2>
-    <div class="block">
-    </div>
-    
-    <h2>Code changes</h2>
-    <t:DeferredZone id="ticket-commits" t:context="ticket" class="block">
-    	<p:empty>
-    		<img src="/static/i/loading_bar_gray.gif" />
-    	</p:empty>
-    	<t:ticket.TicketCommits ticket="ticket"/>
-    </t:DeferredZone>
-    
-</div>
+	<div class="ticket-info">
+	
+		<t:TicketHeader ticket="ticket" />
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Attachments</h3>
+			</div>
+			<div class="panel-body"></div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Description</h3>
+			</div>
+			<div class="panel-body">
+				${ticket.description}
+			</div>
+		</div>
+		<!-- <p:sidebar> <ul> <t:security.IfAuthorized roles="TASK_CREATOR"> <li><t:eventlink t:event="edit">Edit</t:eventlink></li> </t:security.IfAuthorized> <t:security.IfAuthorized 
+			roles="TASK_ASSIGNER"> <li><t:eventlink t:event="assign">Assign</t:eventlink></li> </t:security.IfAuthorized> <t:if test="owner"> <li><t:eventlink t:event="resolve">Resolve</t:eventlink></li> 
+			</t:if> </ul> </p:sidebar> -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Comments</h3>
+			</div>
+			<div class="panel-body">
+				<t:DeferredZone t:id="commentsZone" id="ticket-comments" t:context="ticket" class="block">
+					<p:empty>
+						<div class="progress progress-striped active">
+							<div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+						</div>
+					</p:empty>
+					<t:ticket.TicketComments ticket="ticket" zone="commentsZone" />
+				</t:DeferredZone>
+			</div>
+		</div>
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Stages</h3>
+			</div>
+			<div class="panel-body">
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Code changes</h3>
+			</div>
+			<div class="panel-body">
+				<t:DeferredZone id="ticket-commits" t:context="ticket" class="block">
+					<p:empty>
+						<div class="progress progress-striped active">
+							<div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+						</div>
+					</p:empty>
+					<t:ticket.TicketCommits ticket="ticket" />
+				</t:DeferredZone>
+			</div>
+		</div>
+
+	</div>
 </html>

@@ -1,5 +1,5 @@
 <html t:type="layout" title="Contact com.gagauz"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter" hideLeftMenu="true">
 
 
 	<div class="container">

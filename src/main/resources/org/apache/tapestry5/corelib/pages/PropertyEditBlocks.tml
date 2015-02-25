@@ -1,0 +1,63 @@
+<div xml:space="default" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+
+	<t:block id="text">
+		<t:label class="col-sm-2 control-label" for="textField" />
+		<div class="col-sm-10">
+			<input class="form-control" t:id="textField" />
+		</div>
+	</t:block>
+
+	<t:block id="number">
+		<t:label class="col-sm-2 control-label" for="numberField" />
+		<div class="col-sm-10">
+			<input class="form-control t-number" t:id="numberField" />
+		</div>
+	</t:block>
+
+
+	<t:block id="enum">
+		<t:label class="col-sm-2 control-label" for="select" />
+		<div class="col-sm-10">
+			<input class="form-control" t:id="select" />
+		</div>
+	</t:block>
+
+	<t:block id="boolean">
+		<div class="col-sm-offset-2 col-sm-10">
+			<div class="checkbox">
+				<t:label for="checkboxField">
+					<input t:id="checkboxField" />
+				</t:label>
+			</div>
+		</div>
+	</t:block>
+
+	<t:block id="date">
+		<t:label class="col-sm-2 control-label" for="dateField" />
+		<div class="col-sm-10">
+			<input class="form-control" t:id="dateField" />
+		</div>
+	</t:block>
+
+	<t:block id="calendar">
+		<t:label class="col-sm-2 control-label" for="calendarField" />
+		<div class="col-sm-10">
+			<input class="form-control" t:id="calendarField" />
+		</div>
+	</t:block>
+
+	<t:block id="password">
+		<t:label class="col-sm-2 control-label" for="passwordField" />
+		<div class="col-sm-10">
+			<input class="form-control" t:id="passwordField" />
+		</div>
+	</t:block>
+
+	<t:block id="longtext">
+		<t:label class="col-sm-2 control-label" for="textarea" />
+		<div class="col-sm-10">
+			<textarea class="form-control" t:id="textarea" />
+		</div>
+	</t:block>
+
+</div>

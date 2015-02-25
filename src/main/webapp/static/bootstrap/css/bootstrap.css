@@ -180,10 +180,6 @@ textarea {
 optgroup {
   font-weight: bold;
 }
-table {
-  border-spacing: 0;
-  border-collapse: collapse;
-}
 td,
 th {
   padding: 0;
@@ -254,6 +250,7 @@ th {
   }
   .table {
     border-collapse: collapse !important;
+    border-spacing: 0;
   }
   .table td,
   .table th {
@@ -2602,7 +2599,7 @@ input[type="search"] {
     line-height: 46px;
   }
 }
-.form-group {
+.form-group, t-beaneditor-row {
   margin-bottom: 15px;
 }
 .radio,
@@ -6269,6 +6266,7 @@ button.close {
     bottom: 20px;
   }
 }
+
 .clearfix:before,
 .clearfix:after,
 .dl-horizontal dd:before,
@@ -6295,13 +6293,16 @@ button.close {
 .navbar-collapse:after,
 .pager:before,
 .pager:after,
+/*
 .panel-body:before,
 .panel-body:after,
+*/
 .modal-footer:before,
 .modal-footer:after {
   display: table;
   content: " ";
 }
+
 .clearfix:after,
 .dl-horizontal dd:after,
 .container:after,

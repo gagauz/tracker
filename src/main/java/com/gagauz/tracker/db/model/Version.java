@@ -59,9 +59,6 @@ public class Version implements Identifiable {
 
     @Column
     public String getBranch() {
-        if (null == branch) {
-            branch = project.getCvsRepo().getBranch();
-        }
         return branch;
     }
 

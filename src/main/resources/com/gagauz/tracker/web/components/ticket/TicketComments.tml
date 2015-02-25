@@ -27,15 +27,17 @@
 	<div t:id="editZone" data-popup-class="comment-popup">
 		<t:form id="literal:commentForm" t:id="commentForm" class="comment-form" t:context="newComment.id" t:zone="${parentZoneId}">
 			<t:error for="text" />
-			<div>
-				<t:textarea t:id="text" t:value="newComment.text" t:validate="required"
+			<div class="form-group">
+				<t:textarea class="form-control" t:id="text" t:value="newComment.text" t:validate="required"
 					t:mixins="import" 
 					import.stylesheet="/static/js/jquery/tinyeditor/style.css"
 					import.library="/static/js/jquery/tinyeditor/packed.js"
 					import.jqueryFunction="tinyEditor"
 					rows="5"/>
 			</div>
-			<t:LinkSubmit class="save button">${message:add-comment}</t:LinkSubmit>
+			<div class="form-group">
+				<t:LinkSubmit class="btn btn-default">${message:add-comment}</t:LinkSubmit>
+			</div>
 		</t:form>
 	</div>
 </div>

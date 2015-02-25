@@ -13,7 +13,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 /**
  * Layout component for pages of application tracker.
  */
-@Import(stack = "tracker-stack")
+@Import(stack = "tracker-stack", stylesheet = "context:/static/css/popup.css")
 public class Layout
 {
     /**
@@ -33,6 +33,10 @@ public class Layout
     @Property
     @Parameter(defaultPrefix = BindingConstants.LITERAL)
     private Block sidebar;
+
+    @Property
+    @Parameter(defaultPrefix = BindingConstants.LITERAL)
+    private Block header;
 
     @Inject
     private ComponentResources resources;

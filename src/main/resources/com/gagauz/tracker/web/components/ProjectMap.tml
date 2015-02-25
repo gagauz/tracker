@@ -1,108 +1,106 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-	<t:eventlink t:event="viewMode" t:context="literal:a" class="on_${activeVersions}">Active versions</t:eventlink>
-    <t:eventlink t:event="viewMode" t:context="literal:r" class="on_${releasedVersions}">Released versions</t:eventlink>
+	<ul class="nav nav-tabs">
+		<li class="${cond:activeVersions,active,}">
+			<t:eventlink t:event="viewMode" t:context="literal:a">Active versions</t:eventlink>
+		</li>
+		<li class="${cond:releasedVersions,active,}">
+			<t:eventlink t:event="viewMode" t:context="literal:r">Released versions</t:eventlink>
+		</li>
+	</ul>
 
 	<div class="project-map" t:id="zone">
 		<div class="project-map-owerflow">
 			<div>
-			<table cellspacing="10">
-				<thead>
-					<tr>
-						<td style="border:none;box-shadow:none;"></td>
-						<t:loop source="features" value="feature">
-							<th class="feature-col">
-								<t:pagelink t:page="featureinfo" t:context="feature">${feature.name}</t:pagelink>
-							</th>
-						</t:loop>
-					</tr>
-				</thead>
-				<tbody>
-					<t:loop source="versions" value="version">
-						<tr class="released-${cond:version,prop:version.released,unknown}">
-							<th class="version-col">
-								<t:if test="version">
-								<t:pagelink t:page="versioninfo" t:context="version">
-								${message:version}: ${version.name}<br/>
-								${message:release-date}: ${version.releaseDate}
-								</t:pagelink>
-								<p:else>
-								${message:future-versions}
-								</p:else>
-								</t:if>
-							</th>
+				<table cellspacing="10" class="">
+					<thead>
+						<tr>
+							<td class="empty-col"></td>
 							<t:loop source="features" value="feature">
-								<td class="ticket-col">
-									<div class="ticket-col-div">
-									<t:if test="featureVersion">
-										<div class="description">
-											${featureVersion.description}
-										</div>
-										
-										<div class="tickets" t:type="if" t:test="tickets">
-											<div class="title">${message:tickets-list}</div>
-											<ul>
-												<li t:type="loop" source="tickets" value="ticket">
-													<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
-													<!-- 
-													<t:ProgressBar progress="ticket.progress" estimate="ticket.estimate"/>
-													 -->
-												</li>
-											</ul>
-										</div>
-										<div class="bugs" t:type="if" t:test="bugs">
-											<div class="title">${message:bugs-list}</div>
-											<ul>
-												<li t:type="loop" source="bugs" value="ticket">
-													<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
-													<!-- 
-													<t:ProgressBar progress="ticket.progress" estimate="ticket.estimate"/>
-													 -->
-												</li>
-											</ul>
-										</div>
-										<t:if test="notReleased">
-											<t:eventlink class="add button" t:event="createTicket" t:context="featureVersion" t:zone="ticketZone">
-												${message:create-bug-or-ticket}
-											</t:eventlink>
-										</t:if>
-										<!-- 
-										<div class="progress">
-											<div class="row">
-												${message:total-progress}
-												<t:ProgressBar progress="progress" estimate="estimate"/>
-											</div>
-										</div>
-										 -->
-										
-										
-									<p:else>
-										<t:if test="version">
-											<t:if test="!version.released">
-												<t:eventlink class="add button" t:event="createFeatureVersion" t:context="[feature, version]" t:zone="prop:zoneId">
-													${message:create-feature-version} 
-												</t:eventlink>
-											</t:if>
-										</t:if>
-									</p:else>
-									</t:if>
-									</div>
-								</td>
+								<th class="feature-col">
+									<t:pagelink class="btn btn-primary" t:page="featureinfo" t:context="feature">${feature.name}</t:pagelink>
+								</th>
 							</t:loop>
 						</tr>
-					</t:loop>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<t:loop source="versions" value="version">
+							<tr class="released-${cond:version,prop:version.released,unknown}">
+								<th class="version-col">
+									<t:if test="version">
+										<t:pagelink class="" t:page="versioninfo" t:context="version">
+											${message:version}: ${version.name}
+											<br />
+											${message:release-date}: ${version.releaseDate}
+										</t:pagelink>
+										<p:else>
+											<div>${message:future-versions}</div>
+										</p:else>
+									</t:if>
+								</th>
+								<t:loop source="features" value="feature">
+									<td class="ticket-col ${cond:noReleaseVersion,alert-warning,}" valign="top">
+										<div class="ticket-col-div">
+											<t:if test="featureVersion">
+												<div class="description">
+													${featureVersion.description}
+												</div>
+												<div class="progr">
+													${message:total-progress}
+													<t:ProgressBar progress="progress" estimate="estimate"/>
+												</div>
+												<div class="tickets" t:type="if" t:test="tickets">
+													<div class="title">${message:tickets-list}</div>
+													<ul>
+														<li t:type="loop" source="tickets" value="ticket">
+															<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
+														</li>
+													</ul>
+												</div>
+												<div class="bugs" t:type="if" t:test="bugs">
+													<div class="title">${message:bugs-list}</div>
+													<ul>
+														<li t:type="loop" source="bugs" value="ticket">
+															<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
+														</li>
+													</ul>
+												</div>
+												<t:if test="notReleased">
+													<t:eventlink class="btn btn-default" t:event="createTicket" t:context="featureVersion" t:zone="ticketZone">
+														${message:create-bug-or-ticket}
+													</t:eventlink>
+												</t:if>
+												
+
+
+												<p:else>
+													<t:if test="notReleased">
+														<div class=" ">
+															<p>${message:no-feature-version-yet}</p>
+														</div>
+														<t:eventlink class="btn btn-default" t:event="createFeatureVersion" t:context="[feature, version]" t:zone="prop:zoneId">
+															${message:create-feature-version}
+														</t:eventlink>
+													</t:if>
+												</p:else>
+											</t:if>
+										</div>
+									</td>
+								</t:loop>
+							</tr>
+						</t:loop>
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<div class="c"></div>
 	</div>
-	
+
 	<div style="display:none">
 		<div t:id="ticketZone" class="ticket-popup">
 			<t:if test="newTicket">
-				<t:ticket.EditTicketForm ticket="newTicket"/>
+				<t:ticket.EditTicketForm ticket="newTicket" />
 			</t:if>
 		</div>
 	</div>
-	
+
 </t:container>

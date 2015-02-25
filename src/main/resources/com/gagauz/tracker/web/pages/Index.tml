@@ -3,7 +3,7 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 	xmlns:p="tapestry:parameter">
 
-<t:grid source="projects" row="project" add="edit">
+<t:grid source="projects" row="project" add="edit" class="table table-striped">
 	<p:editCell>
 		<t:pagelink page="projectinfo" context="project">View</t:pagelink>
 	</p:editCell>

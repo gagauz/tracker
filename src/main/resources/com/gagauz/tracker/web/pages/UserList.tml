@@ -25,7 +25,7 @@
 
 	<div class="title">User list</div>
 	<div class="block">
-	    <t:grid source="users" row="user" add="edit">
+	    <t:grid source="users" row="user" add="edit" class="table table-striped">
 	    	<p:editCell>
 	    	<t:eventlink event="edit" context="user.id">${message:edit}</t:eventlink>
 	    	</p:editCell>

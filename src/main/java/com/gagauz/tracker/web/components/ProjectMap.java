@@ -13,6 +13,7 @@ import org.apache.tapestry5.services.Request;
 
 import java.util.*;
 
+@Import(stylesheet = "context:/static/css/project-map.css")
 public class ProjectMap {
 
     @Component(parameters = {"id=prop:zoneId", "show=", "update="})
@@ -195,5 +196,9 @@ public class ProjectMap {
             releasedVersions = true;
             activeVersions = false;
         }
+    }
+
+    public boolean isNoReleaseVersion() {
+        return featureVersion == null;
     }
 }

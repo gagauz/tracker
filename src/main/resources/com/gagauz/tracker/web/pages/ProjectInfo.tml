@@ -5,9 +5,9 @@
 
 	<div>
 		<t:if test="newFeature">
-			<t:BeanEditForm t:id="featureForm" object="newFeature" exclude="id, created, updated"/>
+			<t:BeanEditForm class="form-horizontal" t:id="featureForm" object="newFeature" exclude="id, created, updated" />
 			<p:else>
-				<t:eventlink class="add button" t:event="createFeature">
+				<t:eventlink class="btn btn-primary" t:event="createFeature">
 					${message:create-feature} 
 				</t:eventlink>
 			</p:else>
@@ -15,9 +15,9 @@
 	</div>
 	<div>
 		<t:if test="newVersion">
-			<t:BeanEditForm t:id="versionForm" object="newVersion" exclude="id, created, updated"/>
+			<t:BeanEditForm class="form-horizontal" t:id="versionForm" object="newVersion" exclude="id, created, updated"/>
 			<p:else>
-				<t:eventlink class="add button" t:event="createVersion">
+				<t:eventlink class="btn btn-primary" t:event="createVersion">
 					${message:create-version} 
 				</t:eventlink>
 			</p:else>
