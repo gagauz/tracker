@@ -1,21 +1,27 @@
 <html t:type="layout" title="Contact com.gagauz"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-	<t:if test="roles">
-    <h2>You need have ${roles} roles to proceed</h2>
-    <p:else>
-    <h2>You need to login to proceed</h2>
-    </p:else>
-    </t:if>
-    <t:form t:id="loginForm">
-    	<t:label for="username"></t:label>
-    	<t:textfield t:id="username" value="username"/><br/>
-    	<t:label for="password"></t:label>
-    	<t:passwordfield t:id="password" value="password"/><br/>
-    	<t:label for="remember"></t:label>
-    	<t:checkbox t:id="remember" value="remember"/><br/>
-    	<t:submit/>
-    </t:form>
+
+	<div class="container">
+
+		<t:form t:id="loginForm" class="form-signin">
+			<h2 class="form-signin-heading">Please sign in</h2>
+			<t:label for="username" class="sr-only" />
+			<t:textfield t:id="username" value="username" class="form-control"
+				placeholder="Email address" required="" autofocus="" />
+			<t:label for="password" class="sr-only">
+				Password
+			</t:label>
+			<t:passwordfield t:id="password" value="password"
+				class="form-control" placeholder="Password" required="" />
+			<div class="checkbox">
+				<label for="remember">
+					<t:checkbox t:id="remember" value="remember" />
+					Remember me
+				</label>
+			</div>
+			<t:submit class="btn btn-lg btn-primary btn-block" value="Sign in" />
+		</t:form>
+	</div>
 
 </html>

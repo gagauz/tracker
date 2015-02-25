@@ -13,7 +13,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 /**
  * Layout component for pages of application tracker.
  */
-@Import(stylesheet = "context:layout/layout.css", stack = "tracker-stack")
+@Import(stack = "tracker-stack")
 public class Layout
 {
     /**

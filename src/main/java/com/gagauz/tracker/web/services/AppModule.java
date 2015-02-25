@@ -11,6 +11,7 @@ import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.Role;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule;
+import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -44,6 +45,7 @@ public class AppModule {
     public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
         configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
         configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
+        configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table-responsive");
     }
 
     public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {

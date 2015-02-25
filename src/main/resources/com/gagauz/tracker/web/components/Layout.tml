@@ -4,22 +4,37 @@
 	xmlns:p="tapestry:parameter">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="/static/bootstrap/css/dashboard.css" rel="stylesheet"/>
 <title>${title}</title>
 </head>
 <body>
-	<div id="site-wrapper">
-		<div id="header" class="header">
-			<t:MainMenu />
-		</div>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <t:MainMenu />
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search..."/>
+          </form>
+        </div>
+      </div>
+    </nav>
+	<div id="site-wrapper" class="container-fluid">
 		
-		<div id="page-wrapper">
-			<div id="page-menu">
+		<div id="page-wrapper" class="row">
+			<div id="page-menu" class="col-sm-3 col-md-2 sidebar">
 				<t:delegate to="sidebar" />
-				<ul>
-					<li><a href="#">Menu item</a></li>
-				</ul>
 			</div>
-			<div id="page-content"> 
+			<div id="page-content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"> 
 				<t:body />
 			</div>
 		</div>

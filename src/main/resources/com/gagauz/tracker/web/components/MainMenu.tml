@@ -1,5 +1,5 @@
-<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-<ul>
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<ul class="nav navbar-nav navbar-right">
 	<li><t:pagelink page="index">Index</t:pagelink></li>
 	<li><t:pagelink page="userlist">Users list</t:pagelink></li>
 	<li><t:pagelink page="rolegrouplist">Groups</t:pagelink></li>
@@ -10,4 +10,4 @@
 	</p:else>
 	</t:security.IfAuthorized>
 </ul>
-</div>
+</t:container>
