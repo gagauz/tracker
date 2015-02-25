@@ -19,6 +19,7 @@ public class Version implements Identifiable {
     private Date created = new Date();
     private Date updated = new Date();
     private String name;
+    private String branch;
     private List<FeatureVersion> featureVersion;
     private Date releaseDate = new Date();
     private boolean released = false;
@@ -54,6 +55,18 @@ public class Version implements Identifiable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column
+    public String getBranch() {
+        if (null == branch) {
+            branch = project.getCvsRepo().getBranch();
+        }
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 
     @ForeignKey(name = "fk_version_features")
@@ -119,4 +132,5 @@ public class Version implements Identifiable {
     public boolean equals(Object obj) {
         return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
+
 }
