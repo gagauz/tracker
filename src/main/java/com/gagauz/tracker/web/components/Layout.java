@@ -38,6 +38,10 @@ public class Layout
     @Parameter(defaultPrefix = BindingConstants.LITERAL)
     private Block header;
 
+    @Property
+    @Parameter
+    private boolean hideLeftMenu;
+
     @Inject
     private ComponentResources resources;
 

@@ -1,69 +1,62 @@
 <div xml:space="default" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
 
 	<t:block id="text">
-		<t:label class="${labelClass}" for="textField" />
-		<div class="${fieldWrapperClass}">
-			<input class="${fieldClass}" t:id="textField" />
-			<t:error for="textField" />
+		<t:label class="col-sm-3 control-label" for="textField" />
+		<div class="col-sm-9">
+			<input class="form-control" t:id="textField" />
 		</div>
 	</t:block>
 
 	<t:block id="number">
-		<t:label class="${labelClass}" for="numberField" />
-		<div class="${fieldWrapperClass}">
-			<input class="${fieldClass}" t:id="numberField" />
-			<t:error for="numberField" />
+		<t:label class="col-sm-3 control-label" for="numberField" />
+		<div class="col-sm-9">
+			<input class="form-control t-number" t:id="numberField" />
 		</div>
 	</t:block>
 
+
 	<t:block id="enum">
-		<t:label class="${labelClass}" for="select" />
-		<div class="${fieldWrapperClass}">
-			<input class="${fieldClass}" t:id="select" />
-			<t:error for="select" />
+		<t:label class="col-sm-3 control-label" for="select" />
+		<div class="col-sm-9">
+			<input class="form-control" t:id="select" />
 		</div>
 	</t:block>
 
 	<t:block id="boolean">
-		<div class="col-sm-offset-2 ${fieldWrapperClass}">
+		<div class="col-sm-offset-3 col-sm-9">
 			<div class="checkbox">
-				<t:MyLabel for="checkboxField">
+				<t:mylabel for="checkboxField">
 					<input t:id="checkboxField" />
-					<t:error for="checkboxField" />
-				</t:MyLabel>
+				</t:mylabel>
 			</div>
 		</div>
 	</t:block>
 
 	<t:block id="date">
-		<t:label class="${labelClass}" for="dateField" />
-		<div class="${fieldWrapperClass}">
-			<input class="${fieldClass}" t:id="dateField" />
-			<t:error for="dateField" />
+		<t:label class="col-sm-3 control-label" for="dateField" />
+		<div class="col-sm-9">
+			<input class="form-control" t:id="dateField" />
 		</div>
 	</t:block>
 
 	<t:block id="calendar">
-		<t:label class="${labelClass}" for="calendarField" />
-		<div class="${fieldWrapperClass}">
-			<input class="${fieldClass}" t:id="calendarField" />
-			<t:error for="calendarField" />
+		<t:label class="col-sm-3 control-label" for="calendarField" />
+		<div class="col-sm-9">
+			<input class="form-control" t:id="calendarField" />
 		</div>
 	</t:block>
 
 	<t:block id="password">
-		<t:label class="${labelClass}" for="passwordField" />
-		<div class="${fieldWrapperClass}">
-			<input class="${fieldClass}" t:id="passwordField" />
-			<t:error for="passwordField" />
+		<t:label class="col-sm-3 control-label" for="passwordField" />
+		<div class="col-sm-9">
+			<input class="form-control" t:id="passwordField" />
 		</div>
 	</t:block>
 
 	<t:block id="longtext">
-		<t:label class="${labelClass}" for="textarea" />
-		<div class="${fieldWrapperClass}">
-			<textarea class="${fieldClass}" t:id="textarea" />
-			<t:error for="textarea" />
+		<t:label class="col-sm-3 control-label" for="textarea" />
+		<div class="col-sm-9">
+			<textarea class="form-control" t:id="textarea" />
 		</div>
 	</t:block>
 

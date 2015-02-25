@@ -1,24 +1,5 @@
 <div class="ticket-header" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-	<ol class="breadcrumb">
-		<li class="active">
-			<a href="#" t:type="pagelink" t:page="ticketinfo" t:context="ticket">${ticket.summary}</a>
-		</li>
-		<li>
-			<a href="#" t:type="pagelink" t:page="featureinfo" t:context="ticket.feature">${ticket.feature.name}</a>
-		</li>
-		<li>
-			<t:if test="ticket.version">
-				<a href="#" t:type="pagelink" t:page="versioninfo" t:context="ticket.version">${ticket.version.name}</a>
-				<p:else>
-					Unversioned
-				</p:else>
-			</t:if>
-		</li>
-		<li>
-			<a href="#" t:type="pagelink" t:page="projectinfo" t:context="ticket.feature.project">${ticket.feature.project.name}</a>
-		</li>
-	</ol>
 	<div class="block">
 		<table border="0" class="table">
 			<tr>

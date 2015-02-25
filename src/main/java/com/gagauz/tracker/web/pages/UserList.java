@@ -1,5 +1,6 @@
 package com.gagauz.tracker.web.pages;
 
+import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.User;
@@ -12,6 +13,7 @@ import org.apache.tapestry5.services.SelectModelFactory;
 
 import java.util.List;
 
+@Secured
 public class UserList {
 
     @Property
@@ -30,6 +32,8 @@ public class UserList {
     @Inject
     private SelectModelFactory selectModelFactory;
 
+    private boolean canceled;
+
     void onEdit(Integer id) {
         if (null != id && id > 0) {
             editUser = userDao.findById(id);
@@ -40,16 +44,22 @@ public class UserList {
         editUser = new User();
     }
 
-    void onReset() {
-        editUser = null;
-    }
-
     void onActivate(Integer id) {
         onEdit(id);
     }
 
     void onSuccessFromForm() {
-        userDao.save(editUser);
+        if (null != editUser && !canceled)
+            userDao.save(editUser);
+
+        if (canceled) {
+            editUser = null;
+        }
+    }
+
+    void onCanceledFromForm() {
+        editUser = null;
+        canceled = true;
     }
 
     Object onPassivate() {

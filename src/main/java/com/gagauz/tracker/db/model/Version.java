@@ -14,6 +14,11 @@ import java.util.List;
 })
 public class Version implements Identifiable {
 
+    public static final Version NULL_VERSION = new Version();
+    static {
+        NULL_VERSION.setId(0);
+    }
+
     private int id;
     private Project project;
     private Date created = new Date();

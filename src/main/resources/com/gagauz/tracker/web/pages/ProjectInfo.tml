@@ -1,36 +1,33 @@
-<html t:type="layout" title="${project.name}"
-      t:sidebarTitle="Framework Version"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
+<html t:type="layout" title="${project.name}" t:sidebarTitle="Framework Version"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
 	<div>
 		<t:if test="newFeature">
-			<t:BeanEditForm class="form-horizontal" t:id="featureForm" object="newFeature" exclude="id, created, updated" />
-			<p:else>
-				<t:eventlink class="btn btn-primary" t:event="createFeature">
-					${message:create-feature} 
-				</t:eventlink>
-			</p:else>
+			<t:BeanEditForm class="form-horizontal" t:id="featureForm"
+				object="newFeature" exclude="id, created, updated" cancel="true" />
 		</t:if>
 	</div>
 	<div>
 		<t:if test="newVersion">
-			<t:BeanEditForm class="form-horizontal" t:id="versionForm" object="newVersion" exclude="id, created, updated"/>
-			<p:else>
-				<t:eventlink class="btn btn-primary" t:event="createVersion">
-					${message:create-version} 
-				</t:eventlink>
-			</p:else>
+			<t:BeanEditForm class="form-horizontal" t:id="versionForm"
+				object="newVersion" exclude="id, created, updated" cancel="true" />
 		</t:if>
-	
+		<div class="btn-group">
+			<t:eventlink class="btn btn-primary" t:event="createFeature">
+				${message:create-feature}
+			</t:eventlink>
+			<t:eventlink class="btn btn-primary" t:event="createVersion">
+				${message:create-version}
+			</t:eventlink>
+		</div>
 	</div>
-	<hr/>
-    
-    
-    <t:ProjectMap project="project"/>
+	<hr />
+
+
+	<t:ProjectMap project="project" />
 
 	<p:sidebar>
-        <t:ProjectMenu project="project"/>
-    </p:sidebar>
+		<t:ProjectMenu project="project" />
+	</p:sidebar>
 
 </html>

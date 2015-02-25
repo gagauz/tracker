@@ -2,25 +2,25 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter" hideLeftMenu="true">
 
 
-	<div class="container" style="width:400px;">
+	<div class="container login-form">
 
-		<t:form t:id="loginForm" class="form-signin">
-			<h2 class="form-signin-heading">Please sign in</h2>
+		<t:form t:id="loginForm">
+			<h2 class="form-signin-heading">${message:please-login}</h2>
 			<t:label for="username" class="sr-only" />
-			<t:textfield t:id="username" value="username" class="form-control"
-				placeholder="Email address" required="" autofocus="" />
-			<t:label for="password" class="sr-only">
-				Password
-			</t:label>
+			<t:textfield t:id="username" value="username" class="form-control top"
+				placeholder="Email address" validate="required" autofocus="" />
+			
+			<t:label for="password" class="sr-only"/>
 			<t:passwordfield t:id="password" value="password"
-				class="form-control" placeholder="Password" required="" />
+				class="form-control bottom" placeholder="Password" />
+			
 			<div class="checkbox">
 				<label for="remember">
 					<t:checkbox t:id="remember" value="remember" />
 					Remember me
 				</label>
 			</div>
-			<t:submit class="btn btn-lg btn-primary btn-block" value="Sign in" />
+			<t:submit class="col-sm-3 btn btn-lg btn-primary btn-block" />
 		</t:form>
 	</div>
 

@@ -1,15 +1,15 @@
 <form t:id="form" validate="object" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" class="form-horizontal">
 	<t:errors />
-
+	
 	<t:BeanEditor t:id="editor" object="object" model="model" overrides="this" />
 
 	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<input class="btn btn-default" type="submit" value="${submitLabel}" />
+		<div class="col-sm-3 control-label"></div>
+		<div class="col-sm-9 btn-group">
+			<input class="btn btn-success" type="submit" value="${submitLabel}" />
 			<t:if test="cancel">
-				<t:submit class="btn btn-default" t:id="cancel" mode="cancel" value="message:cancel-label" />
+				<t:submit class="btn btn-danger" t:id="cancel" mode="cancel" value="message:cancel-label" />
 			</t:if>
 		</div>
 	</div>
-
 </form>

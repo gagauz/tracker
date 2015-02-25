@@ -15,12 +15,12 @@ import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
-import org.gagauz.tapestry.common.components.MyBeanEditForm;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class EditTicketForm {
     private Zone zone;
 
     @Component
-    private MyBeanEditForm form;
+    private BeanEditForm form;
 
     @Parameter(name = "ticket")
     private Ticket ticketParam;
@@ -58,6 +58,8 @@ public class EditTicketForm {
     @SessionState
     private SecurityUser user;
 
+    private boolean canceled;
+
     public String getZoneId() {
         return zone.getClientId();
     }
@@ -70,11 +72,17 @@ public class EditTicketForm {
     }
 
     Object onSubmitFromForm() {
-        if (!form.getHasErrors()) {
-            getTicket().setAuthor((User) user);
-            ticketDao.save(getTicket());
+        if (!canceled) {
+            if (!form.getHasErrors()) {
+                getTicket().setAuthor((User) user);
+                ticketDao.save(getTicket());
+            }
         }
         return request.isXHR() ? zone.getBody() : null;
+    }
+
+    void onCanceledFromForm() {
+        canceled = true;
     }
 
     List<User> onProvideCompletions(String username) {

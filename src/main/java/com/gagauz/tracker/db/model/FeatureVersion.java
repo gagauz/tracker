@@ -17,7 +17,7 @@ public class FeatureVersion implements Identifiable, Serializable {
     private static final long serialVersionUID = -8693198398126115278L;
     private int id;
     private Feature feature;
-    private Version version;
+    private Version version = Version.NULL_VERSION;
     private User creator;
     private User owner;
     private Date created = new Date();
@@ -54,7 +54,7 @@ public class FeatureVersion implements Identifiable, Serializable {
     }
 
     public void setVersion(Version version) {
-        this.version = version;
+        this.version = null == version ? Version.NULL_VERSION : version;
     }
 
     @ForeignKey(name = "fk_featureVersion_creator")

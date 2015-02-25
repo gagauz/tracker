@@ -63,6 +63,7 @@ public class FeatureInfo {
         editMode = true;
     }
 
+    @Cached
     public List<FeatureVersion> getFeatureVersions() {
         List<FeatureVersion> list = feature.getFeatureVersions();
         Collections.sort(list, Comparators.FEATURE_VERSION_BY_VERSION_COMPARATOR);
