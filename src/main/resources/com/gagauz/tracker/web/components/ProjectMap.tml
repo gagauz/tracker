@@ -1,4 +1,5 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	
 	<ul class="nav nav-tabs">
 		<li class="${cond:activeVersions,active,}">
 			<t:eventlink t:event="viewMode" t:context="literal:a">Active versions</t:eventlink>

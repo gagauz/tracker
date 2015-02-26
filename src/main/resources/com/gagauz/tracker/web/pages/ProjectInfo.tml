@@ -1,6 +1,12 @@
 <html t:type="layout" title="${project.name}" t:sidebarTitle="Framework Version"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
+	<p:header>Roadmap</p:header>
+	
+	<p:sidebar>
+		<t:ProjectMenu project="project" />
+	</p:sidebar>
+	
 	<div>
 		<t:if test="newFeature">
 			<t:BeanEditForm class="form-horizontal" t:id="featureForm"
@@ -26,8 +32,6 @@
 
 	<t:ProjectMap project="project" />
 
-	<p:sidebar>
-		<t:ProjectMenu project="project" />
-	</p:sidebar>
+
 
 </html>

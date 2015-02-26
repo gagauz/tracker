@@ -82,9 +82,6 @@ public class ProjectMap {
         List<Version> versions = releasedVersions
                 ? versionDao.findByProject(project, true)
                 : versionDao.findByProject(project, false);
-        if (activeVersions) {
-            versions.add(null);
-        }
         if (null == featureVersionMap) {
             initMap(versions);
 

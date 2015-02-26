@@ -17,7 +17,7 @@ public class FeatureVersion implements Identifiable, Serializable {
     private static final long serialVersionUID = -8693198398126115278L;
     private int id;
     private Feature feature;
-    private Version version = Version.NULL_VERSION;
+    private Version version;
     private User creator;
     private User owner;
     private Date created = new Date();
@@ -47,14 +47,14 @@ public class FeatureVersion implements Identifiable, Serializable {
     }
 
     @ForeignKey(name = "fk_featureVersion_version")
-    @JoinColumn(name = "version_id", nullable = true)
+    @JoinColumn(name = "version_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     public Version getVersion() {
         return version;
     }
 
     public void setVersion(Version version) {
-        this.version = null == version ? Version.NULL_VERSION : version;
+        this.version = version;
     }
 
     @ForeignKey(name = "fk_featureVersion_creator")

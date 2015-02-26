@@ -49,6 +49,7 @@ public class ScVersion extends DataBaseScenario {
     protected void execute() {
         User user1 = userDao.findById(1);
         User user2 = userDao.findById(2);
+
         for (int i = 0; i < 1; i++) {
             Project project = new Project();
             project.setKey1("TRACKER");
@@ -104,7 +105,7 @@ public class ScVersion extends DataBaseScenario {
 
                     FeatureVersion featureVersion = new FeatureVersion();
                     featureVersion.setFeature(feature);
-                    featureVersion.setVersion(rand.nextBoolean() ? version : null);
+                    featureVersion.setVersion(version);
                     featureVersion.setOwner(user1);
                     featureVersion.setCreator(user2);
                     featureVersion

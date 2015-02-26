@@ -136,7 +136,7 @@ public class Ticket implements Identifiable {
         this.owner = owner;
     }
 
-    @Column
+    @Column(nullable = false)
     public String getSummary() {
         return summary;
     }

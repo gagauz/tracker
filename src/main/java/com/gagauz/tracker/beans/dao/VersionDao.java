@@ -22,4 +22,10 @@ public class VersionDao extends AbstractDao<Integer, Version> {
                 .list();
     }
 
+    public Version findLast(Project project) {
+        return (Version) getSession().createQuery("from Version v where project=:project order by name desc")
+                .setEntity("project", project)
+                .uniqueResult();
+    }
+
 }
