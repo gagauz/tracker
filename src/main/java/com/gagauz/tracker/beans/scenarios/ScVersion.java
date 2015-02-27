@@ -87,7 +87,7 @@ public class ScVersion extends DataBaseScenario {
                 version.setReleased(j == 0);
                 version.setProject(project);
                 if (j != 4) {
-                    version.setName("1." + j);
+                    version.setName("TRACKER-1." + j);
                     version.setReleaseDate(cal.getTime());
                     cal.add(Calendar.MONTH, 1);
                 } else {

@@ -80,28 +80,48 @@ public class ProjectInfo {
         return project;
     }
 
+    private static String getNextVersion(Project project, Version lastVersion) {
+        if (null != lastVersion) {
+            String name = getNextVersion(lastVersion.getName());
+            if (null != name) {
+                return name;
+            }
+        }
+        return project.getKey1() + "-1";
+    }
+
     private static String getNextVersion(String lastVersion) {
         String name = lastVersion;
-        Pattern p = Pattern.compile("^.*[^0-9]([0-9]+)$");
+        Pattern p = Pattern.compile("^(.*?)([0-9]+)$");
         Matcher m = p.matcher(name);
         if (m.find()) {
-            String v = m.group(1);
-            return String.valueOf(NumberUtils.toInt(v) + 1);
+            String v = m.group(2);
+            v = String.valueOf(NumberUtils.toInt(v) + 1);
+            return m.replaceFirst("$1" + v);
         }
-        return "1";
+        return null;
     }
 
     void onCreateVersion() {
         newVersion = new Version();
         Version lastVersion = versionDao.findLast(project);
-        String versionName = project.getKey1() + '-' + getNextVersion(null == lastVersion ? "1" : lastVersion.getName());
-        //        newVersion.setBranch();
+        String nextName = getNextVersion(project, lastVersion);
+        newVersion.setName(nextName);
+        newVersion.setBranch(nextName);
     }
 
     void onSuccessFromVersionForm() {
-        newVersion.setProject(project);
-        versionDao.save(newVersion);
+        if (!canceled) {
+            newVersion.setProject(project);
+            versionDao.save(newVersion);
+        }
         newVersion = null;
+    }
+
+    private boolean canceled;
+
+    void onCanceledFromVersionForm() {
+        canceled = true;
     }
 
     void onCreateFeature() {
@@ -109,10 +129,16 @@ public class ProjectInfo {
     }
 
     void onSuccessFromFeatureForm() {
-        newFeature.setCreator((User) securityUser);
-        newFeature.setProject(project);
-        featureDao.save(newFeature);
+        if (!canceled) {
+            newFeature.setCreator((User) securityUser);
+            newFeature.setProject(project);
+            featureDao.save(newFeature);
+        }
         newFeature = null;
+    }
+
+    void onCanceledFromFeatureForm() {
+        canceled = true;
     }
 
     public List<Feature> getUserStories() {
@@ -128,7 +154,7 @@ public class ProjectInfo {
     }
 
     public static void main(String[] args) {
-        String g = getNextVersion("PROJECT-1.10");
+        String g = getNextVersion("фывфвыфвы-11.10");
         System.out.println(g);
     }
 }

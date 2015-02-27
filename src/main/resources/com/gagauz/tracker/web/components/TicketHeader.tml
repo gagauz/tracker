@@ -37,6 +37,10 @@
 				<td></td>
 				<th>Last updated:</th>
 				<td>${date:ticket.updated}</td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
 			</tr>
 		</table>
 	</div>
