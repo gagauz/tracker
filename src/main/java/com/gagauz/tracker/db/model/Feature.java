@@ -84,7 +84,7 @@ public class Feature implements Identifiable {
         this.featureVersions = featureVersions;
     }
 
-    @Column
+    @Column(nullable = false)
     public String getName() {
         return name;
     }
@@ -93,7 +93,7 @@ public class Feature implements Identifiable {
         this.name = name;
     }
 
-    @Column
+    @Column(nullable = false)
     public String getDescription() {
         return description;
     }

@@ -11,10 +11,13 @@
 .datePicker {width:220px;background-color:#fff;overflow:hidden;z-index:1000;border:1px solid #ddd;padding:10px;border-radius:4px;}
 .datePicker table {width:100%;}
 .datePicker .header {width:100%;}
-.datePicker .grid td {text-align:right;padding:0px 3px;cursor:pointer;}
-.datePicker td.labelContainer {text-align:center;width:100%;}
-.datePicker td.red {color:red;}
-.datePicker button {}
+.datePicker .grid td {text-align:center;padding:0px 2px;cursor:pointer;border-radius:4px;}
+.datePicker .daysRow td {font-weight:bold;padding:5px 2px 0;}
+.datePicker td.labelContainer, .datePicker td.filler {text-align:center;width:100%;}
+.datePicker td.red {color:#d40000;}
+.datePicker .today {background-color:#ddd;}
+.datePicker .selected {background-color:#337ab7;color:white;}
+
 .datePicker .nextButton, .datePicker .previousButton {
   position: relative;
   top: 1px;

@@ -15,4 +15,8 @@ public class TicketStatusDao extends AbstractDao<Integer, TicketStatus> {
         return findByQuery("from TicketStatus v where project is null or project=:project", param("project", project));
     }
 
+    public List<TicketStatus> findFirstByProject(Project project) {
+        return findByQuery("from TicketStatus v where project is null or project=:project", param("project", project));
+    }
+
 }

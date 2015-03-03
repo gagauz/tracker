@@ -145,7 +145,6 @@ public class ProjectMap {
 
         newTicket = new Ticket();
         newTicket.setFeatureVersion(featureVersion);
-        //        newTicket.setVersion(version);
 
         return ticketZone.getBody();
     }

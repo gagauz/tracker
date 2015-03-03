@@ -2,9 +2,23 @@
 
 	<div t:id="zone">
 		<t:BeanEditForm t:id="form" object="ticket" cancel="true"
-			labelClass="col-sm-3 control-label" 
-			fieldClass="form-control" 
-			fieldRowClass="form-group" 
-			fieldWrapperClass="col-sm-9"/>
+			exclude="id, created, updated, progress, cvsVersion"
+			add="owner, fv">
+			<p:fv>
+				<t:hidden value="ticket.featureVersion" />
+			</p:fv>
+			<p:owner>
+				<t:label class="col-sm-3 control-label" for="owner" />
+				<div class="col-sm-9">
+					<t:textfield class="form-control"
+						t:id="owner" 
+						t:value="ticket.author"
+						translate="prop:usernametranslator" 
+						t:mixins="coolautocompleter"
+						minChars="2"/>
+					<t:error for="owner"/>
+				</div>
+			</p:owner>
+		</t:BeanEditForm>
 	</div>
 </div>

@@ -15,7 +15,7 @@
 				<table cellspacing="10" class="">
 					<thead>
 						<tr>
-							<td class="empty-col"></td>
+							<th class="empty-col"></th>
 							<t:loop source="features" value="feature">
 								<th class="feature-col">
 									<t:pagelink class="btn btn-primary" t:page="featureinfo" t:context="feature">${feature.name}</t:pagelink>

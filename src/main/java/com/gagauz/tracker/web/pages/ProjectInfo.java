@@ -111,17 +111,9 @@ public class ProjectInfo {
     }
 
     void onSuccessFromVersionForm() {
-        if (!canceled) {
-            newVersion.setProject(project);
-            versionDao.save(newVersion);
-        }
+        newVersion.setProject(project);
+        versionDao.save(newVersion);
         newVersion = null;
-    }
-
-    private boolean canceled;
-
-    void onCanceledFromVersionForm() {
-        canceled = true;
     }
 
     void onCreateFeature() {
@@ -129,16 +121,10 @@ public class ProjectInfo {
     }
 
     void onSuccessFromFeatureForm() {
-        if (!canceled) {
-            newFeature.setCreator((User) securityUser);
-            newFeature.setProject(project);
-            featureDao.save(newFeature);
-        }
+        newFeature.setCreator((User) securityUser);
+        newFeature.setProject(project);
+        featureDao.save(newFeature);
         newFeature = null;
-    }
-
-    void onCanceledFromFeatureForm() {
-        canceled = true;
     }
 
     public List<Feature> getUserStories() {

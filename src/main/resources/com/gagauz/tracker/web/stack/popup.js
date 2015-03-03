@@ -25,12 +25,12 @@
 	    }
 		
 		if (!$popupwrap.length) {
-			$popupwrap = $('<div id="popup-wrapper" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;min-height:100%;overflow:auto;z-index:999;">');
+			$popupwrap = $('<div id="popup-wrapper" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;min-height:100%;overflow:auto;z-index:2999;">');
 			$('body').append($popupwrap);
 		}
 		
     	if (!$overlay.length) {
-    		var $overlay = $('<div id="popup-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;">');
+    		var $overlay = $('<div id="popup-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:3000;">');
     		$popupwrap.append($overlay);
     	}
 
@@ -43,7 +43,7 @@
 	    _this.visible = $this.is(":visible");
     	_this.placeholder = specs.popupClone ? false : $('<div style="display:none;">');
     	
-    	_this.wrapper = $('<div class="popup-window" style="display:block;opacity:0;z-index:1001;position:absolute;">');
+    	_this.wrapper = $('<div class="popup-window" style="display:block;opacity:0;z-index:3001;position:absolute;">');
     	_this.wrapper.click(function(e) {
     		e && e.stopPropagation();
     	});
@@ -51,7 +51,7 @@
     		_this.wrapper.addClass(specs.popupClass);
     	}
     	
-    	_this.closeBtn = $('<a>', {"href": "javascript:void(0)", "class": "popup-close"}).text("Закрыть");
+    	_this.closeBtn = $('<a>', {"href": "javascript:void(0)", "class": "btn btn-danger btn-sm popup-close glyphicon glyphicon-remove"});
 	    
 	    
 	    _this.showPopup = function() {

@@ -1,5 +1,6 @@
 package com.gagauz.tracker.web.pages;
 
+import com.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Role;
@@ -14,6 +15,7 @@ import org.apache.tapestry5.util.EnumSelectModel;
 
 import java.util.List;
 
+@Secured
 public class RoleGroupList {
 
     @Property

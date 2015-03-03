@@ -13,6 +13,7 @@ import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.utils.StringUtils;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule;
 import org.apache.tapestry5.*;
+import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.internal.BeanValidationContext;
 import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.internal.services.CompositeFieldValidator;
@@ -21,6 +22,7 @@ import org.apache.tapestry5.ioc.*;
 import org.apache.tapestry5.ioc.annotations.*;
 import org.apache.tapestry5.ioc.services.ServiceOverride;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.*;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
@@ -162,8 +164,26 @@ public class AppModule {
 
         MarkupRendererFilter validationDecorator = new MarkupRendererFilter() {
             @Override
-            public void renderMarkup(MarkupWriter markupWriter, MarkupRenderer renderer) {
+            public void renderMarkup(final MarkupWriter markupWriter, MarkupRenderer renderer) {
                 ValidationDecorator decorator = new BaseValidationDecorator() {
+                    @Override
+                    public void afterField(Field field) {
+                        if (field == null)
+                            return;
+
+                        if (inError(field)) {
+                            Element group = markupWriter.getElement().getContainer();
+                            String clazz = group.getAttribute("class");
+                            if (clazz != null && clazz.contains("form-group")) {
+                                group.addClassName("has-error");
+                            }
+                        }
+                    }
+
+                    private boolean inError(Field field) {
+                        ValidationTracker tracker = environment.peekRequired(ValidationTracker.class);
+                        return tracker.inError(field);
+                    }
 
                 };
                 environment.push(ValidationDecorator.class, decorator);
@@ -174,6 +194,26 @@ public class AppModule {
 
         configuration.override("ValidationDecorator", validationDecorator);
         configuration.override("InjectDefaultStylesheet", null);
+    }
+
+    @Contribute(PartialMarkupRenderer.class)
+    public void contributePartialMarkupRenderer(final OrderedConfiguration<PartialMarkupRenderer> configuration, final Environment environment) {
+
+        PartialMarkupRenderer validationDecorator = new PartialMarkupRenderer() {
+            @Override
+            public void renderMarkup(MarkupWriter writer, JSONObject reply) {
+                ValidationDecorator decorator = new BaseValidationDecorator() {
+
+                };
+                environment.push(ValidationDecorator.class, decorator);
+                // renderer.renderMarkup(markupWriter);
+                environment.pop(ValidationDecorator.class);
+            }
+
+        };
+
+        //        configuration.override("ValidationDecorator", validationDecorator);
+        //        configuration.override("InjectDefaultStylesheet", null);
     }
 
     //@Decorate(serviceInterface = FieldValidatorDefaultSource.class)

@@ -6,22 +6,25 @@
 	<t:if test="editRoleGroup">
 	<h2>Roles Group</h2>
 	<div>
-		<t:beaneditform t:id="form" object="editRoleGroup" exclude="id" add="roles, project">
+		<t:beaneditform t:id="form" object="editRoleGroup" exclude="id" add="roles, project" cancel="true">
 			<p:project>
-				<label for="project">${message:project}</label>
-				<input type="text" readonly="true" value="${projectName}" />
+				<label class="col-sm-3 control-label" for="project">${message:project}</label>
+				<div class="col-sm-9">
+					<input class="form-control" type="text" readonly="true" value="${projectName}" />
+				</div>
 			</p:project>
 			<p:roles>
-				<t:label for="roles"></t:label>
-				<t:MultiSelect t:id="roles" model="model" value="editRoleGroup.roles" size="10" blankLabel="message:select"/>
+				<t:label class="col-sm-3 control-label" for="roles"></t:label>
+				<div class="col-sm-4">
+					<t:MultiSelect class="form-control" t:id="roles" model="model" value="editRoleGroup.roles" size="10" blankLabel="message:select"/>
+				</div>
 			</p:roles>
 		
 		</t:beaneditform>
-		<t:eventlink t:event="reset">${message:reset}</t:eventlink>
 	</div>
 	<br/>
 	<p:else>
-	<t:eventlink class="add button" t:event="create" context="[project]">${message:create}</t:eventlink>
+	<t:eventlink class="btn btn-primary" t:event="create" context="[project]">${message:create-role}</t:eventlink>
 	</p:else>
 	</t:if>
 

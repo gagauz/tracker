@@ -11,17 +11,13 @@
 
 	<div class="block">
 		<t:if test="editUser">
-			<t:beaneditform t:id="form" object="editUser" exclude="id,submit" add="roles,submit" cancel="true">
+			<t:beaneditform t:id="form" object="editUser" exclude="id,submit" add="roles,submit" cancel="true" clientValidation="false">
 				<p:roles>
-					
 					<t:label class="col-sm-3 control-label" for="roles"/>
 					<div class="col-sm-6">
 						<t:MultiSelect class="form-control" t:id="roles" model="allRoleGroups" value="editUser.roleGroups" size="4" blankLabel="message:select"/>
 					</div>
 				</p:roles>
-				<p:submit>
-					<t:linksubmit class="save button">${message:save}</t:linksubmit>
-				</p:submit>
 			</t:beaneditform>
 		<p:else>
 			<t:eventlink class="btn btn-primary" event="create">${message:create-user}</t:eventlink>
