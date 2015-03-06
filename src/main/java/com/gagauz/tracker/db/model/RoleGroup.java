@@ -1,7 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.CollectionType;
-import com.gagauz.tracker.db.base.EnumSetType;
+import com.gagauz.tracker.db.base.HashSetType;
 import com.gagauz.tracker.db.base.Identifiable;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
@@ -10,16 +10,17 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import java.util.EnumSet;
+import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "role_group")
 @TypeDefs({
-        @TypeDef(name = "setOf.Enum",
-                typeClass = EnumSetType.class,
+        @TypeDef(name = "setOf.String",
+                typeClass = HashSetType.class,
                 parameters = {
-                        @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Role"),
-                        @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.RoleSerializer")
+                        @Parameter(name = CollectionType.CLASS, value = "java.lang.String"),
+                        @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.StringSerializer")
                 }
         )
 })
@@ -27,7 +28,7 @@ public class RoleGroup implements Identifiable {
     private int id;
     private String name;
     private Project project;
-    private EnumSet<Role> roles = EnumSet.noneOf(Role.class);
+    private Collection<String> roles = new HashSet<String>();
 
     @Override
     @Id
@@ -61,15 +62,12 @@ public class RoleGroup implements Identifiable {
     }
 
     @Column(nullable = false)
-    @Type(type = "setOf.Enum")
-    public EnumSet<Role> getRoles() {
+    @Type(type = "setOf.String")
+    public Collection<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(EnumSet<Role> roles) {
-        if (null != roles && !(roles instanceof EnumSet)) {
-            roles = EnumSet.copyOf(roles);
-        }
+    public void setRoles(Collection<String> roles) {
         this.roles = roles;
     }
 

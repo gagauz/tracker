@@ -1,7 +1,5 @@
 package org.gagauz.tapestry.common.components;
 
-import com.gagauz.tapestry.encoder.AbstractCollectionValueEncoder;
-import com.gagauz.tapestry.encoder.CollectionValueEncoder;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
@@ -17,6 +15,8 @@ import org.apache.tapestry5.services.ComponentDefaultProvider;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.util.EnumSelectModel;
+import org.gagauz.tapestry.encoder.AbstractCollectionValueEncoder;
+import org.gagauz.tapestry.encoder.CollectionValueEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;

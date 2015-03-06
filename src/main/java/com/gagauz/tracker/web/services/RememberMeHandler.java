@@ -1,64 +1,58 @@
 package com.gagauz.tracker.web.services;
 
-import com.gagauz.tapestry.security.*;
-import com.gagauz.tapestry.security.api.LogoutHandler;
-import com.gagauz.tapestry.security.api.SecurityUser;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.utils.StringUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Cookies;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.tapestry5.services.Request;
+import org.gagauz.tapestry.security.LoginResult;
+import org.gagauz.tapestry.security.SecurityEncryptor;
+import org.gagauz.tapestry.security.api.LoginResultHandler;
+import org.gagauz.tapestry.security.api.LogoutHandler;
+import org.gagauz.tapestry.security.api.SecurityUser;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class RememberMeHandler extends AbstractCommonRequestFilter implements LogoutHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(RememberMeHandler.class);
+public class RememberMeHandler implements LoginResultHandler, LogoutHandler {
 
     public static final String REMEMBER_ME_COOKIE_NAME = "auth";
     public static final int REMEMBER_ME_COOKIE_AGE = 31536000;
 
     @Inject
-    private Cookies cookies;
+    private HttpServletResponse response;
+
+    @Inject
+    private Request request;
 
     @Inject
     private SecurityEncryptor securityEncryptor;
 
-    @Inject
-    private SecurityUserCreator securityUserCreator;
-
-    @Inject
-    private LoginService loginService;
-
     @Override
-    public void handle(SecurityUser user) {
-        removeRememberMeCookie();
-    }
-
-    public void addRememberMeCookie(String username, String password) {
-        String hash = securityEncryptor.encryptArray(username, password);
-        cookies.writeCookieValue(REMEMBER_ME_COOKIE_NAME, hash, REMEMBER_ME_COOKIE_AGE);
-    }
-
-    public void removeRememberMeCookie() {
-        cookies.removeCookieValue(REMEMBER_ME_COOKIE_NAME);
-    }
-
-    @Override
-    public void handleInternal(AbstractCommonHandlerWrapper handlerWrapper) throws IOException {
-        if (null == securityUserCreator.getUserFromContext()) {
-            String cookieValue = cookies.readCookieValue(REMEMBER_ME_COOKIE_NAME);
-            if (null != cookieValue) {
-                log.info("Handle remember me cookie [{}]", cookieValue);
+    public void handle(LoginResult result) {
+        if (result.isSuccess() && !StringUtils.isEmpty(request.getParameter("remember"))) {
+            if (result.getUser() != result.getOldUser()) {
+                String hash = securityEncryptor.encrypt(((User) result.getUser()).getToken());
+                Cookie cookie = new Cookie(REMEMBER_ME_COOKIE_NAME, hash);
+                cookie.setMaxAge(REMEMBER_ME_COOKIE_AGE);
+                cookie.setPath("/");
+                response.addCookie(cookie);
                 try {
-                    String[] credentials = securityEncryptor.decryptArray(cookieValue);
-                    loginService.authenticate(new CredentialsImpl(credentials[0], credentials[1]));
-                } catch (Exception e) {
-                    log.error("Failed to login with cookie. Remove it.", e);
-                    removeRememberMeCookie();
+                    response.flushBuffer();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
-        handlerWrapper.handle();
+    }
+
+    @Override
+    public void handle(SecurityUser user) {
+        //        cookies.removeCookieValue(REMEMBER_ME_COOKIE_NAME);
+        Cookie cookie = new Cookie(REMEMBER_ME_COOKIE_NAME, null);
+        cookie.setMaxAge(-1);
+        response.addCookie(cookie);
     }
 
 }

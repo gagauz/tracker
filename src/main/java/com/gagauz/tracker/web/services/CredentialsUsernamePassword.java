@@ -1,12 +1,12 @@
 package com.gagauz.tracker.web.services;
 
-import com.gagauz.tapestry.security.api.Credentials;
+import org.gagauz.tapestry.security.api.Credentials;
 
-public class CredentialsImpl implements Credentials {
+public class CredentialsUsernamePassword implements Credentials {
     private final String username;
     private final String password;
 
-    public CredentialsImpl(String username, String password) {
+    public CredentialsUsernamePassword(String username, String password) {
         this.username = username;
         this.password = password;
     }

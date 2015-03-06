@@ -8,7 +8,7 @@ import org.apache.tapestry5.func.F;
 import org.apache.tapestry5.func.Predicate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.gagauz.tapestry.security.Secured;
+import org.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.FeatureVersion;

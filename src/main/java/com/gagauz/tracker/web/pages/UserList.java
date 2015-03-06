@@ -1,6 +1,6 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tapestry.security.Secured;
+import org.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.User;

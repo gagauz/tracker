@@ -1,13 +1,15 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tapestry.security.api.SecurityUser;
 import com.gagauz.tracker.db.base.Identifiable;
+import com.gagauz.tracker.utils.HashUtils;
+import org.gagauz.tapestry.security.api.SecurityUser;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "`user`")
@@ -19,7 +21,8 @@ public class User implements Identifiable, Serializable, SecurityUser {
     private Collection<RoleGroup> roleGroups = new HashSet<RoleGroup>();
     private String username;
     private String password;
-    private Role[] roles;
+    private String token = HashUtils.generateRandomString(16);
+    private Set<String> roles;
 
     @Override
     @Id
@@ -81,17 +84,13 @@ public class User implements Identifiable, Serializable, SecurityUser {
         this.roleGroups = roleGroups;
     }
 
-    @Override
-    @Transient
-    public Role[] getRoles() {
-        if (null == roles) {
-            HashSet<Role> roleSet = new HashSet<Role>();
-            for (RoleGroup group : roleGroups) {
-                roleSet.addAll(group.getRoles());
-            }
-            roles = roleSet.toArray(new Role[roleSet.size()]);
-        }
-        return roles;
+    @Column(nullable = false)
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
@@ -107,5 +106,23 @@ public class User implements Identifiable, Serializable, SecurityUser {
     @Override
     public String toString() {
         return "User <id=" + id + ">";
+    }
+
+    @Override
+    @Transient
+    public boolean checkRoles(String[] rolesToCheck) {
+        if (null == roles) {
+            Set<String> roleSet = new HashSet<String>();
+            for (RoleGroup group : roleGroups) {
+                roleSet.addAll(group.getRoles());
+            }
+            roles = roleSet;
+        }
+        for (String role : rolesToCheck) {
+            if (roles.contains(role)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

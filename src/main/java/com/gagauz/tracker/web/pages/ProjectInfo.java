@@ -1,7 +1,5 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tapestry.security.Secured;
-import com.gagauz.tapestry.security.api.SecurityUser;
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.StageDao;
@@ -12,12 +10,14 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.gagauz.tapestry.security.Secured;
+import org.gagauz.tapestry.security.api.SecurityUser;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Secured({Role.PROJECT_USER, Role.PROJECT_ADMIN})
+@Secured({Roles.PROJECT_USER, Roles.PROJECT_ADMIN})
 public class ProjectInfo {
 
     @Property

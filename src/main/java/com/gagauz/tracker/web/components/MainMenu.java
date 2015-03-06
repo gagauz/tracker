@@ -1,8 +1,7 @@
 package com.gagauz.tracker.web.components;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
-
-import com.gagauz.tapestry.security.LogoutService;
+import org.gagauz.tapestry.security.LogoutService;
 
 public class MainMenu {
 

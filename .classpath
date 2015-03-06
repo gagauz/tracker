@@ -50,4 +50,11 @@
   <classpathentry kind="var" path="M2_REPO/org/postgresql/postgresql/9.3-1100-jdbc4/postgresql-9.3-1100-jdbc4.jar" sourcepath="M2_REPO/org/postgresql/postgresql/9.3-1100-jdbc4/postgresql-9.3-1100-jdbc4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/mchange/c3p0/0.9.5/c3p0-0.9.5.jar" sourcepath="M2_REPO/com/mchange/c3p0/0.9.5/c3p0-0.9.5-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/mchange/mchange-commons-java/0.2.9/mchange-commons-java-0.2.9.jar" sourcepath="M2_REPO/com/mchange/mchange-commons-java/0.2.9/mchange-commons-java-0.2.9-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/gagauz/tapestry/tapestry-security/2.1-SNAPSHOT/tapestry-security-2.1-SNAPSHOT.jar" sourcepath="M2_REPO/org/gagauz/tapestry/tapestry-security/2.1-SNAPSHOT/tapestry-security-2.1-SNAPSHOT-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/R:/maven_repo/org/gagauz/tapestry/tapestry-security/2.1-SNAPSHOT/tapestry-security-2.1-SNAPSHOT-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/gagauz/tapestry/tapestry-common/1.0-SNAPSHOT/tapestry-common-1.0-SNAPSHOT.jar" sourcepath="M2_REPO/org/gagauz/tapestry/tapestry-common/1.0-SNAPSHOT/tapestry-common-1.0-SNAPSHOT-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/gagauz/common/utils/1.0-SNAPSHOT/utils-1.0-SNAPSHOT.jar"/>
 </classpath>

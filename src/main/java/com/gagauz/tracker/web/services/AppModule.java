@@ -2,13 +2,10 @@ package com.gagauz.tracker.web.services;
 
 import com.gagauz.tapestry.binding.CondBindingFactory;
 import com.gagauz.tapestry.binding.DateBindingFactory;
-import com.gagauz.tapestry.security.*;
-import com.gagauz.tapestry.security.api.*;
-import com.gagauz.tapestry.security.impl.RedirectLoginHandler;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
-import com.gagauz.tracker.db.model.Role;
+import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.utils.StringUtils;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule;
@@ -26,6 +23,9 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.*;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
+import org.gagauz.tapestry.security.*;
+import org.gagauz.tapestry.security.api.*;
+import org.gagauz.tapestry.security.impl.RedirectLoginHandler;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +33,7 @@ import javax.persistence.JoinColumn;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -52,6 +53,7 @@ public class AppModule {
 
     public static void bind(ServiceBinder binder) {
         binder.bind(RememberMeHandler.class);
+        binder.bind(RememberMeRequestFilter.class);
         binder.bind(ToolsService.class);
     }
 
@@ -67,13 +69,13 @@ public class AppModule {
         configuration.add(SymbolConstants.DEFAULT_STYLESHEET, "com/gagauz/tracker/web/stack/default.css");
 
         //Security config
-        configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_PARAMETER, "redirect");
-        configuration.add(RedirectLoginHandler.SECURITY_REDIRECT_URL, "/login");
+        configuration.add(SecurityConstants.REDIRECT_PARAM, "redirect");
+        configuration.add(SecurityConstants.AUTH_REDIRECT_URL, "/login");
     }
 
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
         configuration.add(new LibraryMapping(InternalConstants.CORE_LIBRARY, "org.gagauz.tapestry.common"));
-        configuration.add(new LibraryMapping("security", "com.gagauz.tapestry.security"));
+        configuration.add(new LibraryMapping(InternalConstants.CORE_LIBRARY, "org.gagauz.tapestry.security"));
     }
 
     @Contribute(JavaScriptStackSource.class)
@@ -90,8 +92,11 @@ public class AppModule {
     }
 
     @Contribute(LoginService.class)
-    public void contributeLoginService(OrderedConfiguration<LoginHandler> configuration, @Inject RedirectLoginHandler filter) {
+    public void contributeLoginService(OrderedConfiguration<LoginResultHandler> configuration,
+                                       @Inject RedirectLoginHandler filter,
+                                       @Inject RememberMeHandler handler) {
         configuration.add("RedirectLoginHandler", filter);
+        configuration.add("RememberMeLoginHandler", handler);
     }
 
     @Contribute(LogoutService.class)
@@ -100,12 +105,12 @@ public class AppModule {
     }
 
     @Contribute(ComponentEventRequestHandler.class)
-    public static void contributeComponentEventRequestHandler(OrderedConfiguration<ComponentEventRequestFilter> configuration, RememberMeHandler handler) {
+    public static void contributeComponentEventRequestHandler(OrderedConfiguration<ComponentEventRequestFilter> configuration, RememberMeRequestFilter handler) {
         configuration.add("RememberMeHandler1", handler);
     }
 
     @Contribute(PageRenderRequestHandler.class)
-    public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration, RememberMeHandler handler) {
+    public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration, RememberMeRequestFilter handler) {
         configuration.add("RememberMeHandler2", handler);
     }
 
@@ -129,11 +134,20 @@ public class AppModule {
 
             @Override
             public SecurityUser loadByCredentials(Credentials credentials) {
-                if (credentials instanceof CredentialsImpl) {
-                    CredentialsImpl credentialsImpl = (CredentialsImpl) credentials;
+                if (credentials instanceof CredentialsUsernamePassword) {
+                    CredentialsUsernamePassword credentialsImpl = (CredentialsUsernamePassword) credentials;
                     User user = userDao.findByUsername(credentialsImpl.getUsername());
                     if (null != user && user.getPassword().equals(credentialsImpl.getPassword())) {
-                        Role[] role = user.getRoles();
+                        Collection<RoleGroup> roles = user.getRoleGroups();
+                        userDao.evict(user);
+                        return user;
+                    }
+                }
+                if (credentials instanceof CredentialsToken) {
+                    CredentialsToken credentialsImpl = (CredentialsToken) credentials;
+                    User user = userDao.findByToken(credentialsImpl.getToken());
+                    if (null != user) {
+                        Collection<RoleGroup> roles = user.getRoleGroups();
                         userDao.evict(user);
                         return user;
                     }

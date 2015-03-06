@@ -1,7 +1,7 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import com.gagauz.tapestry.security.api.SecurityUser;
-import com.gagauz.tracker.beans.dao.Predicate;
+import com.gagauz.common.utils.C;
+import com.gagauz.common.utils.Filter;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.beans.dao.UserDao;
@@ -9,7 +9,6 @@ import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.utils.Param;
-import com.gagauz.tracker.utils.Filter;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
@@ -21,6 +20,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
+import org.gagauz.tapestry.security.api.SecurityUser;
 
 import java.util.List;
 
@@ -132,7 +132,7 @@ public class EditTicketForm {
     public SelectModel getStatusModel() {
         List<TicketStatus> list = ticketStatusDao.findByProject(ticket.getFeature().getProject());
         final TicketStatus from = ticket.getStatus();
-        list = Filter.filter(list, new Predicate<TicketStatus>() {
+        list = C.filter(list, new Filter<TicketStatus>() {
             @Override
             public boolean apply(TicketStatus element) {
                 return element.getAllowedFrom().contains(from);

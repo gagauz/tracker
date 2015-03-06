@@ -1,6 +1,5 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import com.gagauz.tapestry.security.api.SecurityUser;
 import com.gagauz.tracker.beans.dao.TicketCommentDao;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketComment;
@@ -14,6 +13,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.gagauz.tapestry.security.api.SecurityUser;
 
 import java.util.List;
 
