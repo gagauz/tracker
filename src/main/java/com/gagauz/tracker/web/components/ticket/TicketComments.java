@@ -13,7 +13,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
-import org.gagauz.tapestry.security.api.SecurityUser;
+
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class TicketComments {
     private TicketComment newComment;
 
     @SessionState(create = false)
-    private SecurityUser securityUser;
+    private User securityUser;
 
     @Inject
     private TicketCommentDao ticketCommentDao;

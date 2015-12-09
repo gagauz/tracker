@@ -1,10 +1,9 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import com.gagauz.common.utils.C;
-import com.gagauz.common.utils.Filter;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.db.model.SecurityUser;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
@@ -20,9 +19,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
-import org.gagauz.tapestry.security.api.SecurityUser;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class EditTicketForm {
 
@@ -132,12 +132,12 @@ public class EditTicketForm {
     public SelectModel getStatusModel() {
         List<TicketStatus> list = ticketStatusDao.findByProject(ticket.getFeature().getProject());
         final TicketStatus from = ticket.getStatus();
-        list = C.filter(list, new Filter<TicketStatus>() {
+        list = list.stream().filter(new Predicate<TicketStatus>() {
             @Override
-            public boolean apply(TicketStatus element) {
+            public boolean test(TicketStatus element) {
                 return element.getAllowedFrom().contains(from);
             }
-        });
+        }).collect(Collectors.toList());
         return selectModelFactory.create(list, "name");
     }
 }

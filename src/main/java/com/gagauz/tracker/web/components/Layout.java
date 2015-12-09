@@ -4,7 +4,6 @@ import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -13,9 +12,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 /**
  * Layout component for pages of application tracker.
  */
-@Import(stack = "tracker-stack", stylesheet = "context:/static/css/popup.css")
-public class Layout
-{
+public class Layout {
     /**
      * The page title, for the <title> element and the <h1> element.
      */
@@ -50,15 +47,13 @@ public class Layout
     @Symbol(SymbolConstants.APPLICATION_VERSION)
     private String appVersion;
 
-    public String getClassForPageName()
-    {
+    public String getClassForPageName() {
         return resources.getPageName().equalsIgnoreCase(pageName)
                 ? "current_page_item"
                 : null;
     }
 
-    public String[] getPageNames()
-    {
+    public String[] getPageNames() {
         return new String[] {"Index", "About", "Contact"};
     }
 }

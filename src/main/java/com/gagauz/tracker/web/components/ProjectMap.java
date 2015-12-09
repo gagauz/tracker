@@ -9,7 +9,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.Request;
-import org.gagauz.tapestry.security.api.SecurityUser;
+
 
 import java.util.*;
 
@@ -55,7 +55,7 @@ public class ProjectMap {
     private TicketDao ticketDao;
 
     @SessionState
-    private SecurityUser securityUser;
+    private User securityUser;
 
     @Inject
     private Request request;
@@ -91,8 +91,8 @@ public class ProjectMap {
                     continue;
                 }
                 map.put(featureVersion.getFeature(), featureVersion);
-                bugsMap.put(featureVersion, FactoryX.newArrayList());
-                ticketsMap.put(featureVersion, FactoryX.newArrayList());
+                bugsMap.put(featureVersion,new ArrayList<>());
+                ticketsMap.put(featureVersion,new ArrayList<>());
             }
             for (Ticket ticket : ticketDao.findByProject(project)) {
                 if (ticket.getType() == TicketType.TASK) {

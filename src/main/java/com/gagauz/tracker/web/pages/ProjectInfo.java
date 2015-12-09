@@ -11,7 +11,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.gagauz.tapestry.security.Secured;
-import org.gagauz.tapestry.security.api.SecurityUser;
+
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -66,7 +66,7 @@ public class ProjectInfo {
     private RoleGroupDao roleGroupDao;
 
     @SessionState
-    private SecurityUser securityUser;
+    private User securityUser;
 
     Object onActivate(Project project) {
         if (null == project) {

@@ -2,7 +2,6 @@ package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.Identifiable;
 import com.gagauz.tracker.utils.HashUtils;
-import org.gagauz.tapestry.security.api.SecurityUser;
 
 import javax.persistence.*;
 

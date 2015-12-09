@@ -95,7 +95,7 @@ public class SvnCvsWrapper implements CvsWrapper {
     @Override
     public List<Commit> getCommits() {
         String log = log();
-        List<Commit> commits = FactoryX.newArrayList();
+        List<Commit> commits =new ArrayList<>();
         for (String cl : StringUtils.split(log, "------------------------------------------------------------------------")) {
             if (!"".equals(cl.trim())) {
                 String[] lines = StringUtils.split(cl, "\n");
@@ -127,7 +127,7 @@ public class SvnCvsWrapper implements CvsWrapper {
     public List<Commit> getCommits(Ticket ticket) {
         String grep = ticket.getType() + " #" + ticket.getId();
         String log = log(grep);
-        List<Commit> commits = FactoryX.newArrayList();
+        List<Commit> commits =new ArrayList<>();
         for (String cl : StringUtils.split(log, "------------------------------------------------------------------------")) {
             if (!"".equals(cl.trim())) {
                 String[] lines = StringUtils.split(cl, "\n");

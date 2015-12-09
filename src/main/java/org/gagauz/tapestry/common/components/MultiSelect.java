@@ -42,7 +42,7 @@ public class MultiSelect extends AbstractField {
     protected class Renderer extends SelectModelRenderer {
 
         public Renderer(MarkupWriter writer, ValueEncoder encoder) {
-            super(writer, encoder);
+            super(writer, encoder, false);
         }
 
         @Override

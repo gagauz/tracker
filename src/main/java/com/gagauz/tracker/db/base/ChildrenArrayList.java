@@ -10,7 +10,7 @@ public class ChildrenArrayList<P, E extends Child<P>> extends ArrayList<E> {
     private final P parent;
 
     public ChildrenArrayList(P parent, List<E> list) {
-        super(null == list ? FactoryX.newArrayList() : list);
+        super(null == list ?new ArrayList<>() : list);
         this.parent = parent;
     }
 

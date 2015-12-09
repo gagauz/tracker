@@ -2,11 +2,8 @@ package com.gagauz.tracker.web.services;
 
 import com.gagauz.tapestry.binding.CondBindingFactory;
 import com.gagauz.tapestry.binding.DateBindingFactory;
-import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
-import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.utils.StringUtils;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule;
 import org.apache.tapestry5.*;
@@ -23,9 +20,6 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.*;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
-import org.gagauz.tapestry.security.*;
-import org.gagauz.tapestry.security.api.*;
-import org.gagauz.tapestry.security.impl.RedirectLoginHandler;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +27,6 @@ import javax.persistence.JoinColumn;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -42,7 +35,7 @@ import java.util.Locale;
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
  * configure and extend Tapestry, or to place your own service definitions.
  */
-@SubModule({SecurityModule.class, HibernateModule.class, TypeCoercerModule.class, ValueEncoderModule.class})
+@ImportModule({HibernateModule.class, TypeCoercerModule.class, ValueEncoderModule.class})
 public class AppModule {
 
     @Startup
@@ -52,8 +45,6 @@ public class AppModule {
     }
 
     public static void bind(ServiceBinder binder) {
-        binder.bind(RememberMeHandler.class);
-        binder.bind(RememberMeRequestFilter.class);
         binder.bind(ToolsService.class);
     }
 
@@ -66,11 +57,6 @@ public class AppModule {
     public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
-        configuration.add(SymbolConstants.DEFAULT_STYLESHEET, "com/gagauz/tracker/web/stack/default.css");
-
-        //Security config
-        configuration.add(SecurityConstants.REDIRECT_PARAM, "redirect");
-        configuration.add(SecurityConstants.AUTH_REDIRECT_URL, "/login");
     }
 
     public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
@@ -79,39 +65,7 @@ public class AppModule {
     }
 
     @Contribute(JavaScriptStackSource.class)
-    public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
-                                                       final AssetSource assetSource) {
-        configuration.add(JQueryStack.NAME, new JQueryStack(assetSource));
-        configuration.add(TrackerStack.NAME, new TrackerStack(assetSource));
-        //configuration.override("InjectDefaultStylesheet", null);
-    }
-
-    @Contribute(SecurityExceptionInterceptorFilter.class)
-    public void contributeSecurityExceptionInterceptorFilter(OrderedConfiguration<SecurityExceptionHandler> configuration, @Inject RedirectLoginHandler filter) {
-        configuration.add("RedirectLoginHandler", filter);
-    }
-
-    @Contribute(LoginService.class)
-    public void contributeLoginService(OrderedConfiguration<LoginResultHandler> configuration,
-                                       @Inject RedirectLoginHandler filter,
-                                       @Inject RememberMeHandler handler) {
-        configuration.add("RedirectLoginHandler", filter);
-        configuration.add("RememberMeLoginHandler", handler);
-    }
-
-    @Contribute(LogoutService.class)
-    public static void contributeLogoutService(OrderedConfiguration<LogoutHandler> configuration, RememberMeHandler handler) {
-        configuration.add("RememberMeLogoutHandler", handler);
-    }
-
-    @Contribute(ComponentEventRequestHandler.class)
-    public static void contributeComponentEventRequestHandler(OrderedConfiguration<ComponentEventRequestFilter> configuration, RememberMeRequestFilter handler) {
-        configuration.add("RememberMeHandler1", handler, "before:*");
-    }
-
-    @Contribute(PageRenderRequestHandler.class)
-    public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration, RememberMeRequestFilter handler) {
-        configuration.add("RememberMeHandler2", handler, "before:*");
+    public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration, final AssetSource assetSource) {
     }
 
     @Decorate(serviceInterface = JavaScriptStackSource.class)
@@ -119,42 +73,9 @@ public class AppModule {
         return new JavaScriptStackSourceFilter(original);
     }
 
-    public SecurityEncryptor buildSecurityEncryptor(@Inject @Value("${" + SymbolConstants.HMAC_PASSPHRASE + "}") String passphrase) {
-        return new SecurityEncryptor(passphrase);
-    }
-
     public static void contributeBindingSource(MappedConfiguration<String, BindingFactory> configuration, BindingSource bindingSource, TypeCoercer typeCoercer) {
         configuration.add("cond", new CondBindingFactory(bindingSource, typeCoercer));
         configuration.add("date", new DateBindingFactory(bindingSource, typeCoercer));
-    }
-
-    @ServiceId("SecurityUserProvider")
-    public SecurityUserProvider buildSessionUserService(@Inject final UserDao userDao) {
-        return new SecurityUserProvider() {
-
-            @Override
-            public SecurityUser loadByCredentials(Credentials credentials) {
-                if (credentials instanceof CredentialsUsernamePassword) {
-                    CredentialsUsernamePassword credentialsImpl = (CredentialsUsernamePassword) credentials;
-                    User user = userDao.findByUsername(credentialsImpl.getUsername());
-                    if (null != user && user.getPassword().equals(credentialsImpl.getPassword())) {
-                        Collection<RoleGroup> roles = user.getRoleGroups();
-                        userDao.evict(user);
-                        return user;
-                    }
-                }
-                if (credentials instanceof CredentialsToken) {
-                    CredentialsToken credentialsImpl = (CredentialsToken) credentials;
-                    User user = userDao.findByToken(credentialsImpl.getToken());
-                    if (null != user) {
-                        Collection<RoleGroup> roles = user.getRoleGroups();
-                        userDao.evict(user);
-                        return user;
-                    }
-                }
-                return null;
-            }
-        };
     }
 
     @Contribute(ServiceOverride.class)
@@ -207,7 +128,6 @@ public class AppModule {
         };
 
         configuration.override("ValidationDecorator", validationDecorator);
-        configuration.override("InjectDefaultStylesheet", null);
     }
 
     @Contribute(PartialMarkupRenderer.class)
@@ -281,8 +201,7 @@ public class AppModule {
             }
 
             @Override
-            public FieldValidator createDefaultValidator(Field field, String overrideId, Messages overrideMessages,
-                                                         Locale locale, Class propertyType, AnnotationProvider propertyAnnotations) {
+            public FieldValidator createDefaultValidator(Field field, String overrideId, Messages overrideMessages, Locale locale, Class propertyType, AnnotationProvider propertyAnnotations) {
 
                 FieldValidator defaultValidator = defaultSource.createDefaultValidator(field, overrideId,
                         overrideMessages, locale, propertyType, propertyAnnotations);

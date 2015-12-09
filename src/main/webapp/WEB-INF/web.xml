@@ -26,11 +26,15 @@
 		<param-value>com.gagauz.tracker.web</param-value>
 	</context-param>
 
-	<!-- Specify some additional Modules for two different execution modes: development and qa. Remember that the default execution mode is production -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-
+	<filter>
+		<filter-name>static</filter-name>
+		<filter-class>com.gagauz.tracker.web.services.StaticFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>static</filter-name>
+		<url-pattern>/static/*</url-pattern>
+	</filter-mapping>
+    
 	<filter>
 		<filter-name>app</filter-name>
 		<filter-class>com.gagauz.tracker.web.services.ContextRegistryTapestryFilter</filter-class>
@@ -39,5 +43,10 @@
 		<filter-name>app</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- Specify some additional Modules for two different execution modes: development and qa. Remember that the default execution mode is production -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 </web-app>
       

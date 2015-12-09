@@ -4,7 +4,6 @@ import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.utils.CollectionUtils;
 import com.gagauz.tracker.utils.Comparators;
 import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.ComponentResources;
@@ -12,7 +11,6 @@ import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.gagauz.tapestry.security.api.SecurityUser;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -54,7 +52,7 @@ public class VersionUserMap {
     private UserDao userDao;
 
     @SessionState
-    private SecurityUser securityUser;
+    private User securityUser;
 
     @Inject
     private ComponentResources resources;
@@ -103,7 +101,7 @@ public class VersionUserMap {
                 statusMap.put(ticket.getStatus(), i);
 
                 if (null == tickets) {
-                    tickets = CollectionUtils.newArrayList();
+                    tickets = new ArrayList<>();
                     userTicketMap.put(ticket.getOwner(), tickets);
                 }
                 tickets.add(ticket);
@@ -150,7 +148,7 @@ public class VersionUserMap {
         featureVersion.setFeature(feature);
         featureVersion.setVersion(version);
         User user = new User();
-        int id = ((User) securityUser).getId();
+        int id = securityUser.getId();
         user.setId(id);
         featureVersion.setCreator(user);
         featureVersionDao.save(featureVersion);

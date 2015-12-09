@@ -1,6 +1,8 @@
 package com.gagauz.tracker.web.services;
 
 import org.apache.tapestry5.Asset;
+import org.apache.tapestry5.ioc.Resource;
+import org.apache.tapestry5.services.javascript.JavaScriptAggregationStrategy;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.services.javascript.StylesheetLink;
@@ -38,6 +40,16 @@ public class JavaScriptStackSourceFilter implements JavaScriptStackSource {
         public String getInitialization() {
             return original != null ? original.getInitialization() : null;
         }
+
+        @Override
+        public List<String> getModules() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public JavaScriptAggregationStrategy getJavaScriptAggregationStrategy() {
+            return JavaScriptAggregationStrategy.DO_NOTHING;
+        }
     }
 
     private final JavaScriptStackSource original;
@@ -58,6 +70,16 @@ public class JavaScriptStackSourceFilter implements JavaScriptStackSource {
     @Override
     public List<String> getStackNames() {
         return original.getStackNames();
+    }
+
+    @Override
+    public JavaScriptStack findStack(String name) {
+        return original.findStack(name);
+    }
+
+    @Override
+    public JavaScriptStack findStackForJavaScriptLibrary(Resource resource) {
+        return original.findStackForJavaScriptLibrary(resource);
     }
 
 }

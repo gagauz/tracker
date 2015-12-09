@@ -15,21 +15,18 @@ import java.util.Collection;
 @Entity
 @Table(name = "ticket_status")
 @TypeDefs({
-        @TypeDef(name = "listOf.StatusId",
-                typeClass = HashSetType.class,
-                parameters = {
-                        @Parameter(name = com.gagauz.tracker.db.base.CollectionType.CLASS, value = "java.lang.Integer"),
-                        @Parameter(name = com.gagauz.tracker.db.base.CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.IntegerSerializer")
-                }
-        )
+        @TypeDef(name = "listOf.StatusId", typeClass = HashSetType.class, parameters = {
+                @Parameter(name = com.gagauz.tracker.db.base.CollectionType.CLASS, value = "java.lang.Integer"),
+                @Parameter(name = com.gagauz.tracker.db.base.CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.IntegerSerializer")
+        })
 })
 public class TicketStatus implements Identifiable {
     private int id;
     private Project project;
     private String name;
     private String description;
-    private Collection<Integer> allowedFrom = FactoryX.newArrayList();
-    private Collection<Integer> allowedTo = FactoryX.newArrayList();
+    private Collection<Integer> allowedFrom = new ArrayList<>();
+    private Collection<Integer> allowedTo = new ArrayList<>();
 
     @Override
     @Id
