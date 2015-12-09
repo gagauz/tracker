@@ -1,10 +1,10 @@
 package com.gagauz.tracker.web.pages;
 
-import org.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 

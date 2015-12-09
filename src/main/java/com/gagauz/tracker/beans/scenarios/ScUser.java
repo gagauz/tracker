@@ -64,7 +64,7 @@ public class ScUser extends DataBaseScenario {
             userx.setUsername("username" + i);
             userx.setName("User " + i + " Surname");
             userx.setPassword("111");
-            userx.getRoleGroups().add(roleGroup2);
+            userx.getRoleGroups().add(roleGroup);
 
             userDao.save(userx);
         }

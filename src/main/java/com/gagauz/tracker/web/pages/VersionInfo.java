@@ -7,14 +7,13 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.func.F;
 import org.apache.tapestry5.func.Predicate;
 import org.apache.tapestry5.ioc.annotations.Inject;
-
-import org.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketType;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.web.security.Secured;
 
 @Secured
 public class VersionInfo {

@@ -7,12 +7,12 @@ import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.Comparators;
+import com.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.gagauz.tapestry.security.Secured;
 
 import java.util.*;
 

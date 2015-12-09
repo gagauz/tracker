@@ -1,12 +1,12 @@
 package com.gagauz.tracker.web.pages;
 
-import org.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.components.DeferredZone;
+import com.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.ioc.annotations.Inject;
 

@@ -4,15 +4,17 @@ import com.gagauz.tapestry.binding.CondBindingFactory;
 import com.gagauz.tapestry.binding.DateBindingFactory;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
-import com.gagauz.tracker.utils.StringUtils;
+import com.gagauz.tracker.web.security.SecurityModuleSetup;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule;
-import org.apache.tapestry5.*;
-import org.apache.tapestry5.dom.Element;
-import org.apache.tapestry5.internal.BeanValidationContext;
+import org.apache.tapestry5.ComponentParameterConstants;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ValidationDecorator;
 import org.apache.tapestry5.internal.InternalConstants;
-import org.apache.tapestry5.internal.services.CompositeFieldValidator;
-import org.apache.tapestry5.internal.services.FieldValidatorDefaultSourceImpl;
-import org.apache.tapestry5.ioc.*;
+import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.*;
 import org.apache.tapestry5.ioc.services.ServiceOverride;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
@@ -21,21 +23,11 @@ import org.apache.tapestry5.services.*;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
  * configure and extend Tapestry, or to place your own service definitions.
  */
-@ImportModule({HibernateModule.class, TypeCoercerModule.class, ValueEncoderModule.class})
+@ImportModule({SecurityModuleSetup.class, HibernateModule.class, TypeCoercerModule.class, ValueEncoderModule.class})
 public class AppModule {
 
     @Startup
@@ -100,27 +92,8 @@ public class AppModule {
         MarkupRendererFilter validationDecorator = new MarkupRendererFilter() {
             @Override
             public void renderMarkup(final MarkupWriter markupWriter, MarkupRenderer renderer) {
-                ValidationDecorator decorator = new BaseValidationDecorator() {
-                    @Override
-                    public void afterField(Field field) {
-                        if (field == null)
-                            return;
-
-                        if (inError(field)) {
-                            Element group = markupWriter.getElement().getContainer();
-                            String clazz = group.getAttribute("class");
-                            if (clazz != null && clazz.contains("form-group")) {
-                                group.addClassName("has-error");
-                            }
-                        }
-                    }
-
-                    private boolean inError(Field field) {
-                        ValidationTracker tracker = environment.peekRequired(ValidationTracker.class);
-                        return tracker.inError(field);
-                    }
-
-                };
+                ValidationDecorator decorator = new AppValidationDecorator(markupWriter,
+                        environment);
                 environment.push(ValidationDecorator.class, decorator);
                 renderer.renderMarkup(markupWriter);
                 environment.pop(ValidationDecorator.class);
@@ -128,132 +101,24 @@ public class AppModule {
         };
 
         configuration.override("ValidationDecorator", validationDecorator);
-    }
-
-    @Contribute(PartialMarkupRenderer.class)
-    public void contributePartialMarkupRenderer(final OrderedConfiguration<PartialMarkupRenderer> configuration, final Environment environment) {
-
-        PartialMarkupRenderer validationDecorator = new PartialMarkupRenderer() {
-            @Override
-            public void renderMarkup(MarkupWriter writer, JSONObject reply) {
-                ValidationDecorator decorator = new BaseValidationDecorator() {
-
-                };
-                environment.push(ValidationDecorator.class, decorator);
-                // renderer.renderMarkup(markupWriter);
-                environment.pop(ValidationDecorator.class);
-            }
-
-        };
-
-        //        configuration.override("ValidationDecorator", validationDecorator);
         //        configuration.override("InjectDefaultStylesheet", null);
     }
 
-    //@Decorate(serviceInterface = FieldValidatorDefaultSource.class)
-    @Order("after:*")
-    public static FieldValidatorDefaultSource decorateFieldValidatorDefaultSource(final FieldValidatorSource validationSource, final FieldValidatorDefaultSource defaultSource, final Environment environment) {
-        return new FieldValidatorDefaultSourceImpl(null, null) {
+    @Contribute(PartialMarkupRenderer.class)
+    public void contributePartialMarkupRenderer(final OrderedConfiguration<PartialMarkupRendererFilter> configuration, final Environment environment) {
 
-            boolean isHibernateEntity(Class<?> clazz) {
-                for (Annotation annotation : clazz.getAnnotations()) {
-                    if (annotation instanceof Entity) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            Column getColumn(java.lang.reflect.Field clazz) {
-                for (Annotation annotation : clazz.getAnnotations()) {
-                    if (annotation instanceof Column) {
-                        return (Column) annotation;
-                    }
-                }
-                return null;
-            }
-
-            Column getColumn(java.lang.reflect.Method clazz) {
-                for (Annotation annotation : clazz.getAnnotations()) {
-                    if (annotation instanceof Column) {
-                        return (Column) annotation;
-                    }
-                }
-                return null;
-            }
-
-            JoinColumn getJoinColumn(java.lang.reflect.Field clazz) {
-                for (Annotation annotation : clazz.getAnnotations()) {
-                    if (annotation instanceof JoinColumn) {
-                        return (JoinColumn) annotation;
-                    }
-                }
-                return null;
-            }
-
-            JoinColumn getJoinColumn(java.lang.reflect.Method clazz) {
-                for (Annotation annotation : clazz.getAnnotations()) {
-                    if (annotation instanceof JoinColumn) {
-                        return (JoinColumn) annotation;
-                    }
-                }
-                return null;
-            }
-
+        PartialMarkupRendererFilter validationDecorator = new PartialMarkupRendererFilter() {
             @Override
-            public FieldValidator createDefaultValidator(Field field, String overrideId, Messages overrideMessages, Locale locale, Class propertyType, AnnotationProvider propertyAnnotations) {
-
-                FieldValidator defaultValidator = defaultSource.createDefaultValidator(field, overrideId,
-                        overrideMessages, locale, propertyType, propertyAnnotations);
-                BeanValidationContext context = environment.peek(BeanValidationContext.class);
-                if (null != context) {
-                    Class<?> beanClass = context.getBeanType();
-                    List<FieldValidator> validators = new LinkedList<FieldValidator>();
-                    if (isHibernateEntity(beanClass)) {
-                        Column column = null;
-                        JoinColumn joinColumn = null;
-                        try {
-                            java.lang.reflect.Field field0 = beanClass.getField(overrideId);
-                            column = getColumn(field0);
-                            joinColumn = getJoinColumn(field0);
-                        } catch (Exception e) {
-                        }
-                        if (null == column) {
-                            try {
-                                Method method = beanClass.getMethod("get" + StringUtils.capitalize(overrideId));
-                                column = getColumn(method);
-                                joinColumn = getJoinColumn(method);
-                            } catch (Exception e) {
-                            }
-                        }
-                        if (null != column) {
-                            if (!column.nullable()) {
-                                validators.add(validationSource.createValidator(field, "required", null));
-                            }
-                            if (column.length() > 0) {
-                                validators.add(validationSource.createValidator(field, "maxlength", String.valueOf(column.length())));
-                            }
-                        }
-                        if (null != joinColumn) {
-                            if (!joinColumn.nullable()) {
-                                validators.add(validationSource.createValidator(field, "required", null));
-                            }
-                        }
-                        if (!validators.isEmpty()) {
-                            return new CompositeFieldValidator(validators);
-                        }
-                    }
-
-                }
-
-                return defaultValidator;
-
-            }
-
-            @Override
-            public FieldValidator createDefaultValidator(ComponentResources resources, String parameterName) {
-                return defaultSource.createDefaultValidator(resources, parameterName);
+            public void renderMarkup(MarkupWriter markupWriter, JSONObject reply, PartialMarkupRenderer renderer) {
+                ValidationDecorator decorator = new AppValidationDecorator(markupWriter,
+                        environment);
+                environment.push(ValidationDecorator.class, decorator);
+                renderer.renderMarkup(markupWriter, reply);
+                environment.pop(ValidationDecorator.class);
             }
         };
+
+        configuration.override("ValidationDecorator", validationDecorator);
     }
+
 }

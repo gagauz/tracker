@@ -5,13 +5,12 @@ import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.web.security.Secured;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.gagauz.tapestry.security.Secured;
-
 
 import java.util.List;
 import java.util.regex.Matcher;

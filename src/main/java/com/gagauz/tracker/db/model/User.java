@@ -2,6 +2,7 @@ package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.Identifiable;
 import com.gagauz.tracker.utils.HashUtils;
+import com.gagauz.tracker.web.security.api.SecurityUser;
 
 import javax.persistence.*;
 
@@ -119,6 +120,9 @@ public class User implements Identifiable, Serializable, SecurityUser {
                 roleSet.addAll(group.getRoles());
             }
             roles = roleSet;
+        }
+        if (rolesToCheck.length == 0) {
+            return true;
         }
         for (String role : rolesToCheck) {
             if (roles.contains(role)) {
