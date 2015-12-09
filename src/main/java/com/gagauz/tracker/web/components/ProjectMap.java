@@ -1,17 +1,33 @@
 package com.gagauz.tracker.web.components;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
+
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.*;
-import org.apache.tapestry5.annotations.*;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.apache.tapestry5.services.Request;
-
-
-import java.util.*;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketType;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
 
 @Import(stylesheet = "context:/static/css/project-map.css")
 public class ProjectMap {
@@ -65,11 +81,11 @@ public class ProjectMap {
     private Map<FeatureVersion, List<Ticket>> ticketsMap;
 
     private void initMap(List<Version> versions) {
-        featureVersionMap = CollectionFactory.newMap();
-        bugsMap = CollectionFactory.newMap();
-        ticketsMap = CollectionFactory.newMap();
+        featureVersionMap = new HashMap<>();
+        bugsMap = new HashMap<>();
+        ticketsMap = new HashMap<>();
         for (Version version : versions) {
-            Map<Feature, FeatureVersion> map = CollectionFactory.newMap();
+            Map<Feature, FeatureVersion> map = new HashMap<>();
             for (Feature feature : getFeatures()) {
                 map.put(feature, null);
             }
@@ -91,8 +107,8 @@ public class ProjectMap {
                     continue;
                 }
                 map.put(featureVersion.getFeature(), featureVersion);
-                bugsMap.put(featureVersion,new ArrayList<>());
-                ticketsMap.put(featureVersion,new ArrayList<>());
+                bugsMap.put(featureVersion, new ArrayList<Ticket>());
+                ticketsMap.put(featureVersion, new ArrayList<Ticket>());
             }
             for (Ticket ticket : ticketDao.findByProject(project)) {
                 if (ticket.getType() == TicketType.TASK) {
@@ -134,7 +150,7 @@ public class ProjectMap {
         featureVersion.setFeature(feature);
         featureVersion.setVersion(version);
         User user = new User();
-        int id = ((User) securityUser).getId();
+        int id = securityUser.getId();
         user.setId(id);
         featureVersion.setCreator(user);
         featureVersionDao.save(featureVersion);

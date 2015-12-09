@@ -1,5 +1,25 @@
 package com.gagauz.tracker.web.components.ticket;
 
+import java.util.List;
+
+import org.apache.tapestry5.FieldTranslator;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.ValidationException;
+import org.apache.tapestry5.ValueEncoder;
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.BeanEditForm;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.func.F;
+import org.apache.tapestry5.func.Predicate;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.SelectModelFactory;
+import org.apache.tapestry5.services.ValueEncoderSource;
+
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.beans.dao.UserDao;
@@ -8,21 +28,6 @@ import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.utils.Param;
 import com.gagauz.tracker.web.security.api.SecurityUser;
-import org.apache.tapestry5.*;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.corelib.components.BeanEditForm;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.SelectModelFactory;
-import org.apache.tapestry5.services.ValueEncoderSource;
-
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class EditTicketForm {
 
@@ -132,12 +137,12 @@ public class EditTicketForm {
     public SelectModel getStatusModel() {
         List<TicketStatus> list = ticketStatusDao.findByProject(ticket.getFeature().getProject());
         final TicketStatus from = ticket.getStatus();
-        list = list.stream().filter(new Predicate<TicketStatus>() {
+        list = F.flow(list).filter(new Predicate<TicketStatus>() {
             @Override
-            public boolean test(TicketStatus element) {
+            public boolean accept(TicketStatus element) {
                 return element.getAllowedFrom().contains(from);
             }
-        }).collect(Collectors.toList());
+        }).toList();
         return selectModelFactory.create(list, "name");
     }
 }

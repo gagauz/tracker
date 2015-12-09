@@ -62,18 +62,19 @@
 													</ul>
 												</div>
 												<t:if test="notReleased">
-													<t:eventlink class="btn btn-default" t:event="createTicket" t:context="featureVersion" t:zone="ticketZone">
-														${message:create-bug-or-ticket}
+													<t:eventlink class="btn btn-info" t:event="createTicket" t:context="featureVersion" t:zone="ticketZone">
+														<i class="glyphicon glyphicon-plus"></i> ${message:create-bug-or-ticket}
 													</t:eventlink>
 												</t:if>
 
 												<p:else>
 													<t:if test="notReleased">
-														<div class=" ">
-															<p>${message:no-feature-version-yet}</p>
+														<div class="alert alert-warning" role="alert">
+															<i class="glyphicon glyphicon-warning-sign"></i> 
+															${message:no-feature-version-yet}
 														</div>
-														<t:eventlink class="btn btn-default" t:event="createFeatureVersion" t:context="[feature, version]" t:zone="prop:zoneId">
-															${message:create-feature-version}
+														<t:eventlink class="btn btn-info" t:event="createFeatureVersion" t:context="[feature, version]" t:zone="prop:zoneId">
+															<i class="glyphicon glyphicon-plus"></i> ${message:create-feature-version}
 														</t:eventlink>
 													</t:if>
 												</p:else>

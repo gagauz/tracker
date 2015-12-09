@@ -10,7 +10,7 @@
 
 	<t:block id="number">
 		<t:label class="col-sm-3 control-label" for="numberField" />
-		<div class="col-sm-9">
+		<div class="col-sm-3">
 			<input class="form-control t-number" t:id="numberField" />
 			<t:error for="numberField"/>
 		</div>
@@ -38,7 +38,7 @@
 
 	<t:block id="date">
 		<t:label class="col-sm-3 control-label" for="dateField" />
-		<div class="col-sm-9">
+		<div class="col-sm-3">
 			<input class="form-control" t:id="dateField" />
 			<t:error for="dateField"/>
 		</div>
@@ -46,7 +46,7 @@
 
 	<t:block id="calendar">
 		<t:label class="col-sm-3 control-label" for="calendarField" />
-		<div class="col-sm-9">
+		<div class="col-sm-3">
 			<input class="form-control" t:id="calendarField" />
 			<t:error for="calendarField"/>
 		</div>
