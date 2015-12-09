@@ -50,6 +50,8 @@ public class ScStatus extends DataBaseScenario {
 
         closed.setAllowedFrom(Arrays.asList(done.getId(), cant.getId(), invalid.getId(), duplicate.getId()));
         closed.setAllowedTo(Arrays.asList(reopen.getId()));
+
+        statusDao.flush();
     }
 
     private TicketStatus create(String name, String description, Collection<Integer>... lists) {

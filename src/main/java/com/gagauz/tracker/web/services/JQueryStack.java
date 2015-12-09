@@ -31,7 +31,7 @@ public class JQueryStack implements JavaScriptStack {
 
     @Override
     public List<Asset> getJavaScriptLibraries() {
-        final List<Asset> javaScriptStack = new ArrayList<Asset>();
+        final List<Asset> javaScriptStack = FactoryX.newArrayList();
         javaScriptStack.add(assetSource.getExpandedAsset("com/gagauz/tracker/web/stack/jquery/jquery-1.11.1.js"));
         javaScriptStack.add(assetSource.getExpandedAsset("com/gagauz/tracker/web/stack/jquery/jquery-ui.min.js"));
         javaScriptStack.add(assetSource.getExpandedAsset("com/gagauz/tracker/web/stack/jquery/jquery-init.js"));

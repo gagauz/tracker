@@ -21,7 +21,7 @@ public class User implements Identifiable, Serializable, SecurityUser {
     private Collection<RoleGroup> roleGroups = new HashSet<RoleGroup>();
     private String username;
     private String password;
-    private String token = HashUtils.generateRandomString(16);
+    private String token;
     private Set<String> roles;
 
     @Override
@@ -86,6 +86,9 @@ public class User implements Identifiable, Serializable, SecurityUser {
 
     @Column(nullable = false)
     public String getToken() {
+        if (null == token) {
+            token = HashUtils.md5(getEmail() + getPassword());
+        }
         return token;
     }
 

@@ -32,4 +32,9 @@ public abstract class AbstractContextBinding extends AbstractBinding {
                 : resolver.coerce(bindingSource.newBinding(description, container, defaultPrefix, expr).get(), clazz));
 
     }
+
+    @Override
+    public boolean isInvariant() {
+        return false;
+    }
 }

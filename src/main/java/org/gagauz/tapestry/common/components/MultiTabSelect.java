@@ -194,8 +194,8 @@ public class MultiTabSelect extends AbstractField {
 
         decorateInsideField();
 
-        final List<String> valuesOrderList = new ArrayList<String>();
-        final List<String> destinationList = new ArrayList<String>();
+        final List<String> valuesOrderList = FactoryX.newArrayList();
+        final List<String> destinationList = FactoryX.newArrayList();
 
         F.flow(model.getOptions()).filter(new Predicate<OptionModel>() {
             @Override

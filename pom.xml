@@ -12,20 +12,6 @@
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-core</artifactId>
 			<version>${tapestry-release-version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javassist</groupId>
-					<artifactId>javassist</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- This adds automatic compression of JavaScript and CSS when in production 
-			mode. -->
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-yuicompressor</artifactId>
-			<version>${tapestry-release-version}</version>
 		</dependency>
 
 		<dependency>
@@ -50,18 +36,9 @@
 			application code. -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
+			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet-api-release-version}</version>
 		</dependency>
-
-		<!-- Provide dependency to the Tapestry javadoc taglet which replaces the 
-			Maven component report -->
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-javadoc</artifactId>
-			<version>${tapestry-release-version}</version>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -106,21 +83,6 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.5</version>
 		</dependency>
-		<dependency>
-			<groupId>org.gagauz.tapestry</groupId>
-			<artifactId>tapestry-security</artifactId>
-			<version>2.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.gagauz.tapestry</groupId>
-			<artifactId>tapestry-common</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.gagauz.common</groupId>
-			<artifactId>utils</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<finalName>tracker</finalName>
@@ -130,22 +92,11 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
 					<optimize>true</optimize>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<systemPropertyVariables>
-						<tapestry.execution-mode>Qa</tapestry.execution-mode>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -183,53 +134,13 @@
 			<url>http://tapestrysecurity.sourceforge.net/maven_repo/</url>
 		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>eap</id>
-			<url>http://maven.repository.redhat.com/techpreview/all</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<properties>
-		<tapestry-release-version>5.3.8</tapestry-release-version>
-		<servlet-api-release-version>2.5</servlet-api-release-version>
-		<testng-release-version>5.14.10</testng-release-version>
-		<easymock-release-version>3.0</easymock-release-version>
+		<tapestry-release-version>5.4-rc-1</tapestry-release-version>
+		<servlet-api-release-version>3.1.0</servlet-api-release-version>
 		<hibernate-release-version>4.1.7.Final</hibernate-release-version>
 		<spring-release-version>4.0.2.RELEASE</spring-release-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-	<profiles>
-		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when 
-				invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app 
-				will need. -->
-			<!-- By default that is to put the resulting archive into the 'webapps' 
-				folder. -->
-			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-			<id>openshift</id>
-			<build>
-				<finalName>tracker</finalName>
-				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
-						<configuration>
-							<outputDirectory>webapps</outputDirectory>
-							<warName>ROOT</warName>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

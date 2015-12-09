@@ -1,6 +1,5 @@
 package com.gagauz.tracker.web.pages;
 
-import org.gagauz.tapestry.security.Secured;
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.Feature;
@@ -13,6 +12,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.gagauz.tapestry.security.Secured;
 
 import java.util.*;
 
@@ -44,9 +44,6 @@ public class FeatureInfo {
             return Index.class;
         }
         this.feature = feature;
-
-        System.out.println(feature.getFeatureVersions().size());
-
         return null;
     }
 

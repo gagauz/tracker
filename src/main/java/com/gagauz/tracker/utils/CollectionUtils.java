@@ -5,7 +5,7 @@ import java.util.List;
 
 public class CollectionUtils {
     public static <T> List<T> newArrayList() {
-        return new ArrayList<T>();
+        return FactoryX.newArrayList();
     }
 
     public static <T> List<T> newArrayList(int size) {

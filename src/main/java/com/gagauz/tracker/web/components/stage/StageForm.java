@@ -36,7 +36,7 @@ public class StageForm {
 
     @Cached
     public SelectModel getStageSelectModel() {
-        List<OptionModel> list = new ArrayList<OptionModel>();
+        List<OptionModel> list = FactoryX.newArrayList();
         for (Stage stage : stageDao.findByProject(project, getStage().getId())) {
             list.add(new OptionModelImpl(stage.getName(), stage));
         }

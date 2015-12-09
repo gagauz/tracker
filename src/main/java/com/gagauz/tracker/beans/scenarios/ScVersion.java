@@ -69,7 +69,7 @@ public class ScVersion extends DataBaseScenario {
             project.setCvsRepo(repo);
             projectDao.save(project);
 
-            List<Feature> features = new ArrayList<Feature>();
+            List<Feature> features = FactoryX.newArrayList();
 
             for (int h = 0; h < 10; h++) {
                 Feature feature = new Feature();
@@ -142,7 +142,7 @@ public class ScVersion extends DataBaseScenario {
                             Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
                             ticket.setAttachments(Arrays.asList(a1, a2));
                         }
-                        List<TicketComment> cms = new ArrayList<TicketComment>();
+                        List<TicketComment> cms = FactoryX.newArrayList();
                         if (rand.nextBoolean()) {
                             for (int x = rand.nextInt(10) + 1; x > 0; x--) {
                                 TicketComment cm = new TicketComment();

@@ -75,7 +75,7 @@ public class EditTicketForm {
     Object onSubmitFromForm() {
         if (!form.getHasErrors()) {
             List<TicketStatus> status = statusDao.findByProject(getTicket().getFeatureVersion().getFeature().getProject());
-            getTicket().setStatus(status)
+            //            getTicket().setStatus(status)
             getTicket().setAuthor((User) user);
             ticketDao.save(getTicket());
         }

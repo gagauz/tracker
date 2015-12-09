@@ -91,8 +91,8 @@ public class ProjectMap {
                     continue;
                 }
                 map.put(featureVersion.getFeature(), featureVersion);
-                bugsMap.put(featureVersion, new ArrayList<Ticket>());
-                ticketsMap.put(featureVersion, new ArrayList<Ticket>());
+                bugsMap.put(featureVersion, FactoryX.newArrayList());
+                ticketsMap.put(featureVersion, FactoryX.newArrayList());
             }
             for (Ticket ticket : ticketDao.findByProject(project)) {
                 if (ticket.getType() == TicketType.TASK) {

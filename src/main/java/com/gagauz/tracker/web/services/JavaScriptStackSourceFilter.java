@@ -49,7 +49,6 @@ public class JavaScriptStackSourceFilter implements JavaScriptStackSource {
     @Override
     public JavaScriptStack getStack(String name) {
         JavaScriptStack stack = original.getStack(name);
-        System.out.println(" == name " + name);
         if (!SKIP.contains(stack.getClass().getSimpleName())) {
             return new JavaScriptStackWraper(stack);
         }

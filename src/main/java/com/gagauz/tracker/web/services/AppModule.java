@@ -106,12 +106,12 @@ public class AppModule {
 
     @Contribute(ComponentEventRequestHandler.class)
     public static void contributeComponentEventRequestHandler(OrderedConfiguration<ComponentEventRequestFilter> configuration, RememberMeRequestFilter handler) {
-        configuration.add("RememberMeHandler1", handler);
+        configuration.add("RememberMeHandler1", handler, "before:*");
     }
 
     @Contribute(PageRenderRequestHandler.class)
     public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> configuration, RememberMeRequestFilter handler) {
-        configuration.add("RememberMeHandler2", handler);
+        configuration.add("RememberMeHandler2", handler, "before:*");
     }
 
     @Decorate(serviceInterface = JavaScriptStackSource.class)

@@ -32,14 +32,14 @@ public class RememberMeRequestFilter extends AbstractCommonRequestFilter {
         if (null == securityUser) {
             String cookieValue = cookies.readCookieValue(RememberMeHandler.REMEMBER_ME_COOKIE_NAME);
             if (null != cookieValue) {
-                //                log.info("Handle remember me cookie [{}]", cookieValue);
-                //                try {
-                //                    String credentials = securityEncryptor.decrypt(cookieValue);
-                //                    loginService.authenticate(new CredentialsToken(credentials));
-                //                } catch (Exception e) {
-                //                    log.error("Failed to login with cookie. Remove it.", e);
-                //                    cookies.removeCookieValue(RememberMeHandler.REMEMBER_ME_COOKIE_NAME);
-                //                }
+                log.info("Handle remember me cookie [{}]", cookieValue);
+                try {
+                    String credentials = securityEncryptor.decrypt(cookieValue);
+                    loginService.authenticate(new CredentialsToken(credentials));
+                } catch (Exception e) {
+                    log.error("Failed to login with cookie. Remove it.", e);
+                    cookies.removeCookieValue(RememberMeHandler.REMEMBER_ME_COOKIE_NAME);
+                }
             }
         }
         handlerWrapper.handle();

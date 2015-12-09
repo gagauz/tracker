@@ -28,8 +28,8 @@ public class TicketStatus implements Identifiable {
     private Project project;
     private String name;
     private String description;
-    private Collection<Integer> allowedFrom = new ArrayList<Integer>();
-    private Collection<Integer> allowedTo = new ArrayList<Integer>();
+    private Collection<Integer> allowedFrom = FactoryX.newArrayList();
+    private Collection<Integer> allowedTo = FactoryX.newArrayList();
 
     @Override
     @Id
@@ -91,26 +91,6 @@ public class TicketStatus implements Identifiable {
     public void setAllowedTo(Collection<Integer> allowedTo) {
         this.allowedTo = allowedTo;
     }
-
-    //    @JoinTable(name = "jt1", joinColumns = {@JoinColumn(name = "allowedFrom1_id", referencedColumnName = "id", nullable = true)})
-    //    @ManyToMany(fetch = FetchType.LAZY)
-    //    public Collection<TicketStatus> getAllowedFrom() {
-    //        return allowedFrom;
-    //    }
-    //
-    //    public void setAllowedFrom(Collection<TicketStatus> allowedFrom) {
-    //        this.allowedFrom = null == allowedFrom ? new ArrayList<TicketStatus>() : new ArrayList<TicketStatus>(allowedFrom);
-    //    }
-    //
-    //    @JoinTable(name = "jt1", joinColumns = {@JoinColumn(name = "allowedTo1_id", referencedColumnName = "id", nullable = true)})
-    //    @ManyToMany(fetch = FetchType.LAZY)
-    //    public Collection<TicketStatus> getAllowedTo() {
-    //        return allowedTo;
-    //    }
-    //
-    //    public void setAllowedTo(Collection<TicketStatus> allowedTo) {
-    //        this.allowedTo = null == allowedTo ? new ArrayList<TicketStatus>() : new ArrayList<TicketStatus>(allowedTo);
-    //    }
 
     @Override
     public boolean equals(Object obj) {

@@ -1,12 +1,11 @@
 package com.gagauz.tracker.web.pages;
 
-import java.util.List;
-
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.db.model.Project;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.gagauz.tracker.beans.dao.ProjectDao;
-import com.gagauz.tracker.db.model.Project;
+import java.util.List;
 
 public class Index {
 
