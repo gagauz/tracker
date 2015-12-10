@@ -68,7 +68,7 @@ public abstract class CollectionType<T> implements UserType, ParameterizedType {
         String[] strings = string.split(SEPARATOR_STRING);
         Collection<T> result = createCollection(entityClass, strings.length);
         for (String str : strings) {
-            result.add(serializer.unserialize(str));
+            result.add(serializer.unserialize(str, entityClass));
         }
 
         return result;

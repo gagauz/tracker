@@ -10,7 +10,7 @@ public class IntegerSerializer implements Serializer<Integer> {
     }
 
     @Override
-    public Integer unserialize(String string) {
+    public Integer unserialize(String string, Class<Integer> clazz) {
         return null == string || "".equals(string) ? null : Integer.parseInt(string);
     }
 

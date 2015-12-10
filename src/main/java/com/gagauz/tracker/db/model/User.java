@@ -22,7 +22,7 @@ public class User implements Identifiable, Serializable, SecurityUser {
     private String username;
     private String password;
     private String token;
-    private Set<String> roles;
+    private Set<Roles> roles;
 
     @Override
     @Id
@@ -113,18 +113,18 @@ public class User implements Identifiable, Serializable, SecurityUser {
 
     @Override
     @Transient
-    public boolean checkRoles(String[] rolesToCheck) {
+    public boolean checkRoles(Roles[] rolesToCheck) {
         if (null == roles) {
-            Set<String> roleSet = new HashSet<String>();
+            Set<Roles> roleSet = new HashSet<>();
             for (RoleGroup group : roleGroups) {
                 roleSet.addAll(group.getRoles());
             }
             roles = roleSet;
         }
-        if (rolesToCheck.length == 0) {
+        if (null == rolesToCheck || rolesToCheck.length == 0) {
             return true;
         }
-        for (String role : rolesToCheck) {
+        for (Roles role : rolesToCheck) {
             if (roles.contains(role)) {
                 return true;
             }

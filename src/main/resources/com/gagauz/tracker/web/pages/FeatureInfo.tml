@@ -8,8 +8,7 @@
 				</t:pagelink>
 			</li>
 			<li>
-				<t:pagelink t:page="FeaturesList" t:context="feature.project">Features
-				</t:pagelink>
+				<t:pagelink t:page="FeaturesList" t:context="feature.project">Features</t:pagelink>
 			</li>
 			<li>${feature.name}</li>
 		</ol>
@@ -21,7 +20,7 @@
 
 
 
-	<div class="panel panel-default">
+	<div class="panel panel-primary">
 		<div class="panel-heading">${feature.name}</div>
 		<div class="panel-body">
 			<t:if test="editMode">
@@ -33,15 +32,14 @@
 						<p>Creator: ${feature.creator.name}</p>
 						<p>Created: ${date:feature.created}</p>
 					</div>
-					<t:eventlink class="btn btn-default" t:event="edit">Edit
-					</t:eventlink>
+					<t:eventlink class="btn btn-success" t:event="edit">Edit</t:eventlink>
 				</p:else>
 			</t:if>
 		</div>
 	</div>
 	<div class="feature-info">
 		<t:loop source="featureVersions" value="featureVersion">
-			<div class="panel panel-default">
+			<div class="panel panel-info">
 				<div class="panel-heading">
 					<t:if test="featureVersion.version">
 						<t:pagelink t:page="versioninfo" t:context="featureVersion.version">${message:version}:
@@ -55,17 +53,21 @@
 					</t:if>
 				</div>
 				<div class="panel-body">
-					${featureVersion.description}
-
-					<t:loop source="getMap().get(featureVersion.getVersion())"
-						value="ticket">
+					<div>${featureVersion.description}</div>
+					<h5>Tasks</h5>
+					<t:loop source="getTasks()" value="ticket">
 						<div class="ticket-div">
 							<t:pagelink t:page="TicketInfo" t:context="ticket"
-								class="${ticket.type}">${ticket.type} #${ticket.id} ${ticket.summary}
+								class="${ticket.type}"><i class="icon glyphicon"></i> ${ticket.type} #${ticket.id} ${ticket.summary}
 							</t:pagelink>
-							<div>
-								${ticket.description}
-							</div>
+						</div>
+					</t:loop>
+					<h5>Bugs</h5>
+					<t:loop source="getBugs()" value="ticket">
+						<div class="ticket-div">
+							<t:pagelink t:page="TicketInfo" t:context="ticket"
+								class="${ticket.type}"><i class="icon glyphicon"></i> ${ticket.type} #${ticket.id} ${ticket.summary}
+							</t:pagelink>
 						</div>
 					</t:loop>
 				</div>

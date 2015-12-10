@@ -1,5 +1,6 @@
 package com.gagauz.tracker.db.config;
 
+import com.gagauz.tracker.db.utils.StatementInterceptor;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
@@ -26,7 +27,7 @@ public class DevDataSource extends SimpleDriverDataSource implements DataSource 
         props.setProperty("cacheServerConfiguration", "true");
         props.setProperty("characterSetResults", "UTF-8");
         props.setProperty("useLocalSessionState", "true");
-        props.setProperty("statementInterceptors", "com.gagauz.tracker.beans.setup.StatementInterceptor");
+        props.setProperty("statementInterceptors", StatementInterceptor.class.getName());
         setConnectionProperties(props);
     }
 }

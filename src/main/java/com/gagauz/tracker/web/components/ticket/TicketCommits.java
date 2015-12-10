@@ -3,12 +3,14 @@ package com.gagauz.tracker.web.components.ticket;
 import com.gagauz.tracker.beans.cvs.CvsService;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Ticket;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.List;
 
+@Import(module = {"bootstrap/collapse"})
 public class TicketCommits {
 
     @Parameter

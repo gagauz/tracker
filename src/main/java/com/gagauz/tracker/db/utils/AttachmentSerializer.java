@@ -11,7 +11,7 @@ public class AttachmentSerializer implements Serializer<Attachment> {
     }
 
     @Override
-    public Attachment unserialize(String string) {
+    public Attachment unserialize(String string, Class<Attachment> clazz) {
         return null != string ? new Attachment(string) : null;
     }
 

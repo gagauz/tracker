@@ -10,7 +10,7 @@ public class StringSerializer implements Serializer<String> {
     }
 
     @Override
-    public String unserialize(String string) {
+    public String unserialize(String string, Class<String> clazz) {
         return string;
     }
 

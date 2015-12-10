@@ -1,15 +1,16 @@
 package com.gagauz.tracker.web.security;
 
+import com.gagauz.tracker.db.model.Roles;
 import com.gagauz.tracker.web.security.api.AccessAttribute;
 
 public class AnnotationAccessAttribute implements AccessAttribute {
-    private final String[] roles;
+    private final Roles[] roles;
 
-    public AnnotationAccessAttribute(String... roles) {
+    public AnnotationAccessAttribute(Roles... roles) {
         this.roles = roles;
     }
 
-    public String[] getRoles() {
+    public Roles[] getRoles() {
         return roles;
     }
 

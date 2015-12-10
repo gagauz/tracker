@@ -2,7 +2,7 @@
       xmlns:p="tapestry:parameter">
      
 	<t:loop source="attachments" value="attachment">
-   		<a href="${attachment.value}" onclick="$j(this).showPopup({popupClone:true});return false;">
+   		<a href="#" onclick="jQuery(this).modal('show');return false;">
     		<t:if test="attachment.image">
     			<img src="${attachment.value}" />
     			<p:else>

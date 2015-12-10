@@ -120,7 +120,7 @@ public class ProjectInfo {
     }
 
     void onSuccessFromFeatureForm() {
-        newFeature.setCreator((User) securityUser);
+        newFeature.setCreator(securityUser);
         newFeature.setProject(project);
         featureDao.save(newFeature);
         newFeature = null;

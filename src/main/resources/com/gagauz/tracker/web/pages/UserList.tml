@@ -11,7 +11,7 @@
 
 	<div class="block">
 		<t:if test="editUser">
-			<t:beaneditform t:id="form" object="editUser" exclude="id,submit" add="roles,submit" cancel="true" clientValidation="false">
+			<t:beaneditform t:id="form" object="editUser" exclude="id,submit" add="roles,submit" cancel="true">
 				<p:roles>
 					<t:label class="col-sm-3 control-label" for="roles"/>
 					<div class="col-sm-6">

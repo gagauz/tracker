@@ -6,19 +6,26 @@
 	<t:if test="editEntity">
 	<h2>Project workflow</h2>
 	<div>
-		<t:beaneditform t:id="form" object="editEntity" exclude="id" add="project,allowFrom,allowTo">
+		<t:beaneditform t:id="form" object="editEntity" exclude="id" add="project,allowFrom,allowTo" cancel="true">
 			<p:project>
-				<label for="project">${message:project}</label>
-				<input type="text" readonly="true" value="${projectName}" />
+				<label class="control-label col-sm-3" for="project">${message:project}</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" readonly="true" value="${projectName}" />
+				</div>
 			</p:project>
+			
 			<p:allowFrom>
-				<t:label for="allowFrom"></t:label>
-				<t:MultiSelect t:id="allowFrom" model="modelFrom" value="editEntity.allowedFrom" size="10" blankLabel="message:select"/>
+				<t:label class="control-label col-sm-3" for="allowFrom"></t:label>
+				<div class="col-sm-9">
+					<t:MultiSelect t:id="allowFrom" class="form-control" model="modelFrom" value="editEntity.allowedFrom" size="10" blankLabel="message:select"/>
+				</div>
 			</p:allowFrom>
 			
 			<p:allowTo>
-				<t:label for="allowTo"></t:label>
-				<t:MultiSelect t:id="allowTo" model="modelTo" value="editEntity.allowedTo" size="10" blankLabel="message:select"/>
+				<t:label class="control-label col-sm-3" for="allowTo"></t:label>
+				<div class="col-sm-9">
+					<t:MultiSelect t:id="allowTo" class="form-control" model="modelTo" value="editEntity.allowedTo" size="10" blankLabel="message:select"/>
+				</div>
 			</p:allowTo>
 		
 		</t:beaneditform>

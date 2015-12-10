@@ -1,19 +1,18 @@
-.project-map {overflow-y:visible;overflow-x:scroll;width:100%;position:relative1;}
+.project-map {}
 .project-map-owerflow {overflow:visible;}
 .project-map table {}
-.project-map td, .project-map th {border-radius:4px;border:1px solid #ddd}
 .project-map .feature-col, .project-map .ticket-col {width:300px;}
-.project-map .feature-col a {padding:5px;display:block;font-weight:bold;text-align:left;}
-.project-map .feature-col {border:none}
+.project-map .feature-col a {display:block;font-weight:bold;text-align:left;}
+.project-map .feature-col {}
 .project-map .version-col {}
 .project-map .version-col a, .project-map .version-col div{display:block;padding:10px;font-weight:bold;text-align:left;height:100%;}
 .project-map .version-col.col, .empty-col.col {width:100px;}
-.project-map th.empty-col {border:none;box-shadow:none;}
+.project-map th.empty-col {box-shadow:none;}
 .project-map .ticket-col {padding:10px;}
 .project-map .ticket-col div{overflow:hidden;}
 .project-map .ticket-col .description {}
 .project-map .title {margin:5px 0 3px;font-weight:bold;}
-.project-map ul {list-style:none;padding:0 0 0 10px;}
+.project-map ul {list-style:none;padding:0;}
 .project-map li, .project-map li a {text-align:left;display:block;}
 .project-map li {padding:0 0 5px;}
 

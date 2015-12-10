@@ -2,10 +2,10 @@
 	
 	<div class="version-user-map">
 		<div class="version-user-map-owerflow">
-			<table width="100%">
+			<table>
 				<tr>
 					<t:loop source="users" value="user">
-						<td class="">
+						<th class="">
 							<div class="version-col shadow">
 								<t:if test="user">
 									<div>${message:owner}: ${user.name}</div>
@@ -20,7 +20,7 @@
 								<div>${message:remaining-time}: ${remainTime}</div>
 								<div>${message:readiness}: <t:ProgressBar progress="getTotalProgress()" estimate="getTotalEstimate()" percent="true"/></div>
 							</div>
-						</td>
+						</th>
 					</t:loop>
 				</tr>
 				<tr>
@@ -31,8 +31,8 @@
 									<div class="ticket-cell-div bug-${ticket.isBug()} ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">
 										<div>
 											<div class="title">
-												<t:eventlink class="${ticket.type}" t:event="viewticket" t:context="ticket" t:zone="literal:ticketZone" title="${ticket.summary}">
-													#${ticket.id} ${ticket.summary}
+												<t:eventlink class="${ticket.type}" t:event="viewticket" t:context="ticket" async="true" title="${ticket.summary}">
+													<i class="glyphicon icon"></i> ${ticket.type} #${ticket.id} ${ticket.summary}
 												</t:eventlink>
 											</div>
 											<div class="status ${ticket.status}">
@@ -43,7 +43,6 @@
 											</div>
 										</div>
 										<t:ProgressBar progress="ticket.progress" estimate="ticket.estimate" percent="true"/>
-										<div class="c"></div>
 									</div>
 								</t:loop>
 							</div>
@@ -61,33 +60,37 @@
 	</div>
 	
 	<script type="text/javascript">
-	$j(".drag").draggable({
-		appendTo: "div.version-user-map",
-		snap: ".ticket-col",
-		helper: "clone",
-		start: function(){
-        	$j(this).hide();             
-	    },
-	    stop: function(){
-	        $j(this).show()
-	    }
-	});
-	$j(".ticket-col").droppable({
-		hoverClass: "ui-state-hover",
-		drop: function(event, ui) {
-			if (ui.draggable.data("user-id") != $j(this).data("user-id")) {
-				$j(ui.draggable).detach().appendTo(this);
-				
-				$j.post('${eventUrl}', {
-						ticket: ui.draggable.data("ticket-id"),
-						user: $j(this).data("user-id")
-					},
-					function() {
-						window.location = window.location;
-					} 
-				);
-			}
-		}
-    });
+		(function() {
+			require(['draggable'], function(d){
+				d.draggable(".drag", {
+					appendTo: "div.version-user-map",
+					snap: ".ticket-col",
+					helper: "clone",
+					start: function(){
+			        	$j(this).hide();             
+				    },
+				    stop: function(){
+				        $j(this).show()
+				    }
+				});
+				d.droppable(".ticket-col", {
+					hoverClass: "ui-state-hover",
+					drop: function(event, ui) {
+						if (ui.draggable.data("user-id") != $j(this).data("user-id")) {
+							$j(ui.draggable).detach().appendTo(this);
+							
+							$j.post('${eventUrl}', {
+									ticket: ui.draggable.data("ticket-id"),
+									user: $j(this).data("user-id")
+								},
+								function() {
+									window.location = window.location;
+								} 
+							);
+						}
+					}
+			    });
+		    });
+	    }).call(this);
 	</script>
 </div>

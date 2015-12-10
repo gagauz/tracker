@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "feature_version", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"feature_id", "version_id"})
+        @UniqueConstraint(name = "feature|version", columnNames = {"feature_id", "version_id"})
 })
 public class FeatureVersion implements Identifiable, Serializable {
 
@@ -79,7 +79,8 @@ public class FeatureVersion implements Identifiable, Serializable {
         this.owner = owner;
     }
 
-    @Column(columnDefinition = "text")
+    @Column
+    @Lob
     public String getDescription() {
         return description;
     }

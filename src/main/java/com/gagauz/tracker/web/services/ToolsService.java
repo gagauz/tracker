@@ -24,16 +24,16 @@ public class ToolsService {
         StringBuffer sb = new StringBuffer();
 
         if (time > 1440) {
-            sb.append(time / 1440).append(day);
+            sb.append(time / 1440).append(day).append(" ");
             time = time % 1440;
         }
 
         if (time > 60) {
-            sb.append(time / 60).append(hour);
+            sb.append(time / 60).append(hour).append(" ");
             time = time % 60;
         }
         if (time > 0) {
-            sb.append(time).append(minute);
+            sb.append(time).append(minute).append(" ");
         }
 
         return sb.toString();

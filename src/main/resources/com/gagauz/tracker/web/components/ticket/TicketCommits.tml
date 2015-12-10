@@ -2,8 +2,8 @@
 	<t:loop source="commits" value="commit">
 		<div class="commit">
 			<div class="date"><b>${date:commit.date}</b>&#160;<i>${commit.hash}</i> by <a href="#${commit.author}">${commit.author}</a></div>
-			<div class="comm">${commit.comment}</div>
-			<ul class="deta"><t:outputraw value="formatDetails(commit.getDetails())"/></ul>
+			<a class="comm text text-primary" data-toggle="collapse" href="#commit_id_${commit.hash}" aria-expanded="false">${commit.comment}</a>
+			<ul id="commit_id_${commit.hash}" class="deta panel-collapse collapse"><t:outputraw value="formatDetails(commit.getDetails())"/></ul>
 		</div>
 	</t:loop>
 </div>

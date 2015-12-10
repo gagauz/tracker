@@ -36,7 +36,7 @@
 					rows="5"/>
 			</div>
 			<div class="form-group">
-				<t:LinkSubmit class="btn btn-default">${message:add-comment}</t:LinkSubmit>
+				<t:LinkSubmit class="btn btn-success">${message:add-comment}</t:LinkSubmit>
 			</div>
 		</t:form>
 	</div>

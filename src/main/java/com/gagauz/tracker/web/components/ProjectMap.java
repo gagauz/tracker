@@ -1,50 +1,36 @@
 package com.gagauz.tracker.web.components;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Persist;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Request;
-
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.TicketType;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.db.model.*;
+import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Ajax;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
+import org.apache.tapestry5.services.ajax.JavaScriptCallback;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+
+import java.util.*;
 
 @Import(stylesheet = "context:/static/css/project-map.css")
 public class ProjectMap {
 
-    @Component(parameters = {"id=prop:zoneId", "show=", "update="})
+    @Component(parameters = {"id=prop:zoneId"})
     private Zone zone;
 
-    @Component(parameters = {"id=literal:ticketZone", "show=popup", "update=popup"})
+    @Component(parameters = {"id=literal:ticketZone"})
     private Zone ticketZone;
 
     @Parameter(allowNull = false, required = true, principal = true)
     private Project project;
 
-    @Property
+    @Property(write = false)
     private Version version;
 
-    @Property(write = false)
+    @Property
     private Feature feature;
 
     @Property(write = false)
@@ -61,6 +47,14 @@ public class ProjectMap {
     @Property
     private int progress;
 
+    @Persist
+    @Property
+    private boolean activeVersions;
+
+    @Persist
+    @Property
+    private boolean releasedVersions;
+
     @Inject
     private VersionDao versionDao;
 
@@ -75,6 +69,9 @@ public class ProjectMap {
 
     @Inject
     private Request request;
+
+    @Inject
+    private AjaxResponseRenderer ajaxResponseRenderer;
 
     private Map<Version, Map<Feature, FeatureVersion>> featureVersionMap;
     private Map<FeatureVersion, List<Ticket>> bugsMap;
@@ -135,17 +132,18 @@ public class ProjectMap {
         return project.getFeatures();
     }
 
-    public void setFeature(Feature featureLoop) {
+    public void setVersion(Version version0) {
         estimate = 0;
         progress = 0;
-        feature = featureLoop;
+        version = version0;
         if (featureVersionMap != null) {
             Map<Feature, FeatureVersion> map = featureVersionMap.get(version);
             featureVersion = null != map ? map.get(feature) : null;
         }
     }
 
-    Object onCreateFeatureVersion(Feature feature, Version version) {
+    @Ajax
+    void onCreateFeatureVersion(Feature feature, Version version) {
         FeatureVersion featureVersion = new FeatureVersion();
         featureVersion.setFeature(feature);
         featureVersion.setVersion(version);
@@ -154,15 +152,21 @@ public class ProjectMap {
         user.setId(id);
         featureVersion.setCreator(user);
         featureVersionDao.save(featureVersion);
-        return request.isXHR() ? zone.getBody() : null;
+        ajaxResponseRenderer.addRender(zone.getClientId(), zone.getBody());
     }
 
-    Object onCreateTicket(FeatureVersion featureVersion) {
-
+    @Ajax
+    void onCreateTicket(FeatureVersion featureVersion) {
         newTicket = new Ticket();
         newTicket.setFeatureVersion(featureVersion);
-
-        return ticketZone.getBody();
+        ajaxResponseRenderer
+                .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
+                .addCallback(new JavaScriptCallback() {
+                    @Override
+                    public void run(JavaScriptSupport javascriptSupport) {
+                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
+                    }
+                });
     }
 
     public List<Ticket> getTickets() {
@@ -190,14 +194,6 @@ public class ProjectMap {
     public String getZoneId() {
         return "ProjectMapZone";
     }
-
-    @Persist
-    @Property
-    private boolean activeVersions;
-
-    @Persist
-    @Property
-    private boolean releasedVersions;
 
     void onViewMode(String mode) {
         if ("a".equals(mode)) {

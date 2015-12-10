@@ -1,42 +1,29 @@
 package com.gagauz.tracker.web.services;
 
-import org.apache.tapestry5.ComponentParameterConstants;
-import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.ValidationDecorator;
-import org.apache.tapestry5.internal.InternalConstants;
-import org.apache.tapestry5.ioc.Configuration;
-import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
-import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.Contribute;
-import org.apache.tapestry5.ioc.annotations.Decorate;
-import org.apache.tapestry5.ioc.annotations.ImportModule;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Startup;
-import org.apache.tapestry5.ioc.services.ApplicationDefaults;
-import org.apache.tapestry5.ioc.services.ServiceOverride;
-import org.apache.tapestry5.ioc.services.TypeCoercer;
-import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.AssetSource;
-import org.apache.tapestry5.services.BindingFactory;
-import org.apache.tapestry5.services.BindingSource;
-import org.apache.tapestry5.services.Environment;
-import org.apache.tapestry5.services.LibraryMapping;
-import org.apache.tapestry5.services.MarkupRenderer;
-import org.apache.tapestry5.services.MarkupRendererFilter;
-import org.apache.tapestry5.services.PartialMarkupRenderer;
-import org.apache.tapestry5.services.PartialMarkupRendererFilter;
-import org.apache.tapestry5.services.URLEncoder;
-import org.apache.tapestry5.services.javascript.JavaScriptStack;
-import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
-
 import com.gagauz.tapestry.binding.CondBindingFactory;
 import com.gagauz.tapestry.binding.DateBindingFactory;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.web.security.SecurityModuleSetup;
 import com.gagauz.tracker.web.services.hibernate.HibernateModule;
+import org.apache.tapestry5.ComponentParameterConstants;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ValidationDecorator;
+import org.apache.tapestry5.beaneditor.DataTypeConstants;
+import org.apache.tapestry5.internal.InternalConstants;
+import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.*;
+import org.apache.tapestry5.ioc.services.ApplicationDefaults;
+import org.apache.tapestry5.ioc.services.ServiceOverride;
+import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.*;
+import org.apache.tapestry5.services.javascript.JavaScriptStack;
+import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -58,7 +45,7 @@ public class AppModule {
     public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
         configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
         configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
-        configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table-responsive");
+        configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table table-responsive");
     }
 
     @ApplicationDefaults
@@ -142,4 +129,8 @@ public class AppModule {
         configuration.override("ValidationDecorator", validationDecorator);
     }
 
+    public static void contributeBeanBlockOverrideSource(Configuration<BeanBlockContribution> configuration) {
+        configuration.add(new EditBlockContribution(DataTypeConstants.TEXT, "AppPropertyBlocks", "anytext"));
+        configuration.add(new EditBlockContribution(DataTypeConstants.LONG_TEXT, "AppPropertyBlocks", "anytext"));
+    }
 }

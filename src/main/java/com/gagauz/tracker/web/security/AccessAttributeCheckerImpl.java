@@ -1,6 +1,6 @@
 package com.gagauz.tracker.web.security;
 
-import com.gagauz.tracker.db.model.AccessRole;
+import com.gagauz.tracker.db.model.Roles;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.security.api.AccessAttribute;
 import com.gagauz.tracker.web.security.api.AccessAttributeChecker;
@@ -15,7 +15,7 @@ public class AccessAttributeCheckerImpl implements AccessAttributeChecker {
     @Override
     public void check(AccessAttribute accessAttribute) throws AccessDeniedException {
 
-        String[] needRoles = AccessRole.EMPTY_ROLES;
+        Roles[] needRoles = null;
 
         if (accessAttribute instanceof AnnotationAccessAttribute) {
             needRoles = ((AnnotationAccessAttribute) accessAttribute).getRoles();

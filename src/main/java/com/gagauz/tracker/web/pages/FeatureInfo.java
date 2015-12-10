@@ -2,21 +2,18 @@ package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.db.model.*;
 import com.gagauz.tracker.utils.Comparators;
 import com.gagauz.tracker.web.security.Secured;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Persist;
-import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.func.F;
+import org.apache.tapestry5.func.Predicate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.*;
 
 @Secured
+@Import(module = {"bootstrap/collapse"})
 public class FeatureInfo {
 
     @Parameter
@@ -69,7 +66,7 @@ public class FeatureInfo {
 
     @Cached
     public Map<Version, List<Ticket>> getMap() {
-        Map<Version, List<Ticket>> map = new HashMap<Version, List<Ticket>>(feature.getFeatureVersions().size());
+        Map<Version, List<Ticket>> map = new HashMap<>(feature.getFeatureVersions().size());
         for (Ticket ticket : ticketDao.findByFeature(feature)) {
             List<Ticket> tickets = map.get(ticket.getVersion());
             if (null == tickets) {
@@ -79,5 +76,23 @@ public class FeatureInfo {
             tickets.add(ticket);
         }
         return map;
+    }
+
+    public List<Ticket> getTasks() {
+        return F.flow(getMap().get(featureVersion.getVersion())).filter(new Predicate<Ticket>() {
+            @Override
+            public boolean accept(Ticket element) {
+                return element.getType() == TicketType.TASK;
+            }
+        }).toList();
+    }
+
+    public List<Ticket> getBugs() {
+        return F.flow(getMap().get(featureVersion.getVersion())).filter(new Predicate<Ticket>() {
+            @Override
+            public boolean accept(Ticket element) {
+                return element.getType() == TicketType.BUG;
+            }
+        }).toList();
     }
 }

@@ -2,8 +2,11 @@ package com.gagauz.tracker.db.model;
 
 import com.gagauz.tracker.db.base.ArrayListType;
 import com.gagauz.tracker.db.base.Identifiable;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -15,13 +18,10 @@ import java.util.List;
 @Entity
 @Table(name = "ticket")
 @TypeDefs({
-        @TypeDef(name = "listOf.Attachment",
-                typeClass = ArrayListType.class,
-                parameters = {
-                        @Parameter(name = com.gagauz.tracker.db.base.CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
-                        @Parameter(name = com.gagauz.tracker.db.base.CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
-                }
-        )
+        @TypeDef(name = "listOf.Attachment", typeClass = ArrayListType.class, parameters = {
+                @Parameter(name = com.gagauz.tracker.db.base.CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
+                @Parameter(name = com.gagauz.tracker.db.base.CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
+        })
 })
 public class Ticket implements Identifiable {
     private int id;
@@ -145,7 +145,8 @@ public class Ticket implements Identifiable {
         this.summary = summary;
     }
 
-    @Column(columnDefinition = "text")
+    @Column
+    @Lob
     public String getDescription() {
         return description;
     }

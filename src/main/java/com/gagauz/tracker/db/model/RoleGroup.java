@@ -3,32 +3,32 @@ package com.gagauz.tracker.db.model;
 import com.gagauz.tracker.db.base.CollectionType;
 import com.gagauz.tracker.db.base.HashSetType;
 import com.gagauz.tracker.db.base.Identifiable;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.EnumSet;
 
 @Entity
 @Table(name = "role_group")
 @TypeDefs({
-        @TypeDef(name = "setOf.String",
-                typeClass = HashSetType.class,
-                parameters = {
-                        @Parameter(name = CollectionType.CLASS, value = "java.lang.String"),
-                        @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.StringSerializer")
-                }
-        )
+        @TypeDef(name = "setOf.String", typeClass = HashSetType.class, parameters = {
+                @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Roles"),
+                @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.EnumSerializer")
+        })
 })
 public class RoleGroup implements Identifiable {
     private int id;
     private String name;
     private Project project;
-    private Collection<String> roles = new HashSet<String>();
+    private EnumSet<Roles> roles = EnumSet.noneOf(Roles.class);
 
     @Override
     @Id
@@ -63,12 +63,12 @@ public class RoleGroup implements Identifiable {
 
     @Column(nullable = false)
     @Type(type = "setOf.String")
-    public Collection<String> getRoles() {
+    public Collection<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<String> roles) {
-        this.roles = roles;
+    public void setRoles(Collection<Roles> roles) {
+        this.roles = null == roles ? EnumSet.noneOf(Roles.class) : EnumSet.copyOf(roles);
     }
 
     @Override

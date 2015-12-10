@@ -1,5 +1,7 @@
 package com.gagauz.tracker.web.security.api;
 
+import com.gagauz.tracker.db.model.Roles;
+
 public interface SecurityUser {
-    boolean checkRoles(String[] needRoles);
+    boolean checkRoles(Roles[] needRoles);
 }

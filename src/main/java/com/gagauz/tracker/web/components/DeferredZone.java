@@ -1,10 +1,6 @@
 package com.gagauz.tracker.web.components;
 
-import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.Block;
-import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.EventContext;
-import org.apache.tapestry5.Link;
+import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -20,7 +16,7 @@ public class DeferredZone extends Zone {
     private Object context;
 
     @Inject
-    private ComponentResources componentResources;
+    private ComponentResources resources;
 
     @Inject
     private JavaScriptSupport javaScriptSupport;
@@ -36,9 +32,8 @@ public class DeferredZone extends Zone {
     }
 
     void afterRender() {
-        Link link = getEventLink();
         if (!request.isXHR()) {
-            javaScriptSupport.addScript();
+            javaScriptSupport.require("t5/core/zone").invoke("deferredZoneUpdate").with(getClientId(), getZoneUpdateLink().toRedirectURI());
         }
     }
 
@@ -53,7 +48,7 @@ public class DeferredZone extends Zone {
         return null;
     }
 
-    public Link getEventLink() {
-        return componentResources.createEventLink("load", context);
+    public Link getZoneUpdateLink() {
+        return resources.createEventLink("load", context);
     }
 }

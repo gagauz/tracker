@@ -14,19 +14,27 @@
 		<t:ProjectMenu project="project"/>
 	</p:sidebar>
 
-
-	<t:loop source="features" value="feature">
-		<div class="block">
-			<h2><t:pagelink t:page="featureinfo" t:context="feature">#${feature.id} ${feature.name}</t:pagelink></h2>
-			<p>${feature.description}</p>
-			<br/>
-			<t:loop source="feature.featureVersions" value="featureVersion">
-				<div class="block">
-					<div class="title">##${cond:featureVersion.version,prop:featureVersion.version.name,Unversioned}</div>
-					${featureVersion.description}
+	<div class="panel-group">
+		<t:loop source="features" value="feature">
+			<div class="panel panel-info">
+				<div class="panel-heading" id="heading_id_${feature.id}">
+					<t:pagelink t:page="featureinfo" t:context="feature">#${feature.id} ${feature.name}</t:pagelink>
+					<a role="button" data-toggle="collapse" href="#collapse_id_${feature.id}" aria-expanded="false" aria-controls="collapse_id_${feature.id}">
+			          Expand
+			        </a>
 				</div>
-			</t:loop>
-		</div>
-	</t:loop>
-    
+				<div id="collapse_id_${feature.id}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_id_${feature.id}">
+					<div class="panel-body">
+						<div>${feature.description}</div>
+						<t:loop source="feature.featureVersions" value="featureVersion">
+							<div class="block">
+								<div class="title">${cond:featureVersion.version,prop:featureVersion.version.name,Unversioned}</div>
+								${featureVersion.description}
+							</div>
+						</t:loop>
+					</div>
+				</div>
+			</div>
+		</t:loop>
+    </div>
 </html>

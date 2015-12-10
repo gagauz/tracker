@@ -1,12 +1,13 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import java.util.List;
-
-import org.apache.tapestry5.FieldTranslator;
-import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.ValidationException;
-import org.apache.tapestry5.ValueEncoder;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.TicketStatusDao;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.utils.Param;
+import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
@@ -20,14 +21,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
 
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.TicketStatusDao;
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.TicketStatus;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.utils.Param;
-import com.gagauz.tracker.web.security.api.SecurityUser;
+import java.util.List;
 
 public class EditTicketForm {
 
@@ -64,7 +58,7 @@ public class EditTicketForm {
     private Request request;
 
     @SessionState
-    private SecurityUser user;
+    private User user;
 
     public String getZoneId() {
         return zone.getClientId();
@@ -80,8 +74,11 @@ public class EditTicketForm {
     Object onSubmitFromForm() {
         if (!form.getHasErrors()) {
             List<TicketStatus> status = statusDao.findByProject(getTicket().getFeatureVersion().getFeature().getProject());
-            //            getTicket().setStatus(status)
-            getTicket().setAuthor((User) user);
+            if (status.isEmpty()) {
+                status = statusDao.findCommon();
+            }
+            getTicket().setStatus(status.get(0));
+            getTicket().setAuthor(user);
             ticketDao.save(getTicket());
         }
         return request.isXHR() ? zone.getBody() : null;
@@ -119,7 +116,7 @@ public class EditTicketForm {
     }
 
     public User getUser() {
-        return (User) user;
+        return user;
     }
 
     public Ticket getTicket() {

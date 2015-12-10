@@ -173,3 +173,122 @@ fieldset[disabled] .noneButton.active {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
+
+
+/* Task Header */
+.ticket-header .title {margin-bottom:15px;}
+.ticket-header .title a {color:navy;font-size:15px}
+.ticket-header .column {width:50%; float:left;}
+.ticket-header .row b {width:150px; float:left;}
+.ticket-header table th {text-align:right;}
+.ticket-header table td {padding:2px 20px 2px 0;}
+
+/* Task */
+.ticket-info h1, .ticket-info h2{font-size:15px;font-weight:bold;}
+#ticket-commits .commit, #ticket-commits .commit a{font: 12px/15px "Courier New" normal; margin-bottom:10px;}
+#ticket-commits .commit div{line-height:150%}
+#ticket-commits .commit .date{}
+#ticket-commits .commit .date i{color:blue}
+#ticket-commits .commit .comm{font-weight:bold;}
+#ticket-commits .commit .deta {margin-left:25px;}
+#ticket-commits .commit .deta .a{color:#9b0080}
+#ticket-commits .commit .deta .m{color:#0032c1}
+#ticket-commits .commit .deta .d{color:#ff003a}
+
+/* Project Map */
+.shadow {box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
+table.shadow-table {border-spacing: 10px; border-collapse: separate;}
+table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; border:1px solid silver;box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
+ 
+.project-map {width:100%; position:relative1;}
+.project-map-owerflow {position:absolute; overflow:visible;}
+.project-map .empty-col {border:none}
+.project-map .feature-col {}
+.project-map .version-col {}
+.project-map .version-col.col, .empty-col.col {width:100px;}
+.project-map .ticket-col-div {width:250px}
+.project-map .ticket-col div {overflow:hidden;}
+.project-map .ticket-col .owner {color:#660000}
+.project-map .ticket-col .description {}
+.project-map .title {margin:5px 0 3px;font-weight:bold;}
+.project-map ul {list-style:none}
+.project-map li, .project-map li a {font-size:12px;text-align:left;display:bloc;}
+.project-map li {padding:0 0 5px;}
+
+.version-user-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;}
+.version-user-map-owerflow {}
+.version-user-map table td, .version-user-map table th {vertical-align:top}
+.version-user-map .version-col {padding:7px;border:1px solid gray;font-size:13px;margin:0 10px 10px 0;}
+.version-user-map .version-col.col, .empty-col.col {width:100px;}
+.version-user-map .ticket-col {}
+.version-user-map .ticket-col.unassigned {background-color:#d0d0d0;}
+.version-user-map .ticket-cells {font-size:12px;width:270px;}
+.version-user-map .ticket-cell-div {border:1px solid gray;padding:7px;margin:0 10px 10px 0;}
+.version-user-map .ticket-cell-div.ui-draggable-dragging {width:270px;}
+.version-user-map .ticket-cell-div.bug-true {}
+.version-user-map .ticket-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}
+.version-user-map .ticket-cell-div .status {}
+.version-user-map .version-col .todo {border:1px solid gray;padding:2px 4px;color:black;}
+.version-user-map .tickets .row {border:1px solid gray;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
+.version-user-map .bugs .row {border:1px solid red;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
+.version-user-map .nowrap {white-space:nowrap;}
+.version-user-map td {padding:0;vertical-align:top;white-space:normal;}
+
+.version-user-map th.version-col a {color:white}
+
+.version-user-map .ticket-col.ui-state-hover {background-color:#fff;}
+.version-user-map .total-user-time {float:right;clear:right;border:1px solid gray;background:#f0fff0;padding:4px 8px;width:30px;}
+
+.version-user-map .version-col ul {list-style:none}
+.version-user-map .version-col ul li {padding-left:10px;}
+
+.title a {text-align:left;}
+
+/* Comments */
+.comment-form label {clear:both}
+.comment-form textarea{width:100%;border:1px solid #a0a0a0;padding:0}
+.comment-form input {margin-top:10px;}
+#ticket-comments .comment {padding:0 0 5px;margin:0 0 6px;border-bottom:1px solid #c0c0c0;}
+#ticket-comments .comment .date{margin-bottom:3px;}
+#ticket-comments .comment .date a{color:green;text-decoration:none}
+#ticket-comments .comment .text{}
+#ticket-comments .comment .text img{width:60px}
+#ticket-comments .edit-row {display:none;float:right;}
+#ticket-comments .edit-row a {float:left;margin:0 3px;}
+#ticket-comments .comment:hover {background:#ffe;}
+#ticket-comments .comment:hover .edit-row {display:block}
+
+.comment-popup {width:700px;background:#fff;border:1px solid gray;}
+
+body.tiny {background:#fff}
+.tiny .te {border:1px solid #bbb; padding:0 1px 1px;/* font:12px Verdana,Arial; margin:25px*/}
+.tiny .te iframe {border:none}
+.tiny .teheader {height:31px; border-bottom:1px solid #bbb; background:url(images/header-bg.gif) repeat-x; padding-top:1px}
+.tiny .teheader select {float:left; margin-top:5px}
+.tiny .tefont {margin-left:12px}
+.tiny .tesize {margin:0 3px}
+.tiny .testyle {margin-right:12px}
+.tiny .tedivider {float:left; width:1px; height:30px; background:#ccc}
+.tiny .tecontrol {float:left; width:34px; height:30px; cursor:pointer; background-image:url(images/icons.png)}
+.tiny .tecontrol:hover {background-color:#fff; background-position:30px 0}
+.tiny .tefooter {height:32px; border-top:1px solid #bbb; background:#f5f5f5}
+.tiny .toggle {float:left; background:url(images/icons.png) -34px 2px no-repeat; padding:9px 13px 0 31px; height:23px; border-right:1px solid #ccc; cursor:pointer; color:#666}
+.tiny .toggle:hover {background-color:#fff}
+.tiny .resize {float:right; height:32px; width:32px; background:url(images/resize.gif) 15px 15px no-repeat; cursor:s-resize}
+
+.feature-info .desc-div {margin:0 0 15px;}
+.feature-info .ticket-div a.TASK {color:navy;}
+.feature-info .ticket-div a.BUG {color:#990000;}
+.feature-info .ticket-div {margin:0 0 5px;}
+fieldset {background-color:#fff;border:1px solid gray;margin:0 0 10px 0;}
+fieldset legend {background-color:#fff;padding:2px 5px;border:1px solid gray;}
+
+.t-autocomplete-menu {border:1px solid silver;border-top:none;background:white;}
+.t-autocomplete-menu ul {list-style:none;cursor:pointer;}
+.t-autocomplete-menu ul li:hover {background:#d0d0f0;}
+
+.edit-ticket-form {width:700px}
+.edit-ticket-form input.text, .edit-ticket-form select.text{width:300px}
+
+.BUG .icon:before {content:"\e082"; color:#a94442}
+.TASK .icon:before {content:"\e081"; color:#3c763d}

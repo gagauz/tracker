@@ -93,7 +93,8 @@ public class Feature implements Identifiable {
         this.name = name;
     }
 
-    @Column(nullable = false)
+    @Column
+    @Lob
     public String getDescription() {
         return description;
     }

@@ -13,15 +13,20 @@ public class ProgressBar extends ProgressTime {
     @BeginRender
     void beginRender(MarkupWriter writer) {
         writer.writeRaw("<div class=\"progress\">");
+
         if (estimate > 0) {
-            writer.writeRaw("<div class=\"progress-bar\" style=\"width:" + getProgressPercent() + "%\"></div>");
+            writer.writeRaw("<div aria-valuenow=\"" + getProgressPercent() + "\" aria-valuemin=\"0\" aria-valuemax=\"100\""
+                    + " class=\"progress-bar\" style=\"min-width:2em;width:" + getProgressPercent() + "%\">");
             if (percent)
-                writer.writeRaw("<span>" + getProgressPercent() + "%</span>");
+                writer.writeRaw(getProgressPercent() + "%");
             else
-                writer.writeRaw("<span>" + toolsService.getTime(estimate) + "</span>");
+                writer.writeRaw(toolsService.getTime(estimate));
+
+            writer.writeRaw("</div>");
         } else {
-            writer.writeRaw("<span>" + n_e + "</span>");
+            writer.writeRaw(n_e);
         }
+
         writer.writeRaw("</div>");
     }
 

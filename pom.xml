@@ -78,6 +78,22 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.5</version>
 		</dependency>
+		<!-- log4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${log4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${log4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${log4j-version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>tracker</finalName>
@@ -120,6 +136,7 @@
 		</repository>
 	</repositories>
 	<properties>
+		<log4j-version>1.7.12</log4j-version>
 		<tapestry-release-version>5.4-rc-1</tapestry-release-version>
 		<servlet-api-release-version>3.1.0</servlet-api-release-version>
 		<hibernate-release-version>4.1.7.Final</hibernate-release-version>

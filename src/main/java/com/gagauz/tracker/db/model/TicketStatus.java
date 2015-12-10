@@ -30,9 +30,7 @@ public class TicketStatus implements Identifiable {
 
     @Override
     @Id
-    @SequenceGenerator(name = "id_sequence", sequenceName = "status_id_seq", allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_sequence")
-    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }

@@ -1,5 +1,7 @@
 package com.gagauz.tracker.web.security;
 
+import com.gagauz.tracker.db.model.Roles;
+
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
@@ -7,5 +9,5 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface Secured {
-    String[] value() default {};
+    Roles[] value() default {};
 }

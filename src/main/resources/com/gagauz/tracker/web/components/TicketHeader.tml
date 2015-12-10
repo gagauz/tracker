@@ -1,48 +1,62 @@
 <div class="ticket-header" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-
-	<div class="block">
-		<table border="0" class="table">
-			<tr>
-				<th>Status:</th>
-				<td>${ticket.status.name}</td>
-				<th>Author:</th>
-				<td>${ticket.author.name}</td>
-				<th>Estimate:</th>
-				<td>${getTime(ticket.estimate)}</td>
-				<th>Version:</th>
-				<td>${cond:ticket.version,prop:ticket.version.name,}</td>
-			</tr>
-			<tr>
-				<th>Priority:</th>
-				<td>${ticket.priority}</td>
-				<th>Owner:</th>
-				<td>${cond:ticket.owner,prop:ticket.owner.name,Unassigned}</td>
-				<th>Logged:</th>
-				<td>${getTime(ticket.progress)}</td>
-				<th></th>
-				<td></td>
-			</tr>
-			<tr>
-				<th></th>
-				<td></td>
-				<th>Created:</th>
-				<td>${date:ticket.created}</td>
-				<th>Remaining:</th>
-				<td>${getRemaining()}</td>
-				<th></th>
-				<td></td>
-			</tr>
-			<tr>
-				<th></th>
-				<td></td>
-				<th>Last updated:</th>
-				<td>${date:ticket.updated}</td>
-				<th></th>
-				<td></td>
-				<th></th>
-				<td></td>
-			</tr>
-		</table>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<t:eventlink class="btn btn-info" event="edit">Edit</t:eventlink> 
+			<div class="btn-group" role="group">
+				<t:eventlink class="btn btn-info" event="edit">Assign</t:eventlink>
+				<t:eventlink class="btn btn-info" event="edit">Comment</t:eventlink>
+				<t:eventlink class="btn btn-info" event="edit">Attach files</t:eventlink>
+				<t:eventlink class="btn btn-info" event="edit">Log work</t:eventlink>
+				<t:eventlink class="btn btn-info" event="edit">Resolve</t:eventlink>
+			</div>
+		</div>
+		<div class="panel-body">
+			<table class="table table-responsive">
+				<tr>
+					<th>Status:</th>
+					<td>${ticket.status.name}</td>
+					<th>Author:</th>
+					<td>${ticket.author.name}</td>
+					<th>Estimate:</th>
+					<td>${getTime(ticket.estimate)}</td>
+					<th>Version:</th>
+					<td>
+						<t:if test="ticket.version">
+							<t:pagelink t:page="versioninfo" t:context="ticket.version">${ticket.version.name}</t:pagelink>
+						</t:if>
+					</td>
+				</tr>
+				<tr>
+					<th>Priority:</th>
+					<td>${ticket.priority}</td>
+					<th>Owner:</th>
+					<td>${cond:ticket.owner,prop:ticket.owner.name,Unassigned}</td>
+					<th>Logged:</th>
+					<td>${getTime(ticket.progress)}</td>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td></td>
+					<th>Created:</th>
+					<td>${date:ticket.created}</td>
+					<th>Remaining:</th>
+					<td>${getRemaining()}</td>
+					<th></th>
+					<td></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td></td>
+					<th>Last updated:</th>
+					<td>${date:ticket.updated}</td>
+					<th></th>
+					<td></td>
+					<th></th>
+					<td></td>
+				</tr>
+			</table>
+		</div>
 	</div>
-
 </div>

@@ -3,6 +3,7 @@ package com.gagauz.tracker.web.pages;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
+import com.gagauz.tracker.db.model.Roles;
 import com.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
@@ -10,6 +11,8 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.SelectModelFactory;
+import org.apache.tapestry5.util.EnumSelectModel;
 
 import java.util.List;
 
@@ -31,6 +34,9 @@ public class RoleGroupList {
 
     @Inject
     private Messages messages;
+
+    @Inject
+    private SelectModelFactory selectModelFactory;
 
     void onEdit(Project project, RoleGroup roleGroup) {
         this.project = project;
@@ -70,7 +76,7 @@ public class RoleGroupList {
 
     @Cached
     public SelectModel getModel() {
-        return null;//new EnumSelectModel(Role.class, messages);
+        return new EnumSelectModel(Roles.class, messages);
     }
 
     @Cached
