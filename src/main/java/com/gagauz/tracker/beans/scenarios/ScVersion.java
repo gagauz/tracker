@@ -34,6 +34,9 @@ public class ScVersion extends DataBaseScenario {
     private TicketDao ticketDao;
 
     @Autowired
+    private BugDao bugDao;
+
+    @Autowired
     private WorkLogDao workLogDao;
 
     @Autowired
@@ -44,6 +47,9 @@ public class ScVersion extends DataBaseScenario {
 
     @Autowired
     private ScStatus scStatus;
+
+    private String[] fnames = {"Страница регистрации и авторизация", "Каталог товаров", "Главная страница", "Страница успешного оформления заказа",
+            "Страница оформления заказа", "Личный кабинет - Персональные данные", "Личный кабинет - Адреса", "Личный кабинет - Заказы"};
 
     @Override
     protected void execute() {
@@ -69,13 +75,13 @@ public class ScVersion extends DataBaseScenario {
             project.setCvsRepo(repo);
             projectDao.save(project);
 
-            List<Feature> features =new ArrayList<>();
+            List<Feature> features = new ArrayList<>();
 
             for (int h = 0; h < 10; h++) {
                 Feature feature = new Feature();
                 feature.setProject(project);
                 feature.setCreator(user1);
-                feature.setName("Название фичи, например, Авторизация.");
+                feature.setName(RandomUtils.getRandomObject(fnames));
                 feature.setDescription("Общее описание фичи, например, Авторизация на сайте для доступа к защищенным разделам.");
                 features.add(feature);
             }
@@ -109,20 +115,19 @@ public class ScVersion extends DataBaseScenario {
                     featureVersion.setOwner(user1);
                     featureVersion.setCreator(user2);
                     featureVersion
-                            .setDescription("Название имплементации фичи в данной версии, например, реализовать простую защиту страниц без разделения ролей и форму авторизации с хранением признака авторизованного пользователя в сессии.");
+                            .setDescription(
+                                    "Название имплементации фичи в данной версии, например, реализовать простую защиту страниц без разделения ролей и форму авторизации с хранением признака авторизованного пользователя в сессии.");
 
                     featureVersionDao.save(featureVersion);
 
                     int stc = rand.nextInt(5) + 1;
                     for (int k = 0; k < stc; k++) {
                         Ticket ticket = new Ticket();
-                        ticket.setType(rand.nextBoolean() ? TicketType.TASK : TicketType.BUG);
                         ticket.setFeatureVersion(featureVersion);
                         ticket.setOwner(getRandomUser());
                         ticket.setAuthor(getRandomUser());
-                        ticket.setSummary("Название задачи, например, сделать форму авторизации.");
+                        ticket.setSummary("Регистрация");
                         ticket.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
-                        ticket.setPriority(rand.nextInt(30));
                         int es = 15 * (rand.nextInt(10) + 1);
                         ticket.setEstimate(es);
                         WorkLog wl = null;
@@ -142,7 +147,7 @@ public class ScVersion extends DataBaseScenario {
                             Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
                             ticket.setAttachments(Arrays.asList(a1, a2));
                         }
-                        List<TicketComment> cms =new ArrayList<>();
+                        List<TicketComment> cms = new ArrayList<>();
                         if (rand.nextBoolean()) {
                             for (int x = rand.nextInt(10) + 1; x > 0; x--) {
                                 TicketComment cm = new TicketComment();
@@ -166,6 +171,17 @@ public class ScVersion extends DataBaseScenario {
                         if (!cms.isEmpty()) {
                             ticketCommentDao.save(cms);
                         }
+
+                        int stc1 = rand.nextInt(3) + 1;
+                        for (int k1 = 0; k1 < stc1; k1++) {
+                            Bug bug = new Bug();
+                            bug.setTicket(ticket);
+                            bug.setOwner(ticket.getOwner());
+                            bug.setAuthor(getRandomUser());
+                            bug.setSummary("Bug/ Регистрация");
+                            bug.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
+                            bugDao.save(bug);
+                        }
                     }
                 }
             }
@@ -175,7 +191,7 @@ public class ScVersion extends DataBaseScenario {
     private final Map<Integer, TicketStatus> statusHash = new HashMap<Integer, TicketStatus>();
 
     private TicketStatus getRandomStatus() {
-        int r = RandomUtils.getRandomInt(8) + 1;
+        int r = RandomUtils.nextInt(8) + 1;
         TicketStatus u = statusHash.get(r);
         if (null == u) {
             u = statusDao.findById(r);
@@ -187,7 +203,7 @@ public class ScVersion extends DataBaseScenario {
     private final Map<Integer, User> userHash = new HashMap<Integer, User>();
 
     private User getRandomUser() {
-        int r = RandomUtils.getRandomInt(9) + 1;
+        int r = RandomUtils.nextInt(9) + 1;
         User u = userHash.get(r);
         if (null == u) {
             u = userDao.findById(r);

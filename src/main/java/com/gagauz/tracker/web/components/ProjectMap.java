@@ -15,7 +15,6 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import java.util.*;
 
-@Import(stylesheet = "context:/static/css/project-map.css")
 public class ProjectMap {
 
     @Component(parameters = {"id=prop:zoneId"})
@@ -108,11 +107,10 @@ public class ProjectMap {
                 ticketsMap.put(featureVersion, new ArrayList<Ticket>());
             }
             for (Ticket ticket : ticketDao.findByProject(project)) {
-                if (ticket.getType() == TicketType.TASK) {
-                    addToMap(ticketsMap, ticket.getFeatureVersion(), ticket);
-                } else {
-                    addToMap(bugsMap, ticket.getFeatureVersion(), ticket);
-                }
+                addToMap(ticketsMap, ticket.getFeatureVersion(), ticket);
+                //                } else {
+                //                    addToMap(bugsMap, ticket.getFeatureVersion(), ticket);
+                //                }
             }
         }
         return versions;
@@ -159,7 +157,19 @@ public class ProjectMap {
     void onCreateTicket(FeatureVersion featureVersion, TicketType type) {
         newTicket = new Ticket();
         newTicket.setFeatureVersion(featureVersion);
-        newTicket.setType(type);
+        ajaxResponseRenderer
+                .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
+                .addCallback(new JavaScriptCallback() {
+                    @Override
+                    public void run(JavaScriptSupport javascriptSupport) {
+                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
+                    }
+                });
+    }
+
+    @Ajax
+    void onViewTicket(Ticket ticket) {
+        newTicket = ticket;
         ajaxResponseRenderer
                 .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
                 .addCallback(new JavaScriptCallback() {

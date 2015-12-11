@@ -19,6 +19,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import java.util.*;
 import java.util.Map.Entry;
 
+@Import(module = "bootstrap/dropdown")
 public class VersionUserMap {
 
     @Parameter(allowNull = false, required = true, principal = true)
@@ -67,10 +68,17 @@ public class VersionUserMap {
     @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
 
+    @Inject
+    private JavaScriptSupport javaScriptSupport;
+
     private int endTime;
     private int rowEndTime;
     private int minTime;
 
+    @Property
+    private TicketStatus status;
+
+    private Set<TicketStatus> allStatuses;
     private Map<User, List<Ticket>> userTicketMap;
     private Map<User, Map<TicketStatus, Integer>> userTicketStatus;
 
@@ -79,11 +87,13 @@ public class VersionUserMap {
     @Cached
     public Collection<User> getUsers() {
         if (null == userTicketMap) {
+            allStatuses = CollectionFactory.newSet();
             userTicketMap = CollectionFactory.newMap();
             userTicketStatus = CollectionFactory.newMap();
             userTotalTimes = CollectionFactory.newMap();
             minTime = Integer.MAX_VALUE;
             for (Ticket ticket : ticketDao.findByVersion(version)) {
+                allStatuses.add(ticket.getStatus());
                 List<Ticket> tickets = userTicketMap.get(ticket.getOwner());
 
                 Integer[] times = userTotalTimes.get(ticket.getOwner());
@@ -120,6 +130,11 @@ public class VersionUserMap {
         Collections.sort(users, Comparators.USER_BY_NAME_COMPARATOR);
 
         return users;
+    }
+
+    public Collection<TicketStatus> getFilterStatuses() {
+        getUsers();
+        return allStatuses;
     }
 
     public int getTicketsWidth() {
@@ -195,6 +210,10 @@ public class VersionUserMap {
     public void setTicket(Ticket ticket) {
         rowEndTime += ticket.getEstimate() - ticket.getProgress();
         this.ticket = ticket;
+    }
+
+    void afterRender() {
+        javaScriptSupport.require("page/VersionUserMap").invoke("init").with(getEventUrl());
     }
 
     void onChange(@RequestParameter(value = "user") Integer userId, @RequestParameter(value = "ticket") Integer ticketId) {

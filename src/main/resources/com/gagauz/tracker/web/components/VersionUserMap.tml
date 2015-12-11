@@ -1,5 +1,33 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-	
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<span class="navbar-brand">Фильтр</span>
+			</div>
+			<div class="collapse navbar-collapse">
+				<t:form class="navbar-form navbar-left" t:id="filterform">
+					<div class="input-group">
+						<div class="input-group-btn">
+							<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								aria-expanded="false">
+								Статус
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<t:loop source="filterstatuses" value="status"> 
+								<li>
+									<a href="#">${status.name}</a>
+								</li>
+								</t:loop>
+							</ul>
+							<t:submit class="btn btn-default" value="Submit" />
+							<t:submit class="btn btn-default" value="Reset" />
+						</div>
+			        </div>
+	      		</t:form>
+			</div>
+		</div>
+	</nav>
 	<div class="version-user-map">
 		<div class="version-user-map-owerflow">
 			<table>
@@ -22,13 +50,21 @@
 							</div>
 						</th>
 					</t:loop>
+					<th class="">
+						<div class="version-col shadow">
+							Next version
+						</div>
+					</th>
 				</tr>
 				<tr>
 					<t:loop source="users" value="user">
 						<td class="ticket-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}">
 							<div class="ticket-cells">
 								<t:loop source="userTickets" value="ticket">
-									<div class="ticket-cell-div bug-${ticket.isBug()} ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">
+									<div class="ticket-cell-div ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">
+										<div class="drag-handle">
+											<i class="glyphicon glyphicon-move text text-info"></i>
+										</div>
 										<div>
 											<div class="title">
 												<t:eventlink class="${ticket.type}" t:event="viewticket" t:context="ticket" async="true" title="${ticket.summary}">
@@ -51,6 +87,10 @@
 							</div>
 						</td>
 					</t:loop>
+					<td class="ticket-col ${cond:user,,unassigned}" data-version-id="0">
+						<div class="ticket-cells">
+						</div>
+					</td>
 				</tr>
 			</table>
 		</div>
@@ -61,39 +101,4 @@
 			<t:TicketForm ticket="viewTicket"/>
 		</div>
 	</div>
-	
-	<script type="text/javascript">
-		(function() {
-			require(['draggable'], function(d){
-				d.draggable(".drag", {
-					appendTo: "div.version-user-map",
-					snap: ".ticket-col",
-					helper: "clone",
-					start: function(){
-			        	$j(this).hide();             
-				    },
-				    stop: function(){
-				        $j(this).show()
-				    }
-				});
-				d.droppable(".ticket-col", {
-					hoverClass: "ui-state-hover",
-					drop: function(event, ui) {
-						if (ui.draggable.data("user-id") != $j(this).data("user-id")) {
-							$j(ui.draggable).detach().appendTo(this);
-							
-							$j.post('${eventUrl}', {
-									ticket: ui.draggable.data("ticket-id"),
-									user: $j(this).data("user-id")
-								},
-								function() {
-									window.location = window.location;
-								} 
-							);
-						}
-					}
-			    });
-		    });
-	    }).call(this);
-	</script>
 </div>

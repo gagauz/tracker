@@ -49,7 +49,7 @@
 													<div class="title">${message:tickets-list}</div>
 													<ul>
 														<li t:type="loop" source="tickets" value="ticket">
-															<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
+															<t:pagelink class="TASK" t:page="TicketInfo" t:context="ticket">TASK #${ticket.id} ${ticket.summary}</t:pagelink>
 														</li>
 													</ul>
 												</div>
@@ -57,7 +57,7 @@
 													<div class="title">${message:bugs-list}</div>
 													<ul>
 														<li t:type="loop" source="bugs" value="ticket">
-															<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">${ticket.type} #${ticket.id} ${ticket.summary}</t:pagelink>
+															<t:pagelink class="BUG" t:page="TicketInfo" t:context="ticket">BUG #${ticket.id} ${ticket.summary}</t:pagelink>
 														</li>
 													</ul>
 												</div>

@@ -1,5 +1,5 @@
 (function(){
-	define(["jquery"], function($) {
+	define(["jquery", "jquery-ui/jquery-ui"], function($) {
 		var draggable, droppable;
 		
 		draggable = function(selector, opts) {

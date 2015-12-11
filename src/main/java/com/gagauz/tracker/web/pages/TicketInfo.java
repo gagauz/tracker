@@ -2,6 +2,7 @@ package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.db.model.Bug;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
@@ -35,6 +36,9 @@ public class TicketInfo {
     @Property
     private Stage stage;
 
+    @Property
+    private Bug bug;
+
     @Inject
     private StageDao stageDao;
 
@@ -57,7 +61,7 @@ public class TicketInfo {
 
     @Cached
     public List<Stage> getStages() {
-        return ticket.getStages();
+        return null;//ticket.getStages();
     }
 
 }

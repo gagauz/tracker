@@ -202,8 +202,8 @@ table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; b
  
 .project-map {width:100%; position:relative1;}
 .project-map-owerflow {position:absolute; overflow:visible;}
-.project-map .empty-col {border:none}
-.project-map .feature-col {}
+.project-map .empty-col {border:none; box-shadow:none;}
+.project-map .feature-col {width:400px}
 .project-map .version-col {}
 .project-map .version-col.col, .empty-col.col {width:100px;}
 .project-map .ticket-col-div {width:250px}
@@ -211,7 +211,7 @@ table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; b
 .project-map .ticket-col .owner {color:#660000}
 .project-map .ticket-col .description {}
 .project-map .title {margin:5px 0 3px;font-weight:bold;}
-.project-map ul {list-style:none}
+.project-map ul {list-style:none;padding:0}
 .project-map li, .project-map li a {font-size:12px;text-align:left;display:bloc;}
 .project-map li {padding:0 0 5px;}
 
@@ -223,11 +223,13 @@ table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; b
 .version-user-map .ticket-col {}
 .version-user-map .ticket-col.unassigned {background-color:#d0d0d0;}
 .version-user-map .ticket-cells {font-size:12px;width:270px;}
+.version-user-map .ticket-cell-div {position:relative}
 .version-user-map .ticket-cell-div {border:1px solid gray;padding:7px;margin:0 10px 10px 0;}
 .version-user-map .ticket-cell-div.ui-draggable-dragging {width:270px;}
 .version-user-map .ticket-cell-div.bug-true {}
 .version-user-map .ticket-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}
 .version-user-map .ticket-cell-div .status {}
+.version-user-map .ticket-cell-div .drag-handle {position:absolute;top:5px;right:10px;display:block;cursor:pointer}
 .version-user-map .version-col .todo {border:1px solid gray;padding:2px 4px;color:black;}
 .version-user-map .tickets .row {border:1px solid gray;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}
 .version-user-map .bugs .row {border:1px solid red;padding:3px 3px;margin:0 1px 2px 0;font-size:90%;}

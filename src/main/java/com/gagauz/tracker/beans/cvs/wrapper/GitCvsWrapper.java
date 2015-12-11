@@ -78,7 +78,7 @@ public class GitCvsWrapper implements CvsWrapper {
     @Override
     public List<Commit> getCommits() {
         String log = log();
-        List<Commit> commits =new ArrayList<>();
+        List<Commit> commits = new ArrayList<>();
         for (String cl : StringUtils.split(log, ">>>")) {
             if (!"".equals(cl)) {
                 String[] lines = StringUtils.split(cl, "\n", 2);
@@ -97,9 +97,9 @@ public class GitCvsWrapper implements CvsWrapper {
 
     @Override
     public List<Commit> getCommits(Ticket ticket) {
-        String grep = ticket.getType() + "\\s#" + ticket.getId();
+        String grep = ticket.getFeature().getProject().getKey1() + "\\s#" + ticket.getId();
         String log = log(grep);
-        List<Commit> commits =new ArrayList<>();
+        List<Commit> commits = new ArrayList<>();
         for (String cl : log.split(">>>")) {
             if (!"".equals(cl)) {
                 String[] lines = StringUtils.split(cl, "\n", 2);

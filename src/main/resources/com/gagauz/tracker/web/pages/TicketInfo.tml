@@ -28,6 +28,25 @@
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
+				<h3 class="panel-title">Bugs</h3>
+			</div>
+			<div class="panel-body">
+				<t:loop source="ticket.bugs" value="bug">
+					<div>
+						<t:pagelink class="" t:page="TicketInfo" t:context="bug">
+							<i class="glyphicon icon"></i>
+							Bug #${bug.id} ${bug.summary}
+						</t:pagelink>
+						<t:eventlink class="text text-default" t:event="viewticket" t:context="bug" async="true">
+							<i class="glyphicon glyphicon-eye-open"></i>
+						</t:eventlink>
+					</div>
+				</t:loop> 
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
 				<h3 class="panel-title">Description</h3>
 			</div>
 			<div class="panel-body">

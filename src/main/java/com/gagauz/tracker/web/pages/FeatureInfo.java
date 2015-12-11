@@ -2,12 +2,13 @@ package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.Comparators;
 import com.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.annotations.*;
-import org.apache.tapestry5.func.F;
-import org.apache.tapestry5.func.Predicate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import java.util.*;
@@ -79,20 +80,10 @@ public class FeatureInfo {
     }
 
     public List<Ticket> getTasks() {
-        return F.flow(getMap().get(featureVersion.getVersion())).filter(new Predicate<Ticket>() {
-            @Override
-            public boolean accept(Ticket element) {
-                return element.getType() == TicketType.TASK;
-            }
-        }).toList();
+        return getMap().get(featureVersion.getVersion());
     }
 
     public List<Ticket> getBugs() {
-        return F.flow(getMap().get(featureVersion.getVersion())).filter(new Predicate<Ticket>() {
-            @Override
-            public boolean accept(Ticket element) {
-                return element.getType() == TicketType.BUG;
-            }
-        }).toList();
+        return getMap().get(featureVersion.getVersion());
     }
 }

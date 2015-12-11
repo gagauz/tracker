@@ -31,8 +31,8 @@
 					</td>
 				</tr>
 				<tr>
-					<th>Priority:</th>
-					<td>${ticket.priority}</td>
+					<th></th>
+					<td></td>
 					<th>Owner:</th>
 					<td>${cond:ticket.owner,prop:ticket.owner.name,Unassigned}</td>
 					<th>Logged:</th>

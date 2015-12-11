@@ -54,10 +54,13 @@
 														<div class="title">${message:tickets-list}</div>
 														<ul>
 															<li t:type="loop" source="tickets" value="ticket">
-																<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">
+																<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
 																	<i class="glyphicon icon"></i>
-																	${ticket.type} #${ticket.id} ${ticket.summary}
+																	Task #${ticket.id} ${ticket.summary}
 																</t:pagelink>
+																<t:eventlink class="text text-default" t:event="viewticket" t:context="ticket" async="true">
+																	<i class="glyphicon glyphicon-eye-open"></i>
+																</t:eventlink>
 															</li>
 														</ul>
 													</div>
@@ -65,10 +68,13 @@
 														<div class="title">${message:bugs-list}</div>
 														<ul>
 															<li t:type="loop" source="bugs" value="ticket">
-																<t:pagelink class="${ticket.type}" t:page="TicketInfo" t:context="ticket">
+																<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
 																	<i class="glyphicon icon"></i> 
-																	${ticket.type} #${ticket.id} ${ticket.summary}
+																	Bug #${ticket.id} ${ticket.summary}
 																</t:pagelink>
+																<t:eventlink class="text text-default" t:event="viewticket" t:context="ticket" async="true">
+																	<i class="glyphicon glyphicon-eye-open"></i>
+																</t:eventlink>
 															</li>
 														</ul>
 													</div>
@@ -111,7 +117,7 @@
 	<div style="display:none">
 		<div t:id="ticketZone" class="ticket-popup">
 			<t:if test="newTicket">
-				<t:ticket.EditTicketForm ticket="newTicket" />
+				<t:TicketForm ticket="newTicket"/>
 			</t:if>
 		</div>
 	</div>

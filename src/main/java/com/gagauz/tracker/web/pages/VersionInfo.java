@@ -1,19 +1,16 @@
 package com.gagauz.tracker.web.pages;
 
-import java.util.List;
-
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.func.F;
-import org.apache.tapestry5.func.Predicate;
-import org.apache.tapestry5.ioc.annotations.Inject;
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.TicketType;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.web.security.Secured;
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.annotations.Inject;
+
+import java.util.List;
 
 @Secured
 public class VersionInfo {
@@ -58,21 +55,11 @@ public class VersionInfo {
 
     @Cached
     public List<Ticket> getTickets() {
-        return F.flow(getAllTickets()).filter(new Predicate<Ticket>() {
-            @Override
-            public boolean accept(Ticket element) {
-                return element.getType() == TicketType.TASK;
-            }
-        }).toList();
+        return getAllTickets();
     }
 
     @Cached
     public List<Ticket> getBugs() {
-        return F.flow(getAllTickets()).filter(new Predicate<Ticket>() {
-            @Override
-            public boolean accept(Ticket element) {
-                return element.getType() == TicketType.BUG;
-            }
-        }).toList();
+        return getAllTickets();
     }
 }
