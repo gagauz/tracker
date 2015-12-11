@@ -3,14 +3,14 @@
 
 	<p:header>
 		<ol class="breadcrumb">
+			<li class="active">${feature.name}</li>
+			<li>
+				<t:pagelink t:page="FeaturesList" t:context="feature.project">${message:all-features}</t:pagelink>
+			</li>
 			<li>
 				<t:pagelink t:page="ProjectInfo" t:context="feature.project">${feature.project.name}
 				</t:pagelink>
 			</li>
-			<li>
-				<t:pagelink t:page="FeaturesList" t:context="feature.project">Features</t:pagelink>
-			</li>
-			<li>${feature.name}</li>
 		</ol>
 	</p:header>
 

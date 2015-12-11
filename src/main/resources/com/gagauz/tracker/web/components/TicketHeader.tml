@@ -1,13 +1,17 @@
 <div class="ticket-header" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<t:eventlink class="btn btn-info" event="edit">Edit</t:eventlink> 
-			<div class="btn-group" role="group">
-				<t:eventlink class="btn btn-info" event="edit">Assign</t:eventlink>
-				<t:eventlink class="btn btn-info" event="edit">Comment</t:eventlink>
-				<t:eventlink class="btn btn-info" event="edit">Attach files</t:eventlink>
-				<t:eventlink class="btn btn-info" event="edit">Log work</t:eventlink>
-				<t:eventlink class="btn btn-info" event="edit">Resolve</t:eventlink>
+			<div class="btn-toolbar">
+				<div class="btn-group" role="group">
+					<t:eventlink class="btn btn-default" event="edit" context="ticket" async="true">Edit</t:eventlink>
+				</div> 
+				<div class="btn-group" role="group">
+					<t:eventlink class="btn btn-default" event="edit">Assign</t:eventlink>
+					<t:eventlink class="btn btn-default" event="edit">Comment</t:eventlink>
+					<t:eventlink class="btn btn-default" event="edit">Attach files</t:eventlink>
+					<t:eventlink class="btn btn-default" event="edit">Log work</t:eventlink>
+					<t:eventlink class="btn btn-default" event="edit">Resolve</t:eventlink>
+				</div>
 			</div>
 		</div>
 		<div class="panel-body">
@@ -57,6 +61,14 @@
 					<td></td>
 				</tr>
 			</table>
+		</div>
+	</div>
+		
+	<div style="display:none">
+		<div t:id="ticketZone" class="ticket-popup">
+			<t:if test="newTicket">
+				<t:ticket.EditTicketForm ticket="newTicket" />
+			</t:if>
 		</div>
 	</div>
 </div>

@@ -8,10 +8,7 @@ import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.utils.Param;
 import org.apache.tapestry5.*;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.func.F;
@@ -34,6 +31,7 @@ public class EditTicketForm {
     @Parameter(name = "ticket")
     private Ticket ticketParam;
 
+    @Persist("flash")
     private Ticket ticket;
 
     @Inject
@@ -64,22 +62,23 @@ public class EditTicketForm {
         return zone.getClientId();
     }
 
-    boolean setupRender() {
-        if (null != ticketParam) {
-            ticket = ticketParam;
-        }
-        return ticket != null;
-    }
-
     Object onSubmitFromForm() {
         if (!form.getHasErrors()) {
-            List<TicketStatus> status = statusDao.findByProject(getTicket().getFeatureVersion().getFeature().getProject());
-            if (status.isEmpty()) {
-                status = statusDao.findCommon();
+            if (null == getTicket().getStatus()) {
+                List<TicketStatus> status = statusDao.findByProject(getTicket().getFeatureVersion().getFeature().getProject());
+                if (status.isEmpty()) {
+                    status = statusDao.findCommon();
+                }
+                getTicket().setStatus(status.get(0));
             }
-            getTicket().setStatus(status.get(0));
-            getTicket().setAuthor(user);
-            ticketDao.save(getTicket());
+            if (null == getTicket().getAuthor()) {
+                getTicket().setAuthor(user);
+            }
+            if (getTicket().getId() != 0) {
+                ticketDao.merge(ticket);
+            } else {
+                ticketDao.save(ticket);
+            }
         }
         return request.isXHR() ? zone.getBody() : null;
     }
@@ -121,7 +120,7 @@ public class EditTicketForm {
 
     public Ticket getTicket() {
         if (null == ticket) {
-            ticket = new Ticket();
+            ticket = null != ticketParam ? ticketParam : new Ticket();
         }
         return ticket;
     }

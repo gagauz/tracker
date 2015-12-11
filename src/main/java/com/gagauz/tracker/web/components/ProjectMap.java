@@ -156,9 +156,10 @@ public class ProjectMap {
     }
 
     @Ajax
-    void onCreateTicket(FeatureVersion featureVersion) {
+    void onCreateTicket(FeatureVersion featureVersion, TicketType type) {
         newTicket = new Ticket();
         newTicket.setFeatureVersion(featureVersion);
+        newTicket.setType(type);
         ajaxResponseRenderer
                 .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
                 .addCallback(new JavaScriptCallback() {

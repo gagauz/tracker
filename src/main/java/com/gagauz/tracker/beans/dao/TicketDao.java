@@ -27,4 +27,5 @@ public class TicketDao extends AbstractDao<Integer, Ticket> {
         getSession().createSQLQuery("update ticket set progress=COALESCE((select sum(logTime) from work_log where ticket_id="
                 + ticket.getId() + " group by ticket_id), 0) where id=" + ticket.getId()).executeUpdate();
     }
+
 }

@@ -33,6 +33,7 @@
 					import.stylesheet="/static/js/jquery/tinyeditor/style.css"
 					import.library="/static/js/jquery/tinyeditor/packed.js"
 					import.jqueryFunction="tinyEditor"
+					autofocus="false"
 					rows="5"/>
 			</div>
 			<div class="form-group">

@@ -72,9 +72,6 @@ public class AppPropertyBlocks {
     //    }
 
     public boolean isLong() {
-        if (getContext().getPropertyValue() != null) {
-            return getContext().getPropertyValue().toString().length() > 100;
-        }
         Column column = getContext().getAnnotation(Column.class);
         Lob lob = getContext().getAnnotation(Lob.class);
         return (null != column && column.length() > 255) || null != lob;

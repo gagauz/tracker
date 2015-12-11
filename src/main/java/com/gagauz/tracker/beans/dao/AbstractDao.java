@@ -61,6 +61,11 @@ public class AbstractDao<I extends Serializable, E> {
         return getSession().createCriteria(entityClass).list();
     }
 
+    public void merge(E entity) {
+        getSession().merge(entity);
+        getSession().flush();
+    }
+
     public void save(E entity) {
         getSession().saveOrUpdate(entity);
         getSession().flush();

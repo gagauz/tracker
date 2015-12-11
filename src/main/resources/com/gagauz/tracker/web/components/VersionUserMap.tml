@@ -35,6 +35,9 @@
 													<i class="glyphicon icon"></i> ${ticket.type} #${ticket.id} ${ticket.summary}
 												</t:eventlink>
 											</div>
+											<div class="description">
+												${ticket.description}
+											</div>
 											<div class="status ${ticket.status}">
 												${message:status}: ${ticket.status.name}
 											</div>

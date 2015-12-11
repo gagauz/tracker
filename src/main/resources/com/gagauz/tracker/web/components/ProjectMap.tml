@@ -73,9 +73,14 @@
 														</ul>
 													</div>
 													<t:if test="notReleased">
-														<t:eventlink class="btn btn-info" t:event="createTicket" t:context="featureVersion" t:zone="ticketZone">
-															<i class="glyphicon glyphicon-plus"></i> ${message:create-bug-or-ticket}
-														</t:eventlink>
+														<div class="btn-group" role="group">
+															<t:eventlink class="btn btn-default" t:event="createTicket" t:context="[featureVersion, 'TASK']" t:zone="ticketZone">
+																<i class="glyphicon glyphicon-plus-sign text text-success"></i> ${message:create-task}
+															</t:eventlink>
+															<t:eventlink class="btn btn-default" t:event="createTicket" t:context="[featureVersion, 'BUG']" t:zone="ticketZone">
+																<i class="glyphicon glyphicon-minus-sign text text-danger"></i> ${message:create-bug}
+															</t:eventlink>
+														</div>
 													</t:if>
 	
 													<p:else>

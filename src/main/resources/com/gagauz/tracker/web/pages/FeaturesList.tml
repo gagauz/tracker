@@ -5,8 +5,8 @@
 
 	<p:header>
 		<ol class="breadcrumb">
+			<li class="active">${message:all-features}</li>
 			<li><t:pagelink t:page="ProjectInfo" t:context="project">${project.name}</t:pagelink></li>
-			<li>Features</li>
 		</ol>
 	</p:header>
 	

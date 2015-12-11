@@ -3,10 +3,17 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-    <h2>Version: ${version.name}</h2>
-    <t:pagelink t:page="projectinfo" t:context="version.project">${version.project.name}</t:pagelink>
+	<p:header>
+  		<ol class="breadcrumb">
+			<li class="active">
+				Version: ${version.name}
+			</li>
+			<li>
+				<t:pagelink t:page="projectinfo" t:context="version.project">${version.project.name}</t:pagelink>
+			</li>
+		</ol>
+  	</p:header>
     
     <t:VersionUserMap version="version" />
-    
     
 </html>
