@@ -1,13 +1,39 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import com.gagauz.tracker.beans.dao.*;
-import com.gagauz.tracker.beans.setup.DataBaseScenario;
-import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.utils.RandomUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.beans.dao.TicketCommentDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.TicketStatusDao;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.beans.dao.WorkLogDao;
+import com.gagauz.tracker.beans.setup.DataBaseScenario;
+import com.gagauz.tracker.db.model.Attachment;
+import com.gagauz.tracker.db.model.CvsRepo;
+import com.gagauz.tracker.db.model.CvsType;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketComment;
+import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.db.model.WorkLog;
+import com.gagauz.tracker.utils.RandomUtils;
 
 @Service("ScVersion")
 public class ScVersion extends DataBaseScenario {
@@ -32,9 +58,6 @@ public class ScVersion extends DataBaseScenario {
 
     @Autowired
     private TicketDao ticketDao;
-
-    @Autowired
-    private BugDao bugDao;
 
     @Autowired
     private WorkLogDao workLogDao;
@@ -110,14 +133,9 @@ public class ScVersion extends DataBaseScenario {
                     }
 
                     FeatureVersion featureVersion = new FeatureVersion();
-                    featureVersion.setFeature(feature);
-                    featureVersion.setVersion(version);
-                    featureVersion.setOwner(user1);
+                    featureVersion.getId().setFeature(feature);
+                    featureVersion.getId().setVersion(version);
                     featureVersion.setCreator(user2);
-                    featureVersion
-                            .setDescription(
-                                    "Название имплементации фичи в данной версии, например, реализовать простую защиту страниц без разделения ролей и форму авторизации с хранением признака авторизованного пользователя в сессии.");
-
                     featureVersionDao.save(featureVersion);
 
                     int stc = rand.nextInt(5) + 1;
@@ -174,13 +192,15 @@ public class ScVersion extends DataBaseScenario {
 
                         int stc1 = rand.nextInt(3) + 1;
                         for (int k1 = 0; k1 < stc1; k1++) {
-                            Bug bug = new Bug();
-                            bug.setTicket(ticket);
+                            Ticket bug = new Ticket();
+                            bug.setFeatureVersion(featureVersion);
+                            bug.setParent(ticket);
+                            bug.setStatus(getRandomStatus());
                             bug.setOwner(ticket.getOwner());
                             bug.setAuthor(getRandomUser());
                             bug.setSummary("Bug/ Регистрация");
                             bug.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
-                            bugDao.save(bug);
+                            ticketDao.save(bug);
                         }
                     }
                 }
@@ -188,16 +208,16 @@ public class ScVersion extends DataBaseScenario {
         }
     }
 
-    private final Map<Integer, TicketStatus> statusHash = new HashMap<Integer, TicketStatus>();
+    private Map<Integer, TicketStatus> statusHash;
 
     private TicketStatus getRandomStatus() {
-        int r = RandomUtils.nextInt(8) + 1;
-        TicketStatus u = statusHash.get(r);
-        if (null == u) {
-            u = statusDao.findById(r);
-            statusHash.put(r, u);
+        if (null == statusHash) {
+            statusHash = new HashMap<>();
+            for (TicketStatus s : statusDao.findAll()) {
+                statusHash.put(s.getId(), s);
+            }
         }
-        return u;
+        return statusHash.get(1);
     }
 
     private final Map<Integer, User> userHash = new HashMap<Integer, User>();

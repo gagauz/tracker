@@ -1,7 +1,5 @@
 package com.gagauz.tracker.web.components;
 
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -11,6 +9,10 @@ import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+
+import com.gagauz.tracker.beans.dao.WorkflowDao;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.web.services.ToolsService;
 
 public class TicketHeader {
     @Component(parameters = {"id=literal:ticketZone"})
@@ -25,6 +27,9 @@ public class TicketHeader {
 
     @Inject
     protected ToolsService toolsService;
+
+    @Inject
+    protected WorkflowDao workflowDao;
 
     @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
@@ -48,5 +53,9 @@ public class TicketHeader {
                         javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
                     }
                 });
+    }
+
+    void onResolve(Ticket ticket) {
+Wo
     }
 }

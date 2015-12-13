@@ -14,7 +14,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-
 import java.util.List;
 
 public class TicketComments {
@@ -52,10 +51,14 @@ public class TicketComments {
     @Inject
     private JavaScriptSupport javaScriptSupport;
 
+    boolean setupRender() {
+        return ticket.getId() > 0;
+    }
+
     Object onSubmitFromCommentForm(int id) {
         if (!commentForm.getHasErrors()) {
             newComment.setId(id);
-            newComment.setAuthor((User) securityUser);
+            newComment.setAuthor(securityUser);
             newComment.setTicket(ticket);
             ticketCommentDao.save(newComment);
             newComment = null;

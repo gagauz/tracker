@@ -1,45 +1,35 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
-import org.hibernate.annotations.ForeignKey;
-
-import javax.persistence.*;
-
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table(name = "version", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"project_id", "name"})
 })
-public class Version implements Identifiable {
+public class Version extends TimeTrackedEntity {
 
-    private int id;
     private Project project;
-    private Date created = new Date();
-    private Date updated = new Date();
     private String name;
     private String branch;
     private List<FeatureVersion> featureVersion;
     private Date releaseDate = new Date();
     private boolean released = false;
 
-    @Override
-    @Id
-    @SequenceGenerator(name = "id_sequence", sequenceName = "version_id_seq", allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_sequence")
-    @Column(unique = true, nullable = false)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @ForeignKey(name = "fk_version_project")
-    @JoinColumn(nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     public Project getProject() {
         return project;
     }
@@ -67,33 +57,13 @@ public class Version implements Identifiable {
     }
 
     @ForeignKey(name = "fk_version_features")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "version")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.version")
     public List<FeatureVersion> getFeatureVersions() {
         return featureVersion;
     }
 
     public void setFeatureVersions(List<FeatureVersion> featureVersion) {
         this.featureVersion = featureVersion;
-    }
-
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
     }
 
     @Column
@@ -113,21 +83,6 @@ public class Version implements Identifiable {
 
     public void setReleased(boolean released) {
         this.released = released;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updated = new Date();
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
 }

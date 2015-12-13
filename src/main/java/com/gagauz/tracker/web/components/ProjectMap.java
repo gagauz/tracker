@@ -1,10 +1,18 @@
 package com.gagauz.tracker.web.components;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.*;
-import org.apache.tapestry5.annotations.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Ajax;
@@ -13,7 +21,16 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-import java.util.*;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketType;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
 
 public class ProjectMap {
 
@@ -98,11 +115,11 @@ public class ProjectMap {
             initMap(versions);
 
             for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
-                Map<Feature, FeatureVersion> map = featureVersionMap.get(featureVersion.getVersion());
+                Map<Feature, FeatureVersion> map = featureVersionMap.get(featureVersion.getId().getVersion());
                 if (null == map) {
                     continue;
                 }
-                map.put(featureVersion.getFeature(), featureVersion);
+                map.put(featureVersion.getId().getFeature(), featureVersion);
                 bugsMap.put(featureVersion, new ArrayList<Ticket>());
                 ticketsMap.put(featureVersion, new ArrayList<Ticket>());
             }
@@ -143,8 +160,8 @@ public class ProjectMap {
     @Ajax
     void onCreateFeatureVersion(Feature feature, Version version) {
         FeatureVersion featureVersion = new FeatureVersion();
-        featureVersion.setFeature(feature);
-        featureVersion.setVersion(version);
+        featureVersion.getId().setFeature(feature);
+        featureVersion.getId().setVersion(version);
         User user = new User();
         int id = securityUser.getId();
         user.setId(id);
@@ -157,6 +174,7 @@ public class ProjectMap {
     void onCreateTicket(FeatureVersion featureVersion, TicketType type) {
         newTicket = new Ticket();
         newTicket.setFeatureVersion(featureVersion);
+        newTicket.setAuthor(securityUser);
         ajaxResponseRenderer
                 .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
                 .addCallback(new JavaScriptCallback() {

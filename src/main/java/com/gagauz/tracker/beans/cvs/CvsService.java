@@ -1,5 +1,12 @@
 package com.gagauz.tracker.beans.cvs;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.gagauz.tracker.beans.cvs.wrapper.GitCvsWrapper;
 import com.gagauz.tracker.beans.cvs.wrapper.SvnCvsWrapper;
 import com.gagauz.tracker.beans.dao.ProjectDao;
@@ -7,12 +14,6 @@ import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.CvsType;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class CvsService {
@@ -20,7 +21,7 @@ public class CvsService {
     @Autowired
     private ProjectDao projectDao;
 
-    private Map<Project, CvsWrapper> wrapperMap = new HashMap<Project, CvsWrapper>();
+    private Map<Project, CvsWrapper> wrapperMap = new HashMap<>();
 
     public void init() {
         for (Project project : projectDao.findAll()) {

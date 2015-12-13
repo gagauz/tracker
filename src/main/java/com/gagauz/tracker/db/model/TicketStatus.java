@@ -1,46 +1,27 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.HashSetType;
-import com.gagauz.tracker.db.base.Identifiable;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
-
-import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 @Entity
 @Table(name = "ticket_status")
-@TypeDefs({
-        @TypeDef(name = "listOf.StatusId", typeClass = HashSetType.class, parameters = {
-                @Parameter(name = com.gagauz.tracker.db.base.CollectionType.CLASS, value = "java.lang.Integer"),
-                @Parameter(name = com.gagauz.tracker.db.base.CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.IntegerSerializer")
-        })
-})
-public class TicketStatus implements Identifiable {
-    private int id;
+public class TicketStatus extends BaseEntity {
     private Project project;
     private String name;
     private String description;
-    private Collection<Integer> allowedFrom = new ArrayList<>();
-    private Collection<Integer> allowedTo = new ArrayList<>();
+    private TicketStatus from;
+    private TicketStatus to;
+    private Collection<TicketStatus> allowedFrom = new ArrayList<>();
+    private Collection<TicketStatus> allowedTo = new ArrayList<>();
 
-    @Override
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     public Project getProject() {
         return project;
     }
@@ -67,41 +48,39 @@ public class TicketStatus implements Identifiable {
         this.description = description;
     }
 
-    @Type(type = "listOf.StatusId")
-    @Column(nullable = false)
-    public Collection<Integer> getAllowedFrom() {
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    public TicketStatus getFrom() {
+        return from;
+    }
+
+    public void setFrom(TicketStatus from) {
+        this.from = from;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    public TicketStatus getTo() {
+        return to;
+    }
+
+    public void setTo(TicketStatus to) {
+        this.to = to;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "from")
+    public Collection<TicketStatus> getAllowedFrom() {
         return allowedFrom;
     }
 
-    public void setAllowedFrom(Collection<Integer> allowedFrom) {
+    public void setAllowedFrom(Collection<TicketStatus> allowedFrom) {
         this.allowedFrom = allowedFrom;
     }
 
-    @Type(type = "listOf.StatusId")
-    @Column(nullable = false)
-    public Collection<Integer> getAllowedTo() {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "to")
+    public Collection<TicketStatus> getAllowedTo() {
         return allowedTo;
     }
 
-    public void setAllowedTo(Collection<Integer> allowedTo) {
+    public void setAllowedTo(Collection<TicketStatus> allowedTo) {
         this.allowedTo = allowedTo;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (null == obj) {
-            return false;
-        }
-
-        return obj.hashCode() == hashCode();
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
 }

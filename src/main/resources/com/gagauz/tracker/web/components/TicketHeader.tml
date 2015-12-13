@@ -6,11 +6,11 @@
 					<t:eventlink class="btn btn-default" event="edit" context="ticket" async="true">Edit</t:eventlink>
 				</div> 
 				<div class="btn-group" role="group">
-					<t:eventlink class="btn btn-default" event="edit">Assign</t:eventlink>
-					<t:eventlink class="btn btn-default" event="edit">Comment</t:eventlink>
-					<t:eventlink class="btn btn-default" event="edit">Attach files</t:eventlink>
-					<t:eventlink class="btn btn-default" event="edit">Log work</t:eventlink>
-					<t:eventlink class="btn btn-default" event="edit">Resolve</t:eventlink>
+					<t:eventlink class="btn btn-default" event="assign">Assign</t:eventlink>
+					<t:eventlink class="btn btn-default" event="comment">Comment</t:eventlink>
+					<t:eventlink class="btn btn-default" event="attach">Attach files</t:eventlink>
+					<t:eventlink class="btn btn-default" event="log">Log work</t:eventlink>
+					<t:eventlink class="btn btn-default" event="resolve">Resolve</t:eventlink>
 				</div>
 			</div>
 		</div>
@@ -18,7 +18,14 @@
 			<table class="table table-responsive">
 				<tr>
 					<th>Status:</th>
-					<td>${ticket.status.name}</td>
+					<td>
+						<t:if test="ticket.status">
+							${ticket.status.name}
+							<p:else>
+							?
+							</p:else>
+						</t:if>
+					</td>
 					<th>Author:</th>
 					<td>${ticket.author.name}</td>
 					<th>Estimate:</th>

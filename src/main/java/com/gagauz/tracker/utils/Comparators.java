@@ -1,9 +1,9 @@
 package com.gagauz.tracker.utils;
 
+import java.util.Comparator;
+
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.User;
-
-import java.util.Comparator;
 
 public class Comparators {
     public static final Comparator<User> USER_BY_NAME_COMPARATOR = new Comparator<User>() {
@@ -22,13 +22,13 @@ public class Comparators {
     public static final Comparator<FeatureVersion> FEATURE_VERSION_BY_VERSION_COMPARATOR = new Comparator<FeatureVersion>() {
         @Override
         public int compare(FeatureVersion o1, FeatureVersion o2) {
-            if (null == o1 || null == o1.getVersion()) {
+            if (null == o1 || null == o1.getId().getVersion()) {
                 return 1;
             }
-            if (null == o2 || null == o2.getVersion()) {
+            if (null == o2 || null == o2.getId().getVersion()) {
                 return -1;
             }
-            return o1.getVersion().getName().compareTo(o2.getVersion().getName());
+            return o1.getId().getVersion().getName().compareTo(o2.getId().getVersion().getName());
         }
     };
 }

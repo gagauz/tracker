@@ -29,7 +29,6 @@
 						<t:loop source="feature.featureVersions" value="featureVersion">
 							<div class="block">
 								<div class="title">${cond:featureVersion.version,prop:featureVersion.version.name,Unversioned}</div>
-								${featureVersion.description}
 							</div>
 						</t:loop>
 					</div>

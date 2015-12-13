@@ -1,26 +1,27 @@
 package com.gagauz.tracker.beans.dao;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TicketDao extends AbstractDao<Integer, Ticket> {
 
     public List<Ticket> findByProject(Project project) {
-        return getSession().createQuery("from Ticket t where featureVersion.feature.project=:project").setEntity("project", project).list();
+        return getSession().createQuery("from Ticket t where featureVersion.id.feature.project=:project").setEntity("project", project).list();
     }
 
     public List<Ticket> findByVersion(Version version) {
-        return getSession().createQuery("from Ticket t where featureVersion.version=:version").setEntity("version", version).list();
+        return getSession().createQuery("from Ticket t where featureVersion.id.version=:version").setEntity("version", version).list();
     }
 
     public List<Ticket> findByFeature(Feature feature) {
-        return getSession().createQuery("from Ticket t where featureVersion.feature=:feature").setEntity("feature", feature).list();
+        return getSession().createQuery("from Ticket t where featureVersion.id.feature=:feature").setEntity("feature", feature).list();
     }
 
     public void updateTicketProgessTime(Ticket ticket) {

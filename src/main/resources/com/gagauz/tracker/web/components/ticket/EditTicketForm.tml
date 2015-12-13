@@ -13,8 +13,9 @@
 						t:id="owner" 
 						t:value="ticket.author"
 						translate="prop:usernametranslator" 
-						t:mixins="coolautocompleter"
-						minChars="2"/>
+						t:mixins="autocomplete"
+						minChars="2"
+						maxSuggestion="10" />
 					<t:error for="owner"/>
 				</div>
 			</p:owner>

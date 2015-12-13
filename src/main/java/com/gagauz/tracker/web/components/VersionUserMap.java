@@ -1,13 +1,21 @@
 package com.gagauz.tracker.web.components;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.utils.Comparators;
-import com.gagauz.tracker.web.services.ToolsService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.RequestParameter;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
@@ -16,8 +24,17 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-import java.util.*;
-import java.util.Map.Entry;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.utils.Comparators;
+import com.gagauz.tracker.web.services.ToolsService;
 
 @Import(module = "bootstrap/dropdown")
 public class VersionUserMap {
@@ -167,8 +184,8 @@ public class VersionUserMap {
 
     void onCreateFeatureVersion(Feature feature, Version version) {
         FeatureVersion featureVersion = new FeatureVersion();
-        featureVersion.setFeature(feature);
-        featureVersion.setVersion(version);
+        featureVersion.getId().setFeature(feature);
+        featureVersion.getId().setVersion(version);
         User user = new User();
         int id = securityUser.getId();
         user.setId(id);

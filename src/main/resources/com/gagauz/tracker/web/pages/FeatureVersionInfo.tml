@@ -6,9 +6,6 @@
 
     <p>Owner: ${featureVersion.owner.name}</p>
     <p>Creator: ${featureVersion.creator.name}</p>
-    <p>Description</p>
-    <p>${featureVersion.description}</p>
-    <br/>
     
     <!-- 
     <p>Subtickets</p>
