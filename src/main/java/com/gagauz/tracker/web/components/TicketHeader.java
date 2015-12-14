@@ -1,5 +1,8 @@
 package com.gagauz.tracker.web.components;
 
+import com.gagauz.tracker.beans.dao.WorkflowDao;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -10,13 +13,12 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-import com.gagauz.tracker.beans.dao.WorkflowDao;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.web.services.ToolsService;
-
 public class TicketHeader {
     @Component(parameters = {"id=literal:ticketZone"})
     private Zone ticketZone;
+
+    @Component(parameters = {"id=literal:assignZone"})
+    private Zone assignZone;
 
     @Parameter(required = true)
     @Property(write = false)
@@ -55,7 +57,20 @@ public class TicketHeader {
                 });
     }
 
+    @Ajax
+    void onAssign(Ticket ticket) {
+        newTicket = ticket;
+        ajaxResponseRenderer
+                .addRender(Layout.MODAL_BODY_ID, assignZone.getBody())
+                .addCallback(new JavaScriptCallback() {
+                    @Override
+                    public void run(JavaScriptSupport javascriptSupport) {
+                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
+                    }
+                });
+    }
+
     void onResolve(Ticket ticket) {
-Wo
+
     }
 }

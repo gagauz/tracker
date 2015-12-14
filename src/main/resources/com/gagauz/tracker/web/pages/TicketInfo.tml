@@ -3,7 +3,7 @@
 	<p:header>
   		<ol class="breadcrumb">
 			<li class="active">
-				${ticket.type} #${ticket.id} ${ticket.summary}
+				${ticket.key} ${ticket.summary}
 			</li>
 			<li>
 				<a href="#" t:type="pagelink" t:page="featureinfo" t:context="ticket.feature">${ticket.feature.name}</a>
@@ -28,14 +28,14 @@
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">Bugs</h3>
+				<h3 class="panel-title">Subtasks</h3>
 			</div>
 			<div class="panel-body">
 				<t:loop source="ticket.children" value="child">
 					<div>
 						<t:pagelink class="" t:page="TicketInfo" t:context="child">
 							<i class="glyphicon icon"></i>
-							Bug #${child.id} ${child.summary}
+							${child.key} ${child.summary}
 						</t:pagelink>
 						<t:eventlink class="text text-default" t:event="viewticket" t:context="child" async="true">
 							<i class="glyphicon glyphicon-eye-open"></i>
@@ -59,6 +59,29 @@
 				<h3 class="panel-title">Attachments</h3>
 			</div>
 			<div class="panel-body"></div>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Workflow</h3>
+			</div>
+			<div class="panel-body">
+				<t:DeferredZone t:id="workflowZone" id="ticket-workflow" t:context="ticket" class="block">
+					<p:empty>
+						<div class="progress progress-striped active">
+							<div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+						</div>
+					</p:empty>
+					<t:loop source="ticket.workflow" value="workflow">
+						<t:if test="workflow.toOwner">
+						<p>Assign: ${workflow.fromOwner.name} -> ${workflow.toOwner.name}</p>
+						</t:if>
+						<t:if test="workflow.toStatus">
+						<p>Change status: ${workflow.fromStatus.name} -> ${workflow.toStatus.name}</p>
+						</t:if>
+					</t:loop>
+				</t:DeferredZone>
+			</div>
 		</div>
 		
 		<div class="panel panel-default">

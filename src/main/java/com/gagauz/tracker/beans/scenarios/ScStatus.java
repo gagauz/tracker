@@ -1,20 +1,24 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import java.util.Arrays;
-import java.util.Collection;
-
+import com.gagauz.tracker.beans.dao.TicketStatusDao;
+import com.gagauz.tracker.beans.dao.TicketTypeDao;
+import com.gagauz.tracker.beans.setup.DataBaseScenario;
+import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.db.model.TicketType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gagauz.tracker.beans.dao.TicketStatusDao;
-import com.gagauz.tracker.beans.setup.DataBaseScenario;
-import com.gagauz.tracker.db.model.TicketStatus;
+import java.util.Arrays;
+import java.util.Collection;
 
 @Service
 public class ScStatus extends DataBaseScenario {
 
     @Autowired
     private TicketStatusDao statusDao;
+
+    @Autowired
+    private TicketTypeDao typeDao;
 
     @Override
     protected void execute() {
@@ -53,6 +57,9 @@ public class ScStatus extends DataBaseScenario {
         closed.setAllowedTo(Arrays.asList(reopen));
 
         statusDao.flush();
+
+        create("Task");
+        create("Bug");
     }
 
     private TicketStatus create(String name, String description, Collection<TicketStatus>... lists) {
@@ -67,6 +74,13 @@ public class ScStatus extends DataBaseScenario {
         }
         statusDao.save(status);
         return status;
+    }
+
+    private TicketType create(String name) {
+        TicketType type = new TicketType();
+        type.setName(name);
+        typeDao.save(type);
+        return type;
     }
 
 }

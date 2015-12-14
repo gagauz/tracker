@@ -51,27 +51,13 @@
 														<div class="title">${message:tickets-list}</div>
 														<ul>
 															<li t:type="loop" source="tickets" value="ticket">
+																<t:eventlink class="text text-default" t:event="viewticket" t:context="ticket" async="true">
+																	<i class="glyphicon glyphicon-eye-open"></i>
+																</t:eventlink>
 																<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
 																	<i class="glyphicon icon"></i>
-																	Task #${ticket.id} ${ticket.summary}
+																	${ticket.key} ${ticket.summary}
 																</t:pagelink>
-																<t:eventlink class="text text-default" t:event="viewticket" t:context="ticket" async="true">
-																	<i class="glyphicon glyphicon-eye-open"></i>
-																</t:eventlink>
-															</li>
-														</ul>
-													</div>
-													<div class="bugs" t:type="if" t:test="bugs">
-														<div class="title">${message:bugs-list}</div>
-														<ul>
-															<li t:type="loop" source="bugs" value="ticket">
-																<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
-																	<i class="glyphicon icon"></i> 
-																	Bug #${ticket.id} ${ticket.summary}
-																</t:pagelink>
-																<t:eventlink class="text text-default" t:event="viewticket" t:context="ticket" async="true">
-																	<i class="glyphicon glyphicon-eye-open"></i>
-																</t:eventlink>
 															</li>
 														</ul>
 													</div>

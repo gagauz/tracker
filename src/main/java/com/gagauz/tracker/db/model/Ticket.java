@@ -1,23 +1,17 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import com.gagauz.tracker.db.base.ArrayListType;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import com.gagauz.tracker.db.base.ArrayListType;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import java.util.List;
 
 @Entity
 @Table(name = "ticket")
@@ -29,6 +23,8 @@ import com.gagauz.tracker.db.base.ArrayListType;
 })
 public class Ticket extends TimeTrackedEntity {
     private FeatureVersion featureVersion;
+    private String key1;
+    private TicketType type;
     private TicketStatus status;
     private User author;
     private User owner;
@@ -39,6 +35,7 @@ public class Ticket extends TimeTrackedEntity {
     private List<Attachment> attachments;
     private Ticket parent;
     private List<Ticket> children;
+    private List<Workflow> workflow;
 
     @ForeignKey(name = "fk_ticket_featureVersion")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -48,6 +45,28 @@ public class Ticket extends TimeTrackedEntity {
 
     public void setFeatureVersion(FeatureVersion featureVersion) {
         this.featureVersion = featureVersion;
+        if (null == key1 && null != featureVersion) {
+            this.key1 = featureVersion.getId().getFeature().getProject().getKey1() + '-';
+        }
+    }
+
+    @Column(updatable = false)
+    public String getKey1() {
+        return key1;
+    }
+
+    public void setKey1(String key) {
+        this.key1 = key;
+    }
+
+    @ForeignKey(name = "fk_ticket_type")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    public TicketType getType() {
+        return type;
+    }
+
+    public void setType(TicketType type) {
+        this.type = type;
     }
 
     @ForeignKey(name = "fk_ticket_status")
@@ -127,11 +146,6 @@ public class Ticket extends TimeTrackedEntity {
         this.attachments = attachments;
     }
 
-    @Transient
-    public String getType() {
-        return null;
-    }
-
     @ForeignKey(name = "fk_ticket_parent")
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     public Ticket getParent() {
@@ -151,6 +165,15 @@ public class Ticket extends TimeTrackedEntity {
         this.children = children;
     }
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticket")
+    public List<Workflow> getWorkflow() {
+        return workflow;
+    }
+
+    public void setWorkflow(List<Workflow> workflow) {
+        this.workflow = workflow;
+    }
+
     @Transient
     public Project getProject() {
         return featureVersion.getProject();
@@ -164,5 +187,10 @@ public class Ticket extends TimeTrackedEntity {
     @Transient
     public Version getVersion() {
         return featureVersion.getVersion();
+    }
+
+    @Transient
+    public String getKey() {
+        return key1 + getId();
     }
 }

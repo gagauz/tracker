@@ -1,39 +1,13 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.gagauz.tracker.beans.dao.*;
+import com.gagauz.tracker.beans.setup.DataBaseScenario;
+import com.gagauz.tracker.db.model.*;
+import com.gagauz.tracker.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gagauz.tracker.beans.dao.FeatureDao;
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.ProjectDao;
-import com.gagauz.tracker.beans.dao.TicketCommentDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.TicketStatusDao;
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.beans.dao.WorkLogDao;
-import com.gagauz.tracker.beans.setup.DataBaseScenario;
-import com.gagauz.tracker.db.model.Attachment;
-import com.gagauz.tracker.db.model.CvsRepo;
-import com.gagauz.tracker.db.model.CvsType;
-import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.TicketComment;
-import com.gagauz.tracker.db.model.TicketStatus;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.model.Version;
-import com.gagauz.tracker.db.model.WorkLog;
-import com.gagauz.tracker.utils.RandomUtils;
+import java.util.*;
 
 @Service("ScVersion")
 public class ScVersion extends DataBaseScenario {
@@ -43,6 +17,9 @@ public class ScVersion extends DataBaseScenario {
 
     @Autowired
     private TicketStatusDao statusDao;
+
+    @Autowired
+    private TicketTypeDao typeDao;
 
     @Autowired
     private ProjectDao projectDao;
@@ -141,6 +118,7 @@ public class ScVersion extends DataBaseScenario {
                     int stc = rand.nextInt(5) + 1;
                     for (int k = 0; k < stc; k++) {
                         Ticket ticket = new Ticket();
+                        ticket.setType(getRandomType());
                         ticket.setFeatureVersion(featureVersion);
                         ticket.setOwner(getRandomUser());
                         ticket.setAuthor(getRandomUser());
@@ -195,6 +173,7 @@ public class ScVersion extends DataBaseScenario {
                             Ticket bug = new Ticket();
                             bug.setFeatureVersion(featureVersion);
                             bug.setParent(ticket);
+                            bug.setType(getRandomType());
                             bug.setStatus(getRandomStatus());
                             bug.setOwner(ticket.getOwner());
                             bug.setAuthor(getRandomUser());
@@ -209,6 +188,8 @@ public class ScVersion extends DataBaseScenario {
     }
 
     private Map<Integer, TicketStatus> statusHash;
+    private Map<Integer, TicketType> typeHash;
+    private Map<Integer, User> userHash;
 
     private TicketStatus getRandomStatus() {
         if (null == statusHash) {
@@ -217,19 +198,27 @@ public class ScVersion extends DataBaseScenario {
                 statusHash.put(s.getId(), s);
             }
         }
-        return statusHash.get(1);
+        return RandomUtils.getRandomObject(statusHash.values());
     }
 
-    private final Map<Integer, User> userHash = new HashMap<Integer, User>();
+    private TicketType getRandomType() {
+        if (null == typeHash) {
+            typeHash = new HashMap<>();
+            for (TicketType s : typeDao.findAll()) {
+                typeHash.put(s.getId(), s);
+            }
+        }
+        return RandomUtils.getRandomObject(typeHash.values());
+    }
 
     private User getRandomUser() {
-        int r = RandomUtils.nextInt(9) + 1;
-        User u = userHash.get(r);
-        if (null == u) {
-            u = userDao.findById(r);
-            userHash.put(r, u);
+        if (null == userHash) {
+            userHash = new HashMap<>();
+            for (User u : userDao.findAll()) {
+                userHash.put(u.getId(), u);
+            }
         }
-        return u;
+        return RandomUtils.getRandomObject(userHash.values());
     }
 
     @Override

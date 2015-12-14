@@ -68,7 +68,7 @@
 										<div>
 											<div class="title">
 												<t:eventlink class="${ticket.type}" t:event="viewticket" t:context="ticket" async="true" title="${ticket.summary}">
-													<i class="glyphicon icon"></i> ${ticket.type} #${ticket.id} ${ticket.summary}
+													<i class="glyphicon icon"></i> ${ticket.key} ${ticket.summary}
 												</t:eventlink>
 											</div>
 											<div class="description">
