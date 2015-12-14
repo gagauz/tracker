@@ -1,24 +1,30 @@
 (function(){
 	define(["jquery", "bootstrap/modal"], function($, modal) {
 		var showModal = function(id) {
-			var $self = $('#'+id), currentModal = window["currentModal"];
+			var $self = $('#'+id), 
+				currentModal = window["currentModal"],
+				show = function() {
+					$self.modal('show');
+				};
+			
+			
 			console.log('showModal', currentModal);
-			window["currentModal"] = {
-					current: $self,
-					lastModal: (currentModal ? currentModal.current : null) 
-			};
-			if (currentModal && currentModal.current) {
-				console.log('hide', currentModal);
-				currentModal.current.modal('hide');
-			}
+			
+			window['currentModal'] = $self;
 			
 			$self.on('hidden.bs.modal', function() {
 				console.log('hidden.bs.modal');
-				var lastModal = window["currentModal"].lastModal;
-				if (lastModal) {
-					lastModal.modal('show');
+				if (currentModal) {
+					currentModal.current.modal('show');
 				}
-			}).modal('show');
+			});
+			
+			if (currentModal) {
+				console.log('hide', currentModal);
+				currentModal.on('hidden.bs.modal', show).modal('hide');
+			} else {
+				show();
+			}
 		};
 		return {showModal: showModal};
 	});

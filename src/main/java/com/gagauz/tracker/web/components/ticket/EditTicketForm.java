@@ -24,9 +24,11 @@ import org.apache.tapestry5.services.ValueEncoderSource;
 
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.TicketStatusDao;
+import com.gagauz.tracker.beans.dao.TicketTypeDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.db.model.TicketType;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.utils.Param;
 
@@ -49,6 +51,9 @@ public class EditTicketForm {
 
     @Inject
     private TicketStatusDao ticketStatusDao;
+
+    @Inject
+    private TicketTypeDao ticketTypeDao;
 
     @Inject
     private UserDao userDao;
@@ -153,6 +158,12 @@ public class EditTicketForm {
                 return element.getAllowedFrom().contains(from);
             }
         }).toList();
+        return selectModelFactory.create(list, "name");
+    }
+
+    @Cached
+    public SelectModel getTypeModel() {
+        List<TicketType> list = ticketTypeDao.findByProject(ticket.getFeature().getProject());
         return selectModelFactory.create(list, "name");
     }
 }

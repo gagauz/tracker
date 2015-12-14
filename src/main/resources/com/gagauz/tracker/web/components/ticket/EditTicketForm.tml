@@ -1,11 +1,35 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 	<div t:id="zone">
 		<t:BeanEditForm t:id="form" object="ticket" cancel="true"
-			exclude="id, created, updated, progress, cvsVersion"
-			add="owner, fv">
-			<p:fv>
+			exclude="id, key1, created, updated, progress, cvsVersion"
+			add="type, status, owner, featureVersion">
+			<p:featureVersion>
 				<t:hidden value="ticket.featureVersion" />
-			</p:fv>
+			</p:featureVersion>
+			<p:type>
+				<t:label class="col-sm-3 control-label" for="type" />
+				<div class="col-sm-4">
+					<t:select class="form-control"
+						t:id="type" 
+						t:value="ticket.type"
+						t:model="typeModel" 
+						blankOption="NEVER"
+						/>
+					<t:error for="type" />
+				</div>
+			</p:type>
+			<p:status>
+				<t:label class="col-sm-3 control-label" for="status" />
+				<div class="col-sm-4">
+					<t:select class="form-control"
+						t:id="status" 
+						t:value="ticket.status"
+						t:model="statusModel" 
+						blankOption="NEVER"
+						/>
+					<t:error for="status"/>
+				</div>
+			</p:status>
 			<p:owner>
 				<t:label class="col-sm-3 control-label" for="owner" />
 				<div class="col-sm-9">
