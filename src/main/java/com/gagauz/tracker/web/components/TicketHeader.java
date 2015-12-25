@@ -1,5 +1,6 @@
 package com.gagauz.tracker.web.components;
 
+import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.beans.dao.WorkflowDao;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
@@ -12,6 +13,8 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
+
+import java.util.Objects;
 
 public class TicketHeader {
     @Component(parameters = {"id=literal:ticketZone"})
@@ -36,11 +39,17 @@ public class TicketHeader {
     @Property
     private boolean resolve;
 
+    @Property
+    private boolean attach;
+
     @Inject
     protected ToolsService toolsService;
 
     @Inject
     protected WorkflowDao workflowDao;
+
+    @Inject
+    protected TicketDao ticketDao;
 
     @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
@@ -70,10 +79,22 @@ public class TicketHeader {
         return ticket;
     }
 
+    void onAssignToMe(Ticket ticket) {
+        ticket.setOwner(user);
+        ticketDao.save(ticket);
+    }
+
     @Ajax
     Object onResolve(Ticket ticket) {
         newTicket = ticket;
         resolve = true;
+        return ticket;
+    }
+
+    @Ajax
+    Object onAttach(Ticket ticket) {
+        newTicket = ticket;
+        attach = true;
         return ticket;
     }
 
@@ -85,5 +106,9 @@ public class TicketHeader {
         newTicket.setFeatureVersion(ticket.getFeatureVersion());
         subtask = true;
         return newTicket;
+    }
+
+    public boolean isNotMe(User owner) {
+        return !Objects.equals(user, owner);
     }
 }

@@ -6,11 +6,13 @@ import com.gagauz.tracker.db.utils.Param;
 import org.apache.tapestry5.*;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.ComponentDefaultProvider;
+import org.apache.tapestry5.services.FormSupport;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
 
@@ -22,13 +24,14 @@ public class UserAutocompleteField implements Field {
     @Component
     private TextField input;
 
-    @Parameter
-    @Property
+    @Parameter(required = true, autoconnect = true, principal = true)
     private User user;
 
-    @Parameter
-    @Property
-    private String id;
+    @Inject
+    protected ComponentDefaultProvider defaultProvider;
+
+    @Inject
+    protected ComponentResources resources;
 
     @Inject
     private ValueEncoderSource valueEncoderSource;
@@ -38,6 +41,9 @@ public class UserAutocompleteField implements Field {
 
     @Inject
     private UserDao userDao;
+
+    @Environmental(false)
+    protected FormSupport formSupport;
 
     List<JSONObject> onProvideCompletions(String username) {
         List<JSONObject> res = new ArrayList<>();
@@ -59,7 +65,6 @@ public class UserAutocompleteField implements Field {
 
             @Override
             public void render(MarkupWriter writer) {
-
             }
 
             @Override
@@ -86,7 +91,7 @@ public class UserAutocompleteField implements Field {
 
     @Override
     public String getLabel() {
-        return input.getLabel();
+        return defaultProvider.defaultLabel(resources);
     }
 
     @Override
@@ -97,5 +102,13 @@ public class UserAutocompleteField implements Field {
     @Override
     public boolean isRequired() {
         return input.isRequired();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

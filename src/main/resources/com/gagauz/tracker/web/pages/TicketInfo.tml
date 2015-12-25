@@ -33,13 +33,13 @@
 			<div class="panel-body">
 				<t:loop source="ticket.children" value="child">
 					<div>
+						<t:modallink class="text text-default" t:event="viewticket" t:context="child" zone="viewTicketZone">
+							<i class="glyphicon glyphicon-eye-open"></i>
+						</t:modallink>
 						<t:pagelink class="" t:page="TicketInfo" t:context="child">
 							<i class="glyphicon icon"></i>
 							${child.key} ${child.summary}
 						</t:pagelink>
-						<t:eventlink class="text text-default" t:event="viewticket" t:context="child" async="true">
-							<i class="glyphicon glyphicon-eye-open"></i>
-						</t:eventlink>
 					</div>
 				</t:loop> 
 			</div>
@@ -74,7 +74,7 @@
 					</p:empty>
 					<t:loop source="ticket.workflow" value="workflow">
 						<t:if test="workflow.toOwner">
-						<p>${date:workflow.created} <b>${workflow.author.name}</b> assign: ${workflow.fromOwner.name} -> ${workflow.toOwner.name}</p>
+						<p>${date:workflow.created} <b>${workflow.author.name}</b> assign: ${cond:workflow.fromOwner,prop:workflow.fromOwner.name,Unassigned} -> ${workflow.toOwner.name}</p>
 						</t:if>
 						<t:if test="workflow.toStatus">
 						<p>${date:workflow.created} <b>${workflow.author.name}</b> change status: ${workflow.fromStatus.name} -> ${workflow.toStatus.name}</p>
@@ -125,4 +125,13 @@
 			</div>
 		</div>
 	</div>
+	
+	<div style="display:none">
+		<div t:id="viewTicketZone" class="ticket-popup">
+			<t:if test="viewTicket">
+				<t:ticket.ViewTicketForm ticket="viewTicket" />
+			</t:if>
+		</div>
+	</div>
+
 </div>

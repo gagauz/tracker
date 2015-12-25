@@ -36,7 +36,7 @@
 				<div class="col-sm-9">
 					<t:UserAutocompleteField
 						t:id="owner" 
-						t:value="ticket.owner" />
+						t:user="ticket.owner" />
 					<t:error for="owner"/>
 				</div>
 			</p:owner>

@@ -12,8 +12,6 @@ import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.func.F;
-import org.apache.tapestry5.func.Predicate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
@@ -105,13 +103,6 @@ public class EditTicketForm {
     @Cached
     public SelectModel getStatusModel() {
         List<TicketStatus> list = ticketStatusDao.findByProject(ticket.getFeature().getProject());
-        final TicketStatus from = ticket.getStatus();
-        list = F.flow(list).filter(new Predicate<TicketStatus>() {
-            @Override
-            public boolean accept(TicketStatus element) {
-                return element.getAllowedFrom().contains(from);
-            }
-        }).toList();
         return selectModelFactory.create(list, "name");
     }
 

@@ -7,9 +7,12 @@
 				</div> 
 				<div class="btn-group" role="group">
 					<t:modallink class="btn btn-default" event="assign" context="ticket" zone="ticketZone">Assign</t:modallink>
+					<t:if test="isNotMe(ticket.owner)">
+						<t:eventlink class="btn btn-default" event="assignToMe" context="ticket">Assign to me</t:eventlink>
+					</t:if>
 					<t:eventlink class="btn btn-default" event="comment" context="ticket" async="true">Comment</t:eventlink>
 					<t:modallink class="btn btn-default" event="subtask" context="ticket" zone="ticketZone">Create subtask</t:modallink>
-					<t:eventlink class="btn btn-default" event="attach" context="ticket" async="true">Attach files</t:eventlink>
+					<t:modallink class="btn btn-default" event="attach" context="ticket" zone="ticketZone">Attach files</t:modallink>
 					<t:eventlink class="btn btn-default" event="log" context="ticket" async="true">Log work</t:eventlink>
 					<t:modallink class="btn btn-default" event="resolve" context="ticket" zone="ticketZone">Resolve</t:modallink>
 				</div>
@@ -92,6 +95,9 @@
 			</t:if>
 			<t:if test="resolve">
 				<t:ticket.ResolveTicketForm ticket="newTicket" />
+			</t:if>
+			<t:if test="attach">
+				<t:ticket.AttachForm ticket="newTicket" />
 			</t:if>
 		</div>
 	</div>

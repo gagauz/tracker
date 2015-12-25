@@ -9,12 +9,17 @@ import com.gagauz.tracker.db.model.Workflow;
 import com.gagauz.tracker.web.components.DeferredZone;
 import com.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.annotations.*;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Ajax;
 
 import java.util.List;
 
 @Secured
 public class TicketInfo {
+
+    @Component(parameters = {"id=viewTicketZone"})
+    private Zone viewTicketZone;
 
     @Component
     @Property(write = false)
@@ -29,6 +34,9 @@ public class TicketInfo {
 
     @Property
     private Ticket child;
+
+    @Property
+    private Ticket viewTicket;
 
     @Persist
     @Property
@@ -60,6 +68,12 @@ public class TicketInfo {
 
     Object onPassivate() {
         return ticket;
+    }
+
+    @Ajax
+    Object onViewTicket(Ticket ticket) {
+        viewTicket = ticket;
+        return viewTicket;
     }
 
     public boolean isOwner() {

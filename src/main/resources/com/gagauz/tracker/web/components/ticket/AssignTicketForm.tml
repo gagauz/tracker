@@ -4,9 +4,7 @@
 			<p:owner>
 				<t:label class="col-sm-3 control-label" for="owner" />
 				<div class="col-sm-9">
-					<t:UserAutocompleteField
-						t:id="owner" 
-						t:value="assign.toOwner" />
+					<t:UserAutocompleteField t:id="owner" t:user="assign.toOwner" />
 					<t:error for="owner"/>
 					<t:hidden value="ticket" />
 				</div>

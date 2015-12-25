@@ -16,6 +16,8 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 
+import java.util.Objects;
+
 public class AssignTicketForm {
     @Component
     private Zone zone;
@@ -53,7 +55,9 @@ public class AssignTicketForm {
     }
 
     Object onSubmitFromForm() {
-        if (!form.getHasErrors() && ticket.getOwner() != assign.getToOwner()) {
+        System.out.println(ticket);
+        System.out.println(ticket.getOwner());
+        if (!form.getHasErrors() && !Objects.equals(ticket.getOwner(), assign.getToOwner())) {
             assign.setFromOwner(ticket.getOwner());
             assign.setAuthor(user);
             ticket.setOwner(assign.getToOwner());
