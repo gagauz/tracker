@@ -1,9 +1,9 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import com.gagauz.tracker.beans.dao.TicketCommentDao;
+import com.gagauz.tracker.beans.dao.WorkflowDao;
 import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.TicketComment;
 import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Workflow;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -12,6 +12,8 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
+import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import java.util.List;
@@ -30,26 +32,27 @@ public class TicketComments {
     @Component(parameters = {"id=literal:editZone", "show=popup", "update=popup"})
     private Zone editZone;
 
-    private List<TicketComment> comments;
+    private List<Workflow> comments;
 
     @Property
-    private TicketComment comment;
+    private Workflow comment;
 
-    //    @Persist
-    //("flash")
-    private TicketComment newComment;
+    private Workflow newComment;
 
     @SessionState(create = false)
     private User securityUser;
-
-    @Inject
-    private TicketCommentDao ticketCommentDao;
 
     @Inject
     private Request request;
 
     @Inject
     private JavaScriptSupport javaScriptSupport;
+
+    @Inject
+    private WorkflowDao workflowDao;
+
+    @Inject
+    private AjaxResponseRenderer ajaxResponseRenderer;
 
     boolean setupRender() {
         return ticket.getId() > 0;
@@ -60,9 +63,17 @@ public class TicketComments {
             newComment.setId(id);
             newComment.setAuthor(securityUser);
             newComment.setTicket(ticket);
-            ticketCommentDao.save(newComment);
+            workflowDao.save(newComment);
             newComment = null;
-            javaScriptSupport.addInitializerCall("$j('%s').parent('popup').trigger('popupHide');", editZone.getClientId());
+            if (request.isXHR()) {
+                ajaxResponseRenderer.addCallback(new JavaScriptCallback() {
+                    @Override
+                    public void run(JavaScriptSupport javascriptSupport) {
+                        javascriptSupport.addScript("$j('%s').parent('popup').trigger('popupHide');", editZone.getClientId());
+                    }
+                });
+
+            }
         }
 
         if (null != zone && request.isXHR()) {
@@ -71,7 +82,7 @@ public class TicketComments {
         return null;
     }
 
-    Object onEdit(TicketComment comment) {
+    Object onEdit(Workflow comment) {
         if (request.isXHR()) {
             newComment = comment;
             return editZone.getBody();
@@ -79,24 +90,24 @@ public class TicketComments {
         return null;
     }
 
-    Object onDrop(TicketComment comment) {
-        ticketCommentDao.delete(comment);
+    Object onDrop(Workflow comment) {
+        workflowDao.delete(comment);
         if (null != zone && request.isXHR()) {
             return zone.getBody();
         }
         return null;
     }
 
-    public List<TicketComment> getComments() {
+    public List<Workflow> getComments() {
         if (null != ticket && null == comments) {
-            comments = ticketCommentDao.findByTicket(ticket);
+            comments = workflowDao.findCommentsByTicket(ticket);
         }
         return comments;
     }
 
-    public TicketComment getNewComment() {
+    public Workflow getNewComment() {
         if (null == newComment) {
-            newComment = new TicketComment();
+            newComment = new Workflow();
         }
         return newComment;
     }

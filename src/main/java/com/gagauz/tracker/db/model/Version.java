@@ -1,19 +1,11 @@
 package com.gagauz.tracker.db.model;
 
+import org.hibernate.annotations.ForeignKey;
+
+import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table(name = "version", uniqueConstraints = {
@@ -85,4 +77,8 @@ public class Version extends TimeTrackedEntity {
         this.released = released;
     }
 
+    @Override
+    public String toString() {
+        return "Version<id=" + getId() + ">";
+    }
 }

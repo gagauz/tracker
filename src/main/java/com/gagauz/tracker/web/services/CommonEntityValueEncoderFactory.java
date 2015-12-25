@@ -6,7 +6,7 @@ import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.services.ValueEncoderFactory;
 
 public class CommonEntityValueEncoderFactory<E extends Identifiable, Dao extends AbstractDao<Integer, E>> implements
-        ValueEncoderFactory<E> {
+ValueEncoderFactory<E> {
 
     private static final String NULL = "null";
 
@@ -16,8 +16,8 @@ public class CommonEntityValueEncoderFactory<E extends Identifiable, Dao extends
 
     private final Dao dao;
 
-    public CommonEntityValueEncoderFactory(Dao dao) {
-        this.dao = dao;
+    public CommonEntityValueEncoderFactory(Class entity) {
+        this.dao = (Dao) AbstractDao.getDao(entity);
     }
 
     @Override

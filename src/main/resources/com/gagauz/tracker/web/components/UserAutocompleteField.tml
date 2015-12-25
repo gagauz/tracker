@@ -1,0 +1,10 @@
+<t:container class="ticket-header" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+	<t:textfield class="form-control"
+		t:id="input"
+		t:value="user"
+		translate="prop:idtranslator" 
+		t:mixins="CoolAutocompleter"
+		minChars="2"
+		maxSuggestion="10" />
+</t:container>

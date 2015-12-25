@@ -74,10 +74,10 @@
 					</p:empty>
 					<t:loop source="ticket.workflow" value="workflow">
 						<t:if test="workflow.toOwner">
-						<p>Assign: ${workflow.fromOwner.name} -> ${workflow.toOwner.name}</p>
+						<p>${date:workflow.created} <b>${workflow.author.name}</b> assign: ${workflow.fromOwner.name} -> ${workflow.toOwner.name}</p>
 						</t:if>
 						<t:if test="workflow.toStatus">
-						<p>Change status: ${workflow.fromStatus.name} -> ${workflow.toStatus.name}</p>
+						<p>${date:workflow.created} <b>${workflow.author.name}</b> change status: ${workflow.fromStatus.name} -> ${workflow.toStatus.name}</p>
 						</t:if>
 					</t:loop>
 				</t:DeferredZone>

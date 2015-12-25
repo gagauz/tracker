@@ -51,24 +51,21 @@
 														<div class="title">${message:tickets-list}</div>
 														<ul>
 															<li t:type="loop" source="tickets" value="ticket">
-																<t:eventlink class="text text-default" t:event="viewticket" t:context="ticket" async="true">
+																<t:ModalLink class="text text-default" t:zone="viewTicketZone" t:event="viewticket" t:context="ticket">
 																	<i class="glyphicon glyphicon-eye-open"></i>
-																</t:eventlink>
+																</t:ModalLink>
 																<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
 																	<i class="glyphicon icon"></i>
-																	${ticket.key} ${ticket.summary}
+																	${ticket.key} [${ticket.type.name}] ${ticket.summary}
 																</t:pagelink>
 															</li>
 														</ul>
 													</div>
 													<t:if test="notReleased">
 														<div class="btn-toolbar">
-															<t:eventlink role="button" class="btn btn-default" t:event="createTicket" t:context="[featureVersion, 'TASK']" t:zone="ticketZone">
+															<t:ModalLink role="button" class="btn btn-default" t:zone="ticketZone" t:event="createTicket" t:context="[featureVersion]">
 																<i class="glyphicon glyphicon-plus-sign text text-success"></i> ${message:create-task}
-															</t:eventlink>
-															<t:eventlink role="button" class="btn btn-default" t:event="createTicket" t:context="[featureVersion, 'BUG']" t:zone="ticketZone">
-																<i class="glyphicon glyphicon-warning-sign text text-danger"></i> ${message:create-bug}
-															</t:eventlink>
+															</t:ModalLink>
 														</div>
 													</t:if>
 	
@@ -101,6 +98,11 @@
 		<div t:id="ticketZone" class="ticket-popup">
 			<t:if test="newTicket">
 				<t:ticket.EditTicketForm ticket="newTicket"/>
+			</t:if>
+		</div>
+		<div t:id="viewTicketZone" class="ticket-popup">
+			<t:if test="newTicket">
+				<t:ticket.ViewTicketForm ticket="newTicket" />
 			</t:if>
 		</div>
 	</div>

@@ -98,7 +98,7 @@
 	
 	<div style="display:none">
 		<div t:id="ticketZone" class="ticket-popup">
-			<t:TicketForm ticket="viewTicket"/>
+			<t:ticket.ViewTicketForm ticket="viewTicket" />
 		</div>
 	</div>
 </div>

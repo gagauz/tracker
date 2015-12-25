@@ -1,0 +1,38 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+	<t:TicketHeader ticket="ticket"/>
+    
+    <div class="panel panel-default">
+	    <div class="panel-heading"><a href="#collapse_id_description" aria-controls="collapse_id_description" aria-expanded="true" data-toggle="collapse">Description <span class="caret"></span></a></div>
+	    <div class="panel-collapse collapse in" id="collapse_id_description">
+	    	<div class="panel-body">
+	   			${ticket.description}
+	    	</div>
+    	</div>
+   	</div>
+   	
+	<div class="panel panel-default">
+	    <div class="panel-heading"><a href="#collapse_id_attachments" aria-controls="collapse_id_attachments" aria-expanded="false" data-toggle="collapse">Attachments <span class="caret"></span></a></div>
+	    <div class="panel-collapse collapse" id="collapse_id_attachments">
+		    <div class="panel-body">
+		    	<t:AttachmentsBlock attachments="ticket.attachments"/>
+		    </div>
+	    </div>
+    </div>
+    
+    <div class="panel panel-default">
+	    <div class="panel-heading"><a href="#collapse_id_comments" aria-controls="collapse_id_comments" aria-expanded="false" data-toggle="collapse">Comments <span class="caret"></span></a></div>
+		<div class="panel-collapse collapse" id="collapse_id_comments">
+		    <div class="panel-body">
+			    <t:DeferredZone id="ticket-comments" t:event="getcomments" t:context="ticket" class="block">
+			    	<p:empty>
+			    		<img src="/static/i/loading_bar_gray.gif" />
+			    	</p:empty>
+			    	<t:ticket.TicketComments ticket="ticket"/>
+			    </t:DeferredZone>
+			</div>
+		</div>
+	</div>
+
+</div>

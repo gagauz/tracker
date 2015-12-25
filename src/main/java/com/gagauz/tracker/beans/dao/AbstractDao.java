@@ -9,10 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //@Transactional
 public class AbstractDao<I extends Serializable, E> {
+
+    private static Map<Class, AbstractDao> MAP = new HashMap<>();
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -22,6 +26,7 @@ public class AbstractDao<I extends Serializable, E> {
     @SuppressWarnings("unchecked")
     public AbstractDao() {
         entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        MAP.put(entityClass, this);
     }
 
     protected Session getSession() {
@@ -89,4 +94,7 @@ public class AbstractDao<I extends Serializable, E> {
         getSession().flush();
     }
 
+    public static <Id extends Serializable, En> AbstractDao<Id, En> getDao(Class<En> eClass) {
+        return MAP.get(eClass);
+    }
 }

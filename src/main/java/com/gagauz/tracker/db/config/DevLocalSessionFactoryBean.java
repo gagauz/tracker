@@ -1,5 +1,6 @@
 package com.gagauz.tracker.db.config;
 
+import com.gagauz.tracker.utils.SysEnv;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
 import java.util.Properties;
@@ -11,7 +12,8 @@ public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
         setPackagesToScan(com.gagauz.tracker.db.model.User.class.getPackage().getName());
         setAnnotatedPackages(new String[] {com.gagauz.tracker.db.model.User.class.getPackage().getName()});
         Properties properties = new Properties();
-        properties.put(DIALECT, System.getProperty("tracker.jdbc-dialect"));
+
+        properties.put(DIALECT, SysEnv.JDBC_DIALECT.toString());
         properties.put(SHOW_SQL, false);
         properties.put(FORMAT_SQL, false);
         properties.put(USE_SQL_COMMENTS, false);

@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.config;
 
 import com.gagauz.tracker.db.utils.StatementInterceptor;
+import com.gagauz.tracker.utils.SysEnv;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
@@ -16,13 +17,13 @@ public class DevDataSource extends SimpleDriverDataSource implements DataSource 
             System.out.format("%1$40s = %2$s\n", e.getKey(), e.getValue());
         }
         try {
-            setDriverClass((Class<? extends Driver>) Class.forName(System.getProperty("tracker.jdbc-driver")));
+            setDriverClass((Class<? extends Driver>) Class.forName(SysEnv.JDBC_DRIVER.toString()));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        setUrl(System.getProperty("tracker.jdbc-url"));
-        setUsername(System.getProperty("tracker.db-username", "b4f"));
-        setPassword(System.getProperty("tracker.db-password", "office"));
+        setUrl(SysEnv.JDBC_URL.toString());
+        setUsername(SysEnv.JDBC_USERNAME.toString());
+        setPassword(SysEnv.JDBC_PASSWORD.toString());
         Properties props = new Properties();
         props.setProperty("cacheServerConfiguration", "true");
         props.setProperty("characterSetResults", "UTF-8");

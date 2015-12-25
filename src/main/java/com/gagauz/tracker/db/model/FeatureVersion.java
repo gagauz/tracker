@@ -1,16 +1,10 @@
 package com.gagauz.tracker.db.model;
 
-import java.io.Serializable;
-
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.ForeignKey;
+
+import javax.persistence.*;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "feature_version")
@@ -83,5 +77,10 @@ public class FeatureVersion {
     @Transient
     public Feature getFeature() {
         return getId().getFeature();
+    }
+
+    @Override
+    public String toString() {
+        return "FeatureVersion <feature=" + id.getFeature() + ", version=" + id.getVersion() + ">";
     }
 }

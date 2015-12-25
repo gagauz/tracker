@@ -2,23 +2,20 @@ package com.gagauz.tracker.web.components;
 
 import com.gagauz.tracker.beans.dao.WorkflowDao;
 import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.web.services.ToolsService;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.apache.tapestry5.services.ajax.JavaScriptCallback;
-import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 public class TicketHeader {
     @Component(parameters = {"id=literal:ticketZone"})
     private Zone ticketZone;
-
-    @Component(parameters = {"id=literal:assignZone"})
-    private Zone assignZone;
 
     @Parameter(required = true)
     @Property(write = false)
@@ -26,6 +23,18 @@ public class TicketHeader {
 
     @Property
     private Ticket newTicket;
+
+    @Property
+    private boolean edit;
+
+    @Property
+    private boolean subtask;
+
+    @Property
+    private boolean assign;
+
+    @Property
+    private boolean resolve;
 
     @Inject
     protected ToolsService toolsService;
@@ -36,6 +45,9 @@ public class TicketHeader {
     @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
 
+    @SessionState
+    private User user;
+
     public String getTime(int min) {
         return toolsService.getTime(min);
     }
@@ -45,32 +57,33 @@ public class TicketHeader {
     }
 
     @Ajax
-    void onEdit(Ticket ticket) {
+    Object onEdit(Ticket ticket) {
         newTicket = ticket;
-        ajaxResponseRenderer
-                .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
-                .addCallback(new JavaScriptCallback() {
-                    @Override
-                    public void run(JavaScriptSupport javascriptSupport) {
-                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-                    }
-                });
+        edit = true;
+        return ticket;
     }
 
     @Ajax
-    void onAssign(Ticket ticket) {
+    Object onAssign(Ticket ticket) {
         newTicket = ticket;
-        ajaxResponseRenderer
-                .addRender(Layout.MODAL_BODY_ID, assignZone.getBody())
-                .addCallback(new JavaScriptCallback() {
-                    @Override
-                    public void run(JavaScriptSupport javascriptSupport) {
-                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-                    }
-                });
+        assign = true;
+        return ticket;
     }
 
-    void onResolve(Ticket ticket) {
+    @Ajax
+    Object onResolve(Ticket ticket) {
+        newTicket = ticket;
+        resolve = true;
+        return ticket;
+    }
 
+    @Ajax
+    Object onSubtask(Ticket ticket) {
+        newTicket = new Ticket();
+        newTicket.setParent(ticket);
+        newTicket.setAuthor(user);
+        newTicket.setFeatureVersion(ticket.getFeatureVersion());
+        subtask = true;
+        return newTicket;
     }
 }

@@ -1,16 +1,10 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.ForeignKey;
+
+import javax.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "feature")
@@ -67,5 +61,10 @@ public class Feature extends TimeTrackedEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Feature<id=" + getId() + ">";
     }
 }

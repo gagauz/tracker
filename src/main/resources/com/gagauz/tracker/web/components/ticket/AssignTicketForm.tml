@@ -1,33 +1,16 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 	<div t:id="zone">
-		<t:form t:id="form">
-			<div class="form-group">
+		<t:beaneditform t:id="form" object="assign" cancel="true" add="owner" include="comment">
+			<p:owner>
 				<t:label class="col-sm-3 control-label" for="owner" />
 				<div class="col-sm-9">
-					<t:textfield class="form-control"
+					<t:UserAutocompleteField
 						t:id="owner" 
-						t:value="owner"
-						translate="prop:usernametranslator" 
-						t:mixins="autocomplete"
-						minChars="2"
-						maxSuggestion="10" />
+						t:value="assign.toOwner" />
 					<t:error for="owner"/>
+					<t:hidden value="ticket" />
 				</div>
-			</div>
-			<div class="form-group">
-				<t:label class="col-sm-3 control-label" for="comment" />
-				<div class="col-sm-9">
-					<t:textarea class="form-control"
-						t:id="comment" 
-						t:value="comment" />
-					<t:error for="comment" />
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-offset-3">
-					<t:submit class="btn btn-default" value="Assign" />
-				</div>
-			</div>
-		</t:form>
+			</p:owner>
+		</t:beaneditform>
 	</div>
 </div>

@@ -10,16 +10,16 @@
 				</p:else>
 				</t:if>
 				<div class="edit-row">
-					<a href="#ticket-comment-${comment.id}" class="link">Link</a>
+					<a href="#ticket-comment-${comment.id}" class="link"><i class="glyphicon glyphicon-link"></i></a>
 					<t:if test="userComment"> 
-					<t:eventlink t:event="edit" t:context="comment" t:zone="literal:editZone" class="edit">Edit</t:eventlink>
-					<t:eventlink t:event="drop" t:context="comment" t:zone="${parentZoneId}" class="edit">Drop</t:eventlink>
+						<t:eventlink t:event="edit" t:context="comment" t:zone="literal:editZone" class="edit"><i class="glyphicon glyphicon-pencil"></i></t:eventlink>
+						<t:eventlink t:event="drop" t:context="comment" t:zone="${parentZoneId}" class="edit"><i class="glyphicon glyphicon-delete"></i></t:eventlink>
 					</t:if>
 					
 				</div>			
 			</div>
 			<div class="text">
-				<t:outputraw value="comment.text"/>
+				<t:outputraw value="comment.comment"/>
 				<t:AttachmentsBlock attachments="comment.attachments"/>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 		<t:form id="literal:commentForm" t:id="commentForm" class="comment-form" t:context="newComment.id" t:zone="${parentZoneId}">
 			<t:error for="text" />
 			<div class="form-group">
-				<t:textarea class="form-control" t:id="text" t:value="newComment.text" t:validate="required"
+				<t:textarea class="form-control" t:id="text" t:value="newComment.comment" t:validate="required"
 					t:mixins="import" 
 					import.stylesheet="/static/js/jquery/tinyeditor/style.css"
 					import.library="/static/js/jquery/tinyeditor/packed.js"

@@ -1,14 +1,9 @@
 package com.gagauz.tracker.db.model;
 
+import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "ticket_status")
@@ -82,5 +77,10 @@ public class TicketStatus extends BaseEntity {
 
     public void setAllowedTo(Collection<TicketStatus> allowedTo) {
         this.allowedTo = allowedTo;
+    }
+
+    @Override
+    public String toString() {
+        return "TicketStatus<id=" + getId() + ">";
     }
 }

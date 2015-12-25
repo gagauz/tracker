@@ -2,7 +2,8 @@
 	<div t:id="zone">
 		<t:BeanEditForm t:id="form" object="ticket" cancel="true"
 			exclude="id, key1, created, updated, progress, cvsVersion"
-			add="type, status, owner, featureVersion">
+			add="type, status, owner, featureVersion"
+			reorder="type, status, summary, description">
 			<p:featureVersion>
 				<t:hidden value="ticket.featureVersion" />
 			</p:featureVersion>
@@ -33,13 +34,9 @@
 			<p:owner>
 				<t:label class="col-sm-3 control-label" for="owner" />
 				<div class="col-sm-9">
-					<t:textfield class="form-control"
+					<t:UserAutocompleteField
 						t:id="owner" 
-						t:value="ticket.author"
-						translate="prop:usernametranslator" 
-						t:mixins="autocomplete"
-						minChars="2"
-						maxSuggestion="10" />
+						t:value="ticket.owner" />
 					<t:error for="owner"/>
 				</div>
 			</p:owner>

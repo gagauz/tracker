@@ -1,0 +1,17 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<div t:id="zone">
+		<t:beaneditform t:id="form" object="assign" cancel="true" add="status" include="comment">
+			<p:status>
+				<t:hidden value="ticket" />
+				<t:label class="col-sm-3 control-label" for="status" />
+				<div class="col-sm-9">
+					<t:select class="form-control"
+						t:id="status" 
+						t:value="assign.toStatus"
+						t:model="statusmodel" />
+					<t:error for="status"/>
+				</div>
+			</p:status>
+		</t:beaneditform>
+	</div>
+</div>

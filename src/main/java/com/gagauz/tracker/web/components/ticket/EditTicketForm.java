@@ -1,18 +1,15 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.tapestry5.FieldTranslator;
-import org.apache.tapestry5.MarkupWriter;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.TicketStatusDao;
+import com.gagauz.tracker.beans.dao.TicketTypeDao;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.db.model.TicketType;
+import com.gagauz.tracker.db.model.User;
 import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.ValidationException;
-import org.apache.tapestry5.ValueEncoder;
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Persist;
-import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.func.F;
@@ -22,15 +19,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
 
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.TicketStatusDao;
-import com.gagauz.tracker.beans.dao.TicketTypeDao;
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.TicketStatus;
-import com.gagauz.tracker.db.model.TicketType;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.utils.Param;
+import java.util.List;
 
 public class EditTicketForm {
 
@@ -96,41 +85,6 @@ public class EditTicketForm {
             }
         }
         return request.isXHR() ? zone.getBody() : null;
-    }
-
-    List<String> onProvideCompletions(String username) {
-        List<String> res = new ArrayList<>();
-        for (User u : userDao.findByQuery("from User u where username like :name or name like :name", Param.param("name", username + '%'))) {
-            res.add(u.getUsername());
-        }
-        return res;
-    }
-
-    @Cached
-    public FieldTranslator<User> getUsernameTranslator() {
-        final ValueEncoder<User> encoder = valueEncoderSource.getValueEncoder(User.class);
-        return new FieldTranslator<User>() {
-
-            @Override
-            public String toClient(User value) {
-                return encoder.toClient(value);
-            }
-
-            @Override
-            public void render(MarkupWriter writer) {
-
-            }
-
-            @Override
-            public User parse(String input) throws ValidationException {
-                return encoder.toValue(input);
-            }
-
-            @Override
-            public Class<User> getType() {
-                return User.class;
-            }
-        };
     }
 
     public User getUser() {

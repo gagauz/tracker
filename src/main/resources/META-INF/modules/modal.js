@@ -7,7 +7,7 @@
 					$self.modal('show');
 				};
 			
-			
+			/*
 			console.log('showModal', currentModal);
 			
 			window['currentModal'] = $self;
@@ -23,8 +23,10 @@
 				console.log('hide', currentModal);
 				currentModal.on('hidden.bs.modal', show).modal('hide');
 			} else {
-				show();
+				
 			}
+			*/
+			show();
 		};
 		return {showModal: showModal};
 	});

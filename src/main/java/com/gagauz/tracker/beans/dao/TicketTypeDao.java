@@ -15,4 +15,8 @@ public class TicketTypeDao extends AbstractDao<Integer, TicketType> {
         return findByQuery("from TicketType v where project is null or project=:project", param("project", project));
     }
 
+    public List<TicketType> findCommon() {
+        return findByQuery("from TicketType v where project is null");
+    }
+
 }

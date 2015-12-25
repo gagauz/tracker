@@ -1,36 +1,17 @@
 package com.gagauz.tracker.web.components;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.tapestry5.annotations.Cached;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Persist;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.db.model.*;
+import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.apache.tapestry5.services.ajax.JavaScriptCallback;
-import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.TicketType;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.model.Version;
+import java.util.*;
 
 public class ProjectMap {
 
@@ -39,6 +20,9 @@ public class ProjectMap {
 
     @Component(parameters = {"id=literal:ticketZone"})
     private Zone ticketZone;
+
+    @Component(parameters = {"id=literal:viewTicketZone"})
+    private Zone viewTicketZone;
 
     @Parameter(allowNull = false, required = true, principal = true)
     private Project project;
@@ -171,31 +155,18 @@ public class ProjectMap {
     }
 
     @Ajax
-    void onCreateTicket(FeatureVersion featureVersion, TicketType type) {
+    Object onCreateTicket(FeatureVersion featureVersion) {
         newTicket = new Ticket();
         newTicket.setFeatureVersion(featureVersion);
         newTicket.setAuthor(securityUser);
-        ajaxResponseRenderer
-                .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
-                .addCallback(new JavaScriptCallback() {
-                    @Override
-                    public void run(JavaScriptSupport javascriptSupport) {
-                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-                    }
-                });
+
+        return newTicket;
     }
 
     @Ajax
-    void onViewTicket(Ticket ticket) {
+    Object onViewTicket(Ticket ticket) {
         newTicket = ticket;
-        ajaxResponseRenderer
-                .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
-                .addCallback(new JavaScriptCallback() {
-                    @Override
-                    public void run(JavaScriptSupport javascriptSupport) {
-                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-                    }
-                });
+        return newTicket;
     }
 
     public List<Ticket> getTickets() {

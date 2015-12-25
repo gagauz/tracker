@@ -3,14 +3,15 @@
 		<div class="panel-heading">
 			<div class="btn-toolbar">
 				<div class="btn-group" role="group">
-					<t:eventlink class="btn btn-default" event="edit" context="ticket" async="true">Edit</t:eventlink>
+					<t:modallink class="btn btn-default" event="edit" context="ticket" zone="ticketZone">Edit</t:modallink>
 				</div> 
 				<div class="btn-group" role="group">
-					<t:eventlink class="btn btn-default" event="assign" context="ticket" async="true">Assign</t:eventlink>
+					<t:modallink class="btn btn-default" event="assign" context="ticket" zone="ticketZone">Assign</t:modallink>
 					<t:eventlink class="btn btn-default" event="comment" context="ticket" async="true">Comment</t:eventlink>
+					<t:modallink class="btn btn-default" event="subtask" context="ticket" zone="ticketZone">Create subtask</t:modallink>
 					<t:eventlink class="btn btn-default" event="attach" context="ticket" async="true">Attach files</t:eventlink>
 					<t:eventlink class="btn btn-default" event="log" context="ticket" async="true">Log work</t:eventlink>
-					<t:eventlink class="btn btn-default" event="resolve" context="ticket" async="true">Resolve</t:eventlink>
+					<t:modallink class="btn btn-default" event="resolve" context="ticket" zone="ticketZone">Resolve</t:modallink>
 				</div>
 			</div>
 		</div>
@@ -80,13 +81,17 @@
 		
 	<div style="display:none">
 		<div t:id="ticketZone" class="ticket-popup">
-			<t:if test="newTicket">
+			<t:if test="assign">
+				<t:ticket.AssignTicketForm ticket="newTicket" />
+			</t:if>
+			<t:if test="edit">
 				<t:ticket.EditTicketForm ticket="newTicket" />
 			</t:if>
-		</div>
-		<div t:id="assignZone" class="ticket-popup">
-			<t:if test="newTicket">
-				<t:ticket.AssignTicketForm ticket="newTicket" />
+			<t:if test="subtask">
+				<t:ticket.EditTicketForm ticket="newTicket" />
+			</t:if>
+			<t:if test="resolve">
+				<t:ticket.ResolveTicketForm ticket="newTicket" />
 			</t:if>
 		</div>
 	</div>

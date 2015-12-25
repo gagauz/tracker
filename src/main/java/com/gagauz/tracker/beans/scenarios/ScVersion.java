@@ -40,6 +40,9 @@ public class ScVersion extends DataBaseScenario {
     private WorkLogDao workLogDao;
 
     @Autowired
+    private WorkflowDao workflowDao;
+
+    @Autowired
     private TicketCommentDao ticketCommentDao;
 
     @Autowired
@@ -59,7 +62,7 @@ public class ScVersion extends DataBaseScenario {
         for (int i = 0; i < 1; i++) {
             Project project = new Project();
             project.setKey1("TRACKER");
-            project.setName("Трекер (этот проект)");
+            project.setName("Трекер");
             CvsRepo repo = new CvsRepo();
             if (true) {
                 repo.setType(CvsType.GIT);
@@ -143,13 +146,13 @@ public class ScVersion extends DataBaseScenario {
                             Attachment a2 = new Attachment("https://pp.vk.me/c622419/v622419950/f5d8/wo6DQ2DE8s8.jpg");
                             ticket.setAttachments(Arrays.asList(a1, a2));
                         }
-                        List<TicketComment> cms = new ArrayList<>();
+                        List<Workflow> cms = new ArrayList<>();
                         if (rand.nextBoolean()) {
                             for (int x = rand.nextInt(10) + 1; x > 0; x--) {
-                                TicketComment cm = new TicketComment();
+                                Workflow cm = new Workflow();
                                 cm.setAuthor(getRandomUser());
                                 cm.setTicket(ticket);
-                                cm.setText("Lorem ipsum dolorsit.");
+                                cm.setComment("Lorem ipsum dolorsit.");
 
                                 if (rand.nextBoolean()) {
                                     Attachment a1 = new Attachment("http://cs14114.vk.me/c622920/v622920701/10bf7/LDFJx3GuOic.jpg");
@@ -165,7 +168,7 @@ public class ScVersion extends DataBaseScenario {
                         }
                         ticketDao.updateTicketProgessTime(ticket);
                         if (!cms.isEmpty()) {
-                            ticketCommentDao.save(cms);
+                            workflowDao.save(cms);
                         }
 
                         int stc1 = rand.nextInt(3) + 1;
@@ -225,4 +228,5 @@ public class ScVersion extends DataBaseScenario {
     protected DataBaseScenario[] getDependsOn() {
         return new DataBaseScenario[] {scUser, scStatus};
     }
+
 }
