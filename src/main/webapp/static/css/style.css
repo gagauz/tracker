@@ -217,14 +217,16 @@ table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; b
 
 .version-user-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;}
 .version-user-map-owerflow {}
+.version-user-map table {border-collapse:separate;border-spacing:10px}
+.version-user-map table th {border:1px solid #f0f0f0;box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
 .version-user-map table td, .version-user-map table th {vertical-align:top}
-.version-user-map .version-col {padding:7px;border:1px solid gray;font-size:13px;margin:0 10px 10px 0;}
+.version-user-map .version-col {padding:7px;font-size:13px;}
 .version-user-map .version-col.col, .empty-col.col {width:100px;}
 .version-user-map .ticket-col {}
 .version-user-map .ticket-col.unassigned {background-color:#d0d0d0;}
 .version-user-map .ticket-cells {font-size:12px;width:270px;}
 .version-user-map .ticket-cell-div {position:relative}
-.version-user-map .ticket-cell-div {border:1px solid gray;padding:7px;margin:0 10px 10px 0;}
+.version-user-map .ticket-cell-div {border:1px solid #f0f0f0;padding:7px;margin-bottom:10px}
 .version-user-map .ticket-cell-div.ui-draggable-dragging {width:270px;}
 .version-user-map .ticket-cell-div.bug-true {}
 .version-user-map .ticket-cell-div .title {overflow:hidden;margin-bottom:3px;float:left1;}

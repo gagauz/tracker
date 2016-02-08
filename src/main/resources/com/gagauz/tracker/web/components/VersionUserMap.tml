@@ -34,7 +34,7 @@
 				<tr>
 					<t:loop source="users" value="user">
 						<th class="">
-							<div class="version-col shadow">
+							<div class="version-col">
 								<t:if test="user">
 									<div>${message:owner}: ${user.name}</div>
 								<p:else>Unassigned</p:else>
@@ -51,7 +51,7 @@
 						</th>
 					</t:loop>
 					<th class="">
-						<div class="version-col shadow">
+						<div class="version-col">
 							Next version
 						</div>
 					</th>
