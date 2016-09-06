@@ -1,19 +1,30 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
-import com.gagauz.tracker.utils.HashUtils;
-import com.gagauz.tracker.web.security.api.SecurityUser;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.gagauz.utils.CryptoUtils;
+
+import com.gagauz.tracker.db.base.Identifiable;
+import com.gagauz.tracker.utils.HashUtils;
+
 @Entity
 @Table(name = "`user`")
-public class User implements Identifiable, Serializable, SecurityUser {
+public class User implements Identifiable, Serializable, org.gagauz.tapestry.security.api.User {
     private static final long serialVersionUID = 7903294228565311630L;
     private int id;
     private String name;
@@ -111,7 +122,6 @@ public class User implements Identifiable, Serializable, SecurityUser {
         return "User <id=" + id + ">";
     }
 
-    @Override
     @Transient
     public boolean checkRoles(Roles[] rolesToCheck) {
         if (null == roles) {
@@ -130,5 +140,11 @@ public class User implements Identifiable, Serializable, SecurityUser {
             }
         }
         return false;
+    }
+
+    @Transient
+    public boolean checkPassword(String password) {
+        return this.password.equals(password)
+                || this.password.equals(CryptoUtils.createSHA512String(password));
     }
 }

@@ -1,6 +1,7 @@
 package com.gagauz.tracker.db.model;
 
 public enum Roles {
+    NONE,
     VIEWER,
     ADMIN,
     PROJECT_ADMIN,

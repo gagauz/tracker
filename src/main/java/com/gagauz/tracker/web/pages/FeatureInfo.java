@@ -1,5 +1,19 @@
 package com.gagauz.tracker.web.pages;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.gagauz.tracker.web.security.Secured;
+
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.Feature;
@@ -7,14 +21,9 @@ import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.Comparators;
-import com.gagauz.tracker.web.security.Secured;
-import org.apache.tapestry5.annotations.*;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
-import java.util.*;
 
 @Secured
-@Import(module = {"bootstrap/collapse"})
+@Import(module = { "bootstrap/collapse" })
 public class FeatureInfo {
 
     @Parameter

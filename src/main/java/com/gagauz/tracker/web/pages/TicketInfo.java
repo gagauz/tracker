@@ -7,7 +7,7 @@ import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Workflow;
 import com.gagauz.tracker.web.components.DeferredZone;
-import com.gagauz.tracker.web.security.Secured;
+import org.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.annotations.*;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;

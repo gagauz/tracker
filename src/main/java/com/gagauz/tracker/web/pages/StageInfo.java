@@ -3,7 +3,7 @@ package com.gagauz.tracker.web.pages;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.db.model.Stage;
-import com.gagauz.tracker.web.security.Secured;
+import org.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;

@@ -1,14 +1,27 @@
 package com.gagauz.tracker.web.services;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.db.model.*;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.services.ValueEncoderFactory;
+import org.gagauz.tapestry.web.services.CommonEntityValueEncoderFactory;
+
+import com.gagauz.tracker.beans.dao.FeatureVersionDao;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.RoleGroup;
+import com.gagauz.tracker.db.model.Stage;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.TicketComment;
+import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.db.model.TicketType;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
 
 public class ValueEncoderModule {
 
-    public static void contributeValueEncoderSource(MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration, final FeatureVersionDao featureVersionDao) {
+    public static void contributeValueEncoderSource(MappedConfiguration<Class<?>, ValueEncoderFactory<?>> configuration,
+            final FeatureVersionDao featureVersionDao) {
         configuration.add(User.class, new CommonEntityValueEncoderFactory(User.class));
         configuration.add(Project.class, new CommonEntityValueEncoderFactory(Project.class));
         configuration.add(Version.class, new CommonEntityValueEncoderFactory(Version.class));
@@ -23,7 +36,7 @@ public class ValueEncoderModule {
                     public String toClient(FeatureVersion value) {
                         return null == value || null == value.getVersion() || null == value.getFeature()
                                 ? null
-                                        : value.getFeature().getId() + "_" + value.getVersion().getId();
+                                : value.getFeature().getId() + "_" + value.getVersion().getId();
                     }
 
                     @Override

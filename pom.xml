@@ -68,16 +68,13 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.24</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.3-1100-jdbc4</version>
+			<version>9.4.1209</version>
 		</dependency>
-		<dependency>
-			<groupId>com.mchange</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.5</version>
-		</dependency>
+
 		<!-- log4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -94,6 +91,13 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${log4j-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.gagauz</groupId>
+			<artifactId>tapestry-webapp-core</artifactId>
+			<version>1.0</version>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>tracker</finalName>
@@ -137,7 +141,7 @@
 	</repositories>
 	<properties>
 		<log4j-version>1.7.12</log4j-version>
-		<tapestry-release-version>5.4-rc-1</tapestry-release-version>
+		<tapestry-release-version>5.4.1</tapestry-release-version>
 		<servlet-api-release-version>3.1.0</servlet-api-release-version>
 		<hibernate-release-version>4.1.7.Final</hibernate-release-version>
 		<spring-release-version>4.0.2.RELEASE</spring-release-version>

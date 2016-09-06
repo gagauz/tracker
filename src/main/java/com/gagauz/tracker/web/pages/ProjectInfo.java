@@ -5,7 +5,7 @@ import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.*;
-import com.gagauz.tracker.web.security.Secured;
+import org.gagauz.tracker.web.security.Secured;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
