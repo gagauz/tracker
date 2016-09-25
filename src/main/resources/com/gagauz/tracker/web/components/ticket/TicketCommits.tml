@@ -1,4 +1,4 @@
-<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<t:loop source="commits" value="commit">
 		<div class="commit">
 			<div class="date"><b>${date:commit.date}</b>&#160;<i>${commit.hash}</i> by <a href="#${commit.author}">${commit.author}</a></div>

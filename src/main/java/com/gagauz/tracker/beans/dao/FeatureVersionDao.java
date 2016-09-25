@@ -1,16 +1,19 @@
 package com.gagauz.tracker.beans.dao;
 
 import java.util.List;
+import java.util.function.Function;
 
+import org.gagauz.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
 
 @Service
-public class FeatureVersionDao extends AbstractDao<FeatureVersion.Id, FeatureVersion> {
+public class FeatureVersionDao extends AbstractDao<FeatureVersion.FeatureVersionId, FeatureVersion> {
 
     @SuppressWarnings("unchecked")
     public List<FeatureVersion> findByVersion(Version version) {
@@ -32,4 +35,21 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersion.Id, FeatureVer
                 .setInteger("versionId", versionId).uniqueResult();
     }
 
+    @Override
+    protected Function<String, FeatureVersionId> getIdDeserializer() {
+        return string -> {
+            if ("null".equalsIgnoreCase(string) || StringUtils.isEmpty(string)) {
+                return null;
+            }
+            String[] ids = string.split("_");
+            try {
+                FeatureVersionId id = new FeatureVersionId();
+                id.setFeature(new Feature(Integer.parseInt(ids[0])));
+                id.setVersion(new Version(Integer.parseInt(ids[1])));
+                return id;
+            } catch (NumberFormatException e) {
+                throw new IllegalStateException("Invalid FeatureVersionId string", e);
+            }
+        };
+    }
 }

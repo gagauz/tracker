@@ -1,6 +1,6 @@
 <html t:type="layout" title="All projects page"
 	t:sidebarTitle="Framework Version"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
 
 <t:grid source="projects" row="project" add="edit" class="table table-striped">

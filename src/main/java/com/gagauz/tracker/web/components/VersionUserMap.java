@@ -23,6 +23,7 @@ import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.gagauz.tapestry.web.services.ToolsService;
 
 import com.gagauz.tracker.beans.dao.FeatureVersionDao;
 import com.gagauz.tracker.beans.dao.TicketDao;
@@ -34,7 +35,6 @@ import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.Comparators;
-import com.gagauz.tracker.web.services.ToolsService;
 
 @Import(module = "bootstrap/dropdown")
 public class VersionUserMap {

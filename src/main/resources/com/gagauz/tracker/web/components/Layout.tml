@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter"
 >
 	<head>
@@ -39,8 +39,7 @@
 					</div>
 				</t:if>
 				<div id="page-content"
-					class="${cond:hideLeftMenu,col-sm-12 col-md-12,col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main}"
-				>
+					class="${cond:hideLeftMenu,col-sm-12 col-md-12,col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main}">
 					<div class="page-header">
 						<t:delegate to="header" />
 					</div>

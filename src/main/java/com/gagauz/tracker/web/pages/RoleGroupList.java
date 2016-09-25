@@ -3,7 +3,7 @@ package com.gagauz.tracker.web.pages;
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.db.model.Roles;
+import com.gagauz.tracker.db.model.AccessRole;
 import org.gagauz.tracker.web.security.Secured;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
@@ -76,7 +76,7 @@ public class RoleGroupList {
 
     @Cached
     public SelectModel getModel() {
-        return new EnumSelectModel(Roles.class, messages);
+        return new EnumSelectModel(AccessRole.class, messages);
     }
 
     @Cached

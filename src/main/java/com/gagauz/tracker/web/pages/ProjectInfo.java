@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Secured({Roles.PROJECT_USER, Roles.PROJECT_ADMIN})
+@Secured({AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN})
 public class ProjectInfo {
 
     @Property

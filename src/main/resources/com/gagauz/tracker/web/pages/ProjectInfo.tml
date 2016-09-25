@@ -1,5 +1,5 @@
 <html t:type="layout" title="${project.name}" t:sidebarTitle="Framework Version"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 
 	<p:header>Roadmap</p:header>
 	

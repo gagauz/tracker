@@ -1,10 +1,16 @@
 package com.gagauz.tracker.db.model;
 
-import org.hibernate.annotations.ForeignKey;
-
-import javax.persistence.*;
-
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table(name = "feature")
@@ -14,6 +20,14 @@ public class Feature extends TimeTrackedEntity {
     private List<FeatureVersion> featureVersions;
     private String name;
     private String description;
+
+    public Feature() {
+
+    }
+
+    public Feature(int id) {
+        setId(id);
+    }
 
     @ForeignKey(name = "fk_feature_project")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

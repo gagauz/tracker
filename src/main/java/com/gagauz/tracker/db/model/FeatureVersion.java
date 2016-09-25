@@ -1,17 +1,23 @@
 package com.gagauz.tracker.db.model;
 
-import org.hibernate.annotations.ForeignKey;
-
-import javax.persistence.*;
-
 import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table(name = "feature_version")
-public class FeatureVersion {
+public class FeatureVersion implements Serializable {
 
     @Embeddable
-    public static class Id implements Serializable {
+    public static class FeatureVersionId implements Serializable {
         private static final long serialVersionUID = 1939148011273312467L;
         private Feature feature;
         private Version version;
@@ -39,18 +45,18 @@ public class FeatureVersion {
     }
 
     private static final long serialVersionUID = -8693198398126115278L;
-    private Id id;
+    private FeatureVersionId id;
     private User creator;
 
     @EmbeddedId
-    public Id getId() {
+    public FeatureVersionId getId() {
         if (null == id) {
-            id = new Id();
+            id = new FeatureVersionId();
         }
         return id;
     }
 
-    public void setId(Id id) {
+    public void setId(FeatureVersionId id) {
         this.id = id;
     }
 

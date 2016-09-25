@@ -7,12 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.gagauz.tracker.db.model.Roles;
+import com.gagauz.tracker.db.model.AccessRole;
 
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
 public @interface Secured {
-    Roles[] value() default Roles.NONE;
+    AccessRole[] value() default AccessRole.NONE;
 }

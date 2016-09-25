@@ -1,4 +1,4 @@
-<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<div t:id="zone">
 		<t:BeanEditForm t:id="form" object="ticket" cancel="true"
 			exclude="id, key1, created, updated, progress, cvsVersion"

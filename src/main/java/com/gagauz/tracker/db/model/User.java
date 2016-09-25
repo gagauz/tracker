@@ -17,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.gagauz.tapestry.security.api.IUser;
 import org.gagauz.utils.CryptoUtils;
 
 import com.gagauz.tracker.db.base.Identifiable;
@@ -24,7 +25,7 @@ import com.gagauz.tracker.utils.HashUtils;
 
 @Entity
 @Table(name = "`user`")
-public class User implements Identifiable, Serializable, org.gagauz.tapestry.security.api.User {
+public class User implements Identifiable, Serializable, IUser {
     private static final long serialVersionUID = 7903294228565311630L;
     private int id;
     private String name;
@@ -33,7 +34,7 @@ public class User implements Identifiable, Serializable, org.gagauz.tapestry.sec
     private String username;
     private String password;
     private String token;
-    private Set<Roles> roles;
+    private Set<AccessRole> roles;
 
     @Override
     @Id
@@ -123,9 +124,9 @@ public class User implements Identifiable, Serializable, org.gagauz.tapestry.sec
     }
 
     @Transient
-    public boolean checkRoles(Roles[] rolesToCheck) {
+    public boolean checkRoles(AccessRole[] rolesToCheck) {
         if (null == roles) {
-            Set<Roles> roleSet = new HashSet<>();
+            Set<AccessRole> roleSet = new HashSet<>();
             for (RoleGroup group : roleGroups) {
                 roleSet.addAll(group.getRoles());
             }
@@ -134,7 +135,7 @@ public class User implements Identifiable, Serializable, org.gagauz.tapestry.sec
         if (null == rolesToCheck || rolesToCheck.length == 0) {
             return true;
         }
-        for (Roles role : rolesToCheck) {
+        for (AccessRole role : rolesToCheck) {
             if (roles.contains(role)) {
                 return true;
             }

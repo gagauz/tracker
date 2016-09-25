@@ -1,11 +1,12 @@
 package com.gagauz.tracker.db.config;
 
-import com.gagauz.tracker.utils.SysEnv;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import static org.hibernate.cfg.AvailableSettings.*;
 
 import java.util.Properties;
 
-import static org.hibernate.cfg.AvailableSettings.*;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+
+import com.gagauz.tracker.utils.AppProperties;
 
 public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
     public DevLocalSessionFactoryBean() {
@@ -13,11 +14,15 @@ public class DevLocalSessionFactoryBean extends LocalSessionFactoryBean {
         setAnnotatedPackages(new String[] {com.gagauz.tracker.db.model.User.class.getPackage().getName()});
         Properties properties = new Properties();
 
-        properties.put(DIALECT, SysEnv.JDBC_DIALECT.toString());
+        properties.put(DIALECT, AppProperties.JDBC_DIALECT.toString());
         properties.put(SHOW_SQL, false);
         properties.put(FORMAT_SQL, false);
         properties.put(USE_SQL_COMMENTS, false);
-        properties.put(HBM2DDL_AUTO, "create");
+        if (AppProperties.FILL_TEST_DATA.getBoolean()) {
+            properties.put(HBM2DDL_AUTO, "create");
+        } else {
+            properties.put(HBM2DDL_AUTO, "false");
+        }
         properties.put(STATEMENT_BATCH_SIZE, 50);
         properties.put(STATEMENT_BATCH_SIZE, 50);
         properties.put("hibernate.validator.autoregister_listeners", "create");

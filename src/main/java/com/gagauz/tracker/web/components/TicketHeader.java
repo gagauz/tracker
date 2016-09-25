@@ -1,10 +1,7 @@
 package com.gagauz.tracker.web.components;
 
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.WorkflowDao;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.web.services.ToolsService;
+import java.util.Objects;
+
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -13,8 +10,12 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
+import org.gagauz.tapestry.web.services.ToolsService;
 
-import java.util.Objects;
+import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.beans.dao.WorkflowDao;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.User;
 
 public class TicketHeader {
     @Component(parameters = {"id=literal:ticketZone"})

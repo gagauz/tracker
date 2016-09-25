@@ -4,7 +4,7 @@ import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.setup.DataBaseScenario;
 import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.db.model.Roles;
+import com.gagauz.tracker.db.model.AccessRole;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +42,17 @@ public class ScUser extends DataBaseScenario {
 
         RoleGroup roleGroup = new RoleGroup();
         roleGroup.setName("Project owner");
-        roleGroup.getRoles().add(Roles.PROJECT_ADMIN);
-        roleGroup.getRoles().add(Roles.USER_STORY_CREATOR);
-        roleGroup.getRoles().add(Roles.TASK_CREATOR);
-        roleGroup.getRoles().add(Roles.TASK_ASSIGNER);
+        roleGroup.getRoles().add(AccessRole.PROJECT_ADMIN);
+        roleGroup.getRoles().add(AccessRole.USER_STORY_CREATOR);
+        roleGroup.getRoles().add(AccessRole.TASK_CREATOR);
+        roleGroup.getRoles().add(AccessRole.TASK_ASSIGNER);
 
         roleGroupDao.save(roleGroup);
 
         RoleGroup roleGroup2 = new RoleGroup();
         roleGroup2.setName("Quality Assistant");
-        roleGroup2.getRoles().add(Roles.PROJECT_USER);
-        roleGroup2.getRoles().add(Roles.BUG_CREATOR);
+        roleGroup2.getRoles().add(AccessRole.PROJECT_USER);
+        roleGroup2.getRoles().add(AccessRole.BUG_CREATOR);
 
         roleGroupDao.save(roleGroup2);
 
