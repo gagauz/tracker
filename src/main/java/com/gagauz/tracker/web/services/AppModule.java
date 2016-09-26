@@ -1,6 +1,5 @@
 package com.gagauz.tracker.web.services;
 
-import org.apache.catalina.users.AbstractUser;
 import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.beaneditor.DataTypeConstants;
@@ -48,123 +47,126 @@ import com.gagauz.tracker.utils.AppProperties;
 @ImportModule({ ValueEncoderModule.class, CoreWebappModule.class })
 public class AppModule {
 
-	@Startup
-	public static void initScenarios(@Inject TestDataInitializer ai, @Inject SchedulerService schedulerService) {
-		if (AppProperties.FILL_TEST_DATA.getBoolean()) {
-			ai.execute();
-			schedulerService.update();
-		}
-	}
+    @Startup
+    public static void initScenarios(@Inject TestDataInitializer ai, @Inject SchedulerService schedulerService) {
+        if (AppProperties.FILL_TEST_DATA.getBoolean()) {
+            ai.execute();
+            schedulerService.update();
+        }
+    }
 
-	public static void bind(ServiceBinder binder) {
-	}
+    public static void bind(ServiceBinder binder) {
+    }
 
-	@FactoryDefaults
-	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
-		configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
-		configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
-		configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table table-responsive");
-	}
+    @FactoryDefaults
+    public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
+        configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
+        configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
+        configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table table-responsive");
+    }
 
-	@ApplicationDefaults
-	public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
-		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
-		configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
-		configuration.add(SymbolConstants.CHARSET, "utf-8");
-		configuration.add(SymbolConstants.COMBINE_SCRIPTS, true);
-		configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
-		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
-		configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:/static/bootstrap-3.3.6-dist");
-	}
+    @ApplicationDefaults
+    public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
+        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
+        configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
+        configuration.add(SymbolConstants.CHARSET, "utf-8");
+        configuration.add(SymbolConstants.COMBINE_SCRIPTS, true);
+        configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
+        configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
+        configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:/static/bootstrap-3.3.6-dist");
+    }
 
-	@Contribute(JavaScriptStackSource.class)
-	public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
-			final AssetSource assetSource) {
-	}
+    @Contribute(JavaScriptStackSource.class)
+    public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
+            final AssetSource assetSource) {
+    }
 
-	@Decorate(serviceInterface = JavaScriptStackSource.class)
-	public JavaScriptStackSource decorateJavaScriptStackSource(JavaScriptStackSource original) {
-		return new JavaScriptStackSourceFilter(original);
-	}
+    @Decorate(serviceInterface = JavaScriptStackSource.class)
+    public JavaScriptStackSource decorateJavaScriptStackSource(JavaScriptStackSource original) {
+        return new JavaScriptStackSourceFilter(original);
+    }
 
-	public static void contributeBeanBlockOverrideSource(Configuration<BeanBlockContribution> configuration) {
-		configuration.add(new EditBlockContribution(DataTypeConstants.TEXT, "AppPropertyBlocks", "anytext"));
-		configuration.add(new EditBlockContribution(DataTypeConstants.LONG_TEXT, "AppPropertyBlocks", "anytext"));
-	}
+    public static void contributeBeanBlockOverrideSource(Configuration<BeanBlockContribution> configuration) {
+        configuration.add(new EditBlockContribution(DataTypeConstants.TEXT, "AppPropertyBlocks", "anytext"));
+        configuration.add(new EditBlockContribution(DataTypeConstants.LONG_TEXT, "AppPropertyBlocks", "anytext"));
+    }
 
-	public static UserProvider buildUserProvider(final UserDao adminDao) {
-		return new UserProvider() {
-			@Override
-			public <U extends IUser, C extends Credentials> U findByCredentials(C arg0) {
-				if (arg0 instanceof org.gagauz.tracker.web.security.CredentialsImpl) {
-					com.gagauz.tracker.db.model.User user = adminDao
-							.findByUsername(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getUsername());
-					if (null != user && user
-							.checkPassword(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getPassword())) {
-						return (U) user;
-					}
-					return null;
-				} else if (arg0 instanceof CookieCredentials) {
-					try {
-						String[] tokens = CryptoUtils.decryptArrayAES(((CookieCredentials) arg0).getValue());
-						CredentialsImpl cred = new CredentialsImpl(tokens[0], tokens[1], false);
-						return findByCredentials(cred);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+    public static UserProvider buildUserProvider(final UserDao adminDao) {
+        return new UserProvider() {
+            @Override
+            public <U extends IUser, C extends Credentials> U findByCredentials(C arg0) {
+                if (arg0 instanceof org.gagauz.tracker.web.security.CredentialsImpl) {
+                    User user = adminDao.findByUsername(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getUsername());
+                    user.getRoleGroups().forEach(System.out::println);
+                    user = adminDao.unproxy(user);
+                    if (null != user && user.checkPassword(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getPassword())) {
+                        return (U) user;
+                    }
+                    return null;
+                } else if (arg0 instanceof CookieCredentials) {
+                    try {
+                        String[] tokens = CryptoUtils.decryptArrayAES(((CookieCredentials) arg0).getValue());
+                        CredentialsImpl cred = new CredentialsImpl(tokens[0], tokens[1], false);
+                        return findByCredentials(cred);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-				}
-				return null;
-			}
+                }
+                return null;
+            }
 
-			@Override
-			public <U extends IUser, C extends Credentials> C toCredentials(U arg0, Class<C> arg1) {
-				if (arg1.equals(CookieCredentials.class)) {
-					AbstractUser user = (AbstractUser) arg0;
-					String value = CryptoUtils.encryptArrayAES(user.getUsername(), user.getPassword(),
-							user.getClass().getSimpleName());
-					return (C) new CookieCredentials(value);
-				}
-				throw new IllegalStateException();
-			}
+            @Override
+            public <U extends IUser, C extends Credentials> C toCredentials(U arg0, Class<C> arg1) {
+                if (arg1.equals(CookieCredentials.class)) {
+                    User user = (User) arg0;
+                    String value = CryptoUtils.encryptArrayAES(user.getUsername(), user.getPassword(),
+                            user.getClass().getSimpleName());
+                    return (C) new CookieCredentials(value);
+                }
+                throw new IllegalStateException();
+            }
 
-		};
-	}
+        };
+    }
 
-	public static AccessAttributeExtractorChecker buildAccessAttributeExtractorChecker() {
-		return new AccessAttributeExtractorChecker<AccessAttributeImpl>() {
+    public static AccessAttributeExtractorChecker buildAccessAttributeExtractorChecker() {
+        return new AccessAttributeExtractorChecker<AccessAttributeImpl>() {
 
-			@Override
-			public boolean check(UserSet userSet, AccessAttributeImpl attribute) {
-				if (null != userSet) {
-					for (IUser user : userSet) {
-						User aUser = (User) user;
-						if (aUser.checkRoles(attribute.getRoles())) {
-							return true;
-						}
-					}
-				}
-				return false;
-			}
+            @Override
+            public boolean check(UserSet userSet, AccessAttributeImpl attribute) {
+                if (null != userSet) {
+                    if (null == attribute || 0 == attribute.getRoles().length) {
+                        return true;
+                    }
+                    for (IUser user : userSet) {
+                        User aUser = (User) user;
+                        if (aUser.checkRoles(attribute.getRoles())) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
 
-			@Override
-			public AccessAttributeImpl extract(PlasticClass plasticClass, PlasticMethod plasticMethod) {
+            @Override
+            public AccessAttributeImpl extract(PlasticClass plasticClass, PlasticMethod plasticMethod) {
 
-				if (null == plasticMethod) {
-					Secured annotation = plasticClass.getAnnotation(Secured.class);
-					if (null != annotation) {
-						return new AccessAttributeImpl(annotation.value());
-					}
-					return null;
-				}
+                if (null == plasticMethod) {
+                    Secured annotation = plasticClass.getAnnotation(Secured.class);
+                    if (null != annotation) {
+                        return new AccessAttributeImpl(annotation.value());
+                    }
+                    return null;
+                }
 
-				Secured annotation = plasticMethod.getAnnotation(Secured.class);
-				if (null != annotation) {
-					return new AccessAttributeImpl(annotation.value());
-				}
-				return null;
-			}
+                Secured annotation = plasticMethod.getAnnotation(Secured.class);
+                if (null != annotation) {
+                    return new AccessAttributeImpl(annotation.value());
+                }
+                return null;
+            }
 
-		};
-	}
+        };
+    }
 }

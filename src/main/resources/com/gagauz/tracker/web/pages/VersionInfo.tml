@@ -6,7 +6,7 @@
 	<p:header>
   		<ol class="breadcrumb">
 			<li class="active">
-				Version: ${version.name}
+				${msg:'version'}: ${version.name}
 			</li>
 			<li>
 				<t:pagelink t:page="projectinfo" t:context="version.project">${version.project.name}</t:pagelink>

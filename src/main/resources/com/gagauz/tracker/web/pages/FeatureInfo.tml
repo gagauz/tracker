@@ -57,7 +57,7 @@
 					<t:loop source="getTasks()" value="ticket">
 						<div class="ticket-div">
 							<t:pagelink t:page="TicketInfo" t:context="ticket"
-								class="${ticket.type}"><i class="icon glyphicon"></i> ${ticket.type} #${ticket.id} ${ticket.summary}
+								class="${ticket.type.name}"><i class="icon glyphicon"></i> ${ticket.type.name} #${ticket.id} ${ticket.summary}
 							</t:pagelink>
 						</div>
 					</t:loop>
@@ -65,7 +65,7 @@
 					<t:loop source="getBugs()" value="ticket">
 						<div class="ticket-div">
 							<t:pagelink t:page="TicketInfo" t:context="ticket"
-								class="${ticket.type}"><i class="icon glyphicon"></i> ${ticket.type} #${ticket.id} ${ticket.summary}
+								class="${ticket.type}"><i class="icon glyphicon"></i> ${ticket.type.name} #${ticket.id} ${ticket.summary}
 							</t:pagelink>
 						</div>
 					</t:loop>

@@ -1,7 +1,6 @@
 package com.gagauz.tracker.db.model;
 
 public enum AccessRole {
-    NONE,
     VIEWER,
     ADMIN,
     PROJECT_ADMIN,
@@ -11,4 +10,9 @@ public enum AccessRole {
     TASK_ASSIGNER,
     BUG_CREATOR;
 
+    private static final AccessRole[] EMPTY = new AccessRole[0];
+
+    public static AccessRole[] getEmpty() {
+        return EMPTY;
+    }
 }

@@ -3,9 +3,11 @@
 	<li><t:pagelink page="index">Index</t:pagelink></li>
 	<li><t:pagelink page="userlist">Users list</t:pagelink></li>
 	<li><t:pagelink page="rolegrouplist">Groups</t:pagelink></li>
-	<!-- t:IfAuthorized  -->
+	<t:IfAuthorized>
 		<li><t:eventlink t:event="logout">Logout</t:eventlink></li>
+		<p:else>
 			<li><t:pagelink page="Login">Login</t:pagelink></li>
-	<!--  /t:IfAuthorized -->
+		</p:else>
+	</t:IfAuthorized>
 </ul>
 </t:container>

@@ -17,6 +17,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.services.Ajax;
@@ -69,6 +70,9 @@ public class VersionUserMap {
 
     @Inject
     private TicketDao ticketDao;
+
+    @Inject
+    private Messages messages;
 
     @Inject
     private UserDao userDao;
@@ -245,13 +249,13 @@ public class VersionUserMap {
     void onViewTicket(Ticket ticket) {
         viewTicket = ticket;
         ajaxResponseRenderer
-                .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
-                .addCallback(new JavaScriptCallback() {
-                    @Override
-                    public void run(JavaScriptSupport javascriptSupport) {
-                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-                    }
-                });
+        .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
+        .addCallback(new JavaScriptCallback() {
+            @Override
+            public void run(JavaScriptSupport javascriptSupport) {
+                javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
+            }
+        });
     }
 
 }

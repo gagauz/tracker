@@ -14,5 +14,5 @@ import com.gagauz.tracker.db.model.AccessRole;
 @Inherited
 @Documented
 public @interface Secured {
-    AccessRole[] value() default AccessRole.NONE;
+    AccessRole[] value() default {};
 }
