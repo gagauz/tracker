@@ -138,7 +138,6 @@
 	</repositories>
 	<properties>
 		<log4j-version>1.7.12</log4j-version>
-		<tapestry-release-version>5.4.1</tapestry-release-version>
 		<servlet-api-release-version>3.1.0</servlet-api-release-version>
 		<hibernate-release-version>4.1.7.Final</hibernate-release-version>
 		<spring-release-version>4.0.2.RELEASE</spring-release-version>
