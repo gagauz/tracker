@@ -17,17 +17,32 @@ public class I18nString {
         private static final long serialVersionUID = -1449333149260035058L;
         private Locale locale;
         private String key;
+
+        public Id() {
+
+        }
+        public Id(Locale locale, String key) {
+            this.locale = locale;
+            this.key = key;
+        }
         public Locale getLocale() {
             return locale;
         }
         public void setLocale(Locale locale) {
             this.locale = locale;
         }
+
+        @Column(nullable = false)
         public String getKey() {
             return key;
         }
         public void setKey(String key) {
             this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return locale.getLanguage() + "|" + key;
         }
     }
 
