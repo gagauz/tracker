@@ -3,8 +3,14 @@ package com.gagauz.tracker.web.services;
 import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.beaneditor.DataTypeConstants;
+import org.apache.tapestry5.internal.services.ApplicationMessageCatalogObjectProvider;
+import org.apache.tapestry5.ioc.AnnotationProvider;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.ObjectLocator;
+import org.apache.tapestry5.ioc.ObjectProvider;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Decorate;
@@ -33,6 +39,7 @@ import org.gagauz.tracker.web.security.CredentialsImpl;
 import org.gagauz.tracker.web.security.Secured;
 import org.gagauz.utils.CryptoUtils;
 
+import com.gagauz.tracker.beans.dao.I18nStringDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
@@ -47,126 +54,159 @@ import com.gagauz.tracker.utils.AppProperties;
 @ImportModule({ ValueEncoderModule.class, CoreWebappModule.class })
 public class AppModule {
 
-    @Startup
-    public static void initScenarios(@Inject TestDataInitializer ai, @Inject SchedulerService schedulerService) {
-        if (AppProperties.FILL_TEST_DATA.getBoolean()) {
-            ai.execute();
-            schedulerService.update();
-        }
-    }
+	@Startup
+	public static void initScenarios(@Inject TestDataInitializer ai, @Inject SchedulerService schedulerService) {
+		if (AppProperties.FILL_TEST_DATA.getBoolean()) {
+			ai.execute();
+			schedulerService.update();
+		}
+	}
 
-    public static void bind(ServiceBinder binder) {
-    }
+	public static void bind(ServiceBinder binder) {
+	}
 
-    @FactoryDefaults
-    public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
-        configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
-        configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
-        configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table table-responsive");
-    }
+	// @Contribute(ComponentMessagesSource.class)
+	// public static void
+	// contributeComponentMessagesSource(Configuration<Resource> configuration,
+	// I18nStringDao dao) {
+	//
+	// return new MessageServiceOverride(messages, dao);
+	// }
 
-    @ApplicationDefaults
-    public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
-        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
-        configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
-        configuration.add(SymbolConstants.CHARSET, "utf-8");
-        configuration.add(SymbolConstants.COMBINE_SCRIPTS, true);
-        configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
-        configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
-        configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:/static/bootstrap-3.3.6-dist");
-    }
+	// @Contribute(ServiceOverride.class)
+	// public static void contributeServiceOverrides(MappedConfiguration<Class,
+	// Object> configuration,
+	// @InjectService("Messages") Messages messages) {
+	// configuration.add(Messages.class, messages);
+	// }
 
-    @Contribute(JavaScriptStackSource.class)
-    public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
-            final AssetSource assetSource) {
-    }
+	public static void contributeMasterObjectProvider(OrderedConfiguration<ObjectProvider> configuration,
+			@Inject I18nStringDao i18nStringDao, ObjectLocator locator) {
 
-    @Decorate(serviceInterface = JavaScriptStackSource.class)
-    public JavaScriptStackSource decorateJavaScriptStackSource(JavaScriptStackSource original) {
-        return new JavaScriptStackSourceFilter(original);
-    }
+		configuration.add("ApplicationMessages", new ApplicationMessageCatalogObjectProvider(locator) {
 
-    public static void contributeBeanBlockOverrideSource(Configuration<BeanBlockContribution> configuration) {
-        configuration.add(new EditBlockContribution(DataTypeConstants.TEXT, "AppPropertyBlocks", "anytext"));
-        configuration.add(new EditBlockContribution(DataTypeConstants.LONG_TEXT, "AppPropertyBlocks", "anytext"));
-    }
+			@Override
+			public <T> T provide(Class<T> objectType, AnnotationProvider annotationProvider, ObjectLocator locator) {
+				if (objectType.equals(Messages.class)) {
+					return (T) new MessageServiceOverride((Messages) super.provide(objectType, annotationProvider, locator), i18nStringDao);
+				}
 
-    public static UserProvider buildUserProvider(final UserDao adminDao) {
-        return new UserProvider() {
-            @Override
-            public <U extends IUser, C extends Credentials> U findByCredentials(C arg0) {
-                if (arg0 instanceof org.gagauz.tracker.web.security.CredentialsImpl) {
-                    User user = adminDao.findByUsername(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getUsername());
-                    user.getRoleGroups().forEach(System.out::println);
-                    user = adminDao.unproxy(user);
-                    if (null != user && user.checkPassword(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getPassword())) {
-                        return (U) user;
-                    }
-                    return null;
-                } else if (arg0 instanceof CookieCredentials) {
-                    try {
-                        String[] tokens = CryptoUtils.decryptArrayAES(((CookieCredentials) arg0).getValue());
-                        CredentialsImpl cred = new CredentialsImpl(tokens[0], tokens[1], false);
-                        return findByCredentials(cred);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+				return null;
+			}
 
-                }
-                return null;
-            }
+		}, "before:AnnotationBasedContributions");
+	}
 
-            @Override
-            public <U extends IUser, C extends Credentials> C toCredentials(U arg0, Class<C> arg1) {
-                if (arg1.equals(CookieCredentials.class)) {
-                    User user = (User) arg0;
-                    String value = CryptoUtils.encryptArrayAES(user.getUsername(), user.getPassword(),
-                            user.getClass().getSimpleName());
-                    return (C) new CookieCredentials(value);
-                }
-                throw new IllegalStateException();
-            }
+	@FactoryDefaults
+	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
+		configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
+		configuration.override(SymbolConstants.HMAC_PASSPHRASE, "1.0-SNAPSHOT");
+		configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table table-responsive");
+	}
 
-        };
-    }
+	@ApplicationDefaults
+	public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
+		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
+		configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
+		configuration.add(SymbolConstants.CHARSET, "utf-8");
+		configuration.add(SymbolConstants.COMBINE_SCRIPTS, true);
+		configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
+		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
+		configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:/static/bootstrap-3.3.6-dist");
+	}
 
-    public static AccessAttributeExtractorChecker buildAccessAttributeExtractorChecker() {
-        return new AccessAttributeExtractorChecker<AccessAttributeImpl>() {
+	@Contribute(JavaScriptStackSource.class)
+	public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
+			final AssetSource assetSource) {
+	}
 
-            @Override
-            public boolean check(UserSet userSet, AccessAttributeImpl attribute) {
-                if (null != userSet) {
-                    if (null == attribute || 0 == attribute.getRoles().length) {
-                        return true;
-                    }
-                    for (IUser user : userSet) {
-                        User aUser = (User) user;
-                        if (aUser.checkRoles(attribute.getRoles())) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
+	@Decorate(serviceInterface = JavaScriptStackSource.class)
+	public JavaScriptStackSource decorateJavaScriptStackSource(JavaScriptStackSource original) {
+		return new JavaScriptStackSourceFilter(original);
+	}
 
-            @Override
-            public AccessAttributeImpl extract(PlasticClass plasticClass, PlasticMethod plasticMethod) {
+	public static void contributeBeanBlockOverrideSource(Configuration<BeanBlockContribution> configuration) {
+		configuration.add(new EditBlockContribution(DataTypeConstants.TEXT, "AppPropertyBlocks", "anytext"));
+		configuration.add(new EditBlockContribution(DataTypeConstants.LONG_TEXT, "AppPropertyBlocks", "anytext"));
+	}
 
-                if (null == plasticMethod) {
-                    Secured annotation = plasticClass.getAnnotation(Secured.class);
-                    if (null != annotation) {
-                        return new AccessAttributeImpl(annotation.value());
-                    }
-                    return null;
-                }
+	public static UserProvider buildUserProvider(final UserDao adminDao) {
+		return new UserProvider() {
+			@Override
+			public <U extends IUser, C extends Credentials> U findByCredentials(C arg0) {
+				if (arg0 instanceof org.gagauz.tracker.web.security.CredentialsImpl) {
+					User user = adminDao.findByUsername(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getUsername());
+					if (null != user && user.checkPassword(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getPassword())) {
+						if (null != user.getRoleGroups()) {
+							user.getRoleGroups().forEach(System.out::println);
+						}
+						user = adminDao.unproxy(user);
+						return (U) user;
+					}
+					return null;
+				} else if (arg0 instanceof CookieCredentials) {
+					try {
+						String[] tokens = CryptoUtils.decryptArrayAES(((CookieCredentials) arg0).getValue());
+						CredentialsImpl cred = new CredentialsImpl(tokens[0], tokens[1], false);
+						return findByCredentials(cred);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-                Secured annotation = plasticMethod.getAnnotation(Secured.class);
-                if (null != annotation) {
-                    return new AccessAttributeImpl(annotation.value());
-                }
-                return null;
-            }
+				}
+				return null;
+			}
 
-        };
-    }
+			@Override
+			public <U extends IUser, C extends Credentials> C toCredentials(U arg0, Class<C> arg1) {
+				if (arg1.equals(CookieCredentials.class)) {
+					User user = (User) arg0;
+					String value = CryptoUtils.encryptArrayAES(user.getUsername(), user.getPassword(), user.getClass().getSimpleName());
+					return (C) new CookieCredentials(value);
+				}
+				throw new IllegalStateException();
+			}
+
+		};
+	}
+
+	public static AccessAttributeExtractorChecker buildAccessAttributeExtractorChecker() {
+		return new AccessAttributeExtractorChecker<AccessAttributeImpl>() {
+
+			@Override
+			public boolean check(UserSet userSet, AccessAttributeImpl attribute) {
+				if (null != userSet) {
+					if (null == attribute || 0 == attribute.getRoles().length) {
+						return true;
+					}
+					for (IUser user : userSet) {
+						User aUser = (User) user;
+						if (aUser.checkRoles(attribute.getRoles())) {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+
+			@Override
+			public AccessAttributeImpl extract(PlasticClass plasticClass, PlasticMethod plasticMethod) {
+
+				if (null == plasticMethod) {
+					Secured annotation = plasticClass.getAnnotation(Secured.class);
+					if (null != annotation) {
+						return new AccessAttributeImpl(annotation.value());
+					}
+					return null;
+				}
+
+				Secured annotation = plasticMethod.getAnnotation(Secured.class);
+				if (null != annotation) {
+					return new AccessAttributeImpl(annotation.value());
+				}
+				return null;
+			}
+
+		};
+	}
 }

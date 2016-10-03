@@ -12,59 +12,73 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "i18n_string")
 public class I18nString {
-    @Embeddable
-    public static class Id implements Serializable {
-        private static final long serialVersionUID = -1449333149260035058L;
-        private Locale locale;
-        private String key;
+	@Embeddable
+	public static class Id implements Serializable {
+		private static final long serialVersionUID = -1449333149260035058L;
+		private Locale idLocale;
+		private String idKey;
 
-        public Id() {
+		public Id() {
 
-        }
-        public Id(Locale locale, String key) {
-            this.locale = locale;
-            this.key = key;
-        }
-        public Locale getLocale() {
-            return locale;
-        }
-        public void setLocale(Locale locale) {
-            this.locale = locale;
-        }
+		}
 
-        @Column(nullable = false)
-        public String getKey() {
-            return key;
-        }
-        public void setKey(String key) {
-            this.key = key;
-        }
+		public Id(Locale locale, String key) {
+			this.idLocale = locale;
+			this.idKey = key;
+		}
 
-        @Override
-        public String toString() {
-            return locale.getLanguage() + "|" + key;
-        }
-    }
+		public Locale getIdLocale() {
+			return this.idLocale;
+		}
 
-    private Id id;
-    private String value;
+		public void setIdLocale(Locale locale) {
+			this.idLocale = locale;
+		}
 
-    @EmbeddedId
-    public Id getId() {
-        return id;
-    }
+		@Column(nullable = false)
+		public String getIdKey() {
+			return this.idKey;
+		}
 
-    public void setId(Id id) {
-        this.id = id;
-    }
+		public void setIdKey(String key) {
+			this.idKey = key;
+		}
 
-    @Column(length = 1024)
-    public String getValue() {
-        return value;
-    }
+		@Override
+		public String toString() {
+			return this.idLocale.getLanguage() + "|" + this.idKey;
+		}
+	}
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+	private Id id;
+	private String value;
+
+	@EmbeddedId
+	public Id getId() {
+		return this.id;
+	}
+
+	public void setId(Id id) {
+		this.id = id;
+	}
+
+	@Column(length = 1024)
+	public String getValue() {
+		return this.value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	@javax.persistence.Transient
+	public Locale getLocale() {
+		return this.id.getIdLocale();
+	}
+
+	@javax.persistence.Transient
+	public String getKey() {
+		return this.id.getIdKey();
+	}
 
 }

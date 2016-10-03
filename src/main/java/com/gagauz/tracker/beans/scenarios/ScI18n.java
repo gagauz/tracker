@@ -1,6 +1,8 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -18,31 +20,33 @@ import com.gagauz.tracker.db.model.I18nString.Id;
 @Service
 public class ScI18n extends DataBaseScenario {
 
-    @Autowired
-    private I18nStringDao i18nStringDao;
-    @Override
-    protected void execute() {
-        InputStream is = Global.servletContext.getResourceAsStream("/WEB-INF/auth.properties");
-        // InputStream is =
-        // getClass().getResourceAsStream("context:/WEB-INF/app.properties");
-        Properties p = new Properties();
+	@Autowired
+	private I18nStringDao i18nStringDao;
 
-        try {
-            p.load(is);
-            List<I18nString> result = new ArrayList<>(p.size());
-            p.entrySet().forEach(e -> {
-                I18nString i18 = new I18nString();
-                i18.setId(new Id(Locale.ENGLISH, e.getKey().toString()));
-                if (null != e.getValue()) {
-                    i18.setValue(e.getValue().toString());
-                }
-                result.add(i18);
-            });
-            i18nStringDao.save(result);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+	@Override
+	protected void execute() {
+		importLocale(Locale.ENGLISH, "app.properties");
+		importLocale(new Locale("ru"), "app_ru.properties");
+	}
+
+	private void importLocale(Locale locale, String filename) {
+		try {
+			Reader reader = new FileReader(new File(Global.getServletContex().getRealPath("/WEB-INF/" + filename)));
+			Properties p = new Properties();
+			p.load(reader);
+			List<I18nString> result = new ArrayList<>(p.size());
+			p.entrySet().forEach(e -> {
+				I18nString i18 = new I18nString();
+				i18.setId(new Id(locale, e.getKey().toString()));
+				if (null != e.getValue()) {
+					i18.setValue(e.getValue().toString());
+				}
+				result.add(i18);
+			});
+			this.i18nStringDao.save(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
