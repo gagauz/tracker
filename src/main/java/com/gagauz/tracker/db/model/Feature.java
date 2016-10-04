@@ -22,11 +22,7 @@ public class Feature extends TimeTrackedEntity {
 	private String description;
 
 	public Feature() {
-
-	}
-
-	public Feature(int id) {
-		setId(id);
+		// default constructor
 	}
 
 	@ForeignKey(name = "fk_feature_project")

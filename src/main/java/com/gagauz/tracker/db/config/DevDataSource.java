@@ -6,9 +6,9 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.gagauz.hibernate.utils.StatementInterceptor;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-import com.gagauz.tracker.db.utils.StatementInterceptor;
 import com.gagauz.tracker.utils.AppProperties;
 
 public class DevDataSource extends SimpleDriverDataSource implements DataSource {

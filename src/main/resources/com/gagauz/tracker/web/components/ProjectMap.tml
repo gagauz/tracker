@@ -15,15 +15,19 @@
 				<table class="shadow-table">
 					<thead>
 						<tr>
-							<th class="empty-col"></th>
+							<th class="empty-col">${msg:Feature version list}</th>
 							<t:loop source="versions" value="version">
 								<th class="version-col">
 									<div class="cell">
-										<t:pagelink class="" t:page="versioninfo" t:context="version">
-											${message:version}: ${version.name}
-											<br />
-											${message:release-date}: ${version.releaseDate}
-										</t:pagelink>
+										<div>
+											<t:pagelink class="" t:page="versioninfo" t:context="version">
+												${message:version}: ${version.name}
+											</t:pagelink>
+											<t:ModalLink class="pull-right" t:zone="ticketZone" t:action="editVersion" t:context="version">
+												<i class="glyphicon glyphicon-pencil"></i>
+											</t:ModalLink>
+										</div>
+										<div>${message:release-date}: ${version.releaseDate}</div>
 									</div>
 								</th>
 							</t:loop>
@@ -47,27 +51,31 @@
 										<div class="cell">
 											<div class="ticket-col-div">
 												<t:if test="featureVersion">
-													<div class="tickets" t:type="if" t:test="tickets">
-														<div class="title">${message:tickets-list}</div>
-														<ul>
-															<li t:type="loop" source="tickets" value="ticket">
-																<t:ModalLink class="text text-default" t:zone="viewTicketZone" t:event="viewticket" t:context="ticket">
-																	<i class="glyphicon glyphicon-eye-open"></i>
+													<div class="tickets">
+														<div class="title">
+															<t:if test="notReleased">
+																<t:ModalLink role="button" class="" t:zone="ticketZone" t:action="createTicket" t:context="[featureVersion]">
+																	<i class="glyphicon glyphicon-plus text text-success"></i> ${message:create-task}
 																</t:ModalLink>
-																<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
-																	<i class="glyphicon icon"></i>
-																	${ticket.key} [${ticket.type.name}] ${ticket.summary}
-																</t:pagelink>
-															</li>
+															</t:if>
+														</div>
+														<ul>
+															<t:foreach t:source="tickets" t:value="ticket" limit="5">
+																<li>
+																	<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
+																		<i class="glyphicon icon"></i>
+																		${ticket.key} [${ticket.type.name}] ${ticket.summary}
+																	</t:pagelink>
+																	<t:ModalLink class="pull-right" t:zone="viewTicketZone" t:action="viewticket" t:context="ticket">
+																		<i class="glyphicon glyphicon-eye-open"></i>
+																	</t:ModalLink>
+																</li>
+																<p:ellipsis>
+																	<li>${msg:Total} ${tickets.size()} ${msg:tickets}</li>
+																</p:ellipsis>
+															</t:foreach>
 														</ul>
 													</div>
-													<t:if test="notReleased">
-														<div class="btn-toolbar">
-															<t:ModalLink role="button" class="btn btn-default" t:zone="ticketZone" t:event="createTicket" t:context="[featureVersion]">
-																<i class="glyphicon glyphicon-plus-sign text text-success"></i> ${message:create-task}
-															</t:ModalLink>
-														</div>
-													</t:if>
 	
 													<p:else>
 														<t:if test="notReleased">
@@ -98,6 +106,9 @@
 		<div t:id="ticketZone" class="ticket-popup">
 			<t:if test="newTicket">
 				<t:ticket.EditTicketForm ticket="newTicket"/>
+			</t:if>
+			<t:if test="editVersion">
+				<t:version.VersionForm version="editVersion" project="editVersion.project" />
 			</t:if>
 		</div>
 		<div t:id="viewTicketZone" class="ticket-popup">

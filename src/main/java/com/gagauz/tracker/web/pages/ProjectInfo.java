@@ -27,134 +27,136 @@ import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
 
-@Secured({AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN})
+@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
 public class ProjectInfo {
 
-    @Component(parameters = { "id=literal:createVersionZone" })
-    @Property(write = false)
-    private Zone modalZone;
+	@Component(parameters = { "id=literal:createVersionZone" })
+	@Property(write = false)
+	private Zone modalZone;
 
-    @Property
-    private Project project;
+	@Property
+	private Project project;
 
-    @Property
-    @Persist("flash")
-    private Version newVersion;
+	@Property
+	@Persist("flash")
+	private Version newVersion;
 
-    @Property
-    @Persist("flash")
-    private Feature newFeature;
+	@Property
+	@Persist("flash")
+	private Feature newFeature;
 
-    @Property
-    @Persist("flash")
-    private Stage newStage;
+	@Property
+	@Persist("flash")
+	private Stage newStage;
 
-    @Property
-    private RoleGroup roleGroup;
+	@Property
+	private RoleGroup roleGroup;
 
-    @Property
-    private Version version;
+	@Property
+	private Version version;
 
-    @Property
-    private FeatureVersion ticket;
+	@Property
+	private FeatureVersion ticket;
 
-    @Property
-    private Ticket subticket;
+	@Property
+	private Ticket subticket;
 
-    @Property
-    private Feature feature;
+	@Property
+	private Feature feature;
 
-    @Property
-    private Stage stage;
+	@Property
+	private Stage stage;
 
-    @Inject
-    private FeatureDao featureDao;
+	@Inject
+	private FeatureDao featureDao;
 
-    @Inject
-    private VersionDao versionDao;
+	@Inject
+	private VersionDao versionDao;
 
-    @Inject
-    private StageDao stageDao;
+	@Inject
+	private StageDao stageDao;
 
-    @Inject
-    private RoleGroupDao roleGroupDao;
+	@Inject
+	private RoleGroupDao roleGroupDao;
 
-    @SessionState
-    private User securityUser;
+	@SessionState
+	private User securityUser;
 
-    Object onActivate(Project project) {
-        if (null == project) {
-            return Index.class;
-        }
-        this.project = project;
-        return null;
-    }
+	Object onActivate(Project project) {
+		if (null == project) {
+			return Index.class;
+		}
+		this.project = project;
+		return null;
+	}
 
-    Object onPassivate() {
-        return project;
-    }
+	Object onPassivate() {
+		return this.project;
+	}
 
-    private static String getNextVersion(Project project, Version lastVersion) {
-        if (null != lastVersion) {
-            String name = getNextVersion(lastVersion.getName());
-            if (null != name) {
-                return name;
-            }
-        }
-        return project.getCode() + "-1";
-    }
+	private static String getNextVersion(Project project, Version lastVersion) {
+		if (null != lastVersion) {
+			String name = getNextVersion(lastVersion.getName());
+			if (null != name) {
+				return name;
+			}
+		}
+		return project.getCode() + "-1";
+	}
 
-    private static String getNextVersion(String lastVersion) {
-        String name = lastVersion;
-        Pattern p = Pattern.compile("^(.*?)([0-9]+)$");
-        Matcher m = p.matcher(name);
-        if (m.find()) {
-            String v = m.group(2);
-            v = String.valueOf(NumberUtils.toInt(v) + 1);
-            return m.replaceFirst("$1" + v);
-        }
-        return null;
-    }
+	private static String getNextVersion(String lastVersion) {
+		String name = lastVersion;
+		Pattern p = Pattern.compile("^(.*?)([0-9]+)$");
+		Matcher m = p.matcher(name);
+		if (m.find()) {
+			String v = m.group(2);
+			v = String.valueOf(NumberUtils.toInt(v) + 1);
+			return m.replaceFirst("$1" + v);
+		}
+		return null;
+	}
 
-    void onCreateVersion() {
-        newVersion = new Version();
-        Version lastVersion = versionDao.findLast(project);
-        String nextName = getNextVersion(project, lastVersion);
-        newVersion.setName(nextName);
-        newVersion.setCvsBranchName(nextName);
-    }
+	Object onCreateVersion() {
+		this.newVersion = new Version();
+		Version lastVersion = this.versionDao.findLast(this.project);
+		String nextName = getNextVersion(this.project, lastVersion);
+		this.newVersion.setName(nextName);
+		this.newVersion.setCvsBranchName(nextName);
+		return this.newVersion;
+	}
 
-    void onSuccessFromVersionForm() {
-        newVersion.setProject(project);
-        versionDao.save(newVersion);
-        newVersion = null;
-    }
+	void onSuccessFromVersionForm() {
+		this.newVersion.setProject(this.project);
+		this.versionDao.save(this.newVersion);
+		this.newVersion = null;
+	}
 
-    void onCreateFeature() {
-        newFeature = new Feature();
-    }
+	Object onCreateFeature() {
+		this.newFeature = new Feature();
+		return this.newFeature;
+	}
 
-    void onSuccessFromFeatureForm() {
-        newFeature.setCreator(securityUser);
-        newFeature.setProject(project);
-        featureDao.save(newFeature);
-        newFeature = null;
-    }
+	void onSuccessFromFeatureForm() {
+		this.newFeature.setCreator(this.securityUser);
+		this.newFeature.setProject(this.project);
+		this.featureDao.save(this.newFeature);
+		this.newFeature = null;
+	}
 
-    public List<Feature> getUserStories() {
-        return featureDao.findByProject(project);
-    }
+	public List<Feature> getUserStories() {
+		return this.featureDao.findByProject(this.project);
+	}
 
-    public List<Version> getVersions() {
-        return versionDao.findByProject(project);
-    }
+	public List<Version> getVersions() {
+		return this.versionDao.findByProject(this.project);
+	}
 
-    public List<RoleGroup> getRoleGroups() {
-        return roleGroupDao.findByProject(project);
-    }
+	public List<RoleGroup> getRoleGroups() {
+		return this.roleGroupDao.findByProject(this.project);
+	}
 
-    public static void main(String[] args) {
-        String g = getNextVersion("фывфвыфвы-11.10");
-        System.out.println(g);
-    }
+	public static void main(String[] args) {
+		String g = getNextVersion("фывфвыфвы-11.10");
+		System.out.println(g);
+	}
 }

@@ -26,7 +26,7 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersion.FeatureVersion
 	}
 
 	public List<FeatureVersion> findByProject(Project project) {
-		return getSession().createQuery("from FeatureVersion where id.feature.project=:project").setEntity("project", project).list();
+		return getSession().createQuery("from FeatureVersion where feature.project=:project").setEntity("project", project).list();
 	}
 
 	public FeatureVersion findByFeatureAndVersion(int featureId, int versionId) {

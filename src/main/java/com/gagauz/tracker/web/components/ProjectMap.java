@@ -46,6 +46,10 @@ public class ProjectMap {
 	@Property(write = false)
 	private Version version;
 
+	@Persist(value = "flash")
+	@Property
+	private Version editVersion;
+
 	@Property
 	private Feature feature;
 
@@ -177,6 +181,12 @@ public class ProjectMap {
 		this.newTicket.setAuthor(this.securityUser);
 
 		return this.newTicket;
+	}
+
+	@Ajax
+	Object onEditVersion(Version version) {
+		this.editVersion = version;
+		return this.editVersion;
 	}
 
 	@Ajax

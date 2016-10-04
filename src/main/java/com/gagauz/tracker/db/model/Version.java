@@ -29,10 +29,7 @@ public class Version extends TimeTrackedEntity implements Comparable<Version> {
 	private boolean released = false;
 
 	public Version() {
-	}
-
-	public Version(int id) {
-		setId(id);
+		// default constructor
 	}
 
 	@ForeignKey(name = "fk_version_project")

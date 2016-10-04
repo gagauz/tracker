@@ -1,36 +1,33 @@
-<html t:type="layout" title="${project.name}" t:sidebarTitle="Framework Version"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+<html t:type="layout" title="${project.name}" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+
+	<p:mainTitle>${project.name}</p:mainTitle>
 
 	<p:header>${project.name}</p:header>
 	
-	<p:sidebar>
-		<t:ProjectMenu project="project" />
-	</p:sidebar>
-	
 	<div>
-		<t:if test="newFeature">
-			<t:BeanEditForm class="form-horizontal" t:id="featureForm"
-				object="newFeature" exclude="id, key1, created, updated" cancel="true" />
-		</t:if>
-	</div>
-	<div>
-		<div class="btn-group1">
-			<t:eventlink class="btn btn-default" t:event="createFeature">
+		<div class="btn-toolbar">
+			<t:modallink class="btn btn-default" zone="modalZone" action="createFeature">
 				${message:create-feature}
-			</t:eventlink>&#160;
-			<t:modallink class="btn btn-default" zone="modalZone">
+			</t:modallink>
+			<t:modallink class="btn btn-default" zone="modalZone" action="createVersion">
 				${message:create-version}
 			</t:modallink>
 		</div>
 	</div>
-	<hr />
-
 
 	<t:ProjectMap project="project" />
 
 	<div style="display:none">
 		<div t:id="modalZone" class="ticket-popup">
-			<t:version.VersionForm project="project" version="newVersion" />
+			<t:if test="newVersion">
+				<t:version.VersionForm project="project" version="newVersion" />
+			</t:if>
+			
+			<t:if test="newFeature">
+				<t:BeanEditForm class="form-horizontal" t:id="featureForm"
+					object="newFeature" exclude="id, key1, created, updated" cancel="true" />
+			</t:if>
+			
 		</div>
 	</div>
 

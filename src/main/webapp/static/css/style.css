@@ -197,6 +197,7 @@ fieldset[disabled] .noneButton.active {
 
 /* Project Map */
 .shadow {box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
+
 table.shadow-table {border-spacing: 10px; border-collapse: separate;}
 table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; border:1px solid silver;box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.5);}
  
@@ -210,10 +211,7 @@ table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; b
 .project-map .ticket-col div {overflow:hidden;}
 .project-map .ticket-col .owner {color:#660000}
 .project-map .ticket-col .description {}
-.project-map .title {margin:5px 0 3px;font-weight:bold;}
 .project-map ul {list-style:none;padding:0}
-.project-map li, .project-map li a {font-size:12px;text-align:left;display:bloc;}
-.project-map li {padding:0 0 5px;}
 
 .version-user-map {overflow-y:hidden; overflow-x:scroll;width:100%;white-space:nowrap;}
 .version-user-map-owerflow {}
@@ -244,8 +242,6 @@ table.shadow-table td, table.shadow-table th {vertical-align:top;padding:10px; b
 .version-user-map .total-user-time {float:right;clear:right;border:1px solid gray;background:#f0fff0;padding:4px 8px;width:30px;}
 
 .version-user-map .version-col ul {list-style:none}
-
-.title a {text-align:left;}
 
 /* Comments */
 .comment-form label {clear:both}
