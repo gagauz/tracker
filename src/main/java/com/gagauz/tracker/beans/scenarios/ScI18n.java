@@ -10,14 +10,12 @@ import java.util.Properties;
 
 import org.gagauz.tapestry.web.config.Global;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.beans.dao.I18nStringDao;
 import com.gagauz.tracker.beans.setup.DataBaseScenario;
 import com.gagauz.tracker.db.model.I18nString;
 import com.gagauz.tracker.db.model.I18nString.Id;
 
-@Service
 public class ScI18n extends DataBaseScenario {
 
 	@Autowired

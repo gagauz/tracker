@@ -3,14 +3,8 @@ package com.gagauz.tracker.web.services;
 import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.beaneditor.DataTypeConstants;
-import org.apache.tapestry5.internal.services.ApplicationMessageCatalogObjectProvider;
-import org.apache.tapestry5.ioc.AnnotationProvider;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.Messages;
-import org.apache.tapestry5.ioc.ObjectLocator;
-import org.apache.tapestry5.ioc.ObjectProvider;
-import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Decorate;
@@ -39,7 +33,6 @@ import org.gagauz.tracker.web.security.CredentialsImpl;
 import org.gagauz.tracker.web.security.Secured;
 import org.gagauz.utils.CryptoUtils;
 
-import com.gagauz.tracker.beans.dao.I18nStringDao;
 import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.beans.setup.TestDataInitializer;
@@ -63,38 +56,6 @@ public class AppModule {
 	}
 
 	public static void bind(ServiceBinder binder) {
-	}
-
-	// @Contribute(ComponentMessagesSource.class)
-	// public static void
-	// contributeComponentMessagesSource(Configuration<Resource> configuration,
-	// I18nStringDao dao) {
-	//
-	// return new MessageServiceOverride(messages, dao);
-	// }
-
-	// @Contribute(ServiceOverride.class)
-	// public static void contributeServiceOverrides(MappedConfiguration<Class,
-	// Object> configuration,
-	// @InjectService("Messages") Messages messages) {
-	// configuration.add(Messages.class, messages);
-	// }
-
-	public static void contributeMasterObjectProvider(OrderedConfiguration<ObjectProvider> configuration,
-			@Inject I18nStringDao i18nStringDao, ObjectLocator locator) {
-
-		configuration.add("ApplicationMessages", new ApplicationMessageCatalogObjectProvider(locator) {
-
-			@Override
-			public <T> T provide(Class<T> objectType, AnnotationProvider annotationProvider, ObjectLocator locator) {
-				if (objectType.equals(Messages.class)) {
-					return (T) new MessageServiceOverride((Messages) super.provide(objectType, annotationProvider, locator), i18nStringDao);
-				}
-
-				return null;
-			}
-
-		}, "before:AnnotationBasedContributions");
 	}
 
 	@FactoryDefaults

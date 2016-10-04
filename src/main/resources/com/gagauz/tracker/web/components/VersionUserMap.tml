@@ -36,7 +36,7 @@
 						<th class="">
 							<div class="version-col">
 								<t:if test="user">
-									<div>${message:owner}: ${user.name}</div>
+									<div>${message:owner}: <t:pagelink page="userinfo" context="user">${user.name}</t:pagelink></div>
 								<p:else>Unassigned</p:else>
 								</t:if>
 								<div>${message:tickets-by-status}: </div>
@@ -101,4 +101,5 @@
 			<t:ticket.ViewTicketForm ticket="viewTicket" />
 		</div>
 	</div>
+	
 </div>

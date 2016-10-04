@@ -1,23 +1,38 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.FeatureDao;
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
-import com.gagauz.tracker.beans.dao.StageDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.db.model.*;
-import org.gagauz.tracker.web.security.Secured;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.tapestry5.annotations.Persist;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.gagauz.tracker.web.security.Secured;
+
+import com.gagauz.tracker.beans.dao.FeatureDao;
+import com.gagauz.tracker.beans.dao.RoleGroupDao;
+import com.gagauz.tracker.beans.dao.StageDao;
+import com.gagauz.tracker.beans.dao.VersionDao;
+import com.gagauz.tracker.db.model.AccessRole;
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.RoleGroup;
+import com.gagauz.tracker.db.model.Stage;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.Version;
+
 @Secured({AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN})
 public class ProjectInfo {
+
+    @Component(parameters = { "id=literal:createVersionZone" })
+    @Property(write = false)
+    private Zone modalZone;
 
     @Property
     private Project project;

@@ -1,7 +1,12 @@
 package com.gagauz.tracker.web.components;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.tapestry5.*;
+import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.ComponentEventCallback;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.EventContext;
+import org.apache.tapestry5.Link;
+import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
@@ -16,7 +21,7 @@ public class ModalLink extends AbstractLink {
     @Parameter(defaultPrefix = BindingConstants.COMPONENT, allowNull = false, required = true)
     private Zone zone;
 
-    @Parameter(defaultPrefix = BindingConstants.LITERAL, allowNull = false, required = true)
+    @Parameter(defaultPrefix = BindingConstants.LITERAL)
     private String event;
 
     @Parameter
@@ -42,19 +47,29 @@ public class ModalLink extends AbstractLink {
             @Override
             public boolean handleResult(Object result) {
                 ajaxResponseRenderer
-                        .addRender(Layout.MODAL_BODY_ID, zone.getBody())
-                        .addCallback(new JavaScriptCallback() {
-                            @Override
-                            public void run(JavaScriptSupport javascriptSupport) {
-                                javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-                            }
-                        });
+                .addRender(Layout.MODAL_BODY_ID, zone.getBody())
+                .addCallback(new JavaScriptCallback() {
+                    @Override
+                    public void run(JavaScriptSupport javascriptSupport) {
+                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
+                    }
+                });
                 return true;
             }
         };
 
-        resources.getContainerResources().triggerContextEvent(event, context, handler);
-
+        if (null != event) {
+            resources.getContainerResources().triggerContextEvent(event, context, handler);
+        } else {
+            ajaxResponseRenderer
+                    .addRender(Layout.MODAL_BODY_ID, zone.getBody())
+                    .addCallback(new JavaScriptCallback() {
+                        @Override
+                        public void run(JavaScriptSupport javascriptSupport) {
+                            javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
+                        }
+                    });
+        }
     }
 
     void beginRender(MarkupWriter writer) {

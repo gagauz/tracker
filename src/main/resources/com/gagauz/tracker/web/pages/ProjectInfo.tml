@@ -1,7 +1,7 @@
 <html t:type="layout" title="${project.name}" t:sidebarTitle="Framework Version"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 
-	<p:header>Roadmap</p:header>
+	<p:header>${project.name}</p:header>
 	
 	<p:sidebar>
 		<t:ProjectMenu project="project" />
@@ -14,17 +14,13 @@
 		</t:if>
 	</div>
 	<div>
-		<t:if test="newVersion">
-			<t:BeanEditForm class="form-horizontal" t:id="versionForm"
-				object="newVersion" exclude="id, created, updated" cancel="true" />
-		</t:if>
-		<div class="btn-group">
-			<t:eventlink class="btn btn-primary" t:event="createFeature">
+		<div class="btn-group1">
+			<t:eventlink class="btn btn-default" t:event="createFeature">
 				${message:create-feature}
-			</t:eventlink>
-			<t:eventlink class="btn btn-primary" t:event="createVersion">
+			</t:eventlink>&#160;
+			<t:modallink class="btn btn-default" zone="modalZone">
 				${message:create-version}
-			</t:eventlink>
+			</t:modallink>
 		</div>
 	</div>
 	<hr />
@@ -32,6 +28,10 @@
 
 	<t:ProjectMap project="project" />
 
-
+	<div style="display:none">
+		<div t:id="modalZone" class="ticket-popup">
+			<t:version.VersionForm project="project" version="newVersion" />
+		</div>
+	</div>
 
 </html>
