@@ -11,6 +11,6 @@ public class PathUtils {
     }
 
     public static String getProjectBaseDir(Project project) {
-        return getAppBaseDir() + SEP + project.getKey1();
+        return getAppBaseDir() + SEP + project.getCode();
     }
 }

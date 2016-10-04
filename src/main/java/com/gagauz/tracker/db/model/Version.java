@@ -17,83 +17,91 @@ import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table(name = "version", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"project_id", "name"})
+		@UniqueConstraint(columnNames = { "project_id", "name" })
 })
-public class Version extends TimeTrackedEntity {
+public class Version extends TimeTrackedEntity implements Comparable<Version> {
 
-    private Project project;
-    private String name;
-    private String branch;
-    private List<FeatureVersion> featureVersion;
-    private Date releaseDate = new Date();
-    private boolean released = false;
+	private Project project;
+	private String name;
+	private String cvsBranchName;
+	private List<FeatureVersion> featureVersion;
+	private Date releaseDate = new Date();
+	private boolean released = false;
 
-    public Version() {
-    }
+	public Version() {
+	}
 
-    public Version(int id) {
-        setId(id);
-    }
+	public Version(int id) {
+		setId(id);
+	}
 
-    @ForeignKey(name = "fk_version_project")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    public Project getProject() {
-        return project;
-    }
+	@ForeignKey(name = "fk_version_project")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	public Project getProject() {
+		return this.project;
+	}
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
+	public void setProject(Project project) {
+		this.project = project;
+	}
 
-    @Column(nullable = false)
-    public String getName() {
-        return name;
-    }
+	@Column(nullable = false)
+	public String getName() {
+		return this.name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @Column
-    public String getBranch() {
-        return branch;
-    }
+	@Column
+	public String getCvsBranchName() {
+		if (null == this.cvsBranchName) {
+			this.cvsBranchName = getProject().getCode() + '-' + getName();
+		}
+		return this.cvsBranchName;
+	}
 
-    public void setBranch(String branch) {
-        this.branch = branch;
-    }
+	public void setCvsBranchName(String branch) {
+		this.cvsBranchName = branch;
+	}
 
-    @ForeignKey(name = "fk_version_features")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.version")
-    public List<FeatureVersion> getFeatureVersions() {
-        return featureVersion;
-    }
+	@ForeignKey(name = "fk_version_features")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id.versionId")
+	public List<FeatureVersion> getFeatureVersions() {
+		return this.featureVersion;
+	}
 
-    public void setFeatureVersions(List<FeatureVersion> featureVersion) {
-        this.featureVersion = featureVersion;
-    }
+	public void setFeatureVersions(List<FeatureVersion> featureVersion) {
+		this.featureVersion = featureVersion;
+	}
 
-    @Column
-    @Temporal(TemporalType.DATE)
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
+	@Column
+	@Temporal(TemporalType.DATE)
+	public Date getReleaseDate() {
+		return this.releaseDate;
+	}
 
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+	}
 
-    @Column
-    public boolean isReleased() {
-        return released;
-    }
+	@Column
+	public boolean isReleased() {
+		return this.released;
+	}
 
-    public void setReleased(boolean released) {
-        this.released = released;
-    }
+	public void setReleased(boolean released) {
+		this.released = released;
+	}
 
-    @Override
-    public String toString() {
-        return "Version<id=" + getId() + ">";
-    }
+	@Override
+	public String toString() {
+		return "Version<id=" + getId() + ">";
+	}
+
+	@Override
+	public int compareTo(Version o) {
+		return getName().compareTo(o.getName());
+	}
 }

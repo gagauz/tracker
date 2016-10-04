@@ -40,222 +40,222 @@ import com.gagauz.tracker.utils.Comparators;
 @Import(module = "bootstrap/dropdown")
 public class VersionUserMap {
 
-    @Parameter(allowNull = false, required = true, principal = true)
-    private Version version;
+	@Parameter(allowNull = false, required = true, principal = true)
+	private Version version;
 
-    @Component(parameters = {"id=literal:ticketZone", "show=popup", "update=popup"})
-    private Zone ticketZone;
+	@Component(parameters = { "id=literal:ticketZone", "show=popup", "update=popup" })
+	private Zone ticketZone;
 
-    @Property
-    private Feature feature;
+	@Property
+	private Feature feature;
 
-    private User user;
+	private User user;
 
-    private Ticket ticket;
+	private Ticket ticket;
 
-    @Property
-    private int estimated;
+	@Property
+	private int estimated;
 
-    @Property
-    private int progress;
+	@Property
+	private int progress;
 
-    @Property
-    private Ticket viewTicket;
+	@Property
+	private Ticket viewTicket;
 
-    @Property
-    private Entry<TicketStatus, Integer> entry;
+	@Property
+	private Entry<TicketStatus, Integer> entry;
 
-    @Inject
-    private FeatureVersionDao featureVersionDao;
+	@Inject
+	private FeatureVersionDao featureVersionDao;
 
-    @Inject
-    private TicketDao ticketDao;
+	@Inject
+	private TicketDao ticketDao;
 
-    @Inject
-    private Messages messages;
+	@Inject
+	private Messages messages;
 
-    @Inject
-    private UserDao userDao;
+	@Inject
+	private UserDao userDao;
 
-    @SessionState
-    private User securityUser;
+	@SessionState
+	private User securityUser;
 
-    @Inject
-    private ComponentResources resources;
+	@Inject
+	private ComponentResources resources;
 
-    @Inject
-    private ToolsService toolsService;
+	@Inject
+	private ToolsService toolsService;
 
-    @Inject
-    private AjaxResponseRenderer ajaxResponseRenderer;
+	@Inject
+	private AjaxResponseRenderer ajaxResponseRenderer;
 
-    @Inject
-    private JavaScriptSupport javaScriptSupport;
+	@Inject
+	private JavaScriptSupport javaScriptSupport;
 
-    private int endTime;
-    private int rowEndTime;
-    private int minTime;
+	private int endTime;
+	private int rowEndTime;
+	private int minTime;
 
-    @Property
-    private TicketStatus status;
+	@Property
+	private TicketStatus status;
 
-    private Set<TicketStatus> allStatuses;
-    private Map<User, List<Ticket>> userTicketMap;
-    private Map<User, Map<TicketStatus, Integer>> userTicketStatus;
+	private Set<TicketStatus> allStatuses;
+	private Map<User, List<Ticket>> userTicketMap;
+	private Map<User, Map<TicketStatus, Integer>> userTicketStatus;
 
-    private Map<User, Integer[]> userTotalTimes;
+	private Map<User, Integer[]> userTotalTimes;
 
-    @Cached
-    public Collection<User> getUsers() {
-        if (null == userTicketMap) {
-            allStatuses = CollectionFactory.newSet();
-            userTicketMap = CollectionFactory.newMap();
-            userTicketStatus = CollectionFactory.newMap();
-            userTotalTimes = CollectionFactory.newMap();
-            minTime = Integer.MAX_VALUE;
-            for (Ticket ticket : ticketDao.findByVersion(version)) {
-                allStatuses.add(ticket.getStatus());
-                List<Ticket> tickets = userTicketMap.get(ticket.getOwner());
+	@Cached
+	public Collection<User> getUsers() {
+		if (null == this.userTicketMap) {
+			this.allStatuses = CollectionFactory.newSet();
+			this.userTicketMap = CollectionFactory.newMap();
+			this.userTicketStatus = CollectionFactory.newMap();
+			this.userTotalTimes = CollectionFactory.newMap();
+			this.minTime = Integer.MAX_VALUE;
+			for (Ticket ticket : this.ticketDao.findByVersion(this.version)) {
+				this.allStatuses.add(ticket.getStatus());
+				List<Ticket> tickets = this.userTicketMap.get(ticket.getOwner());
 
-                Integer[] times = userTotalTimes.get(ticket.getOwner());
-                if (null == times) {
-                    times = new Integer[] {0, 0};
-                    userTotalTimes.put(ticket.getOwner(), times);
-                }
+				Integer[] times = this.userTotalTimes.get(ticket.getOwner());
+				if (null == times) {
+					times = new Integer[] { 0, 0 };
+					this.userTotalTimes.put(ticket.getOwner(), times);
+				}
 
-                times[0] += ticket.getEstimate();
-                times[1] += ticket.getProgress();
+				times[0] += ticket.getEstimate();
+				times[1] += ticket.getProgress();
 
-                Map<TicketStatus, Integer> statusMap = userTicketStatus.get(ticket.getOwner());
-                if (null == statusMap) {
-                    statusMap = CollectionFactory.newMap();
-                    userTicketStatus.put(ticket.getOwner(), statusMap);
-                }
-                Integer i = statusMap.get(ticket.getStatus());
-                if (null == i) {
-                    i = 0;
-                }
-                ++i;
-                statusMap.put(ticket.getStatus(), i);
+				Map<TicketStatus, Integer> statusMap = this.userTicketStatus.get(ticket.getOwner());
+				if (null == statusMap) {
+					statusMap = CollectionFactory.newMap();
+					this.userTicketStatus.put(ticket.getOwner(), statusMap);
+				}
+				Integer i = statusMap.get(ticket.getStatus());
+				if (null == i) {
+					i = 0;
+				}
+				++i;
+				statusMap.put(ticket.getStatus(), i);
 
-                if (null == tickets) {
-                    tickets = new ArrayList<>();
-                    userTicketMap.put(ticket.getOwner(), tickets);
-                }
-                tickets.add(ticket);
-                minTime = Math.min(minTime, ticket.getEstimate() - ticket.getProgress());
-            }
-            minTime = 80 / (minTime + 1);
-        }
-        List<User> users = new ArrayList<User>(userTicketMap.keySet());
-        Collections.sort(users, Comparators.USER_BY_NAME_COMPARATOR);
+				if (null == tickets) {
+					tickets = new ArrayList<>();
+					this.userTicketMap.put(ticket.getOwner(), tickets);
+				}
+				tickets.add(ticket);
+				this.minTime = Math.min(this.minTime, ticket.getEstimate() - ticket.getProgress());
+			}
+			this.minTime = 80 / (this.minTime + 1);
+		}
+		List<User> users = new ArrayList<>(this.userTicketMap.keySet());
+		Collections.sort(users, Comparators.USER_BY_NAME_COMPARATOR);
 
-        return users;
-    }
+		return users;
+	}
 
-    public Collection<TicketStatus> getFilterStatuses() {
-        getUsers();
-        return allStatuses;
-    }
+	public Collection<TicketStatus> getFilterStatuses() {
+		getUsers();
+		return this.allStatuses;
+	}
 
-    public int getTicketsWidth() {
-        return rowEndTime;
-    }
+	public int getTicketsWidth() {
+		return this.rowEndTime;
+	}
 
-    public Collection<Ticket> getUserTickets() {
-        return userTicketMap.get(user);
-    }
+	public Collection<Ticket> getUserTickets() {
+		return this.userTicketMap.get(this.user);
+	}
 
-    public Set<Entry<TicketStatus, Integer>> getStatuses() {
-        return userTicketStatus.get(user).entrySet();
-    }
+	public Set<Entry<TicketStatus, Integer>> getStatuses() {
+		return this.userTicketStatus.get(this.user).entrySet();
+	}
 
-    public Integer getTotalEstimate() {
-        return userTotalTimes.get(user)[0];
-    }
+	public Integer getTotalEstimate() {
+		return this.userTotalTimes.get(this.user)[0];
+	}
 
-    public Integer getTotalProgress() {
-        return userTotalTimes.get(user)[1];
-    }
+	public Integer getTotalProgress() {
+		return this.userTotalTimes.get(this.user)[1];
+	}
 
-    public String getRemainTime() {
-        Integer[] times = userTotalTimes.get(user);
-        if (times[0] == 0) {
-            return times[1] == 0 ? "0" : "∞";
-        }
-        return toolsService.getTime(times[0] - times[1]);
-    }
+	public String getRemainTime() {
+		Integer[] times = this.userTotalTimes.get(this.user);
+		if (times[0] == 0) {
+			return times[1] == 0 ? "0" : "∞";
+		}
+		return this.toolsService.getTime(times[0] - times[1]);
+	}
 
-    void onCreateFeatureVersion(Feature feature, Version version) {
-        FeatureVersion featureVersion = new FeatureVersion();
-        featureVersion.getId().setFeature(feature);
-        featureVersion.getId().setVersion(version);
-        User user = new User();
-        int id = securityUser.getId();
-        user.setId(id);
-        featureVersion.setCreator(user);
-        featureVersionDao.save(featureVersion);
-    }
+	void onCreateFeatureVersion(Feature feature, Version version) {
+		FeatureVersion featureVersion = new FeatureVersion();
+		featureVersion.setFeature(feature);
+		featureVersion.setVersion(version);
+		User user = new User();
+		int id = this.securityUser.getId();
+		user.setId(id);
+		featureVersion.setCreator(user);
+		this.featureVersionDao.save(featureVersion);
+	}
 
-    public boolean isDraggable() {
-        return true;
-    }
+	public boolean isDraggable() {
+		return true;
+	}
 
-    public String getTicketsTime() {
-        return toolsService.getTime(rowEndTime);
-    }
+	public String getTicketsTime() {
+		return this.toolsService.getTime(this.rowEndTime);
+	}
 
-    public String getTicketTime() {
-        return toolsService.getTime(ticket.getEstimate() - ticket.getProgress());
-    }
+	public String getTicketTime() {
+		return this.toolsService.getTime(this.ticket.getEstimate() - this.ticket.getProgress());
+	}
 
-    public String getEventUrl() {
-        return resources.createEventLink("change").toRedirectURI();
-    }
+	public String getEventUrl() {
+		return this.resources.createEventLink("change").toRedirectURI();
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public User getUser() {
+		return this.user;
+	}
 
-    public void setUser(User user) {
-        endTime = Math.max(rowEndTime, endTime);
-        rowEndTime = 0;
+	public void setUser(User user) {
+		this.endTime = Math.max(this.rowEndTime, this.endTime);
+		this.rowEndTime = 0;
 
-        this.user = user;
-    }
+		this.user = user;
+	}
 
-    public Ticket getTicket() {
-        return ticket;
-    }
+	public Ticket getTicket() {
+		return this.ticket;
+	}
 
-    public void setTicket(Ticket ticket) {
-        rowEndTime += ticket.getEstimate() - ticket.getProgress();
-        this.ticket = ticket;
-    }
+	public void setTicket(Ticket ticket) {
+		this.rowEndTime += ticket.getEstimate() - ticket.getProgress();
+		this.ticket = ticket;
+	}
 
-    void afterRender() {
-        javaScriptSupport.require("page/VersionUserMap").invoke("init").with(getEventUrl());
-    }
+	void afterRender() {
+		this.javaScriptSupport.require("page/VersionUserMap").invoke("init").with(getEventUrl());
+	}
 
-    void onChange(@RequestParameter(value = "user") Integer userId, @RequestParameter(value = "ticket") Integer ticketId) {
-        User user = userDao.findById(userId);
-        Ticket ticket = ticketDao.findById(ticketId);
-        if (null != ticket) {
-            ticket.setOwner(user);
-        }
-    }
+	void onChange(@RequestParameter(value = "user") Integer userId, @RequestParameter(value = "ticket") Integer ticketId) {
+		User user = this.userDao.findById(userId);
+		Ticket ticket = this.ticketDao.findById(ticketId);
+		if (null != ticket) {
+			ticket.setOwner(user);
+		}
+	}
 
-    @Ajax
-    void onViewTicket(Ticket ticket) {
-        viewTicket = ticket;
-        ajaxResponseRenderer
-        .addRender(Layout.MODAL_BODY_ID, ticketZone.getBody())
-        .addCallback(new JavaScriptCallback() {
-            @Override
-            public void run(JavaScriptSupport javascriptSupport) {
-                javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-            }
-        });
-    }
+	@Ajax
+	void onViewTicket(Ticket ticket) {
+		this.viewTicket = ticket;
+		this.ajaxResponseRenderer
+				.addRender(Layout.MODAL_BODY_ID, this.ticketZone.getBody())
+				.addCallback(new JavaScriptCallback() {
+					@Override
+					public void run(JavaScriptSupport javascriptSupport) {
+						javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
+					}
+				});
+	}
 
 }

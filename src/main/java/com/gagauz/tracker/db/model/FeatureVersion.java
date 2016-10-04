@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -19,27 +20,23 @@ public class FeatureVersion implements Serializable {
 	@Embeddable
 	public static class FeatureVersionId implements Serializable {
 		private static final long serialVersionUID = 1939148011273312467L;
-		private Feature feature;
-		private Version version;
+		private int featureId;
+		private int versionId;
 
-		@ForeignKey(name = "fk_featureVersion_feature")
-		@ManyToOne(fetch = FetchType.LAZY)
-		public Feature getFeature() {
-			return feature;
+		public int getFeatureId() {
+			return this.featureId;
 		}
 
-		public void setFeature(Feature feature) {
-			this.feature = feature;
+		public void setFeatureId(int featureId) {
+			this.featureId = featureId;
 		}
 
-		@ForeignKey(name = "fk_featureVersion_version")
-		@ManyToOne(fetch = FetchType.LAZY)
-		public Version getVersion() {
-			return version;
+		public int getVersionId() {
+			return this.versionId;
 		}
 
-		public void setVersion(Version version) {
-			this.version = version;
+		public void setVersionId(int versionId) {
+			this.versionId = versionId;
 		}
 
 		@Override
@@ -48,7 +45,12 @@ public class FeatureVersion implements Serializable {
 				return this == obj;
 			}
 			FeatureVersionId other = (FeatureVersionId) obj;
-			return other.getFeature().equals(feature) && other.getVersion().equals(version);
+			return other.getFeatureId() == this.featureId && other.getVersionId() == this.versionId;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(this.featureId) + '_' + this.versionId;
 		}
 
 	}
@@ -56,13 +58,15 @@ public class FeatureVersion implements Serializable {
 	private static final long serialVersionUID = -8693198398126115278L;
 	private FeatureVersionId id;
 	private User creator;
+	private Feature feature;
+	private Version version;
 
 	@EmbeddedId
 	public FeatureVersionId getId() {
-		if (null == id) {
-			id = new FeatureVersionId();
+		if (null == this.id) {
+			this.id = new FeatureVersionId();
 		}
-		return id;
+		return this.id;
 	}
 
 	public void setId(FeatureVersionId id) {
@@ -72,7 +76,7 @@ public class FeatureVersion implements Serializable {
 	@ForeignKey(name = "fk_featureVersion_creator")
 	@ManyToOne(fetch = FetchType.LAZY)
 	public User getCreator() {
-		return creator;
+		return this.creator;
 	}
 
 	public void setCreator(User creator) {
@@ -81,21 +85,35 @@ public class FeatureVersion implements Serializable {
 
 	@Transient
 	public Project getProject() {
-		return getId().getFeature().getProject();
+		return getFeature().getProject();
 	}
 
-	@Transient
-	public Version getVersion() {
-		return getId().getVersion();
-	}
-
-	@Transient
+	@ForeignKey(name = "fk_featureVersion_feature")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "featureId", insertable = false, updatable = false, referencedColumnName = "id")
 	public Feature getFeature() {
-		return getId().getFeature();
+		return this.feature;
+	}
+
+	public void setFeature(Feature feature) {
+		this.feature = feature;
+		this.getId().featureId = null != feature ? feature.getId() : 0;
+	}
+
+	@ForeignKey(name = "fk_featureVersion_version")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "versionId", insertable = false, updatable = false, referencedColumnName = "id")
+	public Version getVersion() {
+		return this.version;
+	}
+
+	public void setVersion(Version version) {
+		this.version = version;
+		this.getId().versionId = null != version ? version.getId() : 0;
 	}
 
 	@Override
 	public String toString() {
-		return "FeatureVersion <feature=" + id.getFeature() + ", version=" + id.getVersion() + ">";
+		return "FeatureVersion <feature=" + this.getId().getFeatureId() + ", version=" + this.getId().getVersionId() + ">";
 	}
 }

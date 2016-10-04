@@ -101,7 +101,7 @@ public class ProjectInfo {
                 return name;
             }
         }
-        return project.getKey1() + "-1";
+        return project.getCode() + "-1";
     }
 
     private static String getNextVersion(String lastVersion) {
@@ -121,7 +121,7 @@ public class ProjectInfo {
         Version lastVersion = versionDao.findLast(project);
         String nextName = getNextVersion(project, lastVersion);
         newVersion.setName(nextName);
-        newVersion.setBranch(nextName);
+        newVersion.setCvsBranchName(nextName);
     }
 
     void onSuccessFromVersionForm() {

@@ -12,7 +12,7 @@ import java.util.List;
 public class Project implements Identifiable {
 
     private int id;
-    private String key1;
+    private String code;
     private String name;
     private CvsRepo cvsRepo;
     private List<Version> versions;
@@ -33,12 +33,12 @@ public class Project implements Identifiable {
     }
 
     @Column(nullable = false, unique = true)
-    public String getKey1() {
-        return key1;
+    public String getCode() {
+        return code;
     }
 
-    public void setKey1(String key1) {
-        this.key1 = key1;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Column(nullable = false)

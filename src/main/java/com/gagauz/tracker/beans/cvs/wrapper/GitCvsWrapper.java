@@ -97,7 +97,7 @@ public class GitCvsWrapper implements CvsWrapper {
 
     @Override
     public List<Commit> getCommits(Ticket ticket) {
-        String grep = ticket.getFeature().getProject().getKey1() + "\\s#" + ticket.getId();
+        String grep = ticket.getFeature().getProject().getCode() + "\\s#" + ticket.getId();
         String log = log(grep);
         List<Commit> commits = new ArrayList<>();
         for (String cl : log.split(">>>")) {

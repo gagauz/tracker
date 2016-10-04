@@ -125,7 +125,7 @@ public class SvnCvsWrapper implements CvsWrapper {
 
     @Override
     public List<Commit> getCommits(Ticket ticket) {
-        String grep = ticket.getFeature().getProject().getKey1() + " #" + ticket.getId();
+        String grep = ticket.getFeature().getProject().getCode() + " #" + ticket.getId();
         String log = log(grep);
         List<Commit> commits = new ArrayList<>();
         for (String cl : StringUtils.split(log, "------------------------------------------------------------------------")) {
