@@ -6,19 +6,13 @@
     <h1>Типы заявок</h1>
 	<t:beaneditform t:id="form" object="ticketType" cancel="true" exclude="id,created,updated" />
     
-	<h2>Типы заявок общие, для проекта <t:if test="project">${project.name}</t:if></h2>
+	<h2>Типы заявок для проекта</h2>
 	<t:grid source="getTicketType1()" row="ticketTypeRow" add="edit" class="table table-striped">
     	<p:editCell>
     	<t:eventlink event="edit" context="[ticketTypeRow]">${message:edit}</t:eventlink>
     	</p:editCell>
     </t:grid>
-    
-	<h2>Типы заявок общие, для всех проектов</h2>
-    <t:grid source="getTicketType2()" row="ticketTypeRow" add="edit" class="table table-striped">
-    	<p:editCell>
-    	<t:eventlink event="edit" context="[ticketTypeRow]">${message:edit}</t:eventlink>
-    	</p:editCell>
-    </t:grid>
+   
 
 
 </html>

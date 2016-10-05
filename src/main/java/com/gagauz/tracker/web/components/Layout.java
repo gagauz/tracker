@@ -38,7 +38,7 @@ public class Layout {
 
 	@Property
 	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private Block mainTitle;
+	private Block navBar;
 
 	@Property
 	@Parameter(defaultPrefix = BindingConstants.LITERAL)

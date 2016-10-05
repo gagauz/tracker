@@ -1,86 +1,81 @@
 package com.gagauz.tracker.beans.scenarios;
 
-import com.gagauz.tracker.beans.dao.TicketStatusDao;
-import com.gagauz.tracker.beans.dao.TicketTypeDao;
-import com.gagauz.tracker.beans.setup.DataBaseScenario;
-import com.gagauz.tracker.db.model.TicketStatus;
-import com.gagauz.tracker.db.model.TicketType;
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
+import com.gagauz.tracker.beans.dao.TicketStatusDao;
+import com.gagauz.tracker.beans.setup.DataBaseScenario;
+import com.gagauz.tracker.db.model.TicketStatus;
 
 @Service
 public class ScStatus extends DataBaseScenario {
 
-    @Autowired
-    private TicketStatusDao statusDao;
+	@Autowired
+	private TicketStatusDao statusDao;
 
-    @Autowired
-    private TicketTypeDao typeDao;
+	@Autowired
+	private ScVersion scVersion;
 
-    @Override
-    protected void execute() {
-        TicketStatus open = create("Open", null);
-        TicketStatus reopen = create("Reopen", null);
-        TicketStatus inprog = create("In progress", null);
+	@Override
+	protected DataBaseScenario[] getDependsOn() {
+		return new DataBaseScenario[] { this.scVersion };
+	}
 
-        TicketStatus done = create("Done", null);
-        TicketStatus cant = create("Cannot reproduce", null);
-        TicketStatus invalid = create("Invalid", null);
-        TicketStatus duplicate = create("Duplicate", null);
+	@Override
+	protected void execute() {
+		TicketStatus open = create("Open", null);
+		TicketStatus reopen = create("Reopen", null);
+		TicketStatus inprog = create("In progress", null);
 
-        TicketStatus closed = create("Closed", null);
-        open.getAllowedFrom().add(null);
-        open.setAllowedTo(Arrays.asList(inprog));
+		TicketStatus done = create("Done", null);
+		TicketStatus cant = create("Cannot reproduce", null);
+		TicketStatus invalid = create("Invalid", null);
+		TicketStatus duplicate = create("Duplicate", null);
 
-        reopen.setAllowedFrom(Arrays.asList(done, cant, invalid, duplicate, closed));
-        reopen.setAllowedTo(open.getAllowedTo());
+		TicketStatus closed = create("Closed", null);
+		open.getAllowedFrom().add(null);
+		open.setAllowedTo(Arrays.asList(inprog));
 
-        inprog.setAllowedFrom(Arrays.asList(open, reopen));
-        inprog.setAllowedTo(Arrays.asList(done, cant, invalid, duplicate));
+		reopen.setAllowedFrom(Arrays.asList(done, cant, invalid, duplicate, closed));
+		reopen.setAllowedTo(open.getAllowedTo());
 
-        done.setAllowedFrom(Arrays.asList(inprog, reopen, open));
-        done.setAllowedTo(Arrays.asList(reopen, closed));
+		inprog.setAllowedFrom(Arrays.asList(open, reopen));
+		inprog.setAllowedTo(Arrays.asList(done, cant, invalid, duplicate));
 
-        cant.setAllowedFrom(done.getAllowedFrom());
-        cant.setAllowedTo(done.getAllowedTo());
+		done.setAllowedFrom(Arrays.asList(inprog, reopen, open));
+		done.setAllowedTo(Arrays.asList(reopen, closed));
 
-        invalid.setAllowedFrom(done.getAllowedFrom());
-        invalid.setAllowedTo(done.getAllowedTo());
+		cant.setAllowedFrom(done.getAllowedFrom());
+		cant.setAllowedTo(done.getAllowedTo());
 
-        duplicate.setAllowedFrom(done.getAllowedFrom());
-        duplicate.setAllowedTo(done.getAllowedTo());
+		invalid.setAllowedFrom(done.getAllowedFrom());
+		invalid.setAllowedTo(done.getAllowedTo());
 
-        closed.setAllowedFrom(Arrays.asList(done, cant, invalid, duplicate));
-        closed.setAllowedTo(Arrays.asList(reopen));
+		duplicate.setAllowedFrom(done.getAllowedFrom());
+		duplicate.setAllowedTo(done.getAllowedTo());
 
-        statusDao.flush();
+		closed.setAllowedFrom(Arrays.asList(done, cant, invalid, duplicate));
+		closed.setAllowedTo(Arrays.asList(reopen));
 
-        create("Task");
-        create("Bug");
-    }
+		this.statusDao.flush();
 
-    private TicketStatus create(String name, String description, Collection<TicketStatus>... lists) {
-        TicketStatus status = new TicketStatus();
-        status.setName(name);
-        status.setDescription(description);
-        if (lists.length > 0) {
-            status.setAllowedFrom(lists[0]);
-        }
-        if (lists.length > 1) {
-            status.setAllowedFrom(lists[1]);
-        }
-        statusDao.save(status);
-        return status;
-    }
+	}
 
-    private TicketType create(String name) {
-        TicketType type = new TicketType();
-        type.setName(name);
-        typeDao.save(type);
-        return type;
-    }
+	private TicketStatus create(String name, String description, Collection<TicketStatus>... lists) {
+		TicketStatus status = new TicketStatus();
+		status.setName(name);
+		status.setDescription(description);
+		if (lists.length > 0) {
+			status.setAllowedFrom(lists[0]);
+		}
+		if (lists.length > 1) {
+			status.setAllowedFrom(lists[1]);
+		}
+		this.statusDao.save(status);
+		return status;
+	}
 
 }

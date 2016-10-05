@@ -1,8 +1,12 @@
 <html t:type="layout" title="${project.name}" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 
-	<p:mainTitle>${project.name}</p:mainTitle>
+	<p:NavBar>
+		<t:project.NavBar />
+	</p:NavBar>
 
-	<p:header>${project.name}</p:header>
+	<p:header>
+		${project.name}
+	</p:header>
 	
 	<div>
 		<div class="btn-toolbar">

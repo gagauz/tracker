@@ -77,9 +77,6 @@ public class ScVersion extends DataBaseScenario {
 	@Autowired
 	private ScUser scUser;
 
-	@Autowired
-	private ScStatus scStatus;
-
 	private String[] fnames = { "Страница регистрации и авторизация", "Каталог товаров", "Главная страница",
 			"Страница успешного оформления заказа",
 			"Страница оформления заказа", "Личный кабинет - Персональные данные", "Личный кабинет - Адреса", "Личный кабинет - Заказы" };
@@ -93,6 +90,15 @@ public class ScVersion extends DataBaseScenario {
 			Project project = new Project();
 			project.setCode("TRACKER");
 			project.setName("Трекер");
+			this.projectDao.saveNoCommit(project);
+
+			TicketType feature1 = create("Feature", project, null);
+			create("Dev task", project, feature1);
+			create("SA task", project, feature1);
+			create("BA task", project, feature1);
+			create("QA task", project, feature1);
+			create("Bug", project, feature1);
+
 			CvsRepo repo = new CvsRepo();
 			if (true) {
 				repo.setType(CvsType.GIT);
@@ -254,9 +260,24 @@ public class ScVersion extends DataBaseScenario {
 		return RandomUtils.getRandomObject(this.userHash.values());
 	}
 
+	private TicketType create(String name, Project project, TicketType parent) {
+		TicketType type = new TicketType();
+		type.setName(name);
+		type.setProject(project);
+		type.setParent(parent);
+		this.typeDao.save(type);
+
+		if (null == this.typeHash) {
+			this.typeHash = new HashMap<>();
+		}
+		this.typeHash.put(type.getId(), type);
+
+		return type;
+	}
+
 	@Override
 	protected DataBaseScenario[] getDependsOn() {
-		return new DataBaseScenario[] { this.scUser, this.scStatus };
+		return new DataBaseScenario[] { this.scUser };
 	}
 
 }

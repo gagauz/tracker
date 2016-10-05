@@ -1,12 +1,11 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 <nav>
-	<ul>
-		<li><t:pagelink page="ProjectInfo" context="project">Road map</t:pagelink></li>
-		<li><t:pagelink page="RoleGroupList" context="[project, null]">Roles</t:pagelink></li>
-		<li><t:pagelink page="UserList">Users</t:pagelink></li>
-		<li><t:pagelink page="WorkflowInfo" context="project">Workflow</t:pagelink></li>
-		<li><t:pagelink page="FeaturesList" context="project">Features</t:pagelink></li>
-		<li><t:pagelink page="TicketTypeEdit" context="project">Ticket type</t:pagelink></li>
+	<ul class="nav">
+		<li><t:pagelink page="ProjectEdit" context="[project]">Project general</t:pagelink></li>
+		<li><t:pagelink page="ProjectEdit" context="[project,'roles']">Roles</t:pagelink></li>
+		<li><t:pagelink page="ProjectEdit" context="[project,'users']">Users</t:pagelink></li>
+		<li><t:pagelink page="ProjectEdit" context="[project,'tickettypes']">Ticket types</t:pagelink></li>
+		<li><t:pagelink page="ProjectEdit" context="[project,'workflow']">Workflow</t:pagelink></li>
 		<t:body/>
 	</ul>
 </nav>

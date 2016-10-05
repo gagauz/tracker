@@ -1,4 +1,4 @@
-package com.gagauz.tracker.web.pages;
+package com.gagauz.tracker.web.components.ticket;
 
 import com.gagauz.tracker.beans.dao.TicketTypeDao;
 import com.gagauz.tracker.db.model.Project;

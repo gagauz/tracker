@@ -22,8 +22,8 @@
 						<span class="icon-bar"></span>
 					</button>
 					<div class="navbar-brand">
-						<t:if test="mainTitle">
-							<t:delegate to="mainTitle" />
+						<t:if test="navBar">
+							<t:delegate to="navBar" />
 							<p:else>
 								<a class="navbar-brand" href="/">Home</a>
 							</p:else>

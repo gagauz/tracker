@@ -9,28 +9,38 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "ticket_type", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"project_id", "name"})
+		@UniqueConstraint(columnNames = { "project_id", "name" })
 })
 public class TicketType extends TimeTrackedEntity {
-    private String name;
-    private Project project;
+	private String name;
+	private Project project;
+	private TicketType parent;
 
-    @Column(nullable = true)
-    public String getName() {
-        return name;
-    }
+	@Column(nullable = true)
+	public String getName() {
+		return this.name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    public Project getProject() {
-        return project;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	public Project getProject() {
+		return this.project;
+	}
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	public TicketType getParent() {
+		return this.parent;
+	}
+
+	public void setParent(TicketType parent) {
+		this.parent = parent;
+	}
 
 }

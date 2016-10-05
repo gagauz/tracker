@@ -1,0 +1,40 @@
+<html t:type="layout" title="${project.name}" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+
+	<p:NavBar>
+		<t:project.NavBar />
+	</p:NavBar>
+
+	<p:header>
+		${project.name}
+	</p:header>
+	
+	<p:sidebar>
+		<t:ProjectMenu project="project" />
+	</p:sidebar>
+
+	<t:if test="operation">
+		<t:delegate to="prop:operation" />
+	
+		<p:else>
+			
+		</p:else>
+	</t:if>
+	
+	<t:block t:id="users">
+	users block
+	</t:block>
+	<t:block t:id="roles">
+	roles block
+	</t:block>
+	<t:block t:id="workflow">
+	workflow block
+	</t:block>
+	<t:block t:id="tickettypes">
+		<t:ticket.TicketTypeEdit project="project" />
+	</t:block>
+	
+	<div t:id="modalZone">
+	
+	</div>
+
+</html>
