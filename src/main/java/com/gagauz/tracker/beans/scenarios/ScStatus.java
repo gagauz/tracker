@@ -13,69 +13,55 @@ import com.gagauz.tracker.db.model.TicketStatus;
 @Service
 public class ScStatus extends DataBaseScenario {
 
-	@Autowired
-	private TicketStatusDao statusDao;
+    @Autowired
+    private TicketStatusDao statusDao;
 
-	@Autowired
-	private ScVersion scVersion;
+    @Autowired
+    private ScVersion scVersion;
 
-	@Override
-	protected DataBaseScenario[] getDependsOn() {
-		return new DataBaseScenario[] { this.scVersion };
-	}
+    @Override
+    protected DataBaseScenario[] getDependsOn() {
+        return new DataBaseScenario[] { this.scVersion };
+    }
 
-	@Override
-	protected void execute() {
-		TicketStatus open = create("Open", null);
-		TicketStatus reopen = create("Reopen", null);
-		TicketStatus inprog = create("In progress", null);
+    @Override
+    protected void execute() {
+        TicketStatus open = create("Open", null);
+        TicketStatus reopen = create("Reopen", null);
+        TicketStatus inprog = create("In progress", null);
 
-		TicketStatus done = create("Done", null);
-		TicketStatus cant = create("Cannot reproduce", null);
-		TicketStatus invalid = create("Invalid", null);
-		TicketStatus duplicate = create("Duplicate", null);
+        TicketStatus done = create("Done", null);
+        TicketStatus invalid = create("Invalid", null);
+        TicketStatus incomplete = create("Incomplete", null);
 
-		TicketStatus closed = create("Closed", null);
-		open.getAllowedFrom().add(null);
-		open.setAllowedTo(Arrays.asList(inprog));
+        TicketStatus verified = create("Verified", null);
+        TicketStatus closed = create("Closed", null);
+        open.setAllowedTo(Arrays.asList(inprog, invalid, incomplete));
 
-		reopen.setAllowedFrom(Arrays.asList(done, cant, invalid, duplicate, closed));
-		reopen.setAllowedTo(open.getAllowedTo());
+        reopen.setAllowedTo(open.getAllowedTo());
 
-		inprog.setAllowedFrom(Arrays.asList(open, reopen));
-		inprog.setAllowedTo(Arrays.asList(done, cant, invalid, duplicate));
+        inprog.setAllowedTo(Arrays.asList(done, invalid, incomplete));
 
-		done.setAllowedFrom(Arrays.asList(inprog, reopen, open));
-		done.setAllowedTo(Arrays.asList(reopen, closed));
+        done.setAllowedTo(Arrays.asList(reopen, verified, closed));
 
-		cant.setAllowedFrom(done.getAllowedFrom());
-		cant.setAllowedTo(done.getAllowedTo());
+        invalid.setAllowedTo(Arrays.asList(reopen, closed));
 
-		invalid.setAllowedFrom(done.getAllowedFrom());
-		invalid.setAllowedTo(done.getAllowedTo());
+        verified.setAllowedTo(Arrays.asList(reopen, closed));
 
-		duplicate.setAllowedFrom(done.getAllowedFrom());
-		duplicate.setAllowedTo(done.getAllowedTo());
+        closed.setAllowedTo(Arrays.asList(reopen));
 
-		closed.setAllowedFrom(Arrays.asList(done, cant, invalid, duplicate));
-		closed.setAllowedTo(Arrays.asList(reopen));
+        this.statusDao.flush();
+    }
 
-		this.statusDao.flush();
-
-	}
-
-	private TicketStatus create(String name, String description, Collection<TicketStatus>... lists) {
-		TicketStatus status = new TicketStatus();
-		status.setName(name);
-		status.setDescription(description);
-		if (lists.length > 0) {
-			status.setAllowedFrom(lists[0]);
-		}
-		if (lists.length > 1) {
-			status.setAllowedFrom(lists[1]);
-		}
-		this.statusDao.save(status);
-		return status;
-	}
+    private TicketStatus create(String name, String description, Collection<TicketStatus>... lists) {
+        TicketStatus status = new TicketStatus();
+        status.setName(name);
+        status.setDescription(description);
+        if (lists.length > 0) {
+            status.setAllowedTo(lists[0]);
+        }
+        this.statusDao.save(status);
+        return status;
+    }
 
 }
