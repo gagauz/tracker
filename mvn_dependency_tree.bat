@@ -1,2 +1,2 @@
-call mvn -v dependency:tree > tree.txt
+mvn dependency:tree -Dverbose > log
 pause

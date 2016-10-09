@@ -1,8 +1,11 @@
 package com.gagauz.tracker.beans.scheduler;
 
-import com.gagauz.tracker.beans.common.HibernateSessionManager;
-import com.gagauz.tracker.beans.dao.ProjectDao;
-import com.gagauz.tracker.db.model.Project;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TriggerContext;
@@ -10,14 +13,11 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.gagauz.tracker.beans.dao.ProjectDao;
+import com.gagauz.tracker.db.model.Project;
 
 @Service
-public class SchedulerService extends HibernateSessionManager {
+public class SchedulerService {
 
     @Autowired
     private ProjectDao projectDao;
@@ -25,7 +25,7 @@ public class SchedulerService extends HibernateSessionManager {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(10, this);
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
 
     @Transactional
     public void update() {
@@ -35,7 +35,7 @@ public class SchedulerService extends HibernateSessionManager {
     public void updateNonTransactional() {
         executor.shutdownNow();
         List<Project> schedulers = projectDao.findAll();
-        executor = Executors.newScheduledThreadPool(schedulers.size(), this);
+        executor = Executors.newScheduledThreadPool(schedulers.size());
         for (final Project scheduler : schedulers) {
             executor.execute(createRunnable(scheduler.getId(), new CronTrigger("*/1 * * ? * ?")));
         }
@@ -111,8 +111,4 @@ public class SchedulerService extends HibernateSessionManager {
         };
     }
 
-    @Override
-    protected SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
 }

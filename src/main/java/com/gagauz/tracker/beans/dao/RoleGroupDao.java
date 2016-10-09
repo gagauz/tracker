@@ -12,7 +12,7 @@ public class RoleGroupDao extends AbstractDao<Integer, RoleGroup> {
 
     @SuppressWarnings("unchecked")
     public List<RoleGroup> findByProject(Project project) {
-        return getSession().createQuery("from RoleGroup r where project=:project or project is null").setEntity("project", project).list();
+        return getSession().createQuery("from RoleGroup r where project=:project").setEntity("project", project).list();
     }
 
 }

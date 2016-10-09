@@ -2,7 +2,7 @@
 <nav>
 	<ul class="nav">
 		<li><t:pagelink page="ProjectEdit" context="[project]">Project general</t:pagelink></li>
-		<li><t:pagelink page="ProjectEdit" context="[project,'roles']">Roles</t:pagelink></li>
+		<li><t:pagelink page="ProjectEdit" context="[project,'roles']">Role groups</t:pagelink></li>
 		<li><t:pagelink page="ProjectEdit" context="[project,'users']">Users</t:pagelink></li>
 		<li><t:pagelink page="ProjectEdit" context="[project,'tickettypes']">Ticket types</t:pagelink></li>
 		<li><t:pagelink page="ProjectEdit" context="[project,'workflow']">Workflow</t:pagelink></li>

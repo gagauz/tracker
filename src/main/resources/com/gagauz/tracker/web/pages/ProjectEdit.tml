@@ -11,6 +11,8 @@
 	<p:sidebar>
 		<t:ProjectMenu project="project" />
 	</p:sidebar>
+	
+	<t:Alerts showDismissAll="false"/>
 
 	<t:if test="operation">
 		<t:delegate to="prop:operation" />
@@ -24,13 +26,13 @@
 	users block
 	</t:block>
 	<t:block t:id="roles">
-	roles block
+		<t:role.RoleGroupEdit object="object" />
 	</t:block>
 	<t:block t:id="workflow">
-	workflow block
+		<t:ticket.TicketStatusEdit object="object" project="project" />
 	</t:block>
 	<t:block t:id="tickettypes">
-		<t:ticket.TicketTypeEdit project="project" />
+		<t:ticket.TicketTypeEdit object="object" />
 	</t:block>
 	
 	<div t:id="modalZone">

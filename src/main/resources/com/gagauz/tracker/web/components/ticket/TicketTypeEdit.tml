@@ -3,13 +3,24 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
       xmlns:p="tapestry:parameter">
 
-    <h1>Типы заявок</h1>
-	<t:beaneditform t:id="form" object="ticketType" cancel="true" exclude="id,created,updated" />
+	<t:beaneditform t:id="form" object="object" cancel="true" exclude="id,created,updated"  add="creator,assignee">
+	<p:creator>
+		<t:label for="creator" class="col-md-3" />
+		<div class="col-md-9">
+			<t:MultiSelect t:id="creator" model="groupModel" value="object.creator" class="form-control form-control"/>
+		</div>
+	</p:creator>
+	<p:assignee>
+		<t:label for="assignee" class="col-md-3" />
+		<div class="col-md-9">
+			<t:MultiSelect t:id="assignee" model="groupModel" value="object.assignee" class="form-control form-control"/>
+		</div>
+	</p:assignee>
+	</t:beaneditform>
     
-	<h2>Типы заявок для проекта</h2>
 	<t:grid source="getTicketType1()" row="ticketTypeRow" add="edit" class="table table-striped">
     	<p:editCell>
-    	<t:eventlink event="edit" context="[ticketTypeRow]">${message:edit}</t:eventlink>
+	    	<t:editlink row="ticketTypeRow" />
     	</p:editCell>
     </t:grid>
    

@@ -15,7 +15,7 @@
 				<table class="shadow-table">
 					<thead>
 						<tr>
-							<th class="empty-col">${msg:Feature version list}</th>
+							<th class="version-col">${msg:Feature version list}</th>
 							<t:loop source="versions" value="version">
 								<th class="version-col">
 									<div class="cell">
@@ -52,19 +52,20 @@
 											<div class="ticket-col-div">
 												<t:if test="featureVersion">
 													<div class="tickets">
-														<div class="title">
+														<div class="title btn-toolbar">
 															<t:if test="notReleased">
-																<t:ModalLink role="button" class="" t:zone="ticketZone" t:action="createTicket" t:context="[featureVersion]">
+																<t:ModalLink role="button" class="btn btn-default btn-xs" t:zone="ticketZone" t:action="createTicket" t:context="[featureVersion]">
 																	<i class="glyphicon glyphicon-plus text text-success"></i> ${message:create-task}
 																</t:ModalLink>
 															</t:if>
 														</div>
 														<ul>
+														
 															<t:foreach t:source="tickets" t:value="ticket" limit="5">
 																<li>
 																	<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
 																		<i class="glyphicon icon"></i>
-																		${ticket.key} [${ticket.type.name}] ${ticket.summary}
+																		<span class="label ${ticket.type.css}">${ticket.type.name}</span> ${ticket.key} ${ticket.summary}
 																	</t:pagelink>
 																	<t:ModalLink class="pull-right" t:zone="viewTicketZone" t:action="viewticket" t:context="ticket">
 																		<i class="glyphicon glyphicon-eye-open"></i>
@@ -113,7 +114,7 @@
 		</div>
 		<div t:id="viewTicketZone" class="ticket-popup">
 			<t:if test="newTicket">
-				<t:ticket.ViewTicketForm ticket="newTicket" />
+				<t:ticket.ViewTicketForm ticket="newTicket" popup="true" />
 			</t:if>
 		</div>
 	</div>

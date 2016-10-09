@@ -31,208 +31,199 @@ import com.gagauz.tracker.db.model.Version;
 
 public class ProjectMap {
 
-	@Component(parameters = { "id=prop:zoneId" })
-	private Zone zone;
+    @Component(parameters = { "id=prop:zoneId" })
+    private Zone zone;
 
-	@Component(parameters = { "id=literal:ticketZone" })
-	private Zone ticketZone;
+    @Component(parameters = { "id=literal:ticketZone" })
+    private Zone ticketZone;
 
-	@Component(parameters = { "id=literal:viewTicketZone" })
-	private Zone viewTicketZone;
+    @Component(parameters = { "id=literal:viewTicketZone" })
+    private Zone viewTicketZone;
 
-	@Parameter(allowNull = false, required = true, principal = true)
-	private Project project;
+    @Parameter(allowNull = false, required = true, principal = true)
+    private Project project;
 
-	@Property(write = false)
-	private Version version;
+    @Property(write = false)
+    private Version version;
 
-	@Persist(value = "flash")
-	@Property
-	private Version editVersion;
+    @Persist(value = "flash")
+    @Property
+    private Version editVersion;
 
-	@Property
-	private Feature feature;
+    @Property
+    private Feature feature;
 
-	@Property(write = false)
-	private FeatureVersion featureVersion;
+    @Property(write = false)
+    private FeatureVersion featureVersion;
 
-	private Ticket ticket;
+    private Ticket ticket;
 
-	@Property
-	private Ticket newTicket;
+    @Property
+    private Ticket newTicket;
 
-	@Property
-	private int estimate;
+    @Property
+    private int estimate;
 
-	@Property
-	private int progress;
+    @Property
+    private int progress;
 
-	@Persist
-	@Property
-	private boolean activeVersions;
+    @Persist
+    @Property
+    private boolean activeVersions;
 
-	@Persist
-	@Property
-	private boolean releasedVersions;
+    @Persist
+    @Property
+    private boolean releasedVersions;
 
-	@Inject
-	private VersionDao versionDao;
+    @Inject
+    private VersionDao versionDao;
 
-	@Inject
-	private FeatureVersionDao featureVersionDao;
+    @Inject
+    private FeatureVersionDao featureVersionDao;
 
-	@Inject
-	private TicketDao ticketDao;
+    @Inject
+    private TicketDao ticketDao;
 
-	@SessionState
-	private User securityUser;
+    @SessionState
+    private User securityUser;
 
-	@Inject
-	private Request request;
+    @Inject
+    private Request request;
 
-	@Inject
-	private AjaxResponseRenderer ajaxResponseRenderer;
+    @Inject
+    private AjaxResponseRenderer ajaxResponseRenderer;
 
-	private Map<Version, Map<Feature, FeatureVersion>> featureVersionMap;
-	private Map<FeatureVersion, List<Ticket>> bugsMap;
-	private Map<FeatureVersion, List<Ticket>> ticketsMap;
+    private Map<Version, Map<Feature, FeatureVersion>> featureVersionMap;
+    private Map<FeatureVersion, List<Ticket>> ticketsMap;
 
-	private void initMap(List<Version> versions) {
-		this.featureVersionMap = new HashMap<>();
-		this.bugsMap = new HashMap<>();
-		this.ticketsMap = new HashMap<>();
-		for (Version version : versions) {
-			Map<Feature, FeatureVersion> map = new HashMap<>();
-			for (Feature feature : getFeatures()) {
-				map.put(feature, null);
-			}
-			this.featureVersionMap.put(version, map);
-		}
-	}
+    private void initMap(List<Version> versions) {
+        featureVersionMap = new HashMap<>();
+        ticketsMap = new HashMap<>();
+        for (Version version : versions) {
+            Map<Feature, FeatureVersion> map = new HashMap<>();
+            for (Feature feature : getFeatures()) {
+                map.put(feature, null);
+            }
+            featureVersionMap.put(version, map);
+        }
+    }
 
-	@Cached
-	public Collection<Version> getVersions() {
-		List<Version> versions = this.releasedVersions
-				? this.versionDao.findByProject(this.project, true)
-				: this.versionDao.findByProject(this.project, false);
-		if (null == this.featureVersionMap) {
-			initMap(versions);
+    @Cached
+    public Collection<Version> getVersions() {
+        List<Version> versions = releasedVersions
+                ? versionDao.findByProject(project, true)
+                        : versionDao.findByProject(project, false);
+                if (null == featureVersionMap) {
+                    initMap(versions);
 
-			for (FeatureVersion featureVersion : this.featureVersionDao.findByProject(this.project)) {
-				Map<Feature, FeatureVersion> map = this.featureVersionMap.get(featureVersion.getVersion());
-				if (null == map) {
-					continue;
-				}
-				map.put(featureVersion.getFeature(), featureVersion);
-				this.bugsMap.put(featureVersion, new ArrayList<Ticket>());
-				this.ticketsMap.put(featureVersion, new ArrayList<Ticket>());
-			}
-			for (Ticket ticket : this.ticketDao.findByProject(this.project)) {
-				addToMap(this.ticketsMap, ticket.getFeatureVersion(), ticket);
-				// } else {
-				// addToMap(bugsMap, ticket.getFeatureVersion(), ticket);
-				// }
-			}
-		}
-		return versions;
-	}
+                    for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
+                        Map<Feature, FeatureVersion> map = featureVersionMap.get(featureVersion.getVersion());
+                        if (null == map) {
+                            continue;
+                        }
+                        map.put(featureVersion.getFeature(), featureVersion);
+                        ticketsMap.put(featureVersion, new ArrayList<Ticket>());
+                    }
+                    for (Ticket ticket : ticketDao.findByProject(project)) {
+                        addToMap(ticketsMap, ticket.getFeatureVersion(), ticket);
+                    }
+                }
+                return versions;
+    }
 
-	private <K, V> void addToMap(Map<K, List<V>> map, K key, V value) {
-		List<V> l = map.get(key);
-		if (null == l) {
-			l = new LinkedList<>();
-			map.put(key, l);
-		}
-		l.add(value);
-	}
+    private <K, V> void addToMap(Map<K, List<V>> map, K key, V value) {
+        List<V> l = map.get(key);
+        if (null == l) {
+            l = new LinkedList<>();
+            map.put(key, l);
+        }
+        l.add(value);
+    }
 
-	@Cached
-	public Collection<Feature> getFeatures() {
-		return this.project.getFeatures();
-	}
+    @Cached
+    public Collection<Feature> getFeatures() {
+        return project.getFeatures();
+    }
 
-	public void setVersion(Version version0) {
-		this.estimate = 0;
-		this.progress = 0;
-		this.version = version0;
-		if (this.featureVersionMap != null) {
-			Map<Feature, FeatureVersion> map = this.featureVersionMap.get(this.version);
-			this.featureVersion = null != map ? map.get(this.feature) : null;
-		}
-	}
+    public void setVersion(Version version0) {
+        estimate = 0;
+        progress = 0;
+        version = version0;
+        if (featureVersionMap != null) {
+            Map<Feature, FeatureVersion> map = featureVersionMap.get(version);
+            featureVersion = null != map ? map.get(feature) : null;
+        }
+    }
 
-	@Ajax
-	void onCreateFeatureVersion(Feature feature, Version version) {
-		FeatureVersion featureVersion = new FeatureVersion();
-		featureVersion.setFeature(feature);
-		featureVersion.setVersion(version);
-		User user = new User();
-		int id = this.securityUser.getId();
-		user.setId(id);
-		featureVersion.setCreator(user);
-		this.featureVersionDao.save(featureVersion);
-		this.ajaxResponseRenderer.addRender(this.zone.getClientId(), this.zone.getBody());
-	}
+    @Ajax
+    void onCreateFeatureVersion(Feature feature, Version version) {
+        FeatureVersion featureVersion = new FeatureVersion();
+        featureVersion.setFeature(feature);
+        featureVersion.setVersion(version);
+        User user = new User();
+        int id = securityUser.getId();
+        user.setId(id);
+        featureVersion.setCreator(user);
+        featureVersionDao.save(featureVersion);
+        ajaxResponseRenderer.addRender(zone.getClientId(), zone.getBody());
+    }
 
-	@Ajax
-	Object onCreateTicket(FeatureVersion featureVersion) {
-		this.newTicket = new Ticket();
-		this.newTicket.setFeatureVersion(featureVersion);
-		this.newTicket.setAuthor(this.securityUser);
+    @Ajax
+    Object onCreateTicket(FeatureVersion featureVersion) {
+        newTicket = new Ticket();
+        newTicket.setFeatureVersion(featureVersion);
+        newTicket.setAuthor(securityUser);
 
-		return this.newTicket;
-	}
+        return newTicket;
+    }
 
-	@Ajax
-	Object onEditVersion(Version version) {
-		this.editVersion = version;
-		return this.editVersion;
-	}
+    @Ajax
+    Object onEditVersion(Version version) {
+        editVersion = version;
+        return editVersion;
+    }
 
-	@Ajax
-	Object onViewTicket(Ticket ticket) {
-		this.newTicket = ticket;
-		return this.newTicket;
-	}
+    @Ajax
+    Object onViewTicket(Ticket ticket) {
+        newTicket = ticket;
+        return newTicket;
+    }
 
-	public List<Ticket> getTickets() {
-		return this.ticketsMap.get(this.featureVersion);
-	}
+    public List<Ticket> getTickets() {
+        List<Ticket> list = ticketsMap.get(featureVersion);
+        return list;
+    }
 
-	public List<Ticket> getBugs() {
-		return this.bugsMap.get(this.featureVersion);
-	}
+    public Ticket getTicket() {
+        return ticket;
+    }
 
-	public Ticket getTicket() {
-		return this.ticket;
-	}
+    public void setTicket(Ticket ticket) {
+        estimate += ticket.getEstimate();
+        progress += ticket.getProgress();
+        this.ticket = ticket;
+    }
 
-	public void setTicket(Ticket ticket) {
-		this.estimate += ticket.getEstimate();
-		this.progress += ticket.getProgress();
-		this.ticket = ticket;
-	}
+    public boolean isNotReleased() {
+        return null == version || !version.isReleased();
+    }
 
-	public boolean isNotReleased() {
-		return null == this.version || !this.version.isReleased();
-	}
+    public String getZoneId() {
+        return "ProjectMapZone";
+    }
 
-	public String getZoneId() {
-		return "ProjectMapZone";
-	}
+    void onViewMode(String mode) {
+        if ("a".equals(mode)) {
+            releasedVersions = false;
+            activeVersions = true;
+        }
+        if ("r".equals(mode)) {
+            releasedVersions = true;
+            activeVersions = false;
+        }
+    }
 
-	void onViewMode(String mode) {
-		if ("a".equals(mode)) {
-			this.releasedVersions = false;
-			this.activeVersions = true;
-		}
-		if ("r".equals(mode)) {
-			this.releasedVersions = true;
-			this.activeVersions = false;
-		}
-	}
-
-	public boolean isNoReleaseVersion() {
-		return this.featureVersion == null;
-	}
+    public boolean isNoReleaseVersion() {
+        return featureVersion == null;
+    }
 }

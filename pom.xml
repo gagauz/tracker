@@ -12,7 +12,7 @@
 			<groupId>org.gagauz</groupId>
 			<artifactId>tapestry-webapp-core</artifactId>
 			<version>1.0</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -38,33 +38,6 @@
 			<version>${servlet-api-release-version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate-release-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring-release-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring-release-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring-release-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring-release-version}</version>
-		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -145,8 +118,6 @@
 	<properties>
 		<log4j-version>1.7.12</log4j-version>
 		<servlet-api-release-version>3.1.0</servlet-api-release-version>
-		<hibernate-release-version>4.1.7.Final</hibernate-release-version>
-		<spring-release-version>4.0.2.RELEASE</spring-release-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>

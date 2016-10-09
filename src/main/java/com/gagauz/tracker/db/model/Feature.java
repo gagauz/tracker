@@ -72,9 +72,4 @@ public class Feature extends TimeTrackedEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	@Override
-	public String toString() {
-		return "Feature<id=" + getId() + ">";
-	}
 }

@@ -10,6 +10,7 @@ public class TestDataInitializer {
     @Autowired
     private DataBaseScenario[] scenarios;
 
+
     @Transactional
     public void execute() {
         for (DataBaseScenario scenario : scenarios) {

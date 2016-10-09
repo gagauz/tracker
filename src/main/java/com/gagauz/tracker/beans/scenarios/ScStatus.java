@@ -6,8 +6,10 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gagauz.tracker.beans.dao.ProjectDao;
 import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.beans.setup.DataBaseScenario;
+import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.TicketStatus;
 
 @Service
@@ -17,15 +19,22 @@ public class ScStatus extends DataBaseScenario {
     private TicketStatusDao statusDao;
 
     @Autowired
-    private ScVersion scVersion;
+    private ProjectDao projectDao;
+
+    @Autowired
+    private ScProject scProject;
+
+    private Project project;
 
     @Override
     protected DataBaseScenario[] getDependsOn() {
-        return new DataBaseScenario[] { this.scVersion };
+        return new DataBaseScenario[] { scProject };
     }
 
     @Override
     protected void execute() {
+        project = projectDao.findByCode(ScProject.TRACKER);
+        assert (project != null);
         TicketStatus open = create("Open", null);
         TicketStatus reopen = create("Reopen", null);
         TicketStatus inprog = create("In progress", null);
@@ -50,17 +59,18 @@ public class ScStatus extends DataBaseScenario {
 
         closed.setAllowedTo(Arrays.asList(reopen));
 
-        this.statusDao.flush();
+        statusDao.flush();
     }
 
     private TicketStatus create(String name, String description, Collection<TicketStatus>... lists) {
         TicketStatus status = new TicketStatus();
         status.setName(name);
         status.setDescription(description);
+        status.setProject(project);
         if (lists.length > 0) {
             status.setAllowedTo(lists[0]);
         }
-        this.statusDao.save(status);
+        statusDao.save(status);
         return status;
     }
 

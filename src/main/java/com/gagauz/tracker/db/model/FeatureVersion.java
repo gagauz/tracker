@@ -17,103 +17,123 @@ import org.hibernate.annotations.ForeignKey;
 @Table(name = "feature_version")
 public class FeatureVersion implements Serializable {
 
-	@Embeddable
-	public static class FeatureVersionId implements Serializable {
-		private static final long serialVersionUID = 1939148011273312467L;
-		private int featureId;
-		private int versionId;
+    @Embeddable
+    public static class FeatureVersionId implements Serializable {
+        private static final long serialVersionUID = 1939148011273312467L;
+        private int featureId;
+        private int versionId;
 
-		public int getFeatureId() {
-			return this.featureId;
-		}
+        public int getFeatureId() {
+            return featureId;
+        }
 
-		public void setFeatureId(int featureId) {
-			this.featureId = featureId;
-		}
+        public void setFeatureId(int featureId) {
+            this.featureId = featureId;
+        }
 
-		public int getVersionId() {
-			return this.versionId;
-		}
+        public int getVersionId() {
+            return versionId;
+        }
 
-		public void setVersionId(int versionId) {
-			this.versionId = versionId;
-		}
+        public void setVersionId(int versionId) {
+            this.versionId = versionId;
+        }
 
-		@Override
-		public boolean equals(Object obj) {
-			if (null == obj || this == obj || !(obj instanceof FeatureVersionId)) {
-				return this == obj;
-			}
-			FeatureVersionId other = (FeatureVersionId) obj;
-			return other.getFeatureId() == this.featureId && other.getVersionId() == this.versionId;
-		}
+        @Override
+        public boolean equals(Object obj) {
+            if (null == obj || this == obj || !(obj instanceof FeatureVersionId)) {
+                return this == obj;
+            }
+            FeatureVersionId other = (FeatureVersionId) obj;
+            return other.getFeatureId() == featureId && other.getVersionId() == versionId;
+        }
 
-		@Override
-		public String toString() {
-			return String.valueOf(this.featureId) + '_' + this.versionId;
-		}
+        @Override
+        public String toString() {
+            return String.valueOf(featureId) + '_' + versionId;
+        }
 
-	}
+    }
 
-	private static final long serialVersionUID = -8693198398126115278L;
-	private FeatureVersionId id;
-	private User creator;
-	private Feature feature;
-	private Version version;
+    private static final long serialVersionUID = -8693198398126115278L;
+    private FeatureVersionId id;
+    private User creator;
+    private Feature feature;
+    private Version version;
 
-	@EmbeddedId
-	public FeatureVersionId getId() {
-		if (null == this.id) {
-			this.id = new FeatureVersionId();
-		}
-		return this.id;
-	}
+    @EmbeddedId
+    public FeatureVersionId getId() {
+        if (null == id) {
+            id = new FeatureVersionId();
+        }
+        return id;
+    }
 
-	public void setId(FeatureVersionId id) {
-		this.id = id;
-	}
+    public void setId(FeatureVersionId id) {
+        this.id = id;
+    }
 
-	@ForeignKey(name = "fk_featureVersion_creator")
-	@ManyToOne(fetch = FetchType.LAZY)
-	public User getCreator() {
-		return this.creator;
-	}
+    @ForeignKey(name = "fk_featureVersion_creator")
+    @ManyToOne(fetch = FetchType.LAZY)
+    public User getCreator() {
+        return creator;
+    }
 
-	public void setCreator(User creator) {
-		this.creator = creator;
-	}
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 
-	@Transient
-	public Project getProject() {
-		return getFeature().getProject();
-	}
+    @Transient
+    public Project getProject() {
+        return getFeature().getProject();
+    }
 
-	@ForeignKey(name = "fk_featureVersion_feature")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "featureId", insertable = false, updatable = false, referencedColumnName = "id")
-	public Feature getFeature() {
-		return this.feature;
-	}
+    @ForeignKey(name = "fk_featureVersion_feature")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "featureId", insertable = false, updatable = false, referencedColumnName = "id")
+    public Feature getFeature() {
+        return feature;
+    }
 
-	public void setFeature(Feature feature) {
-		this.feature = feature;
-		this.getId().featureId = null != feature ? feature.getId() : 0;
-	}
+    public void setFeature(Feature feature) {
+        this.feature = feature;
+        getId().featureId = null != feature ? feature.getId() : 0;
+    }
 
-	@ForeignKey(name = "fk_featureVersion_version")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "versionId", insertable = false, updatable = false, referencedColumnName = "id")
-	public Version getVersion() {
-		return this.version;
-	}
+    @ForeignKey(name = "fk_featureVersion_version")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "versionId", insertable = false, updatable = false, referencedColumnName = "id")
+    public Version getVersion() {
+        return version;
+    }
 
-	public void setVersion(Version version) {
-		this.version = version;
-		this.getId().versionId = null != version ? version.getId() : 0;
-	}
+    public void setVersion(Version version) {
+        this.version = version;
+        getId().versionId = null != version ? version.getId() : 0;
+    }
 
-	@Override
-	public String toString() {
-		return "FeatureVersion <feature=" + this.getId().getFeatureId() + ", version=" + this.getId().getVersionId() + ">";
-	}
+    @Override
+    public String toString() {
+        return "FeatureVersion <feature=" + getId().getFeatureId() + ", version=" + getId().getVersionId() + ">";
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().getFeatureId() ^ (getId().getVersionId() >>> 32);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (null == obj) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof FeatureVersion) {
+            return getId().equals(((FeatureVersion) obj).getId());
+        }
+        return false;
+    }
 }

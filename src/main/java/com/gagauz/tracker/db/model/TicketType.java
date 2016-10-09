@@ -17,6 +17,7 @@ public class TicketType extends TimeTrackedEntity {
     private TicketType parent;
     private RoleGroup creator;
     private RoleGroup assignee;
+    private String css;
 
     @Column(nullable = true)
     public String getName() {
@@ -62,6 +63,16 @@ public class TicketType extends TimeTrackedEntity {
 
     public void setAssignee(RoleGroup assignee) {
         this.assignee = assignee;
+    }
+
+
+    @Column(nullable = true)
+    public String getCss() {
+        return css;
+    }
+
+    public void setCss(String css) {
+        this.css = css;
     }
 
 }

@@ -6,46 +6,31 @@ import java.util.EnumSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.gagauz.hibernate.types.CollectionType;
+import org.gagauz.hibernate.types.HashSetType;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import com.gagauz.tracker.db.base.CollectionType;
-import com.gagauz.tracker.db.base.HashSetType;
-import com.gagauz.tracker.db.base.Identifiable;
 
 @Entity
 @Table(name = "role_group")
 @TypeDefs({
     @TypeDef(name = "setOf.String", typeClass = HashSetType.class, parameters = {
             @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.AccessRole"),
-            @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.EnumSerializer")
+            @Parameter(name = CollectionType.SERIALIZER, value = "org.gagauz.hibernate.model.base.EnumSerializer")
     })
 })
-public class RoleGroup implements Identifiable {
-    private int id;
+public class RoleGroup extends BaseEntity {
     private String name;
     private Project project;
     private EnumSet<AccessRole> roles = EnumSet.noneOf(AccessRole.class);
-
-    @Override
-    @Id
-    @GeneratedValue
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @Column(nullable = false)
     public String getName() {
@@ -74,17 +59,6 @@ public class RoleGroup implements Identifiable {
     }
 
     public void setRoles(Collection<AccessRole> roles) {
-        this.roles = null == roles ? EnumSet.noneOf(AccessRole.class) : EnumSet.copyOf(roles);
+        this.roles = null == roles || roles.isEmpty() ? EnumSet.noneOf(AccessRole.class) : EnumSet.copyOf(roles);
     }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || (null != obj && obj.hashCode() == hashCode());
-    }
-
 }

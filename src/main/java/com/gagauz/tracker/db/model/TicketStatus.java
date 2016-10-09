@@ -85,9 +85,4 @@ public class TicketStatus extends BaseEntity {
     public void setTicketType(TicketType ticketType) {
         this.ticketType = ticketType;
     }
-
-    @Override
-    public String toString() {
-        return "TicketStatus<id=" + getId() + ">";
-    }
 }

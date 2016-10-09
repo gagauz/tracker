@@ -1,0 +1,5 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+	<t:eventlink t:event="edit" t:context="row" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-pencil"></i> 
+		${msg:Edit}
+	</t:eventlink>
+</t:container>

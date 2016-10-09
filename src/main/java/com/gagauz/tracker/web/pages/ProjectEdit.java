@@ -9,6 +9,7 @@ import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.PageActivationContext;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
@@ -34,137 +35,139 @@ import com.gagauz.tracker.db.model.Version;
 @Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
 public class ProjectEdit {
 
-	@Component(parameters = { "id=literal:createVersionZone" })
-	@Property(write = false)
-	private Zone modalZone;
+    @Component(parameters = { "id=literal:createVersionZone" })
+    @Property(write = false)
+    private Zone modalZone;
 
-	@Property
-	private Project project;
+    @Property
+    @PageActivationContext(index = 0)
+    private Project project;
 
-	@Property
-	@Persist("flash")
-	private Version newVersion;
+    @Property
+    @PageActivationContext(index = 2)
+    private Object object;
 
-	@Property
-	@Persist("flash")
-	private Feature newFeature;
 
-	@Property
-	@Persist("flash")
-	private Stage newStage;
+    @Property
+    @Persist("flash")
+    private Version newVersion;
 
-	@Property
-	private RoleGroup roleGroup;
+    @Property
+    @Persist("flash")
+    private Feature newFeature;
 
-	@Property
-	private Version version;
+    @Property
+    @Persist("flash")
+    private Stage newStage;
 
-	@Property
-	private FeatureVersion ticket;
+    @Property
+    private RoleGroup roleGroup;
 
-	@Property
-	private Ticket subticket;
+    @Property
+    private Version version;
 
-	@Property
-	private Feature feature;
+    @Property
+    private FeatureVersion ticket;
 
-	@Property
-	private Stage stage;
+    @Property
+    private Ticket subticket;
 
-	@Inject
-	private FeatureDao featureDao;
+    @Property
+    private Feature feature;
 
-	@Inject
-	private VersionDao versionDao;
+    @Property
+    private Stage stage;
 
-	@Inject
-	private StageDao stageDao;
+    @Inject
+    private FeatureDao featureDao;
 
-	@Inject
-	private RoleGroupDao roleGroupDao;
+    @Inject
+    private VersionDao versionDao;
 
-	@Inject
-	private ComponentResources resources;
+    @Inject
+    private StageDao stageDao;
 
-	@SessionState
-	private User securityUser;
+    @Inject
+    private RoleGroupDao roleGroupDao;
 
-	@Property
-	private Block operation;
+    @Inject
+    private ComponentResources resources;
 
-	Object onActivate(EventContext ctx) {
-		if (ctx.getCount() > 0) {
-			this.project = ctx.get(Project.class, 0);
-			if (null == this.project) {
-				return Index.class;
-			}
-			Global.put(Project.class, this.project);
-			if (ctx.getCount() > 1) {
+    @SessionState
+    private User securityUser;
 
-				try {
-					this.operation = this.resources.getBlock(ctx.get(String.class, 1));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return null;
-	}
+    @Property
+    private Block operation;
 
-	Object onPassivate() {
-		return this.project;
-	}
+    @PageActivationContext(index = 1)
+    private String operationName;
 
-	private static String getNextVersion(Project project, Version lastVersion) {
-		if (null != lastVersion) {
-			String name = getNextVersion(lastVersion.getName());
-			if (null != name) {
-				return name;
-			}
-		}
-		return project.getCode() + "-1";
-	}
+    Object onActivate(EventContext ctx) {
+        if (null == this.project) {
+            return Index.class;
+        }
 
-	private static String getNextVersion(String lastVersion) {
-		String name = lastVersion;
-		Pattern p = Pattern.compile("^(.*?)([0-9]+)$");
-		Matcher m = p.matcher(name);
-		if (m.find()) {
-			String v = m.group(2);
-			v = String.valueOf(NumberUtils.toInt(v) + 1);
-			return m.replaceFirst("$1" + v);
-		}
-		return null;
-	}
+        Global.put(Project.class, this.project);
 
-	Object onCreateVersion() {
-		this.newVersion = new Version();
-		Version lastVersion = this.versionDao.findLast(this.project);
-		String nextName = getNextVersion(this.project, lastVersion);
-		this.newVersion.setName(nextName);
-		this.newVersion.setCvsBranchName(nextName);
-		return this.newVersion;
-	}
+        try {
+            operationName = ctx.get(String.class, 1);
+            this.operation = this.resources.getBlock(operationName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	Object onCreateFeature() {
-		this.newFeature = new Feature();
-		return this.newFeature;
-	}
+    private static String getNextVersion(Project project, Version lastVersion) {
+        if (null != lastVersion) {
+            String name = getNextVersion(lastVersion.getName());
+            if (null != name) {
+                return name;
+            }
+        }
+        return project.getCode() + "-1";
+    }
 
-	public List<Feature> getUserStories() {
-		return this.featureDao.findByProject(this.project);
-	}
+    private static String getNextVersion(String lastVersion) {
+        String name = lastVersion;
+        Pattern p = Pattern.compile("^(.*?)([0-9]+)$");
+        Matcher m = p.matcher(name);
+        if (m.find()) {
+            String v = m.group(2);
+            v = String.valueOf(NumberUtils.toInt(v) + 1);
+            return m.replaceFirst("$1" + v);
+        }
+        return null;
+    }
 
-	public List<Version> getVersions() {
-		return this.versionDao.findByProject(this.project);
-	}
+    Object onCreateVersion() {
+        this.newVersion = new Version();
+        Version lastVersion = this.versionDao.findLast(this.project);
+        String nextName = getNextVersion(this.project, lastVersion);
+        this.newVersion.setName(nextName);
+        this.newVersion.setCvsBranchName(nextName);
+        return this.newVersion;
+    }
 
-	public List<RoleGroup> getRoleGroups() {
-		return this.roleGroupDao.findByProject(this.project);
-	}
+    Object onCreateFeature() {
+        this.newFeature = new Feature();
+        return this.newFeature;
+    }
 
-	public static void main(String[] args) {
-		String g = getNextVersion("фывфвыфвы-11.10");
-		System.out.println(g);
-	}
+    public List<Feature> getUserStories() {
+        return this.featureDao.findByProject(this.project);
+    }
+
+    public List<Version> getVersions() {
+        return this.versionDao.findByProject(this.project);
+    }
+
+    public List<RoleGroup> getRoleGroups() {
+        return this.roleGroupDao.findByProject(this.project);
+    }
+
+    public static void main(String[] args) {
+        String g = getNextVersion("фывфвыфвы-11.10");
+        System.out.println(g);
+    }
 }

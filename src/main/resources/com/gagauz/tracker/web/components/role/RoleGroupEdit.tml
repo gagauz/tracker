@@ -1,0 +1,10 @@
+<t:container
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+      xmlns:p="tapestry:parameter">
+	<t:beaneditform object="object" exclude="id"/>
+	<t:grid source="rolegroups" row="roleGroup" add="edit" class="table tble-stripped table-hover">
+		<p:editCell>
+			<t:editlink row="rolegroup" />
+		</p:editCell>
+	</t:grid>
+</t:container>

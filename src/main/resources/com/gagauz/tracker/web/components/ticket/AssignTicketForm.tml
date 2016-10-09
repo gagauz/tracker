@@ -1,6 +1,6 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<div t:id="zone">
-		<t:beaneditform t:id="form" object="assign" cancel="true" add="owner" include="comment">
+		<t:beaneditform t:id="form" object="assign" cancel="true" add="owner" include="comment" reorder="owner,comment" zone="zone">
 			<p:owner>
 				<t:label class="col-sm-3 control-label" for="owner" />
 				<div class="col-sm-9">

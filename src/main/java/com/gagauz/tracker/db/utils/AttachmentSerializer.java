@@ -1,7 +1,8 @@
 package com.gagauz.tracker.db.utils;
 
+import org.gagauz.hibernate.model.base.Serializer;
+
 import com.gagauz.tracker.db.model.Attachment;
-import com.gagauz.tracker.utils.Serializer;
 
 public class AttachmentSerializer implements Serializer<Attachment> {
 

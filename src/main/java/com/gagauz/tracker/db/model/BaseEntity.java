@@ -24,7 +24,16 @@ public class BaseEntity implements Identifiable {
 
     @Override
     public boolean equals(Object obj) {
-        return (this == obj) || (obj != null && (((BaseEntity) obj).id == id));
+        if (null == obj) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (getClass().isAssignableFrom(obj.getClass())) {
+            return (((BaseEntity) obj).id == id);
+        }
+        return false;
     }
 
     @Override
@@ -32,4 +41,8 @@ public class BaseEntity implements Identifiable {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + "#" + id;
+    }
 }

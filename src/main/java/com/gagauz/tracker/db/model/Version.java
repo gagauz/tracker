@@ -93,11 +93,6 @@ public class Version extends TimeTrackedEntity implements Comparable<Version> {
 	}
 
 	@Override
-	public String toString() {
-		return "Version<id=" + getId() + ">";
-	}
-
-	@Override
 	public int compareTo(Version o) {
 		return getName().compareTo(o.getName());
 	}
