@@ -17,12 +17,12 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersion.FeatureVersion
 
 	@SuppressWarnings("unchecked")
 	public List<FeatureVersion> findByVersion(Version version) {
-		return getSession().createQuery("from FeatureVersion where id.version=:version").setEntity("version", version).list();
+		return getSession().createQuery("from FeatureVersion where version=:version").setEntity("version", version).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<FeatureVersion> findByFeature(Feature feature) {
-		return getSession().createQuery("from FeatureVersion where id.feature=:feature").setEntity("feature", feature).list();
+		return getSession().createQuery("from FeatureVersion where feature=:feature").setEntity("feature", feature).list();
 	}
 
 	public List<FeatureVersion> findByProject(Project project) {
@@ -30,7 +30,7 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersion.FeatureVersion
 	}
 
 	public FeatureVersion findByFeatureAndVersion(int featureId, int versionId) {
-		return (FeatureVersion) getSession().createQuery("from FeatureVersion where id.feature.id=:featureId and id.version.id=:versionId")
+		return (FeatureVersion) getSession().createQuery("from FeatureVersion where feature.id=:featureId and version.id=:versionId")
 				.setInteger("featureId", featureId)
 				.setInteger("versionId", versionId).uniqueResult();
 	}

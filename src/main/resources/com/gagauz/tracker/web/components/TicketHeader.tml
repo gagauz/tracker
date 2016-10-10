@@ -1,5 +1,5 @@
 <div class="ticket-header" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
-	<div class="">
+	<div t:id="headerZone">
 		<div class="btn-toolbar btn-xs">
 			<div class="btn-group" role="group">
 				<t:modallink class="btn btn-default" action="edit" context="ticket" zone="ticketZone">Edit</t:modallink>
@@ -13,32 +13,56 @@
 				<t:modallink class="btn btn-default" action="subtask" context="ticket" zone="ticketZone">Create subtask</t:modallink>
 				<t:modallink class="btn btn-default" action="attach" context="ticket" zone="ticketZone">Attach files</t:modallink>
 				<t:eventlink class="btn btn-default" event="log" context="ticket" async="true">Log work</t:eventlink>
-				<t:modallink class="btn btn-default" action="resolve" context="ticket" zone="ticketZone">Resolve</t:modallink>
 			</div>
 		</div>
+		<hr />
 		<div class="row">
 			<div class="col-md-1">Status:</div>
-			<div class="col-md-3"><span class="label ${cond:ticket.status.css,ticket.status.css,label-default}">${ticket.status.name}</span></div>
+			<div class="col-md-3">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="statusDropDown" aria-haspopup="true" aria-expanded="true">
+					${ticket.status.name} <span class="caret"></span>
+				</a>			
+				<ul class="dropdown-menu" aria-labelledby="statusDropDown">
+				 	<t:loop source="ticket.status.allowedTo" value="status">
+						<li><t:eventlink t:event="changeStatus" context="[ticket,status]" zone="headerZone">${status.name}</t:eventlink></li>
+					</t:loop>
+				</ul>
+			</div>
 			<div class="col-md-1">Author:</div>
 			<div class="col-md-3">
-				<t:pagelink page="userinfo" context="ticket.author">${ticket.author.name}</t:pagelink>
+				<t:pagelink page="userinfo" context="ticket.author">${ticket.author.name} <span class="caret"></span></t:pagelink>
 			</div>
 			<div class="col-md-1">Estimate:</div>
 			<div class="col-md-3">${getTime(ticket.estimate)}</div>
 		</div>
 		<div class="row">
 			<div class="col-md-1">Type:</div>
-			<div class="col-md-3"><span class="label ${ticket.type.css}">${ticket.type.name}</span></div>
+			<div class="col-md-3">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="typeDropDown" aria-haspopup="true" aria-expanded="true">
+					${ticket.type.name} <span class="caret"></span>
+				</a>			
+				<ul class="dropdown-menu" aria-labelledby="typeDropDown">
+				 	<t:loop source="types" value="type">
+						<li><t:eventlink t:event="changeType" context="[ticket,type]" zone="headerZone">${type.name}</t:eventlink></li>
+					</t:loop>
+				</ul>
+			</div>
 			<div class="col-md-1">Owner:</div>
 			<div class="col-md-3">
-				<t:if test="ticket.owner">
-					<t:pagelink page="userinfo" context="ticket.author">
-						${ticket.owner.name}
-					</t:pagelink>
-					<p:else>
-						Unassigned
-					</p:else>
-				</t:if>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="ownerDropDown" aria-haspopup="true" aria-expanded="true">
+					<t:if test="ticket.owner">
+						${ticket.owner.name} <span class="caret"></span>
+						<p:else>
+							Unassigned
+						</p:else>
+					</t:if>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="ownerDropDown">
+				    <t:form t:id="assignForm">
+				    	<t:UserAutocompleteField user="ticket.owner"/>
+				    	<t:submit value="Assign" />
+				    </t:form>
+				</div>
 			</div>
 			<div class="col-md-1">Logged:</div>
 			<div class="col-md-3">${getTime(ticket.progress)}</div>
@@ -47,22 +71,24 @@
 			<div class="col-md-1">Version:</div>
 			<div class="col-md-3">
 				<t:pagelink t:page="versioninfo" t:context="ticket.version">${ticket.version.name}</t:pagelink>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="versionDropDown" aria-haspopup="true" aria-expanded="true">
+					<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="versionDropDown">
+				 	<t:loop source="versions" value="version">
+						<li><t:eventlink t:event="changeVersion" context="[ticket,version]" zone="ticketZone">${version.version.name}</t:eventlink></li>
+					</t:loop>
+				</ul>
 			</div>
 			<div class="col-md-1">Created:</div>
 			<div class="col-md-3">${date:ticket.created}</div>
 			<div class="col-md-1">Remaining:</div>
 			<div class="col-md-3">${getRemaining()}</div>
 		</div>
-		<div class="row">
-			<div class="col-md-1"></div>
-			<div class="col-md-3"></div>
-			<div class="col-md-1">Updated:</div>
-			<div class="col-md-3">${date:ticket.updated}</div>
-			<div class="col-md-1"></div>
-			<div class="col-md-3"></div>
-		</div>
 	</div>
-		
+	
+	<hr />
+	
 	<div style="display:none">
 		<div t:id="ticketZone" class="ticket-popup">
 			<t:if test="assign">
@@ -73,9 +99,6 @@
 			</t:if>
 			<t:if test="subtask">
 				<t:ticket.EditTicketForm ticket="newTicket" />
-			</t:if>
-			<t:if test="resolve">
-				<t:ticket.ResolveTicketForm ticket="newTicket" />
 			</t:if>
 			<t:if test="attach">
 				<t:ticket.AttachForm ticket="newTicket" />

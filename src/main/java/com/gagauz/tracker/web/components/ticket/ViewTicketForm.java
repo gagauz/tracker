@@ -16,43 +16,43 @@ import com.gagauz.tracker.db.model.TicketComment;
 @Import(module = "bootstrap/collapse")
 public class ViewTicketForm {
 
-    @Parameter(name = "ticket")
-    private Ticket ticketParam;
+	@Parameter(name = "ticket")
+	private Ticket ticketParam;
 
-    @Parameter(value = "false")
-    @Property
-    private boolean popup;
+	@Parameter(value = "false")
+	@Property
+	private boolean popup;
 
-    @Property(write = false)
-    private Ticket ticket;
+	@Property
+	private Ticket ticket;
 
-    @Property
-    private Attachment attachment;
+	@Property
+	private Attachment attachment;
 
-    @Property
-    private List<TicketComment> comments;
+	@Property
+	private List<TicketComment> comments;
 
-    @Property
-    private TicketComment comment;
+	@Property
+	private TicketComment comment;
 
-    @Inject
-    private ComponentResources componentResources;
+	@Inject
+	private ComponentResources componentResources;
 
-    @Inject
-    private TicketCommentDao ticketCommentDao;
+	@Inject
+	private TicketCommentDao ticketCommentDao;
 
-    boolean setupRender() {
-        if (null != ticketParam) {
-            ticket = ticketParam;
-        }
-        return ticket != null;
-    }
+	boolean setupRender() {
+		if (null != ticketParam) {
+			ticket = ticketParam;
+		}
+		return ticket != null;
+	}
 
-    public String getAjaxUrl() {
-        return componentResources.createEventLink("getComments", ticket).toRedirectURI();
-    }
+	public String getAjaxUrl() {
+		return componentResources.createEventLink("getComments", ticket).toRedirectURI();
+	}
 
-    void onGetComments(Ticket ticket) {
-        comments = ticketCommentDao.findByTicket(ticket);
-    }
+	void onGetComments(Ticket ticket) {
+		comments = ticketCommentDao.findByTicket(ticket);
+	}
 }
