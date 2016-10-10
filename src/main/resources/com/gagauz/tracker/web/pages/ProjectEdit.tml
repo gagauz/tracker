@@ -3,11 +3,11 @@
 	<p:NavBar>
 		<t:project.NavBar />
 	</p:NavBar>
-
+	
 	<p:header>
 		${project.name}
 	</p:header>
-	
+
 	<p:sidebar>
 		<t:ProjectMenu project="project" />
 	</p:sidebar>
@@ -16,9 +16,7 @@
 
 	<t:if test="operation">
 		<t:delegate to="prop:operation" />
-	
 		<p:else>
-			
 		</p:else>
 	</t:if>
 	

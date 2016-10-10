@@ -9,21 +9,21 @@ import com.gagauz.tracker.db.base.Identifiable;
 
 @MappedSuperclass
 public class BaseEntity implements Identifiable {
-    private int id;
+	private int id;
 
-    @Override
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getId() {
-        return id;
-    }
+	@Override
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
+	@Override
+	public boolean equals(Object obj) {
         if (null == obj) {
             return false;
         }
@@ -36,13 +36,13 @@ public class BaseEntity implements Identifiable {
         return false;
     }
 
-    @Override
-    public int hashCode() {
-        return id;
-    }
+	@Override
+	public int hashCode() {
+		return id;
+	}
 
     @Override
     public String toString() {
         return getClass().getName() + "#" + id;
-    }
+}
 }
