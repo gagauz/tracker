@@ -1,6 +1,5 @@
 package com.gagauz.tracker.db.model;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,46 +7,28 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.gagauz.tapestry.security.api.IUser;
-import org.gagauz.utils.CryptoUtils;
+import org.apache.tapestry5.security.api.Principal;
 
-import com.gagauz.tracker.db.base.Identifiable;
 import com.gagauz.tracker.utils.HashUtils;
+import com.xl0e.hibernate.model.Model;
+import com.xl0e.util.CryptoUtils;
 
 @Entity
 @Table(name = "`user`")
-public class User implements Identifiable, Serializable, IUser {
+public class User extends Model implements Principal {
     private static final long serialVersionUID = 7903294228565311630L;
-    private int id;
     private String name;
     private String email;
-    private Collection<RoleGroup> roleGroups = new HashSet<RoleGroup>();
+    private Collection<RoleGroup> roleGroups = new HashSet<>();
     private String username;
     private String password;
     private String token;
     private Set<AccessRole> roles;
-
-    @Override
-    @Id
-    @SequenceGenerator(name = "id_sequence", sequenceName = "user_id_seq", allocationSize = 50)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "id_sequence")
-    @Column(unique = true, nullable = false)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @Column(nullable = false)
     public String getName() {
@@ -106,16 +87,6 @@ public class User implements Identifiable, Serializable, IUser {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || (null != obj && obj.hashCode() == hashCode());
     }
 
     @Override

@@ -11,23 +11,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.gagauz.hibernate.types.ArrayListType;
-import org.gagauz.hibernate.types.CollectionType;
-import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.xl0e.hibernate.types.ArrayListType;
+import com.xl0e.hibernate.types.CollectionType;
+
 @Entity
 @Table(name = "ticket")
 @TypeDefs({
-    @TypeDef(name = "listOf.Attachment", typeClass = ArrayListType.class, parameters = {
-            @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
-            @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
-    })
+        @TypeDef(name = "listOf.Attachment", typeClass = ArrayListType.class, parameters = {
+                @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
+                @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
+        })
 })
 public class Ticket extends TimeTrackedEntity {
+    private static final long serialVersionUID = 9133733343859656192L;
     private FeatureVersion featureVersion;
     private String key1;
     private TicketType type;
@@ -43,7 +44,6 @@ public class Ticket extends TimeTrackedEntity {
     private List<Ticket> children;
     private List<Workflow> workflow;
 
-    @ForeignKey(name = "fk_ticket_featureVersion")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     public FeatureVersion getFeatureVersion() {
         return featureVersion;
@@ -65,7 +65,6 @@ public class Ticket extends TimeTrackedEntity {
         key1 = key;
     }
 
-    @ForeignKey(name = "fk_ticket_type")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     public TicketType getType() {
         return type;
@@ -75,7 +74,6 @@ public class Ticket extends TimeTrackedEntity {
         this.type = type;
     }
 
-    @ForeignKey(name = "fk_ticket_status")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     public TicketStatus getStatus() {
         return status;
@@ -85,7 +83,6 @@ public class Ticket extends TimeTrackedEntity {
         this.status = status;
     }
 
-    @ForeignKey(name = "fk_ticket_author")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     public User getAuthor() {
         return author;
@@ -95,7 +92,6 @@ public class Ticket extends TimeTrackedEntity {
         this.author = author;
     }
 
-    @ForeignKey(name = "fk_ticket_owner")
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     public User getOwner() {
         return owner;
@@ -152,7 +148,6 @@ public class Ticket extends TimeTrackedEntity {
         this.attachments = attachments;
     }
 
-    @ForeignKey(name = "fk_ticket_parent")
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     public Ticket getParent() {
         return parent;

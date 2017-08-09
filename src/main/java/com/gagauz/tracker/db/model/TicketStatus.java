@@ -12,9 +12,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.xl0e.hibernate.model.Model;
+
 @Entity
 @Table(name = "ticket_status")
-public class TicketStatus extends BaseEntity {
+public class TicketStatus extends Model {
+    private static final long serialVersionUID = 5968810449492475582L;
     private Project project;
     private String name;
     private String css;
@@ -75,7 +78,6 @@ public class TicketStatus extends BaseEntity {
     public void setApprovers(Set<RoleGroup> approvers) {
         this.approvers = approvers;
     }
-
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     public TicketType getTicketType() {

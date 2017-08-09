@@ -15,7 +15,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.gagauz.tapestry.web.config.Global;
+import org.apache.tapestry5.web.config.Global;
 import org.gagauz.tracker.web.security.Secured;
 
 import com.gagauz.tracker.beans.dao.FeatureDao;
@@ -46,7 +46,6 @@ public class ProjectEdit {
     @Property
     @PageActivationContext(index = 2)
     private Object object;
-
 
     @Property
     @Persist("flash")

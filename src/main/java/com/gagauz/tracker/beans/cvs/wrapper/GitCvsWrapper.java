@@ -1,16 +1,16 @@
 package com.gagauz.tracker.beans.cvs.wrapper;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.gagauz.tracker.beans.cvs.CvsWrapper;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.utils.BashUtils;
 import com.gagauz.tracker.utils.StringUtils;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class GitCvsWrapper implements CvsWrapper {
 
@@ -84,7 +84,7 @@ public class GitCvsWrapper implements CvsWrapper {
                 String[] lines = StringUtils.split(cl, "\n", 2);
                 String[] fields = StringUtils.split(lines[0], "|");
                 Commit commit = new Commit();
-                commit.setHash(fields[1]);
+                commit.setId(fields[1]);
                 commit.setDate(new Date(Long.parseLong(fields[0])));
                 commit.setAuthor(fields[2]);
                 commit.setComment(fields[3]);
@@ -106,7 +106,7 @@ public class GitCvsWrapper implements CvsWrapper {
                 String[] fields = StringUtils.split(lines[0], "|");
                 if (fields.length > 1) {
                     Commit commit = new Commit();
-                    commit.setHash(fields[1]);
+                    commit.setId(fields[1]);
                     commit.setDate(new Date(Long.parseLong(fields[0]) * 1000));
                     commit.setAuthor(fields[2]);
                     commit.setComment(fields[3]);

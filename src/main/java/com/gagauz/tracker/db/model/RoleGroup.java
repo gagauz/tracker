@@ -10,24 +10,25 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.gagauz.hibernate.types.CollectionType;
-import org.gagauz.hibernate.types.HashSetType;
-import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
+import com.xl0e.hibernate.model.Model;
+import com.xl0e.hibernate.types.CollectionType;
+import com.xl0e.hibernate.types.HashSetType;
 
 @Entity
 @Table(name = "role_group")
 @TypeDefs({
-    @TypeDef(name = "setOf.String", typeClass = HashSetType.class, parameters = {
-            @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.AccessRole"),
-            @Parameter(name = CollectionType.SERIALIZER, value = "org.gagauz.hibernate.model.base.EnumSerializer")
-    })
+        @TypeDef(name = "setOf.String", typeClass = HashSetType.class, parameters = {
+                @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.AccessRole"),
+                @Parameter(name = CollectionType.SERIALIZER, value = "com.xl0e.hibernate.model.base.EnumSerializer")
+        })
 })
-public class RoleGroup extends BaseEntity {
+public class RoleGroup extends Model {
+    private static final long serialVersionUID = 5710346787058144797L;
     private String name;
     private Project project;
     private EnumSet<AccessRole> roles = EnumSet.noneOf(AccessRole.class);
@@ -41,7 +42,6 @@ public class RoleGroup extends BaseEntity {
         this.name = name;
     }
 
-    @ForeignKey(name = "fk_roleGroup_project")
     @JoinColumn(nullable = true)
     @ManyToOne(fetch = FetchType.LAZY)
     public Project getProject() {

@@ -9,7 +9,7 @@
 	<name>tracker</name>
 	<dependencies>
 		<dependency>
-			<groupId>org.gagauz</groupId>
+			<groupId>com.xl0e</groupId>
 			<artifactId>tapestry-webapp-core</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>

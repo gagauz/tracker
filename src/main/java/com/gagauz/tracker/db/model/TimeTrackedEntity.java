@@ -8,8 +8,11 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.xl0e.hibernate.model.Model;
+
+@SuppressWarnings("serial")
 @MappedSuperclass
-public class TimeTrackedEntity extends BaseEntity {
+public class TimeTrackedEntity extends Model {
 
     private Date created = new Date();
     private Date updated;

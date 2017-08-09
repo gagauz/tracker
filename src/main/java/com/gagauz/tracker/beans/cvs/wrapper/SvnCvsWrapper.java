@@ -1,17 +1,17 @@
 package com.gagauz.tracker.beans.cvs.wrapper;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.gagauz.tracker.beans.cvs.CvsWrapper;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.utils.BashUtils;
 import com.gagauz.tracker.utils.StringUtils;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class SvnCvsWrapper implements CvsWrapper {
 
@@ -78,7 +78,7 @@ public class SvnCvsWrapper implements CvsWrapper {
 
     private String log(String grep) {
         StringBuilder log = new StringBuilder();
-        //Stupid SVN doesn't event have case insensitive search
+        // Stupid SVN doesn't event have case insensitive search
         int res = BashUtils.execute(repoDir, log, "svn log --verbose --search \"" + grep + '"');
         if (0 != res) {
             System.err.println(log.toString());
@@ -101,7 +101,7 @@ public class SvnCvsWrapper implements CvsWrapper {
                 String[] lines = StringUtils.split(cl, "\n");
                 String[] fields = StringUtils.split(lines[0], "|");
                 Commit commit = new Commit();
-                commit.setHash(fields[0].trim());
+                commit.setId(fields[0].trim());
                 commit.setAuthor(fields[1].trim());
                 commit.setDate(new Date(fields[2].trim()));
                 int numOfComments = Integer.parseInt(fields[3].replaceAll("[^0-9]", ""));
@@ -133,7 +133,7 @@ public class SvnCvsWrapper implements CvsWrapper {
                 String[] lines = StringUtils.split(cl, "\n");
                 String[] fields = StringUtils.split(lines[0], "|");
                 Commit commit = new Commit();
-                commit.setHash(fields[0].trim());
+                commit.setId(fields[0].trim());
                 commit.setAuthor(fields[1].trim());
                 commit.setDate(new Date(fields[2].trim()));
                 int numOfComments = Integer.parseInt(fields[3].replaceAll("[^0-9]", ""));

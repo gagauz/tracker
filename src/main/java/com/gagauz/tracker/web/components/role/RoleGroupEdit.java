@@ -6,7 +6,7 @@ import org.apache.tapestry5.alerts.AlertManager;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.gagauz.tapestry.web.config.Global;
+import org.apache.tapestry5.web.config.Global;
 
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.db.model.Project;

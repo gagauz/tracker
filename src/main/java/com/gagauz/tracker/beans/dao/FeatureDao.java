@@ -1,18 +1,18 @@
 package com.gagauz.tracker.beans.dao;
 
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Feature;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-import static com.gagauz.tracker.db.utils.Param.param;
+import org.springframework.stereotype.Service;
+
+import com.gagauz.tracker.db.model.Feature;
+import com.gagauz.tracker.db.model.Project;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class FeatureDao extends AbstractDao<Integer, Feature> {
 
     public List<Feature> findByProject(Project project) {
-        return findByQuery("from Feature v where project=:project", param("project", project));
+        return findByFilter(filter().eq("project", project));
     }
 
 }

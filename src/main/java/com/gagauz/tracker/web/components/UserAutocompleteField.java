@@ -1,9 +1,14 @@
 package com.gagauz.tracker.web.components;
 
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.db.utils.Param;
-import org.apache.tapestry5.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.Field;
+import org.apache.tapestry5.FieldTranslator;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.ValidationException;
+import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Environmental;
@@ -16,8 +21,8 @@ import org.apache.tapestry5.services.FormSupport;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.db.model.User;
 
 public class UserAutocompleteField implements Field {
 
@@ -47,7 +52,7 @@ public class UserAutocompleteField implements Field {
 
     List<JSONObject> onProvideCompletions(String username) {
         List<JSONObject> res = new ArrayList<>();
-        for (User u : userDao.findByQuery("from User u where username like :name or name like :name or email like :name", Param.param("name", username + '%'))) {
+        for (User u : userDao.findByNameOrEmail(username)) {
             res.add(new JSONObject("id", u.getId(), "name", u.getName() + " - " + u.getEmail()));
         }
         return res;

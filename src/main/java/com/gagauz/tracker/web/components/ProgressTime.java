@@ -5,8 +5,7 @@ import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.gagauz.tapestry.web.services.ToolsService;
-
+import org.apache.tapestry5.web.services.ToolsService;
 
 public class ProgressTime {
 

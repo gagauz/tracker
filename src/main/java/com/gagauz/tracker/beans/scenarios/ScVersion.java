@@ -88,8 +88,8 @@ public class ScVersion extends DataBaseScenario {
 
     @Override
     protected void execute() {
-        User user1 = userDao.findById(1);
-        User user2 = userDao.findById(2);
+        User user1 = userDao.findByUsername("username0");
+        User user2 = userDao.findByUsername("username1");
 
         for (int i = 0; i < 1; i++) {
             project = projectDao.findByCode(ScProject.TRACKER);
@@ -104,7 +104,7 @@ public class ScVersion extends DataBaseScenario {
                 feature.setDescription("Общее описание фичи, например, Авторизация на сайте для доступа к защищенным разделам.");
                 features.add(feature);
             }
-            featureDao.save(features);
+            featureDao.saveAll(features);
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.MONTH, -1);
             for (int j = 0; j < 3; j++) {
@@ -185,7 +185,7 @@ public class ScVersion extends DataBaseScenario {
                         }
                         ticketDao.updateTicketProgessTime(ticket);
                         if (!cms.isEmpty()) {
-                            workflowDao.save(cms);
+                            workflowDao.saveAll(cms);
                         }
 
                         int stc1 = rand.nextInt(3) + 1;
@@ -240,7 +240,6 @@ public class ScVersion extends DataBaseScenario {
         }
         return RandomUtils.getRandomObject(userHash.values());
     }
-
 
     @Override
     protected DataBaseScenario[] getDependsOn() {

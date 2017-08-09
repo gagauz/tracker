@@ -1,31 +1,26 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
-
-import javax.persistence.*;
-
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.xl0e.hibernate.model.Model;
 
 @Entity
 @Table(name = "stage")
-public class Stage implements Identifiable {
-    private int id;
+public class Stage extends Model {
+    private static final long serialVersionUID = 8419781705750435315L;
     private Project project;
     private Date created = new Date();
     private Date updated;
     private String name;
     private String description;
-
-    @Id
-    @GeneratedValue
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     public Project getProject() {

@@ -2,7 +2,6 @@ package com.gagauz.tracker.web.config;
 
 import javax.sql.DataSource;
 
-import org.gagauz.hibernate.config.AbstractHibernateConfig;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowire;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.gagauz.tracker.db.config.DevDataSource;
 import com.gagauz.tracker.db.config.DevLocalSessionFactoryBean;
+import com.xl0e.hibernate.config.AbstractHibernateConfig;
 
 @Configuration
 @EnableScheduling

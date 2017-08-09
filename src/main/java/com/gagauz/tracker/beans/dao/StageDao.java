@@ -1,10 +1,12 @@
 package com.gagauz.tracker.beans.dao;
 
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Stage;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Stage;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class StageDao extends AbstractDao<Integer, Stage> {

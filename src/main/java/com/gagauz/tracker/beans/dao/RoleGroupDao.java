@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class RoleGroupDao extends AbstractDao<Integer, RoleGroup> {

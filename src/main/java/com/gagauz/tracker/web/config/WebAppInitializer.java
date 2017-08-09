@@ -1,6 +1,6 @@
 package com.gagauz.tracker.web.config;
 
-import org.gagauz.tapestry.web.config.AbstractWebApplicationInitializer;
+import org.apache.tapestry5.web.config.AbstractWebApplicationInitializer;
 
 import com.gagauz.tracker.web.services.AppModule;
 
@@ -12,7 +12,7 @@ public class WebAppInitializer extends AbstractWebApplicationInitializer {
     }
 
     @Override
-    protected String[] getConfigLocations() {
+    protected String[] getSpringConfigLocations() {
         return new String[] { CommonConfiguration.class.getName() };
     }
 

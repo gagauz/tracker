@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.I18nString;
 import com.gagauz.tracker.db.model.I18nString.Id;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class I18nStringDao extends AbstractDao<I18nString.Id, I18nString> {
@@ -19,6 +20,5 @@ public class I18nStringDao extends AbstractDao<I18nString.Id, I18nString> {
             return new Id(l, ids[1]);
         };
     }
-
 
 }

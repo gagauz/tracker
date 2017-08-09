@@ -15,8 +15,8 @@ import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.internal.SelectModelImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
-import org.gagauz.tapestry.web.config.Global;
-import org.gagauz.tapestry.web.services.model.CollectionGridDataSourceRowTypeFix;
+import org.apache.tapestry5.web.config.Global;
+import org.apache.tapestry5.web.services.model.CollectionGridDataSourceRowTypeFix;
 
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.beans.dao.TicketTypeDao;
@@ -55,7 +55,7 @@ public class TicketTypeEdit {
 
     @Cached
     public GridDataSource getTicketType1() {
-        return new CollectionGridDataSourceRowTypeFix<TicketType>(ticketTypeDao.findByProject(getProject()), TicketType.class);
+        return new CollectionGridDataSourceRowTypeFix<>(ticketTypeDao.findByProject(getProject()), TicketType.class);
     }
 
     void onSubmitFromForm() {
@@ -70,7 +70,7 @@ public class TicketTypeEdit {
     @Cached
     public SelectModel getGroupModel() {
         List<OptionModel> list = new ArrayList<>();
-        for (RoleGroup roleGroup:roleGroupDao.findByProject(getProject())) {
+        for (RoleGroup roleGroup : roleGroupDao.findByProject(getProject())) {
             list.add(new OptionModelImpl(roleGroup.getName(), roleGroup));
         }
         return new SelectModelImpl(list.toArray(new OptionModel[list.size()]));

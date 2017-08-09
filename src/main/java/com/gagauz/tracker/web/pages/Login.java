@@ -5,8 +5,8 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.security.AuthenticationService;
 import org.apache.tapestry5.services.Request;
-import org.gagauz.tapestry.security.AuthenticationService;
 import org.gagauz.tracker.web.security.CredentialsImpl;
 
 import com.gagauz.tracker.db.model.User;

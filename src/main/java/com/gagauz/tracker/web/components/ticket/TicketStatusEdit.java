@@ -1,6 +1,5 @@
 package com.gagauz.tracker.web.components.ticket;
 
-
 import java.util.stream.Collectors;
 
 import org.apache.tapestry5.SelectModel;
@@ -9,7 +8,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
-import org.gagauz.tapestry.web.services.model.CollectionGridDataSourceRowTypeFix;
+import org.apache.tapestry5.web.services.model.CollectionGridDataSourceRowTypeFix;
 
 import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.db.model.Project;

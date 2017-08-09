@@ -1,6 +1,6 @@
 package com.gagauz.tracker.utils;
 
-import org.gagauz.utils.IAppProperty;
+import com.xl0e.util.IAppProperty;
 
 public enum AppProperties implements IAppProperty<AppProperties> {
     JDBC_USERNAME("b4f"),
@@ -18,7 +18,7 @@ public enum AppProperties implements IAppProperty<AppProperties> {
     }
 
     @Override
-	public String getDefaultValue() {
+    public String getDefaultValue() {
         return defaultValue;
     }
 

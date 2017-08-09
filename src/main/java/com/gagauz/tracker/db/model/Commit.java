@@ -1,29 +1,32 @@
 package com.gagauz.tracker.db.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import java.util.Date;
+import com.xl0e.hibernate.model.IModel;
 
 @Entity
 @Table(name = "commit")
-public class Commit {
-    private String hash;
+public class Commit implements IModel<String> {
+    private String id;
     private String author;
     private String comment;
     private Date date;
     private String details;
 
+    @Override
     @Id
     @Column(updatable = false, nullable = false)
-    public String getHash() {
-        return hash;
+    public String getId() {
+        return id;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Column(nullable = false)

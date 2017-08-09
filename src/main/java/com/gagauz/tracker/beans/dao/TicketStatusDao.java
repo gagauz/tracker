@@ -1,26 +1,26 @@
 package com.gagauz.tracker.beans.dao;
 
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.TicketStatus;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-import static com.gagauz.tracker.db.utils.Param.param;
+import org.springframework.stereotype.Service;
+
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.TicketStatus;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class TicketStatusDao extends AbstractDao<Integer, TicketStatus> {
 
     public List<TicketStatus> findByProject(Project project) {
-        return findByQuery("from TicketStatus v where project is null or project=:project", param("project", project));
+        return findByFilter(filter().eq("project", project));
     }
 
     public List<TicketStatus> findFirstByProject(Project project) {
-        return findByQuery("from TicketStatus v where project=:project", param("project", project));
+        return findByFilter(filter().eq("project", project));
     }
 
     public List<TicketStatus> findCommon() {
-        return findByQuery("from TicketStatus v where project is null");
+        return findByFilter(filter().isNull("project"));
     }
 
 }

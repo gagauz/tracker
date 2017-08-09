@@ -112,23 +112,23 @@ public class ProjectMap {
     public Collection<Version> getVersions() {
         List<Version> versions = releasedVersions
                 ? versionDao.findByProject(project, true)
-                        : versionDao.findByProject(project, false);
-                if (null == featureVersionMap) {
-                    initMap(versions);
+                : versionDao.findByProject(project, false);
+        if (null == featureVersionMap) {
+            initMap(versions);
 
-                    for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
-                        Map<Feature, FeatureVersion> map = featureVersionMap.get(featureVersion.getVersion());
-                        if (null == map) {
-                            continue;
-                        }
-                        map.put(featureVersion.getFeature(), featureVersion);
-                        ticketsMap.put(featureVersion, new ArrayList<Ticket>());
-                    }
-                    for (Ticket ticket : ticketDao.findByProject(project)) {
-                        addToMap(ticketsMap, ticket.getFeatureVersion(), ticket);
-                    }
+            for (FeatureVersion featureVersion : featureVersionDao.findByProject(project)) {
+                Map<Feature, FeatureVersion> map = featureVersionMap.get(featureVersion.getVersion());
+                if (null == map) {
+                    continue;
                 }
-                return versions;
+                map.put(featureVersion.getFeature(), featureVersion);
+                ticketsMap.put(featureVersion, new ArrayList<Ticket>());
+            }
+            for (Ticket ticket : ticketDao.findByProject(project)) {
+                addToMap(ticketsMap, ticket.getFeatureVersion(), ticket);
+            }
+        }
+        return versions;
     }
 
     private <K, V> void addToMap(Map<K, List<V>> map, K key, V value) {

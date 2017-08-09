@@ -1,8 +1,8 @@
 package org.gagauz.tracker.web.security;
 
-import org.gagauz.tapestry.security.api.Credentials;
+import org.apache.tapestry5.security.api.Credential;
 
-public class CredentialsImpl implements Credentials {
+public class CredentialsImpl implements Credential {
     private String username;
     private String password;
     private boolean remember;

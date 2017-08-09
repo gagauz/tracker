@@ -1,6 +1,6 @@
 package org.gagauz.tracker.web.security;
 
-import org.gagauz.tapestry.security.api.AccessAttribute;
+import org.apache.tapestry5.security.api.AccessAttribute;
 
 import com.gagauz.tracker.db.model.AccessRole;
 

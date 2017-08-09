@@ -1,10 +1,12 @@
 package com.gagauz.tracker.beans.dao;
 
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.Workflow;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.Workflow;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class WorkflowDao extends AbstractDao<Integer, Workflow> {

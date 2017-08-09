@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Commit;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class CommitDao extends AbstractDao<String, Commit> {

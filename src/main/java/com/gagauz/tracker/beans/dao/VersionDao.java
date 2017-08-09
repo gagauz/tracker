@@ -1,10 +1,12 @@
 package com.gagauz.tracker.beans.dao;
 
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.Version;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.Version;
+import com.xl0e.hibernate.dao.AbstractDao;
 
 @Service
 public class VersionDao extends AbstractDao<Integer, Version> {
@@ -16,10 +18,7 @@ public class VersionDao extends AbstractDao<Integer, Version> {
 
     @SuppressWarnings("unchecked")
     public List<Version> findByProject(Project project, boolean released) {
-        return getSession().createQuery("from Version v where project=:project and released=:released")
-                .setEntity("project", project)
-                .setBoolean("released", released)
-                .list();
+        return getCriteriaFilter().eq("project", project).eq("released", released).list();
     }
 
     public Version findLast(Project project) {

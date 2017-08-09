@@ -1,31 +1,24 @@
 package com.gagauz.tracker.db.model;
 
-import com.gagauz.tracker.db.base.Identifiable;
-import org.hibernate.annotations.ForeignKey;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import com.xl0e.hibernate.model.Model;
 
 @Entity
 @Table(name = "work_log")
-public class WorkLog implements Identifiable {
+public class WorkLog extends Model {
+    static final long serialVersionUID = -7626106166663507656L;
     private int id;
     private User user;
     private Ticket ticket;
     private int logTime;
     private String comment;
 
-    @Override
-    @Id
-    @GeneratedValue
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @ForeignKey(name = "fk_workLog_user")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, nullable = false)
     public User getUser() {
@@ -36,7 +29,6 @@ public class WorkLog implements Identifiable {
         this.user = user;
     }
 
-    @ForeignKey(name = "fk_workLog_ticket")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, nullable = false)
     public Ticket getTicket() {
