@@ -5,7 +5,7 @@ import com.gagauz.tracker.beans.dao.TicketDao;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
-import org.gagauz.tracker.web.security.Secured;
+import org.apache.tapestry5.web.services.security.Secured;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;

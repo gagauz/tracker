@@ -10,17 +10,17 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.apache.tapestry5.security.api.Principal;
 
 import com.gagauz.tracker.utils.HashUtils;
 import com.xl0e.hibernate.model.Model;
-import com.xl0e.util.CryptoUtils;
+import com.xl0e.util.C;
+
+import org.apache.tapestry5.security.api.AccessAttributes;
+import org.apache.tapestry5.web.services.security.SecuredAccessAttributes;
 
 @Entity
 @Table(name = "`user`")
-public class User extends Model implements Principal {
+public class User extends Model implements org.apache.tapestry5.security.api.User {
     private static final long serialVersionUID = 7903294228565311630L;
     private String name;
     private String email;
@@ -28,7 +28,7 @@ public class User extends Model implements Principal {
     private String username;
     private String password;
     private String token;
-    private Set<AccessRole> roles;
+    private transient AccessAttributes accessAttributes;
 
     @Column(nullable = false)
     public String getName() {
@@ -73,7 +73,7 @@ public class User extends Model implements Principal {
     }
 
     public void setRoleGroups(Collection<RoleGroup> roleGroups) {
-        this.roles = null;
+        this.accessAttributes = null;
         this.roleGroups = roleGroups;
     }
 
@@ -94,29 +94,15 @@ public class User extends Model implements Principal {
         return "User <id=" + id + ">";
     }
 
-    @Transient
-    public boolean checkRoles(AccessRole[] rolesToCheck) {
-        if (null == roles) {
-            Set<AccessRole> roleSet = new HashSet<>();
+    @Override
+    public AccessAttributes getAccessAttributes() {
+        if (null == accessAttributes) {
+            Set<String> roles = C.newHashSet();
             for (RoleGroup group : roleGroups) {
-                roleSet.addAll(group.getRoles());
+                roles.addAll(group.getRoles());
             }
-            roles = roleSet;
+            accessAttributes = new SecuredAccessAttributes(roles);
         }
-        if (null == rolesToCheck || rolesToCheck.length == 0) {
-            return true;
-        }
-        for (AccessRole role : rolesToCheck) {
-            if (roles.contains(role)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Transient
-    public boolean checkPassword(String password) {
-        return this.password.equals(password)
-                || this.password.equals(CryptoUtils.createSHA512String(password));
+        return accessAttributes;
     }
 }

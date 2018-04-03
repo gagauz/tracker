@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.User;
-import com.xl0e.hibernate.dao.AbstractDao;
+
 
 @Service
 public class UserDao extends AbstractDao<Integer, User> {

@@ -12,7 +12,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.gagauz.tracker.web.security.Secured;
+import org.apache.tapestry5.web.services.security.Secured;
 
 import com.gagauz.tracker.beans.dao.FeatureDao;
 import com.gagauz.tracker.beans.dao.TicketDao;

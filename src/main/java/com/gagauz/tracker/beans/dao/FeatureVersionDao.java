@@ -11,7 +11,7 @@ import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.StringUtils;
-import com.xl0e.hibernate.dao.AbstractDao;
+
 
 @Service
 public class FeatureVersionDao extends AbstractDao<FeatureVersionId, FeatureVersion> {

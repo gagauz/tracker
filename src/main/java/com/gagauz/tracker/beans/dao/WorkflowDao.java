@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Workflow;
-import com.xl0e.hibernate.dao.AbstractDao;
+
 
 @Service
 public class WorkflowDao extends AbstractDao<Integer, Workflow> {

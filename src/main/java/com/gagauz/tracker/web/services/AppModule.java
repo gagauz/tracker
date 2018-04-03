@@ -1,5 +1,16 @@
 package com.gagauz.tracker.web.services;
 
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.beans.scheduler.SchedulerService;
+import com.gagauz.tracker.beans.setup.TestDataInitializer;
+import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.utils.AppProperties;
+import com.ivaga.tapestry.csscombiner.CssCombinerModule;
+import com.ivaga.tapestry.csscombiner.LessModule;
+import com.xl0e.hibernate.utils.EntityFilterBuilder;
+import com.xl0e.tapestry.hibernate.HibernateValueEncoderModule;
+import com.xl0e.util.CryptoUtils;
+
 import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.beaneditor.DataTypeConstants;
@@ -13,33 +24,17 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Startup;
 import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.FactoryDefaults;
-import org.apache.tapestry5.plastic.PlasticClass;
-import org.apache.tapestry5.plastic.PlasticMethod;
-import org.apache.tapestry5.security.PrincipalStorage;
-import org.apache.tapestry5.security.api.AccessAttributeExtractorChecker;
-import org.apache.tapestry5.security.api.Credential;
-import org.apache.tapestry5.security.api.Principal;
+import org.apache.tapestry5.security.api.Credentials;
 import org.apache.tapestry5.security.api.UserProvider;
 import org.apache.tapestry5.security.impl.CookieCredentials;
+import org.apache.tapestry5.security.impl.UserAndPassCredentials;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.BeanBlockContribution;
 import org.apache.tapestry5.services.EditBlockContribution;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.web.services.modules.CoreWebappModule;
-import org.gagauz.tracker.web.security.AccessAttributeImpl;
-import org.gagauz.tracker.web.security.CredentialsImpl;
-import org.gagauz.tracker.web.security.Secured;
-
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.beans.scheduler.SchedulerService;
-import com.gagauz.tracker.beans.setup.TestDataInitializer;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.utils.AppProperties;
-import com.ivaga.tapestry.csscombiner.CssCombinerModule;
-import com.ivaga.tapestry.csscombiner.LessModule;
-import com.xl0e.tapestry.hibernate.HibernateValueEncoderModule;
-import com.xl0e.util.CryptoUtils;
+import org.apache.tapestry5.web.services.security.CookieEncryptorDecryptor;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -80,7 +75,7 @@ public class AppModule {
 
     @Contribute(JavaScriptStackSource.class)
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
-            final AssetSource assetSource) {
+                                                       final AssetSource assetSource) {
     }
 
     @Decorate(serviceInterface = JavaScriptStackSource.class)
@@ -93,78 +88,29 @@ public class AppModule {
         configuration.add(new EditBlockContribution(DataTypeConstants.LONG_TEXT, "AppPropertyBlocks", "anytext"));
     }
 
-    public static UserProvider buildUserProvider(final UserDao adminDao) {
-        return new UserProvider() {
-            @Override
-            public <U extends Principal, C extends Credential> U findByCredential(C arg0) {
-                if (arg0 instanceof org.gagauz.tracker.web.security.CredentialsImpl) {
-                    User user = adminDao.findByUsername(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getUsername());
-                    if (null != user && user.checkPassword(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getPassword())) {
-                        if (null != user.getRoleGroups()) {
-                            user.getRoleGroups().forEach(System.out::println);
-                        }
-                        user = adminDao.unproxy(user);
-                        return (U) user;
-                    }
-                    return null;
-                } else if (arg0 instanceof CookieCredentials) {
-                    try {
-                        String[] tokens = CryptoUtils.decryptArrayAES(((CookieCredentials) arg0).getValue());
-                        CredentialsImpl cred = new CredentialsImpl(tokens[0], tokens[1], false);
-                        return findByCredential(cred);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+    public static UserProvider<User, Credentials> buildUserProvider(@Inject final UserDao accountDao,
+                                                                    @Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
+        return c -> {
 
-                }
-                return null;
+            String username = "";
+            String password = "";
+
+            if (c instanceof UserAndPassCredentials) {
+                UserAndPassCredentials credentials = (UserAndPassCredentials) c;
+                username = CryptoUtils.createSHA512String(credentials.getUsername());
+                password = CryptoUtils.createSHA512String(credentials.getPassword());
+
             }
-
-            @Override
-            public <U extends Principal, C extends Credential> C toCredentials(U arg0, Class<C> arg1) {
-                if (arg1.equals(CookieCredentials.class)) {
-                    User user = (User) arg0;
-                    String value = CryptoUtils.encryptArrayAES(user.getUsername(), user.getPassword(), user.getClass().getSimpleName());
-                    return (C) new CookieCredentials(value);
-                }
-                throw new IllegalStateException();
+            if (c instanceof CookieCredentials) {
+                CookieCredentials credentials = (CookieCredentials) c;
+                String[] usernameAndPassword = cookieEncryptorDecryptor.decryptArray(credentials.getValue());
+                username = usernameAndPassword[0];
+                password = usernameAndPassword[1];
             }
-
+            return accountDao.findOneByFilter(EntityFilterBuilder.and()
+                    .eq("username", username)
+                    .eq("password", password));
         };
     }
 
-    public static AccessAttributeExtractorChecker buildAccessAttributeExtractorChecker() {
-        return new AccessAttributeExtractorChecker<AccessAttributeImpl>() {
-
-            @Override
-            public boolean check(PrincipalStorage userSet, AccessAttributeImpl attribute) {
-                if (null != userSet) {
-                    if (null == attribute || 0 == attribute.getRoles().length) {
-                        return true;
-                    }
-                    return userSet.stream().filter(user -> ((User) user).checkRoles(attribute.getRoles())).findAny().isPresent();
-                }
-                return false;
-            }
-
-            @Override
-            public AccessAttributeImpl extract(PlasticClass plasticClass, PlasticMethod plasticMethod) {
-
-                if (null == plasticMethod) {
-                    Secured annotation = plasticClass.getAnnotation(Secured.class);
-                    if (null != annotation) {
-                        return new AccessAttributeImpl(annotation.value());
-                    }
-                    return null;
-                }
-
-                Secured annotation = plasticMethod.getAnnotation(Secured.class);
-                if (null != annotation) {
-                    return new AccessAttributeImpl(annotation.value());
-                }
-                return null;
-            }
-
-        };
-    }
 }

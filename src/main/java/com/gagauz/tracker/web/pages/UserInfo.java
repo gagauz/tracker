@@ -2,7 +2,7 @@ package com.gagauz.tracker.web.pages;
 
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.Property;
-import org.gagauz.tracker.web.security.Secured;
+import org.apache.tapestry5.web.services.security.Secured;
 
 import com.gagauz.tracker.db.model.User;
 

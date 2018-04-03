@@ -4,7 +4,7 @@ import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.AccessRole;
-import org.gagauz.tracker.web.security.Secured;
+import org.apache.tapestry5.web.services.security.Secured;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Persist;

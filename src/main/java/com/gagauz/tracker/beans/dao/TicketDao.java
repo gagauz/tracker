@@ -8,7 +8,7 @@ import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
-import com.xl0e.hibernate.dao.AbstractDao;
+
 
 @Service
 public class TicketDao extends AbstractDao<Integer, Ticket> {
