@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Stage;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class StageDao extends AbstractDao<Integer, Stage> {
+public class StageDao extends AbstractHibernateDao<Integer, Stage> {
 
     public List<Stage> findByProject(Project project) {
         return createQuery("from Stage v where project=:project").setEntity("project", project).list();

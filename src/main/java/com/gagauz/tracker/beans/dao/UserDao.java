@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.User;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class UserDao extends AbstractDao<Integer, User> {
+public class UserDao extends AbstractHibernateDao<Integer, User> {
 
     public User findByToken(String token) {
         return findOneByFilter(filter().eq("token", token));

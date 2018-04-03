@@ -15,7 +15,6 @@ import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.internal.SelectModelImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
-import org.apache.tapestry5.web.config.Global;
 import org.apache.tapestry5.web.services.model.CollectionGridDataSourceRowTypeFix;
 
 import com.gagauz.tracker.beans.dao.RoleGroupDao;
@@ -23,6 +22,7 @@ import com.gagauz.tracker.beans.dao.TicketTypeDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.TicketType;
+import com.xl0e.web.config.Global;
 
 public class TicketTypeEdit {
 

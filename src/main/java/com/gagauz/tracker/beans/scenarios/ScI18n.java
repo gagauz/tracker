@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.apache.tapestry5.web.config.Global;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gagauz.tracker.beans.dao.I18nStringDao;
 import com.gagauz.tracker.beans.setup.DataBaseScenario;
 import com.gagauz.tracker.db.model.I18nString;
 import com.gagauz.tracker.db.model.I18nString.Id;
+import com.xl0e.web.config.Global;
 
 public class ScI18n extends DataBaseScenario {
 

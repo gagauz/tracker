@@ -11,10 +11,10 @@ import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.StringUtils;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class FeatureVersionDao extends AbstractDao<FeatureVersionId, FeatureVersion> {
+public class FeatureVersionDao extends AbstractHibernateDao<FeatureVersionId, FeatureVersion> {
 
     public List<FeatureVersion> findByVersion(Version version) {
         return getCriteriaFilter().eq("version", version).list();

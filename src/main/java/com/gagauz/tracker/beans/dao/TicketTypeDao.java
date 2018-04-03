@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.TicketType;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class TicketTypeDao extends AbstractDao<Integer, TicketType> {
+public class TicketTypeDao extends AbstractHibernateDao<Integer, TicketType> {
 
     public List<TicketType> findByProject(Project project) {
         return findByFilter(filter().or().isNull("project").eq("project", project));

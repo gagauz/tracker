@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.apache.tapestry5.security.api.Principal;
+import org.apache.tapestry5.security.api.User;
 
 import com.gagauz.tracker.utils.HashUtils;
 import com.xl0e.hibernate.model.Model;
@@ -20,7 +20,7 @@ import com.xl0e.util.CryptoUtils;
 
 @Entity
 @Table(name = "`user`")
-public class User extends Model implements Principal {
+public class User extends Model implements User {
     private static final long serialVersionUID = 7903294228565311630L;
     private String name;
     private String email;

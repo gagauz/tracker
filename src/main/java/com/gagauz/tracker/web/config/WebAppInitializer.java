@@ -1,8 +1,7 @@
 package com.gagauz.tracker.web.config;
 
-import org.apache.tapestry5.web.config.AbstractWebApplicationInitializer;
-
 import com.gagauz.tracker.web.services.AppModule;
+import com.xl0e.web.config.AbstractWebApplicationInitializer;
 
 public class WebAppInitializer extends AbstractWebApplicationInitializer {
 

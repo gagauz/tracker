@@ -7,6 +7,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -72,6 +73,7 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
     private Project project;
     private Feature feature;
     private Version version;
+    private String description;
 
     @Override
     @EmbeddedId
@@ -130,6 +132,15 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
         this.version = version;
         getId().projectId = null != version && null != version.getProject() ? version.getProject().getId() : 0;
         getId().versionId = null != version ? version.getId() : 0;
+    }
+
+    @Lob
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

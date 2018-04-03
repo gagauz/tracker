@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class VersionDao extends AbstractDao<Integer, Version> {
+public class VersionDao extends AbstractHibernateDao<Integer, Version> {
 
     @SuppressWarnings("unchecked")
     public List<Version> findByProject(Project project) {

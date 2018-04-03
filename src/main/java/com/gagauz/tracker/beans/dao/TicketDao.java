@@ -8,10 +8,10 @@ import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class TicketDao extends AbstractDao<Integer, Ticket> {
+public class TicketDao extends AbstractHibernateDao<Integer, Ticket> {
 
     public List<Ticket> findByProject(Project project) {
         return getCriteriaFilter().eq("featureVersion.id.projectId", project.getId()).list();

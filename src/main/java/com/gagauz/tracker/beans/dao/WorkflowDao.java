@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Workflow;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class WorkflowDao extends AbstractDao<Integer, Workflow> {
+public class WorkflowDao extends AbstractHibernateDao<Integer, Workflow> {
 
     public List<Workflow> findCommentsByTicket(Ticket ticket) {
         return getSession()

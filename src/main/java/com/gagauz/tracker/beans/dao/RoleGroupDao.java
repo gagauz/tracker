@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
-import com.xl0e.hibernate.dao.AbstractDao;
+import com.xl0e.hibernate.dao.AbstractHibernateDao;
 
 @Service
-public class RoleGroupDao extends AbstractDao<Integer, RoleGroup> {
+public class RoleGroupDao extends AbstractHibernateDao<Integer, RoleGroup> {
 
     @SuppressWarnings("unchecked")
     public List<RoleGroup> findByProject(Project project) {

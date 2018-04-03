@@ -16,9 +16,9 @@ import org.apache.tapestry5.ioc.services.FactoryDefaults;
 import org.apache.tapestry5.plastic.PlasticClass;
 import org.apache.tapestry5.plastic.PlasticMethod;
 import org.apache.tapestry5.security.PrincipalStorage;
-import org.apache.tapestry5.security.api.AccessAttributeExtractorChecker;
-import org.apache.tapestry5.security.api.Credential;
-import org.apache.tapestry5.security.api.Principal;
+import org.apache.tapestry5.security.api.AccessAttributesChecker;
+import org.apache.tapestry5.security.api.Credentials;
+import org.apache.tapestry5.security.api.User;
 import org.apache.tapestry5.security.api.UserProvider;
 import org.apache.tapestry5.security.impl.CookieCredentials;
 import org.apache.tapestry5.services.AssetSource;
@@ -96,7 +96,7 @@ public class AppModule {
     public static UserProvider buildUserProvider(final UserDao adminDao) {
         return new UserProvider() {
             @Override
-            public <U extends Principal, C extends Credential> U findByCredential(C arg0) {
+            public <U extends User, C extends Credentials> U findByCredential(C arg0) {
                 if (arg0 instanceof org.gagauz.tracker.web.security.CredentialsImpl) {
                     User user = adminDao.findByUsername(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getUsername());
                     if (null != user && user.checkPassword(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getPassword())) {
@@ -121,7 +121,7 @@ public class AppModule {
             }
 
             @Override
-            public <U extends Principal, C extends Credential> C toCredentials(U arg0, Class<C> arg1) {
+            public <U extends User, C extends Credentials> C toCredentials(U arg0, Class<C> arg1) {
                 if (arg1.equals(CookieCredentials.class)) {
                     User user = (User) arg0;
                     String value = CryptoUtils.encryptArrayAES(user.getUsername(), user.getPassword(), user.getClass().getSimpleName());
@@ -133,11 +133,11 @@ public class AppModule {
         };
     }
 
-    public static AccessAttributeExtractorChecker buildAccessAttributeExtractorChecker() {
-        return new AccessAttributeExtractorChecker<AccessAttributeImpl>() {
+    public static AccessAttributesChecker buildAccessAttributeExtractorChecker() {
+        return new AccessAttributesChecker<AccessAttributeImpl>() {
 
             @Override
-            public boolean check(PrincipalStorage userSet, AccessAttributeImpl attribute) {
+            public boolean canAccess(PrincipalStorage userSet, AccessAttributeImpl attribute) {
                 if (null != userSet) {
                     if (null == attribute || 0 == attribute.getRoles().length) {
                         return true;
