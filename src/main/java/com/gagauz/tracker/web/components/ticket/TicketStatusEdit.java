@@ -10,9 +10,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.web.services.model.CollectionGridDataSourceRowTypeFix;
 
-import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.services.dao.TicketStatusDao;
 
 public class TicketStatusEdit {
     @Parameter(autoconnect = true)

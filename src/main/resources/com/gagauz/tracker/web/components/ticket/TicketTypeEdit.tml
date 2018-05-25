@@ -1,29 +1,25 @@
 <html t:type="layout" title="tracker Index"
-      t:sidebarTitle="Framework Version"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
-      xmlns:p="tapestry:parameter">
+	t:sidebarTitle="Framework Version"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
 
-	<t:beaneditform t:id="form" object="object" cancel="true" exclude="id,created,updated"  add="creator,assignee">
+<t:beanform t:id="form" object="object" cancel="true"
+	exclude="id,created,updated" add="creator,assignee">
 	<p:creator>
-		<t:label for="creator" class="col-md-3" />
-		<div class="col-md-9">
-			<t:MultiSelect t:id="creator" model="groupModel" value="object.creator" class="form-control form-control"/>
-		</div>
+		<t:MultiSelect t:id="creator" model="groupModel"
+			value="object.creator" t:mixins="myformgroup" />
 	</p:creator>
 	<p:assignee>
-		<t:label for="assignee" class="col-md-3" />
-		<div class="col-md-9">
-			<t:MultiSelect t:id="assignee" model="groupModel" value="object.assignee" class="form-control form-control"/>
-		</div>
+		<t:MultiSelect t:id="assignee" model="groupModel"
+			value="object.assignee" t:mixins="myformgroup" />
 	</p:assignee>
-	</t:beaneditform>
-    
-	<t:grid source="getTicketType1()" row="ticketTypeRow" add="edit" class="table table-striped">
-    	<p:editCell>
-	    	<t:editlink row="ticketTypeRow" />
-    	</p:editCell>
-    </t:grid>
-   
+</t:beanform>
 
+<t:grid source="getTicketType1()" row="ticketTypeRow" add="edit"
+	class="table table-striped">
+	<p:editCell>
+		<t:editlink row="ticketTypeRow" />
+	</p:editCell>
+</t:grid>
 
 </html>

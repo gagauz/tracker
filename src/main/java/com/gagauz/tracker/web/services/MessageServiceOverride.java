@@ -9,9 +9,9 @@ import java.util.Set;
 import org.apache.tapestry5.ioc.MessageFormatter;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.internal.util.MessageFormatterImpl;
+import org.apache.tapestry5.web.config.Global;
 
-import com.gagauz.tracker.beans.dao.I18nStringDao;
-import com.xl0e.web.config.Global;
+import com.gagauz.tracker.services.dao.I18nStringDao;
 
 public class MessageServiceOverride implements Messages {
 

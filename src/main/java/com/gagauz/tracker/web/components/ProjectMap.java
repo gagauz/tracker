@@ -19,15 +19,15 @@ import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.FeatureVersionDao;
+import com.gagauz.tracker.services.dao.TicketDao;
+import com.gagauz.tracker.services.dao.VersionDao;
 
 public class ProjectMap {
 

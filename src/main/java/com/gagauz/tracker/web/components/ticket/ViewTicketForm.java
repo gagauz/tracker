@@ -8,10 +8,10 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.gagauz.tracker.beans.dao.TicketCommentDao;
 import com.gagauz.tracker.db.model.Attachment;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketComment;
+import com.gagauz.tracker.services.dao.TicketCommentDao;
 
 @Import(module = "bootstrap/collapse")
 public class ViewTicketForm {

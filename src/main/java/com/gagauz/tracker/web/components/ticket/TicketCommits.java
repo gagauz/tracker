@@ -1,8 +1,9 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import com.gagauz.tracker.beans.cvs.CvsService;
 import com.gagauz.tracker.db.model.Commit;
 import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.services.cvs.CvsService;
+
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;

@@ -6,7 +6,7 @@
 	<t:if test="editEntity">
 	<h2>Project workflow</h2>
 	<div>
-		<t:beaneditform t:id="form" object="editEntity" exclude="id" add="project,allowFrom,allowTo" cancel="true">
+		<t:beanform t:id="form" object="editEntity" exclude="id" add="project,allowFrom,allowTo" cancel="true">
 			<p:project>
 				<label class="control-label col-sm-3" for="project">${message:project}</label>
 				<div class="col-sm-9">
@@ -28,7 +28,7 @@
 				</div>
 			</p:allowTo>
 		
-		</t:beaneditform>
+		</t:beanform>
 		<t:eventlink t:event="reset">${message:reset}</t:eventlink>
 	</div>
 	<br/>

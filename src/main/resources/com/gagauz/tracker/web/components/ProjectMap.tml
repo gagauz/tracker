@@ -54,20 +54,19 @@
 													<div class="tickets">
 														<div class="title btn-toolbar">
 															<t:if test="notReleased">
-																<t:ModalLink role="button" class="btn btn-default btn-xs" t:zone="ticketZone" t:action="createTicket" t:context="[featureVersion]">
-																	<i class="glyphicon glyphicon-plus text text-success"></i> ${message:create-task}
+																<t:ModalLink role="button" class="btn btn-success" t:zone="ticketZone" t:action="createTicket" t:context="[featureVersion]">
+																	<i class="glyphicon glyphicon-plus"></i> ${message:create-task}
 																</t:ModalLink>
 															</t:if>
 														</div>
-														<ul>
-														
+														<ul class="ticket-col-div-tickets">
 															<t:foreach t:source="tickets" t:value="ticket" limit="5">
 																<li>
-																	<t:pagelink class="" t:page="TicketInfo" t:context="ticket">
+																	<t:pagelink class="${ticket.status.css}" t:page="TicketInfo" t:context="ticket">
 																		<i class="glyphicon icon"></i>
-																		<span class="label ${ticket.type.css}">${ticket.type.name}</span> ${ticket.key} ${ticket.summary}
+																		${ticket.key} ${ticket.summary}
 																	</t:pagelink>
-																	<t:ModalLink class="pull-right" t:zone="viewTicketZone" t:action="viewticket" t:context="ticket">
+																	<t:ModalLink class="" t:zone="viewTicketZone" t:action="viewticket" t:context="ticket">
 																		<i class="glyphicon glyphicon-eye-open"></i>
 																	</t:ModalLink>
 																</li>

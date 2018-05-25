@@ -1,12 +1,13 @@
 package com.gagauz.tracker.web.components.ticket;
 
-import com.gagauz.tracker.beans.dao.TicketCommentDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.beans.dao.WorkflowDao;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Workflow;
+import com.gagauz.tracker.services.dao.TicketCommentDao;
+import com.gagauz.tracker.services.dao.TicketDao;
+import com.gagauz.tracker.services.dao.UserDao;
+import com.gagauz.tracker.services.dao.WorkflowDao;
+
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;

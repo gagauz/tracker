@@ -1,3 +1,3 @@
 call ./setenv.bat
-call mvn eclipse:clean eclipse:eclipse -DdownloadSources=true -DdownloadSources -DresolveWorkspaceProjects=false
+call mvn eclipse:clean eclipse:eclipse -DdownloadSources=true -DdownloadSources -DresolveWorkspaceProjects=true
 pause

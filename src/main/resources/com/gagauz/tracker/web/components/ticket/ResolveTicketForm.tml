@@ -1,6 +1,6 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<div t:id="zone">
-		<t:beaneditform t:id="form" object="assign" cancel="true" add="status" include="comment">
+		<t:beanform t:id="form" object="assign" cancel="true" add="status" include="comment">
 			<p:status>
 				<t:hidden value="ticket" />
 				<t:label class="col-sm-3 control-label" for="status" />
@@ -12,6 +12,6 @@
 					<t:error for="status"/>
 				</div>
 			</p:status>
-		</t:beaneditform>
+		</t:beanform>
 	</div>
 </div>

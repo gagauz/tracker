@@ -1,7 +1,12 @@
 package com.gagauz.tracker.web.config;
 
+import org.apache.tapestry5.web.config.AbstractWebApplicationInitializer;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+
+import com.gagauz.tracker.config.DevCommonConfiguration;
+import com.gagauz.tracker.config.ProdCommonConfiguration;
+import com.gagauz.tracker.utils.AppProperties;
 import com.gagauz.tracker.web.services.AppModule;
-import com.xl0e.web.config.AbstractWebApplicationInitializer;
 
 public class WebAppInitializer extends AbstractWebApplicationInitializer {
 
@@ -12,7 +17,7 @@ public class WebAppInitializer extends AbstractWebApplicationInitializer {
 
     @Override
     protected String[] getSpringConfigLocations() {
-        return new String[] { CommonConfiguration.class.getName() };
+        return new String[] { DevCommonConfiguration.class.getName(), ProdCommonConfiguration.class.getName() };
     }
 
     @Override
@@ -20,4 +25,8 @@ public class WebAppInitializer extends AbstractWebApplicationInitializer {
         return true;
     }
 
+    @Override
+    protected void onSpringContext(AnnotationConfigWebApplicationContext context) {
+        context.getEnvironment().setActiveProfiles(AppProperties.PROFILE.getString());
+    }
 }

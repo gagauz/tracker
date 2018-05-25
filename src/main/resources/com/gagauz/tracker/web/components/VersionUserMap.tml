@@ -33,7 +33,7 @@
 			<table>
 				<tr>
 					<t:loop source="users" value="user">
-						<th class="">
+						<th class="" style=" background-color: ${bgcolor}">
 							<div class="version-col">
 								<t:if test="user">
 									<div>${message:owner}: <t:pagelink page="userinfo" context="user">${user.name}</t:pagelink></div>
@@ -58,7 +58,7 @@
 				</tr>
 				<tr>
 					<t:loop source="users" value="user">
-						<td class="ticket-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}">
+						<td class="ticket-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}" style="background-color: ${bgcolor}">
 							<div class="ticket-cells">
 								<t:loop source="userTickets" value="ticket">
 									<div class="ticket-cell-div ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">

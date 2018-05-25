@@ -1,10 +1,14 @@
 package com.gagauz.tracker.web.services;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.beaneditor.DataTypeConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Decorate;
@@ -13,32 +17,36 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Startup;
 import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.FactoryDefaults;
-import org.apache.tapestry5.plastic.PlasticClass;
-import org.apache.tapestry5.plastic.PlasticMethod;
+import org.apache.tapestry5.security.AuthenticationService;
+import org.apache.tapestry5.security.LoginResult;
 import org.apache.tapestry5.security.PrincipalStorage;
-import org.apache.tapestry5.security.api.AccessAttributesChecker;
+import org.apache.tapestry5.security.api.AccessAttributes;
+import org.apache.tapestry5.security.api.AuthenticationHandler;
+import org.apache.tapestry5.security.api.CookieCredentialEncoder;
 import org.apache.tapestry5.security.api.Credentials;
-import org.apache.tapestry5.security.api.User;
 import org.apache.tapestry5.security.api.UserProvider;
 import org.apache.tapestry5.security.impl.CookieCredentials;
+import org.apache.tapestry5.security.impl.UsernamePasswordCredentials;
+import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.BeanBlockContribution;
 import org.apache.tapestry5.services.EditBlockContribution;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
+import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.web.services.modules.CoreWebappModule;
-import org.gagauz.tracker.web.security.AccessAttributeImpl;
-import org.gagauz.tracker.web.security.CredentialsImpl;
-import org.gagauz.tracker.web.security.Secured;
+import org.apache.tapestry5.web.services.security.CookieEncryptorDecryptor;
+import org.apache.tapestry5.web.services.security.SecuredAnnotationModule;
 
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.beans.scheduler.SchedulerService;
-import com.gagauz.tracker.beans.setup.TestDataInitializer;
 import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.services.dao.UserDao;
+import com.gagauz.tracker.services.scheduler.SchedulerService;
+import com.gagauz.tracker.services.setup.TestDataInitializer;
 import com.gagauz.tracker.utils.AppProperties;
 import com.ivaga.tapestry.csscombiner.CssCombinerModule;
 import com.ivaga.tapestry.csscombiner.LessModule;
-import com.xl0e.tapestry.hibernate.HibernateValueEncoderModule;
+import com.xl0e.tapestry.hibernate.HibernateModule;
+import com.xl0e.util.Cast;
 import com.xl0e.util.CryptoUtils;
 
 /**
@@ -46,7 +54,13 @@ import com.xl0e.util.CryptoUtils;
  * it's a good place to configure and extend Tapestry, or to place your own
  * service definitions.
  */
-@ImportModule({ CoreWebappModule.class, LessModule.class, CssCombinerModule.class, HibernateValueEncoderModule.class })
+@ImportModule({
+        CoreWebappModule.class,
+        LessModule.class,
+        CssCombinerModule.class,
+        HibernateModule.class,
+        SecuredAnnotationModule.class
+})
 public class AppModule {
 
     @Startup
@@ -71,16 +85,28 @@ public class AppModule {
     public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, "false");
-        configuration.add(SymbolConstants.CHARSET, "utf-8");
         configuration.add(SymbolConstants.COMBINE_SCRIPTS, true);
         configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
         configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
         configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:/static/bootstrap-3.3.6-dist");
+        configuration.override(ComponentParameterConstants.GRID_TABLE_CSS_CLASS, "table table-responsive valign-center");
+        configuration.override(SymbolConstants.FORM_GROUP_LABEL_CSS_CLASS, "col-sm-3 col-xs-12 control-label");
+        configuration.override(SymbolConstants.FORM_GROUP_FORM_FIELD_WRAPPER_ELEMENT_CSS_CLASS, "col-sm-9 col-xs-12");
+        configuration.override(SymbolConstants.FORM_GROUP_FORM_FIELD_WRAPPER_ELEMENT_NAME, "div");
+        configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
+        configuration.add(SymbolConstants.FORM_CLIENT_LOGIC_ENABLED, false);
+        configuration.add(SymbolConstants.SECURE_ENABLED, true);
+        configuration.add(SymbolConstants.FORM_FIELD_CSS_CLASS, "form-control");
+        configuration.add(SymbolConstants.ENCODE_LOCALE_INTO_PATH, false);
+        configuration.add(SymbolConstants.CHARSET, StandardCharsets.UTF_8.name());
+        configuration.add(SymbolConstants.HMAC_PASSPHRASE, "aasdf785675sdfkjf^&*%ewrfw");
+        configuration.add(UploadSymbols.FILESIZE_MAX, 5 * 1024 * 1024);
+        configuration.add(UploadSymbols.REQUESTSIZE_MAX, -1);
     }
 
     @Contribute(JavaScriptStackSource.class)
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
-            final AssetSource assetSource) {
+                                                       final AssetSource assetSource) {
     }
 
     @Decorate(serviceInterface = JavaScriptStackSource.class)
@@ -93,78 +119,57 @@ public class AppModule {
         configuration.add(new EditBlockContribution(DataTypeConstants.LONG_TEXT, "AppPropertyBlocks", "anytext"));
     }
 
-    public static UserProvider buildUserProvider(final UserDao adminDao) {
-        return new UserProvider() {
-            @Override
-            public <U extends User, C extends Credentials> U findByCredential(C arg0) {
-                if (arg0 instanceof org.gagauz.tracker.web.security.CredentialsImpl) {
-                    User user = adminDao.findByUsername(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getUsername());
-                    if (null != user && user.checkPassword(((org.gagauz.tracker.web.security.CredentialsImpl) arg0).getPassword())) {
-                        if (null != user.getRoleGroups()) {
-                            user.getRoleGroups().forEach(System.out::println);
-                        }
-                        user = adminDao.unproxy(user);
-                        return (U) user;
-                    }
-                    return null;
-                } else if (arg0 instanceof CookieCredentials) {
-                    try {
-                        String[] tokens = CryptoUtils.decryptArrayAES(((CookieCredentials) arg0).getValue());
-                        CredentialsImpl cred = new CredentialsImpl(tokens[0], tokens[1], false);
-                        return findByCredential(cred);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+    public static UserProvider<User, Credentials> buildUserProvider(@Inject final UserDao accountDao,
+                                                                    @Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
+        return c -> {
 
-                }
-                return null;
-            }
-
-            @Override
-            public <U extends User, C extends Credentials> C toCredentials(U arg0, Class<C> arg1) {
-                if (arg1.equals(CookieCredentials.class)) {
-                    User user = (User) arg0;
-                    String value = CryptoUtils.encryptArrayAES(user.getUsername(), user.getPassword(), user.getClass().getSimpleName());
-                    return (C) new CookieCredentials(value);
-                }
-                throw new IllegalStateException();
-            }
+            return Cast.of(c)
+                    .castF(UsernamePasswordCredentials.class, credentials -> {
+                        String username = CryptoUtils.createSHA512String(credentials.getUsername());
+                        String password = CryptoUtils.createSHA512String(credentials.getPassword());
+                        return accountDao.findByNameAndPass(credentials.getUsername(), credentials.getPassword());
+                    })
+                    .castF(CookieCredentials.class, cr -> {
+                        CookieCredentials credentials = (CookieCredentials) c;
+                        String[] usernameAndPassword = cookieEncryptorDecryptor.decryptArray(credentials.getValue());
+                        String username = usernameAndPassword[0];
+                        String password = usernameAndPassword[1];
+                        return accountDao.findByNameAndPass(username, password);
+                    })
+                    .get();
 
         };
     }
 
-    public static AccessAttributesChecker buildAccessAttributeExtractorChecker() {
-        return new AccessAttributesChecker<AccessAttributeImpl>() {
-
-            @Override
-            public boolean canAccess(PrincipalStorage userSet, AccessAttributeImpl attribute) {
-                if (null != userSet) {
-                    if (null == attribute || 0 == attribute.getRoles().length) {
-                        return true;
-                    }
-                    return userSet.stream().filter(user -> ((User) user).checkRoles(attribute.getRoles())).findAny().isPresent();
-                }
-                return false;
-            }
-
-            @Override
-            public AccessAttributeImpl extract(PlasticClass plasticClass, PlasticMethod plasticMethod) {
-
-                if (null == plasticMethod) {
-                    Secured annotation = plasticClass.getAnnotation(Secured.class);
-                    if (null != annotation) {
-                        return new AccessAttributeImpl(annotation.value());
-                    }
-                    return null;
-                }
-
-                Secured annotation = plasticMethod.getAnnotation(Secured.class);
-                if (null != annotation) {
-                    return new AccessAttributeImpl(annotation.value());
-                }
-                return null;
-            }
-
+    public static CookieCredentialEncoder<User> buildCookieCredentialEncoder(@Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
+        return user -> {
+            String value = cookieEncryptorDecryptor.encryptArray(user.getUsername(), user.getPassword());
+            return new CookieCredentials(value);
         };
     }
+
+    @Contribute(AuthenticationService.class)
+    public void contributeAuthenticationService(OrderedConfiguration<AuthenticationHandler> configuration,
+                                                ApplicationStateManager applicationStateManager) {
+        configuration.add("SetUserInSessionHandler", new AuthenticationHandler() {
+
+            @Override
+            public void handleLogin(LoginResult loginResult) {
+                org.apache.tapestry5.security.api.User user = loginResult.getUser();
+
+                if (loginResult.isSuccess() && null != user) {
+                    PrincipalStorage storage = Optional.ofNullable(applicationStateManager.getIfExists(PrincipalStorage.class))
+                            .orElseGet(PrincipalStorage::new);
+                    storage.add(user);
+                    applicationStateManager.set(PrincipalStorage.class, storage);
+                    applicationStateManager.set(User.class, (User) user);
+                }
+            }
+
+            @Override
+            public void handleLogout(AccessAttributes user) {
+            }
+        }, "after:*");
+    }
+
 }

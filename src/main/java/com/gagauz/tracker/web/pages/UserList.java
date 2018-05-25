@@ -1,9 +1,10 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
-import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.User;
-import org.gagauz.tracker.web.security.Secured;
+import com.gagauz.tracker.services.dao.RoleGroupDao;
+import com.gagauz.tracker.services.dao.UserDao;
+
+import org.apache.tapestry5.web.services.security.Secured;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Persist;

@@ -6,8 +6,9 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.security.AuthenticationService;
+import org.apache.tapestry5.security.api.Credentials;
+import org.apache.tapestry5.security.impl.UsernamePasswordCredentials;
 import org.apache.tapestry5.services.Request;
-import org.gagauz.tracker.web.security.CredentialsImpl;
 
 import com.gagauz.tracker.db.model.User;
 
@@ -33,8 +34,8 @@ public class Login {
 
     Object onSubmitFromLoginForm() {
         if (!loginForm.getHasErrors()) {
-            CredentialsImpl credentials = new CredentialsImpl(username, password, remember);
-            User user = authenticationService.login(credentials);
+            Credentials credentials = new UsernamePasswordCredentials(username, password, true);
+            User user = (User) authenticationService.login(credentials);
             if (null != user) {
                 return Index.class;
             }

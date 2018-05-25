@@ -6,7 +6,7 @@
 	<t:if test="editRoleGroup">
 	<h2>Roles Group</h2>
 	<div>
-		<t:beaneditform t:id="form" object="editRoleGroup" exclude="id" add="roles, project" cancel="true">
+		<t:beanform t:id="form" object="editRoleGroup" exclude="id" add="roles, project" cancel="true">
 			<p:project>
 				<label class="col-sm-3 control-label" for="project">${message:project}</label>
 				<div class="col-sm-9">
@@ -20,7 +20,7 @@
 				</div>
 			</p:roles>
 		
-		</t:beaneditform>
+		</t:beanform>
 	</div>
 	<br/>
 	<p:else>

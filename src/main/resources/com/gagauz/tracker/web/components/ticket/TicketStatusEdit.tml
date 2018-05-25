@@ -1,12 +1,12 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
-	<t:BeanEditForm object="object" exclude="id" add="allowedTo">
+	<t:BeanForm object="object" exclude="id" add="allowedTo">
 		<p:allowedTo>
-			<t:label for="allowedTo" class="col-md-3" />
-			<div class="col-md-9">
-				<t:MultiSelect t:id="allowedTo" model="model" value="object.allowedTo" size="5" blankOption="never" class="form-control form-control"/>
-			</div>
+			<t:MultiSelect t:id="allowedTo" model="model" value="object.allowedTo" 
+				size="5" 
+				blankOption="never" 
+				t:mixins="myformgroup"/>
 		</p:allowedTo>
-	</t:BeanEditForm>
+	</t:BeanForm>
 	
 	<t:Grid source="statuses" row="row" add="edit">
 		<p:editcell>

@@ -1,7 +1,6 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.Collection;
-import java.util.EnumSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,15 +22,15 @@ import com.xl0e.hibernate.types.HashSetType;
 @Table(name = "role_group")
 @TypeDefs({
         @TypeDef(name = "setOf.String", typeClass = HashSetType.class, parameters = {
-                @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.AccessRole"),
-                @Parameter(name = CollectionType.SERIALIZER, value = "com.xl0e.hibernate.model.base.EnumSerializer")
+                @Parameter(name = CollectionType.CLASS, value = "java.lang.String"),
+                @Parameter(name = CollectionType.SERIALIZER, value = "com.xl0e.hibernate.model.base.StringSerializer")
         })
 })
 public class RoleGroup extends Model {
     private static final long serialVersionUID = 5710346787058144797L;
     private String name;
     private Project project;
-    private EnumSet<AccessRole> roles = EnumSet.noneOf(AccessRole.class);
+    private Set<String> roles;
 
     @Column(nullable = false)
     public String getName() {
@@ -52,13 +51,13 @@ public class RoleGroup extends Model {
         this.project = project;
     }
 
-    @Column(nullable = false)
+    @Column
     @Type(type = "setOf.String")
-    public Collection<AccessRole> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<AccessRole> roles) {
-        this.roles = null == roles || roles.isEmpty() ? EnumSet.noneOf(AccessRole.class) : EnumSet.copyOf(roles);
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 }

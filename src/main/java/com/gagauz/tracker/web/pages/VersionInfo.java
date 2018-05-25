@@ -1,18 +1,20 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Ticket;
-import com.gagauz.tracker.db.model.Version;
-import org.gagauz.tracker.web.security.Secured;
+import java.util.List;
+
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.web.services.security.Secured;
 
-import java.util.List;
+import com.gagauz.tracker.db.model.AccessRole;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Ticket;
+import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.FeatureVersionDao;
+import com.gagauz.tracker.services.dao.TicketDao;
 
-@Secured
+@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
 public class VersionInfo {
 
     @Property(write = false)
