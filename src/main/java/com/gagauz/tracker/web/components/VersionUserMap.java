@@ -26,15 +26,16 @@ import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.web.services.ToolsService;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.FeatureVersionDao;
+import com.gagauz.tracker.services.dao.TicketDao;
+import com.gagauz.tracker.services.dao.UserDao;
+import com.gagauz.tracker.utils.ColorMap;
 import com.gagauz.tracker.utils.Comparators;
 
 @Import(module = "bootstrap/dropdown")
@@ -250,12 +251,12 @@ public class VersionUserMap {
         this.viewTicket = ticket;
         this.ajaxResponseRenderer
                 .addRender(Layout.MODAL_BODY_ID, this.ticketZone.getBody())
-                .addCallback(new JavaScriptCallback() {
-                    @Override
-                    public void run(JavaScriptSupport javascriptSupport) {
-                        javascriptSupport.require("modal").invoke("showModal").with(Layout.MODAL_ID);
-                    }
-                });
+                .addCallback((JavaScriptCallback) javascriptSupport -> javascriptSupport.require("modal").invoke("showModal")
+                        .with(Layout.MODAL_ID));
+    }
+
+    public String getBgColor() {
+        return ColorMap.getColor(user.getId());
     }
 
 }

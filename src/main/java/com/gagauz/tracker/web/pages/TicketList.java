@@ -1,13 +1,17 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.db.model.FeatureVersion;
-import com.gagauz.tracker.db.model.Version;
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
 import java.util.List;
 
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.web.services.security.Secured;
+
+import com.gagauz.tracker.db.model.AccessRole;
+import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.FeatureVersionDao;
+
+@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
 public class TicketList {
 
     @Property

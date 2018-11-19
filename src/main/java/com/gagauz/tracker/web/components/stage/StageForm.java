@@ -1,8 +1,9 @@
 package com.gagauz.tracker.web.components.stage;
 
-import com.gagauz.tracker.beans.dao.StageDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Stage;
+import com.gagauz.tracker.services.dao.StageDao;
+
 import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;

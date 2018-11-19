@@ -1,7 +1,6 @@
 package com.gagauz.tracker.db.config;
 
 import java.sql.Driver;
-import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -13,9 +12,6 @@ import com.gagauz.tracker.utils.AppProperties;
 public class DevDataSource extends SimpleDriverDataSource implements DataSource {
 
     public DevDataSource() {
-        for (Entry e : System.getProperties().entrySet()) {
-            System.out.format("%1$40s = %2$s\n", e.getKey(), e.getValue());
-        }
         try {
             setDriverClass((Class<? extends Driver>) Class.forName(AppProperties.JDBC_DRIVER.toString()));
         } catch (ClassNotFoundException e) {

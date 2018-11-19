@@ -6,11 +6,12 @@ import org.apache.tapestry5.alerts.AlertManager;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.web.config.Global;
 
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
+import com.gagauz.tracker.services.dao.RoleGroupDao;
+
+import org.apache.tapestry5.web.config.Global;
 
 public class RoleGroupEdit {
 

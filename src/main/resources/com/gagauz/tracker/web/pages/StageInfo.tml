@@ -16,7 +16,7 @@
     		<hr/>
     	</t:if>
     	<div>
-    		<t:beaneditform t:id="editForm" t:object="stage" exclude="id, created, updated">
+    		<t:beanform t:id="editForm" t:object="stage" exclude="id, created, updated">
 				<p:name>
 					<t:label for="stagename"/>
 					<t:textfield t:id="stagename" value="stage.name" validate="required"/>
@@ -25,7 +25,7 @@
 					<t:label for="description"/>
 					<t:textarea t:id="description" value="stage.description" />
 				</p:description>
-			</t:beaneditform>
+			</t:beanform>
 		    <hr/>
 		    <div class="feature-info">
 		    	<t:loop source="childStages" value="stageRow">
@@ -47,7 +47,7 @@
 		    	</t:loop> 
 			</div>
 			<t:if test="newTrigger">
-				<t:beaneditform t:id="createTriggerForm" t:object="newTrigger" exclude="id" add="reset">
+				<t:beanform t:id="createTriggerForm" t:object="newTrigger" exclude="id" add="reset">
 					<p:name>
 						<t:label for="name"/>
 						<t:textfield t:id="name" value="newTrigger.name" validate="required"/>
@@ -59,7 +59,7 @@
 					<p:reset>
 						<t:eventlink t:event="cancelTrigger">Cancel</t:eventlink>
 					</p:reset>
-				</t:beaneditform>
+				</t:beanform>
 			</t:if>
 			<t:eventlink t:event="createTrigger">Create</t:eventlink>
 		</div>
@@ -74,7 +74,7 @@
 		    	</t:loop> 
 			</div>
 			<t:if test="newAction">
-				<t:beaneditform t:id="createActionForm" t:object="newAction" exclude="id" add="reset">
+				<t:beanform t:id="createActionForm" t:object="newAction" exclude="id" add="reset">
 					<p:name>
 						<t:label for="name1"/>
 						<t:textfield t:id="name1" value="newAction.name" validate="required"/>
@@ -86,7 +86,7 @@
 					<p:reset>
 						<t:eventlink t:event="cancelAction">Cancel</t:eventlink>
 					</p:reset>
-				</t:beaneditform>
+				</t:beanform>
 			</t:if>
 			<t:eventlink t:event="createStageAction">Create</t:eventlink>
 		</div>

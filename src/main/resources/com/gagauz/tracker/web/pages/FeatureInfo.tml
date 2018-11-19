@@ -24,7 +24,7 @@
 		<div class="panel-heading">${feature.name}</div>
 		<div class="panel-body">
 			<t:if test="editMode">
-				<t:BeanEditForm t:id="editForm" object="feature"
+				<t:beanform t:id="editForm" object="feature"
 					exclude="id, created, updated" />
 				<p:else>
 					<div>

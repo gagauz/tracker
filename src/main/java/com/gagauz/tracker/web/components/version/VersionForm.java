@@ -1,8 +1,9 @@
 package com.gagauz.tracker.web.components.version;
 
-import com.gagauz.tracker.beans.dao.VersionDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.VersionDao;
+
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;

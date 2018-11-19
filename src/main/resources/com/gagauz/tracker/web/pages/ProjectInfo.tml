@@ -28,7 +28,7 @@
 			</t:if>
 			
 			<t:if test="newFeature">
-				<t:BeanEditForm class="form-horizontal" t:id="featureForm"
+				<t:beanform class="form-horizontal" t:id="featureForm"
 					object="newFeature" exclude="id, key1, created, updated" cancel="true" />
 			</t:if>
 			

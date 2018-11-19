@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.gagauz.tracker.beans.dao.ProjectDao;
 import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.services.dao.ProjectDao;
 
 public class Index {
 

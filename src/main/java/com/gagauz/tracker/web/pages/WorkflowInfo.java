@@ -1,8 +1,9 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.TicketStatusDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.TicketStatus;
+import com.gagauz.tracker.services.dao.TicketStatusDao;
+
 import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;

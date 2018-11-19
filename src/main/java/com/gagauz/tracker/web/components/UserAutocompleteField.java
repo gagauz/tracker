@@ -21,8 +21,8 @@ import org.apache.tapestry5.services.FormSupport;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ValueEncoderSource;
 
-import com.gagauz.tracker.beans.dao.UserDao;
 import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.services.dao.UserDao;
 
 public class UserAutocompleteField implements Field {
 
@@ -52,7 +52,7 @@ public class UserAutocompleteField implements Field {
 
     List<JSONObject> onProvideCompletions(String username) {
         List<JSONObject> res = new ArrayList<>();
-        for (User u : userDao.findByNameOrEmail(username)) {
+        for (User u : userDao.findSimilarByNameOrUsername(username)) {
             res.add(new JSONObject("id", u.getId(), "name", u.getName() + " - " + u.getEmail()));
         }
         return res;

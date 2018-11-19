@@ -10,9 +10,8 @@
 	<dependencies>
 		<dependency>
       <groupId>com.xl0e</groupId>
-	    <artifactId>tapestry-54-web-core</artifactId>
+			<artifactId>tapestry-54-web-core</artifactId>
 			<version>1.0</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -43,7 +42,6 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.24</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -51,29 +49,6 @@
 		</dependency>
 
 		<!-- log4j -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${log4j-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jul-to-slf4j</artifactId>
-			<version>${log4j-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${log4j-version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.3.2</version>
-		</dependency>
-
-
 	</dependencies>
 	<build>
 		<finalName>tracker</finalName>
@@ -116,7 +91,7 @@
 		</repository>
 	</repositories>
 	<properties>
-		<log4j-version>1.7.12</log4j-version>
+		<log4j-version>1.7.25</log4j-version>
 		<servlet-api-release-version>3.1.0</servlet-api-release-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>

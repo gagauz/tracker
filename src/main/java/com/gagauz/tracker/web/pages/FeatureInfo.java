@@ -14,15 +14,16 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.web.services.security.Secured;
 
-import com.gagauz.tracker.beans.dao.FeatureDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
+import com.gagauz.tracker.db.model.AccessRole;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.FeatureDao;
+import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.utils.Comparators;
 
-@Secured
+@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
 @Import(module = { "bootstrap/collapse" })
 public class FeatureInfo {
 
@@ -80,7 +81,7 @@ public class FeatureInfo {
         for (Ticket ticket : ticketDao.findByFeature(feature)) {
             List<Ticket> tickets = map.get(ticket.getVersion());
             if (null == tickets) {
-                tickets = new LinkedList<Ticket>();
+                tickets = new LinkedList<>();
                 map.put(ticket.getVersion(), tickets);
             }
             tickets.add(ticket);

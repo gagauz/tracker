@@ -14,16 +14,16 @@ import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.web.services.ToolsService;
 
-import com.gagauz.tracker.beans.dao.FeatureVersionDao;
-import com.gagauz.tracker.beans.dao.TicketDao;
-import com.gagauz.tracker.beans.dao.TicketTypeDao;
-import com.gagauz.tracker.beans.dao.VersionDao;
-import com.gagauz.tracker.beans.dao.WorkflowDao;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.TicketType;
 import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.services.dao.FeatureVersionDao;
+import com.gagauz.tracker.services.dao.TicketDao;
+import com.gagauz.tracker.services.dao.TicketTypeDao;
+import com.gagauz.tracker.services.dao.VersionDao;
+import com.gagauz.tracker.services.dao.WorkflowDao;
 
 @Import(module = "bootstrap/dropdown")
 public class TicketHeader {

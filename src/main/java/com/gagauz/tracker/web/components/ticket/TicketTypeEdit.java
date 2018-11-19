@@ -9,25 +9,25 @@ import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.internal.SelectModelImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
+import org.apache.tapestry5.web.components.BeanForm;
 import org.apache.tapestry5.web.config.Global;
 import org.apache.tapestry5.web.services.model.CollectionGridDataSourceRowTypeFix;
 
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
-import com.gagauz.tracker.beans.dao.TicketTypeDao;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.TicketType;
+import com.gagauz.tracker.services.dao.RoleGroupDao;
+import com.gagauz.tracker.services.dao.TicketTypeDao;
 
 public class TicketTypeEdit {
 
     @Component
-    private BeanEditForm form;
+    private BeanForm form;
 
     @Property
     private TicketType ticketTypeRow;

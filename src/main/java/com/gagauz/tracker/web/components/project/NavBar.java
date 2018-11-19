@@ -1,9 +1,9 @@
 package com.gagauz.tracker.web.components.project;
 
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.web.config.Global;
 
 import com.gagauz.tracker.db.model.Project;
+import org.apache.tapestry5.web.config.Global;
 
 public class NavBar {
     @Property(write = false)

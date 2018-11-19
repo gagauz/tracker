@@ -1,6 +1,6 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<div t:id="zone">
-		<t:BeanEditForm t:id="form" object="ticket" cancel="true"
+		<t:beanform t:id="form" object="ticket" cancel="true"
 			exclude="id, key1, created, updated, progress, cvsVersion"
 			add="type, status, owner, featureVersion"
 			reorder="type, status, summary, description">
@@ -40,6 +40,6 @@
 					<t:error for="owner"/>
 				</div>
 			</p:owner>
-		</t:BeanEditForm>
+		</t:beanform>
 	</div>
 </div>

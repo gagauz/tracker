@@ -1,6 +1,5 @@
 package com.gagauz.tracker.db.model;
 
-import java.util.Collections;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,7 +17,6 @@ import org.hibernate.annotations.TypeDefs;
 import com.xl0e.hibernate.model.Model;
 import com.xl0e.hibernate.types.CollectionType;
 import com.xl0e.hibernate.types.HashSetType;
-import com.xl0e.util.C;
 
 @Entity
 @Table(name = "role_group")
@@ -32,7 +30,7 @@ public class RoleGroup extends Model {
     private static final long serialVersionUID = 5710346787058144797L;
     private String name;
     private Project project;
-    private Set<String> roles = Collections.emptySet();
+    private Set<String> roles;
 
     @Column(nullable = false)
     public String getName() {
@@ -53,13 +51,13 @@ public class RoleGroup extends Model {
         this.project = project;
     }
 
-    @Column(nullable = false)
+    @Column
     @Type(type = "setOf.String")
     public Set<String> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<String> roles) {
-        this.roles = null == roles || roles.isEmpty() ? Collections.emptySet() : C.hashSet(roles);
+        this.roles = roles;
     }
 }

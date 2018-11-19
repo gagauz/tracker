@@ -1,8 +1,9 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.StageDao;
-import com.gagauz.tracker.beans.scheduler.SchedulerService;
 import com.gagauz.tracker.db.model.Stage;
+import com.gagauz.tracker.services.dao.StageDao;
+import com.gagauz.tracker.services.scheduler.SchedulerService;
+
 import org.apache.tapestry5.web.services.security.Secured;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Property;
