@@ -1,33 +1,29 @@
 package com.gagauz.tracker.web.services;
 
-import com.gagauz.tracker.beans.dao.UserDao;
-import com.gagauz.tracker.beans.scheduler.SchedulerService;
-import com.gagauz.tracker.beans.setup.TestDataInitializer;
-import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.utils.AppProperties;
-import com.ivaga.tapestry.csscombiner.CssCombinerModule;
-import com.ivaga.tapestry.csscombiner.LessModule;
-import com.xl0e.hibernate.utils.EntityFilterBuilder;
-import com.xl0e.tapestry.hibernate.HibernateValueEncoderModule;
-import com.xl0e.util.CryptoUtils;
-
 import org.apache.tapestry5.ComponentParameterConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.beaneditor.DataTypeConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Decorate;
 import org.apache.tapestry5.ioc.annotations.ImportModule;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Startup;
 import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.FactoryDefaults;
+import org.apache.tapestry5.security.AuthenticationService;
+import org.apache.tapestry5.security.LoginResult;
+import org.apache.tapestry5.security.PrincipalStorage;
+import org.apache.tapestry5.security.api.AccessAttributes;
+import org.apache.tapestry5.security.api.AuthenticationHandler;
+import org.apache.tapestry5.security.api.CookieCredentialEncoder;
 import org.apache.tapestry5.security.api.Credentials;
 import org.apache.tapestry5.security.api.UserProvider;
 import org.apache.tapestry5.security.impl.CookieCredentials;
-import org.apache.tapestry5.security.impl.UserAndPassCredentials;
+import org.apache.tapestry5.security.impl.UsernamePasswordCredentials;
+import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.BeanBlockContribution;
 import org.apache.tapestry5.services.EditBlockContribution;
@@ -35,22 +31,26 @@ import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.web.services.modules.CoreWebappModule;
 import org.apache.tapestry5.web.services.security.CookieEncryptorDecryptor;
+import org.apache.tapestry5.web.services.security.SecuredAnnotationModule;
+
+import com.gagauz.tracker.beans.dao.UserDao;
+import com.gagauz.tracker.db.model.User;
+import com.ivaga.tapestry.csscombiner.CssCombinerModule;
+import com.ivaga.tapestry.csscombiner.LessModule;
+import com.xl0e.tapestry.hibernate.HibernateModule;
+import com.xl0e.util.CryptoUtils;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
  * it's a good place to configure and extend Tapestry, or to place your own
  * service definitions.
  */
-@ImportModule({ CoreWebappModule.class, LessModule.class, CssCombinerModule.class, HibernateValueEncoderModule.class })
+@ImportModule({ CoreWebappModule.class,
+        HibernateModule.class,
+        LessModule.class,
+        CssCombinerModule.class,
+        SecuredAnnotationModule.class })
 public class AppModule {
-
-    @Startup
-    public static void initScenarios(@Inject TestDataInitializer ai, @Inject SchedulerService schedulerService) {
-        if (AppProperties.FILL_TEST_DATA.getBoolean()) {
-            ai.execute();
-            schedulerService.update();
-        }
-    }
 
     public static void bind(ServiceBinder binder) {
     }
@@ -75,7 +75,7 @@ public class AppModule {
 
     @Contribute(JavaScriptStackSource.class)
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
-                                                       final AssetSource assetSource) {
+            final AssetSource assetSource) {
     }
 
     @Decorate(serviceInterface = JavaScriptStackSource.class)
@@ -89,28 +89,62 @@ public class AppModule {
     }
 
     public static UserProvider<User, Credentials> buildUserProvider(@Inject final UserDao accountDao,
-                                                                    @Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
+            @Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
         return c -> {
 
             String username = "";
             String password = "";
 
-            if (c instanceof UserAndPassCredentials) {
-                UserAndPassCredentials credentials = (UserAndPassCredentials) c;
-                username = CryptoUtils.createSHA512String(credentials.getUsername());
+            if (c instanceof UsernamePasswordCredentials) {
+                UsernamePasswordCredentials credentials = (UsernamePasswordCredentials) c;
+                username = credentials.getUsername();
                 password = CryptoUtils.createSHA512String(credentials.getPassword());
+                return accountDao.findByUsernameAndPassword(username, password);
 
             }
             if (c instanceof CookieCredentials) {
                 CookieCredentials credentials = (CookieCredentials) c;
-                String[] usernameAndPassword = cookieEncryptorDecryptor.decryptArray(credentials.getValue());
-                username = usernameAndPassword[0];
-                password = usernameAndPassword[1];
+                String token = cookieEncryptorDecryptor.decrypt(credentials.getValue());
+                return accountDao.findByToken(token);
             }
-            return accountDao.findOneByFilter(EntityFilterBuilder.and()
-                    .eq("username", username)
-                    .eq("password", password));
+            throw new IllegalStateException("Unknow creadentials type " + c.getClass());
         };
+    }
+
+    public static CookieCredentialEncoder buildCookieCredentialEncoder(@Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
+        return new CookieCredentialEncoder<User>() {
+            @Override
+            public CookieCredentials encode(User user) {
+                return null == user ? null : new CookieCredentials(cookieEncryptorDecryptor.encrypt(user.getToken()));
+            }
+        };
+    }
+
+    @Contribute(AuthenticationService.class)
+    public static void contributeAuthenticationService(OrderedConfiguration<AuthenticationHandler> configuration, ApplicationStateManager applicationStateManager) {
+
+        AuthenticationHandler handler = new AuthenticationHandler() {
+
+            @Override
+            public void handleLogout(AccessAttributes user) {
+                applicationStateManager.set(PrincipalStorage.class, null);
+            }
+
+            @Override
+            public void handleLogin(LoginResult result) {
+                if (result.isSuccess()) {
+                    PrincipalStorage users = applicationStateManager.getIfExists(PrincipalStorage.class);
+                    if (null == users) {
+                        users = new PrincipalStorage();
+                    }
+                    //                    users.clear();
+                    users.add(result.getUser());
+                    applicationStateManager.set(PrincipalStorage.class, users);
+                }
+            }
+        };
+
+        configuration.add("StoreInSessionLoginHandler", handler, "after:*");
     }
 
 }

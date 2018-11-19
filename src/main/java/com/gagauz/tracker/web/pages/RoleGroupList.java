@@ -1,10 +1,8 @@
 package com.gagauz.tracker.web.pages;
 
-import com.gagauz.tracker.beans.dao.RoleGroupDao;
-import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.db.model.AccessRole;
-import org.apache.tapestry5.web.services.security.Secured;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Persist;
@@ -12,9 +10,11 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
-import org.apache.tapestry5.util.EnumSelectModel;
+import org.apache.tapestry5.web.services.security.Secured;
 
-import java.util.List;
+import com.gagauz.tracker.beans.dao.RoleGroupDao;
+import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.db.model.RoleGroup;
 
 @Secured
 public class RoleGroupList {
@@ -63,7 +63,7 @@ public class RoleGroupList {
     }
 
     Object onPassivate() {
-        return new Object[] {project, editRoleGroup};
+        return new Object[] { project, editRoleGroup };
     }
 
     @Cached
@@ -76,7 +76,7 @@ public class RoleGroupList {
 
     @Cached
     public SelectModel getModel() {
-        return new EnumSelectModel(AccessRole.class, messages);
+        return selectModelFactory.create(Collections.emptyList(), "name");
     }
 
     @Cached

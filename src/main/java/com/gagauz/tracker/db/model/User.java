@@ -10,13 +10,14 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.apache.tapestry5.security.api.AccessAttributes;
+import org.apache.tapestry5.web.services.security.SecuredAccessAttributes;
 
 import com.gagauz.tracker.utils.HashUtils;
 import com.xl0e.hibernate.model.Model;
 import com.xl0e.util.C;
-
-import org.apache.tapestry5.security.api.AccessAttributes;
-import org.apache.tapestry5.web.services.security.SecuredAccessAttributes;
 
 @Entity
 @Table(name = "`user`")
@@ -94,10 +95,11 @@ public class User extends Model implements org.apache.tapestry5.security.api.Use
         return "User <id=" + id + ">";
     }
 
+    @Transient
     @Override
     public AccessAttributes getAccessAttributes() {
         if (null == accessAttributes) {
-            Set<String> roles = C.newHashSet();
+            Set<String> roles = C.hashSet();
             for (RoleGroup group : roleGroups) {
                 roles.addAll(group.getRoles());
             }

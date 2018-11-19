@@ -10,15 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.xl0e.hibernate.model.Model;
-import com.xl0e.hibernate.types.CollectionType;
-import com.xl0e.hibernate.types.HashSetType;
-import com.xl0e.util.C;
-
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
+
+import com.xl0e.hibernate.model.Model;
+import com.xl0e.hibernate.types.CollectionType;
+import com.xl0e.hibernate.types.HashSetType;
+import com.xl0e.util.C;
 
 @Entity
 @Table(name = "role_group")
@@ -60,6 +60,6 @@ public class RoleGroup extends Model {
     }
 
     public void setRoles(Set<String> roles) {
-        this.roles = null == roles || roles.isEmpty() ? Collections.emptySet() : C.newHashSet(roles);
+        this.roles = null == roles || roles.isEmpty() ? Collections.emptySet() : C.hashSet(roles);
     }
 }

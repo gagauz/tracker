@@ -9,8 +9,8 @@
 	<name>tracker</name>
 	<dependencies>
 		<dependency>
-			<groupId>com.xl0e</groupId>
-			<artifactId>tapestry-webapp-core</artifactId>
+      <groupId>com.xl0e</groupId>
+	    <artifactId>tapestry-54-web-core</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
