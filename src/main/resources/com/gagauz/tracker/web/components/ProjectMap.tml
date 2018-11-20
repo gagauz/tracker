@@ -50,7 +50,7 @@
 									<td class="released-${cond:version,prop:version.released,unknown}">
 										<div class="cell">
 											<div class="ticket-col-div">
-												<t:version.FeatureVersionCard zone="zone" feature="feature" version="version" featureVersion="featureVersion" />
+												<t:version.FeatureVersionCard zone="zone" ticketZone="ticketZone" feature="feature" version="version" featureVersion="featureVersion" />
 												<t:if test="featureVersion">
 													<div class="tickets">
 														<ul class="ticket-col-div-tickets">

@@ -7,7 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.xl0e.hibernate.model.Model;
+import com.gagauz.tracker.db.base.Model;
 
 @Entity
 @Table(name = "work_log")

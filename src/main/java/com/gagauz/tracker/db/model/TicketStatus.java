@@ -10,7 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.xl0e.hibernate.model.Model;
+import com.gagauz.tracker.db.base.Model;
 
 @Entity
 @Table(name = "ticket_status")

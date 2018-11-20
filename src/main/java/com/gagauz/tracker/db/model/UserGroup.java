@@ -21,46 +21,46 @@ import com.xl0e.hibernate.types.HashSetType;
 
 @Entity
 @Table(name = DB.Table.user_group, uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "name", DB.Column.project_id })
+		@UniqueConstraint(columnNames = { DB.Column.project_id, "name" })
 })
 @TypeDefs({
-        @TypeDef(name = "setOf.String", typeClass = HashSetType.class, parameters = {
-                @Parameter(name = CollectionType.CLASS, value = "java.lang.String"),
-                @Parameter(name = CollectionType.SERIALIZER, value = "com.xl0e.hibernate.model.base.StringSerializer")
-        })
+		@TypeDef(name = "setOf.String", typeClass = HashSetType.class, parameters = {
+				@Parameter(name = CollectionType.CLASS, value = "java.lang.String"),
+				@Parameter(name = CollectionType.SERIALIZER, value = "com.xl0e.hibernate.model.base.StringSerializer")
+		})
 })
 public class UserGroup extends TimeTrackedEntity {
-    private static final long serialVersionUID = 5710346787058144797L;
-    private String name;
-    private Project project;
-    private Set<String> roles;
+	private static final long serialVersionUID = 5710346787058144797L;
+	private String name;
+	private Project project;
+	private Set<String> roles;
 
-    @Column(nullable = false)
-    public String getName() {
-        return name;
-    }
+	@Column(nullable = false)
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = DB.Column.project_id)
-    public Project getProject() {
-        return project;
-    }
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = DB.Column.project_id)
+	public Project getProject() {
+		return project;
+	}
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
+	public void setProject(Project project) {
+		this.project = project;
+	}
 
-    @Column
-    @Type(type = "setOf.String")
-    public Set<String> getRoles() {
-        return roles;
-    }
+	@Column
+	@Type(type = "setOf.String")
+	public Set<String> getRoles() {
+		return roles;
+	}
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
+	public void setRoles(Set<String> roles) {
+		this.roles = roles;
+	}
 }

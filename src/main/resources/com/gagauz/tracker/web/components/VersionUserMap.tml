@@ -33,20 +33,20 @@
 			<table>
 				<tr>
 					<t:loop source="users" value="user">
-						<th class="" style=" background-color: ${bgcolor}">
+						<th class="" style=" background-color: ">
 							<div class="version-col">
 								<t:if test="user">
 									<div>${message:owner}: <t:pagelink page="userinfo" context="user">${user.name}</t:pagelink></div>
 								<p:else>Unassigned</p:else>
 								</t:if>
-								<div>${message:tickets-by-status}: </div>
-								<ul>
-								<t:loop source="Statuses" value="entry">
-									<li>${entry.key.name}: ${entry.value}</li>
-								</t:loop>
-								</ul>
-								<div>${message:remaining-time}: ${remainTime}</div>
-								<div>${message:readiness}: <t:ProgressBar progress="getTotalProgress()" estimate="getTotalEstimate()" percent="true"/></div>
+								<table>
+									<tr><td>${message:tickets-by-status}</td><td></td></tr>
+									<t:loop source="Statuses" value="entry">
+										<tr><td>${entry.key.name}</td><td>${entry.value}</td></tr>
+									</t:loop>
+									<tr><td>${message:remaining-time}</td><td>${remainTime}</td></tr>
+									<tr><td>${message:readiness}</td><td><t:ProgressBar progress="getTotalProgress()" estimate="getTotalEstimate()" percent="true"/></td></tr>
+								</table>
 							</div>
 						</th>
 					</t:loop>
@@ -58,7 +58,7 @@
 				</tr>
 				<tr>
 					<t:loop source="users" value="user">
-						<td class="ticket-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}" style="background-color: ${bgcolor}">
+						<td class="ticket-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}" style="background-color: ">
 							<div class="ticket-cells">
 								<t:loop source="userTickets" value="ticket">
 									<div class="ticket-cell-div ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">

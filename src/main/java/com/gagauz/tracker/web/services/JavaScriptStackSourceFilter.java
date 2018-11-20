@@ -1,85 +1,87 @@
 package com.gagauz.tracker.web.services;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.tapestry5.Asset;
+import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.ioc.Resource;
 import org.apache.tapestry5.services.javascript.JavaScriptAggregationStrategy;
 import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.services.javascript.StylesheetLink;
 
-import java.util.*;
-
 public class JavaScriptStackSourceFilter implements JavaScriptStackSource {
 
-    private Set<String> SKIP = new HashSet<String>(Arrays.asList("Slider", "AjaxUploadStack", "DataTableStack", "FormFragmentSupportStack", "FormSupportStack",
-            "SuperfishStack", "JQueryDateFieldStack", "GalleryStack"));
+	private class JavaScriptStackWraper implements JavaScriptStack {
+		private final JavaScriptStack original;
 
-    private class JavaScriptStackWraper implements JavaScriptStack {
-        private final JavaScriptStack original;
+		JavaScriptStackWraper(JavaScriptStack original) {
+			this.original = original;
+		}
 
-        JavaScriptStackWraper(JavaScriptStack original) {
-            this.original = original;
-        }
+		@Override
+		public List<String> getStacks() {
+			return original != null ? original.getStacks() : Collections.<String>emptyList();
+		}
 
-        @Override
-        public List<String> getStacks() {
-            return original != null ? original.getStacks() : Collections.<String>emptyList();
-        }
+		@Override
+		public List<Asset> getJavaScriptLibraries() {
+			return original.getJavaScriptLibraries();
+		}
 
-        @Override
-        public List<Asset> getJavaScriptLibraries() {
-            return original != null ? original.getJavaScriptLibraries() : Collections.<Asset>emptyList();
-        }
+		@Override
+		public List<StylesheetLink> getStylesheets() {
+			return Collections.<StylesheetLink>emptyList();
+		}
 
-        @Override
-        public List<StylesheetLink> getStylesheets() {
-            return Collections.<StylesheetLink>emptyList();
-        }
+		@Override
+		public String getInitialization() {
+			return original.getInitialization();
+		}
 
-        @Override
-        public String getInitialization() {
-            return original != null ? original.getInitialization() : null;
-        }
+		@Override
+		public List<String> getModules() {
+			return original.getModules();
+		}
 
-        @Override
-        public List<String> getModules() {
-            return Collections.emptyList();
-        }
+		@Override
+		public JavaScriptAggregationStrategy getJavaScriptAggregationStrategy() {
+			return original.getJavaScriptAggregationStrategy();
+		}
+	}
 
-        @Override
-        public JavaScriptAggregationStrategy getJavaScriptAggregationStrategy() {
-            return JavaScriptAggregationStrategy.DO_NOTHING;
-        }
-    }
+	private final JavaScriptStackSource original;
+	private JavaScriptStack coreStackWrapper;
 
-    private final JavaScriptStackSource original;
+	public JavaScriptStackSourceFilter(JavaScriptStackSource original) {
+		this.original = original;
+	}
 
-    public JavaScriptStackSourceFilter(JavaScriptStackSource original) {
-        this.original = original;
-    }
+	@Override
+	public JavaScriptStack getStack(String name) {
+		if (name.equals(InternalConstants.CORE_STACK_NAME)) {
+			if (null == coreStackWrapper) {
+				coreStackWrapper = new JavaScriptStackWraper(original.getStack(name));
+			}
+			return coreStackWrapper;
+		}
+		return original.getStack(name);
+	}
 
-    @Override
-    public JavaScriptStack getStack(String name) {
-        JavaScriptStack stack = original.getStack(name);
-        if (!SKIP.contains(stack.getClass().getSimpleName())) {
-            return new JavaScriptStackWraper(stack);
-        }
-        return new JavaScriptStackWraper(null);
-    }
+	@Override
+	public List<String> getStackNames() {
+		return original.getStackNames();
+	}
 
-    @Override
-    public List<String> getStackNames() {
-        return original.getStackNames();
-    }
+	@Override
+	public JavaScriptStack findStack(String name) {
+		return original.findStack(name);
+	}
 
-    @Override
-    public JavaScriptStack findStack(String name) {
-        return original.findStack(name);
-    }
-
-    @Override
-    public JavaScriptStack findStackForJavaScriptLibrary(Resource resource) {
-        return original.findStackForJavaScriptLibrary(resource);
-    }
+	@Override
+	public JavaScriptStack findStackForJavaScriptLibrary(Resource resource) {
+		return original.findStackForJavaScriptLibrary(resource);
+	}
 
 }

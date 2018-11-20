@@ -25,7 +25,7 @@
 						<t:if test="navBar">
 							<t:delegate to="navBar" />
 							<p:else>
-								<a class="navbar-brand" href="/">Home</a>
+								<a class="nav" href="/">Home</a>
 							</p:else>
 						</t:if>
 					</div>
