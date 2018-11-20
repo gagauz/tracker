@@ -2,7 +2,10 @@ package com.gagauz.tracker.web.components;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
@@ -21,6 +24,7 @@ import com.gagauz.tracker.db.model.TicketType;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.services.dao.FeatureVersionDao;
 import com.gagauz.tracker.services.dao.TicketDao;
+import com.gagauz.tracker.services.dao.TicketStatusDao;
 import com.gagauz.tracker.services.dao.TicketTypeDao;
 import com.gagauz.tracker.services.dao.VersionDao;
 import com.gagauz.tracker.services.dao.WorkflowDao;
@@ -74,6 +78,9 @@ public class TicketHeader {
 
     @Inject
     protected TicketDao ticketDao;
+
+    @Inject
+    protected TicketStatusDao ticketStatusDao;
 
     @Inject
     protected TicketTypeDao ticketTypeDao;
@@ -172,10 +179,22 @@ public class TicketHeader {
     }
 
     public List<TicketType> getTypes() {
-        return ticketTypeDao.findByProject(ticket.getProject());
+        return ticketTypeDao.findByUserGroupsAndProject(user.getUserGroups(), ticket.getProject());
     }
 
     public List<FeatureVersion> getVersions() {
         return featureVersionDao.findByFeature(ticket.getFeature());
     }
+
+    @Cached
+    public List<TicketStatus> getStatuses() {
+        List<TicketStatus> list = ticketStatusDao.findByUserGroupsAndProject(user.getUserGroups(), ticket.getFeature().getProject());
+        return list.stream()
+                .filter(s -> Optional.ofNullable(ticket.getStatus())
+                        .map(TicketStatus::getAllowedTo)
+                        .map(c -> c.contains(s))
+                        .orElse(true))
+                .collect(Collectors.toList());
+    }
+
 }

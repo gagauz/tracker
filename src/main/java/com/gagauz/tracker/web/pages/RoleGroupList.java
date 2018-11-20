@@ -12,8 +12,8 @@ import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.web.services.security.Secured;
 
 import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.services.dao.RoleGroupDao;
+import com.gagauz.tracker.db.model.UserGroup;
+import com.gagauz.tracker.services.dao.UserGroupDao;
 
 @Secured
 public class RoleGroupList {
@@ -22,14 +22,14 @@ public class RoleGroupList {
     private Project project;
 
     @Property
-    private RoleGroup roleGroup;
+    private UserGroup roleGroup;
 
     @Property
     @Persist
-    private RoleGroup editRoleGroup;
+    private UserGroup editRoleGroup;
 
     @Inject
-    private RoleGroupDao roleGroupDao;
+    private UserGroupDao roleGroupDao;
 
     @Inject
     private Messages messages;
@@ -37,7 +37,7 @@ public class RoleGroupList {
     @Inject
     private SelectModelFactory selectModelFactory;
 
-    void onEdit(Project project, RoleGroup roleGroup) {
+    void onEdit(Project project, UserGroup roleGroup) {
         this.project = project;
         if (null != roleGroup) {
             this.editRoleGroup = roleGroup;
@@ -45,7 +45,7 @@ public class RoleGroupList {
     }
 
     void onCreate(Project project) {
-        editRoleGroup = new RoleGroup();
+        editRoleGroup = new UserGroup();
         editRoleGroup.setProject(project);
     }
 
@@ -53,7 +53,7 @@ public class RoleGroupList {
         editRoleGroup = null;
     }
 
-    void onActivate(Project project, RoleGroup roleGroup) {
+    void onActivate(Project project, UserGroup roleGroup) {
         onEdit(project, roleGroup);
     }
 
@@ -66,7 +66,7 @@ public class RoleGroupList {
     }
 
     @Cached
-    public List<RoleGroup> getRoleGroups() {
+    public List<UserGroup> getRoleGroups() {
         if (null != project) {
             return roleGroupDao.findByProject(project);
         }

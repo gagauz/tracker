@@ -1,7 +1,6 @@
 package com.gagauz.tracker.db.model;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,9 +14,11 @@ import javax.persistence.Transient;
 import org.apache.tapestry5.security.api.AccessAttributes;
 import org.apache.tapestry5.web.services.security.SecuredAccessAttributes;
 
+import com.gagauz.tracker.db.base.DB;
 import com.gagauz.tracker.utils.HashUtils;
 import com.xl0e.hibernate.model.Model;
 import com.xl0e.util.C;
+import com.xl0e.util.CryptoUtils;
 
 @Entity
 @Table(name = "`user`")
@@ -25,10 +26,10 @@ public class User extends Model implements org.apache.tapestry5.security.api.Use
     private static final long serialVersionUID = 7903294228565311630L;
     private String name;
     private String email;
-    private Collection<RoleGroup> roleGroups = new HashSet<>();
     private String username;
     private String password;
     private String token;
+    private Set<UserGroup> userGroups;
     private transient AccessAttributes accessAttributes;
 
     @Column(nullable = false)
@@ -67,15 +68,20 @@ public class User extends Model implements org.apache.tapestry5.security.api.Use
         this.password = password;
     }
 
-    @JoinTable(name = "user_roles")
-    @ManyToMany(fetch = FetchType.LAZY)
-    public Collection<RoleGroup> getRoleGroups() {
-        return roleGroups;
+    @Transient
+    public void setPasswordRaw(String password) {
+        setPassword(CryptoUtils.createSHA512String(password));
     }
 
-    public void setRoleGroups(Collection<RoleGroup> roleGroups) {
+    @JoinTable(name = DB.Table.user_to_user_groups)
+    @ManyToMany(fetch = FetchType.LAZY)
+    public Collection<UserGroup> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(Collection<UserGroup> userGroups) {
+        this.userGroups = C.hashSet(userGroups);
         this.accessAttributes = null;
-        this.roleGroups = roleGroups;
     }
 
     @Column(nullable = false)
@@ -100,8 +106,8 @@ public class User extends Model implements org.apache.tapestry5.security.api.Use
     public AccessAttributes getAccessAttributes() {
         if (null == accessAttributes) {
             Set<String> roles = C.hashSet();
-            for (RoleGroup group : roleGroups) {
-                roles.addAll(group.getRoles());
+            for (UserGroup group : userGroups) {
+                roles.addAll(C.emptyIfNull(group.getRoles()));
             }
             accessAttributes = new SecuredAccessAttributes(roles);
         }

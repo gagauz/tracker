@@ -23,7 +23,7 @@
 					${ticket.status.name} <span class="caret"></span>
 				</a>			
 				<ul class="dropdown-menu" aria-labelledby="statusDropDown">
-				 	<t:loop source="ticket.status.allowedTo" value="status">
+				 	<t:loop source="statuses" value="status">
 						<li><t:eventlink t:event="changeStatus" context="[ticket,status]" zone="headerZone">${status.name}</t:eventlink></li>
 					</t:loop>
 				</ul>

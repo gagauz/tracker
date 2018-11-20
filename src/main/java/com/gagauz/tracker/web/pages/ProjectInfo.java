@@ -11,25 +11,23 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.web.config.Global;
 import org.apache.tapestry5.web.services.security.Secured;
 
-import com.gagauz.tracker.db.model.AccessRole;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.RoleGroup;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
+import com.gagauz.tracker.db.model.UserGroup;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.services.dao.FeatureDao;
-import com.gagauz.tracker.services.dao.RoleGroupDao;
 import com.gagauz.tracker.services.dao.StageDao;
+import com.gagauz.tracker.services.dao.UserGroupDao;
 import com.gagauz.tracker.services.dao.VersionDao;
 
-import org.apache.tapestry5.web.config.Global;
-
-@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
+@Secured
 public class ProjectInfo {
 
     @Component(parameters = { "id=literal:createVersionZone" })
@@ -52,7 +50,7 @@ public class ProjectInfo {
     private Stage newStage;
 
     @Property
-    private RoleGroup roleGroup;
+    private UserGroup roleGroup;
 
     @Property
     private Version version;
@@ -79,7 +77,7 @@ public class ProjectInfo {
     private StageDao stageDao;
 
     @Inject
-    private RoleGroupDao roleGroupDao;
+    private UserGroupDao roleGroupDao;
 
     @SessionState
     private User securityUser;
@@ -155,7 +153,7 @@ public class ProjectInfo {
         return this.versionDao.findByProject(this.project);
     }
 
-    public List<RoleGroup> getRoleGroups() {
+    public List<UserGroup> getRoleGroups() {
         return this.roleGroupDao.findByProject(this.project);
     }
 

@@ -1,6 +1,7 @@
 package com.gagauz.tracker.web.services;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.tapestry5.ComponentParameterConstants;
@@ -21,6 +22,7 @@ import org.apache.tapestry5.security.AuthenticationService;
 import org.apache.tapestry5.security.LoginResult;
 import org.apache.tapestry5.security.PrincipalStorage;
 import org.apache.tapestry5.security.api.AccessAttributes;
+import org.apache.tapestry5.security.api.AccessAttributesChecker;
 import org.apache.tapestry5.security.api.AuthenticationHandler;
 import org.apache.tapestry5.security.api.CookieCredentialEncoder;
 import org.apache.tapestry5.security.api.Credentials;
@@ -36,6 +38,8 @@ import org.apache.tapestry5.services.javascript.JavaScriptStackSource;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.web.services.modules.CoreWebappModule;
 import org.apache.tapestry5.web.services.security.CookieEncryptorDecryptor;
+import org.apache.tapestry5.web.services.security.SecuredAccessAttributeChecker;
+import org.apache.tapestry5.web.services.security.SecuredAccessAttributes;
 import org.apache.tapestry5.web.services.security.SecuredAnnotationModule;
 
 import com.gagauz.tracker.db.model.User;
@@ -106,12 +110,26 @@ public class AppModule {
 
     @Contribute(JavaScriptStackSource.class)
     public static void contributeJavaScriptStackSource(MappedConfiguration<String, JavaScriptStack> configuration,
-                                                       final AssetSource assetSource) {
+            final AssetSource assetSource) {
     }
 
     @Decorate(serviceInterface = JavaScriptStackSource.class)
     public JavaScriptStackSource decorateJavaScriptStackSource(JavaScriptStackSource original) {
         return new JavaScriptStackSourceFilter(original);
+    }
+
+    @Decorate(serviceInterface = AccessAttributesChecker.class)
+    public AccessAttributesChecker decorateAccessAttributesChecker(final AccessAttributesChecker<AccessAttributes> original) {
+        return new SecuredAccessAttributeChecker() {
+            @Override
+            public boolean canAccess(final SecuredAccessAttributes sessionAttributes, final SecuredAccessAttributes resourceAttributes) {
+                return (null != sessionAttributes && Optional.ofNullable(resourceAttributes)
+                        .map(SecuredAccessAttributes::getAttributes)
+                        .map(Collection::isEmpty)
+                        .orElse(true))
+                        || super.canAccess(sessionAttributes, resourceAttributes);
+            }
+        };
     }
 
     public static void contributeBeanBlockOverrideSource(Configuration<BeanBlockContribution> configuration) {
@@ -120,14 +138,12 @@ public class AppModule {
     }
 
     public static UserProvider<User, Credentials> buildUserProvider(@Inject final UserDao accountDao,
-                                                                    @Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
+            @Inject final CookieEncryptorDecryptor cookieEncryptorDecryptor) {
         return c -> {
 
             return Cast.of(c)
                     .castF(UsernamePasswordCredentials.class, credentials -> {
-                        String username = CryptoUtils.createSHA512String(credentials.getUsername());
-                        String password = CryptoUtils.createSHA512String(credentials.getPassword());
-                        return accountDao.findByNameAndPass(credentials.getUsername(), credentials.getPassword());
+                        return accountDao.findByNameAndPass(credentials.getUsername(), CryptoUtils.createSHA512String(credentials.getPassword()));
                     })
                     .castF(CookieCredentials.class, cr -> {
                         CookieCredentials credentials = (CookieCredentials) c;
@@ -150,7 +166,7 @@ public class AppModule {
 
     @Contribute(AuthenticationService.class)
     public void contributeAuthenticationService(OrderedConfiguration<AuthenticationHandler> configuration,
-                                                ApplicationStateManager applicationStateManager) {
+            ApplicationStateManager applicationStateManager) {
         configuration.add("SetUserInSessionHandler", new AuthenticationHandler() {
 
             @Override

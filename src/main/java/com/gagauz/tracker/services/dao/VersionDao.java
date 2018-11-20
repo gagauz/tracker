@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
 
-
 @Service
 public class VersionDao extends AbstractDao<Integer, Version> {
 

@@ -7,14 +7,13 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.web.services.security.Secured;
 
-import com.gagauz.tracker.db.model.AccessRole;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.services.dao.FeatureVersionDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 
-@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
+@Secured
 public class VersionInfo {
 
     @Property(write = false)

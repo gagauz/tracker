@@ -19,9 +19,9 @@ import org.apache.tapestry5.web.config.Global;
 import org.apache.tapestry5.web.services.model.CollectionGridDataSourceRowTypeFix;
 
 import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.RoleGroup;
+import com.gagauz.tracker.db.model.UserGroup;
 import com.gagauz.tracker.db.model.TicketType;
-import com.gagauz.tracker.services.dao.RoleGroupDao;
+import com.gagauz.tracker.services.dao.UserGroupDao;
 import com.gagauz.tracker.services.dao.TicketTypeDao;
 
 public class TicketTypeEdit {
@@ -40,7 +40,7 @@ public class TicketTypeEdit {
     private TicketTypeDao ticketTypeDao;
 
     @Inject
-    private RoleGroupDao roleGroupDao;
+    private UserGroupDao roleGroupDao;
 
     @Inject
     private SelectModelFactory modelFactory;
@@ -70,7 +70,7 @@ public class TicketTypeEdit {
     @Cached
     public SelectModel getGroupModel() {
         List<OptionModel> list = new ArrayList<>();
-        for (RoleGroup roleGroup : roleGroupDao.findByProject(getProject())) {
+        for (UserGroup roleGroup : roleGroupDao.findByProject(getProject())) {
             list.add(new OptionModelImpl(roleGroup.getName(), roleGroup));
         }
         return new SelectModelImpl(list.toArray(new OptionModel[list.size()]));

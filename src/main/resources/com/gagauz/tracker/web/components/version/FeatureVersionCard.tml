@@ -1,0 +1,28 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+	<t:if test="allowCreate">
+		<t:eventlink class="" t:event="createFeatureVersion" t:context="[feature, version]" t:zone="prop:zone.clientId">
+			<i class="glyphicon glyphicon-plus"></i> ${message:create-feature-version}
+		</t:eventlink>
+		
+		<p:else>
+			<t:if test="allowRemove">
+				<t:eventlink class="" t:event="deleteFeatureVersion" t:context="[featureVersion]" t:zone="prop:zone.clientId" title="${message:delete-feature-version}">
+					<i class="glyphicon glyphicon-trash"></i>
+				</t:eventlink>
+			</t:if>
+			<t:if test="!version.released">
+				<t:ModalLink role="button" class="" t:zone="prop:ticketZone" t:action="createTicket" t:context="[featureVersion]" title="${message:create-task}">
+					<i class="glyphicon glyphicon-plus"></i>
+				</t:ModalLink>
+			</t:if>
+		</p:else>
+	</t:if>
+	
+	<div style="display:none">
+		<div t:id="ticketZone" class="ticket-popup">
+			<t:if test="newTicket">
+				<t:ticket.EditTicketForm ticket="newTicket"/>
+			</t:if>
+		</div>
+	</div>
+</div>

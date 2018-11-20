@@ -15,8 +15,8 @@ public class TicketType extends TimeTrackedEntity {
 	private String name;
 	private Project project;
 	private TicketType parent;
-    private RoleGroup creator;
-    private RoleGroup assignee;
+    private UserGroup creator;
+    private UserGroup assignee;
     private String css;
 
 	@Column(nullable = true)
@@ -48,20 +48,20 @@ public class TicketType extends TimeTrackedEntity {
 	}
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    public RoleGroup getCreator() {
+    public UserGroup getCreator() {
         return creator;
     }
 
-    public void setCreator(RoleGroup creator) {
+    public void setCreator(UserGroup creator) {
         this.creator = creator;
     }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    public RoleGroup getAssignee() {
+    public UserGroup getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(RoleGroup assignee) {
+    public void setAssignee(UserGroup assignee) {
         this.assignee = assignee;
     }
 

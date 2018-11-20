@@ -12,7 +12,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.web.services.security.Secured;
 
-import com.gagauz.tracker.db.model.AccessRole;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
@@ -21,7 +20,7 @@ import com.gagauz.tracker.services.dao.StageDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.web.components.DeferredZone;
 
-@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
+@Secured
 public class TicketInfo {
 
     @Component(parameters = { "id=viewTicketZone" })

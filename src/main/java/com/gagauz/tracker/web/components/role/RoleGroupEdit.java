@@ -8,8 +8,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.gagauz.tracker.db.model.Project;
-import com.gagauz.tracker.db.model.RoleGroup;
-import com.gagauz.tracker.services.dao.RoleGroupDao;
+import com.gagauz.tracker.db.model.UserGroup;
+import com.gagauz.tracker.services.dao.UserGroupDao;
 
 import org.apache.tapestry5.web.config.Global;
 
@@ -19,14 +19,14 @@ public class RoleGroupEdit {
     private AlertManager alertManager;
 
     @Inject
-    private RoleGroupDao roleGroupDao;
+    private UserGroupDao roleGroupDao;
 
     @Parameter
     @Property
-    private RoleGroup object;
+    private UserGroup object;
 
     @Property
-    private RoleGroup roleGroup;
+    private UserGroup roleGroup;
 
     public Project getProject() {
         return Global.peek(Project.class);
@@ -36,16 +36,16 @@ public class RoleGroupEdit {
         return getProject() != null;
     }
 
-    public List<RoleGroup> getRoleGroups() {
+    public List<UserGroup> getRoleGroups() {
         return roleGroupDao.findByProject(getProject());
     }
 
-    void onEdit(RoleGroup roleGroup) {
+    void onEdit(UserGroup roleGroup) {
         object = roleGroup;
     }
 
     void onSuccess() {
         roleGroupDao.save(object);
-        alertManager.success("RoleGroup " + object.getName() + " saved");
+        alertManager.success("UserGroup " + object.getName() + " saved");
     }
 }

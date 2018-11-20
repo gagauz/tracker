@@ -3,18 +3,22 @@ package com.gagauz.tracker.db.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.gagauz.tracker.db.utils.SaveOrUpdateDateListener;
 import com.xl0e.hibernate.model.Model;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
+@EntityListeners(SaveOrUpdateDateListener.class)
 public class TimeTrackedEntity extends Model {
 
-    private Date created = new Date();
+    private Date created;
     private Date updated;
 
     @Column(updatable = false)
@@ -40,6 +44,11 @@ public class TimeTrackedEntity extends Model {
     @PreUpdate
     protected void onUpdate() {
         updated = new Date();
+    }
+
+    @PrePersist
+    protected void onPersist() {
+        created = new Date();
     }
 
 }

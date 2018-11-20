@@ -1,7 +1,7 @@
 package com.gagauz.tracker.web.pages;
 
 import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.services.dao.RoleGroupDao;
+import com.gagauz.tracker.services.dao.UserGroupDao;
 import com.gagauz.tracker.services.dao.UserDao;
 
 import org.apache.tapestry5.web.services.security.Secured;
@@ -28,7 +28,7 @@ public class UserList {
     private UserDao userDao;
 
     @Inject
-    private RoleGroupDao roleGroupDao;
+    private UserGroupDao roleGroupDao;
 
     @Inject
     private SelectModelFactory selectModelFactory;

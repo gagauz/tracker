@@ -9,7 +9,7 @@
 			</p:featureVersion>
 			<p:type>
 				<t:label class="col-sm-3 control-label" for="type" />
-				<div class="col-sm-4">
+				<div class="col-sm-9">
 					<t:select class="form-control"
 						t:id="type" 
 						t:value="ticket.type"
@@ -21,7 +21,7 @@
 			</p:type>
 			<p:status>
 				<t:label class="col-sm-3 control-label" for="status" />
-				<div class="col-sm-4">
+				<div class="col-sm-9">
 					<t:select class="form-control"
 						t:id="status" 
 						t:value="ticket.status"

@@ -9,13 +9,12 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.web.services.security.Secured;
 
-import com.gagauz.tracker.db.model.AccessRole;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.services.dao.FeatureDao;
 
-@Secured({ AccessRole.PROJECT_USER, AccessRole.PROJECT_ADMIN })
+@Secured
 @Import(module = { "bootstrap/collapse" })
 public class FeaturesList {
 

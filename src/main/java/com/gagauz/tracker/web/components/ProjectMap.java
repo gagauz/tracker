@@ -3,6 +3,7 @@ package com.gagauz.tracker.web.components;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.FeatureDao;
 import com.gagauz.tracker.services.dao.FeatureVersionDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.services.dao.VersionDao;
@@ -32,6 +34,7 @@ import com.gagauz.tracker.services.dao.VersionDao;
 public class ProjectMap {
 
     @Component(parameters = { "id=prop:zoneId" })
+    @Property(write = false)
     private Zone zone;
 
     @Component(parameters = { "id=literal:ticketZone" })
@@ -79,6 +82,9 @@ public class ProjectMap {
     private VersionDao versionDao;
 
     @Inject
+    private FeatureDao featureDao;
+
+    @Inject
     private FeatureVersionDao featureVersionDao;
 
     @Inject
@@ -97,10 +103,10 @@ public class ProjectMap {
     private Map<FeatureVersion, List<Ticket>> ticketsMap;
 
     private void initMap(List<Version> versions) {
-        featureVersionMap = new HashMap<>();
+        featureVersionMap = new LinkedHashMap<>();
         ticketsMap = new HashMap<>();
         for (Version version : versions) {
-            Map<Feature, FeatureVersion> map = new HashMap<>();
+            Map<Feature, FeatureVersion> map = new LinkedHashMap<>();
             for (Feature feature : getFeatures()) {
                 map.put(feature, null);
             }
@@ -142,7 +148,7 @@ public class ProjectMap {
 
     @Cached
     public Collection<Feature> getFeatures() {
-        return project.getFeatures();
+        return featureDao.findByProject(project);
     }
 
     public void setVersion(Version version0) {
@@ -153,19 +159,6 @@ public class ProjectMap {
             Map<Feature, FeatureVersion> map = featureVersionMap.get(version);
             featureVersion = null != map ? map.get(feature) : null;
         }
-    }
-
-    @Ajax
-    void onCreateFeatureVersion(Feature feature, Version version) {
-        FeatureVersion featureVersion = new FeatureVersion();
-        featureVersion.setFeature(feature);
-        featureVersion.setVersion(version);
-        User user = new User();
-        int id = securityUser.getId();
-        user.setId(id);
-        featureVersion.setCreator(user);
-        featureVersionDao.save(featureVersion);
-        ajaxResponseRenderer.addRender(zone.getClientId(), zone.getBody());
     }
 
     @Ajax

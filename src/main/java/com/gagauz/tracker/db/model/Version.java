@@ -32,7 +32,6 @@ public class Version extends TimeTrackedEntity implements Comparable<Version> {
         // default constructor
     }
 
-    @ForeignKey(name = "fk_version_project")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     public Project getProject() {
         return this.project;

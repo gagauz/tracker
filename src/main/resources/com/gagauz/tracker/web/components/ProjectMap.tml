@@ -35,7 +35,7 @@
 					</thead>
 					<tbody>
 						<t:loop source="features" value="feature">
-							<tr >
+							<tr>
 								<td>
 									<div class="cell">
 										<div class="feature-col">
@@ -50,15 +50,9 @@
 									<td class="released-${cond:version,prop:version.released,unknown}">
 										<div class="cell">
 											<div class="ticket-col-div">
+												<t:version.FeatureVersionCard zone="zone" feature="feature" version="version" featureVersion="featureVersion" />
 												<t:if test="featureVersion">
 													<div class="tickets">
-														<div class="title btn-toolbar">
-															<t:if test="notReleased">
-																<t:ModalLink role="button" class="btn btn-success" t:zone="ticketZone" t:action="createTicket" t:context="[featureVersion]">
-																	<i class="glyphicon glyphicon-plus"></i> ${message:create-task}
-																</t:ModalLink>
-															</t:if>
-														</div>
 														<ul class="ticket-col-div-tickets">
 															<t:foreach t:source="tickets" t:value="ticket" limit="5">
 																<li>
@@ -76,18 +70,6 @@
 															</t:foreach>
 														</ul>
 													</div>
-	
-													<p:else>
-														<t:if test="notReleased">
-															<div class="alert alert-warning" role="alert">
-																<i class="glyphicon glyphicon-warning-sign"></i> 
-																${message:no-feature-version-yet}
-															</div>
-															<t:eventlink class="btn btn-info" t:event="createFeatureVersion" t:context="[feature, version]" t:zone="prop:zoneId">
-																<i class="glyphicon glyphicon-plus"></i> ${message:create-feature-version}
-															</t:eventlink>
-														</t:if>
-													</p:else>
 												</t:if>
 											</div>
 										</div>

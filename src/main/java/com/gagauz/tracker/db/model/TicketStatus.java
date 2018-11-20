@@ -2,14 +2,12 @@ package com.gagauz.tracker.db.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.xl0e.hibernate.model.Model;
@@ -23,7 +21,6 @@ public class TicketStatus extends Model {
     private String css;
     private String description;
     private Collection<TicketStatus> allowedTo = new ArrayList<>();
-    private Set<RoleGroup> approvers;
     private TicketType ticketType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
@@ -68,15 +65,6 @@ public class TicketStatus extends Model {
 
     public void setAllowedTo(Collection<TicketStatus> allowedTo) {
         this.allowedTo = allowedTo;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY)
-    public Set<RoleGroup> getApprovers() {
-        return approvers;
-    }
-
-    public void setApprovers(Set<RoleGroup> approvers) {
-        this.approvers = approvers;
     }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)

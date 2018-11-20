@@ -13,6 +13,7 @@ import com.xl0e.testdata.DataBaseScenario;
 public class ScProject extends DataBaseScenario {
 
     public static final String TRACKER = "TRACKER";
+
     @Autowired
     private ProjectDao projectDao;
 
@@ -38,5 +39,4 @@ public class ScProject extends DataBaseScenario {
         project.setCvsRepo(repo);
         projectDao.save(project);
     }
-
 }

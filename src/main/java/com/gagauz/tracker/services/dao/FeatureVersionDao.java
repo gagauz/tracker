@@ -11,7 +11,7 @@ import com.gagauz.tracker.db.model.FeatureVersion.FeatureVersionId;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.utils.StringUtils;
-
+import com.xl0e.util.CryptoUtils;
 
 @Service
 public class FeatureVersionDao extends AbstractDao<FeatureVersionId, FeatureVersion> {
@@ -25,7 +25,7 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersionId, FeatureVers
     }
 
     public List<FeatureVersion> findByProject(Project project) {
-        return getCriteriaFilter().eq("id.projectId", project.getId()).list();
+        return getCriteriaFilter().addAlias("feature", "feature").eq("feature.project.id", project.getId()).list();
     }
 
     public FeatureVersion findByFeatureAndVersion(int featureId, int versionId) {
@@ -38,7 +38,7 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersionId, FeatureVers
             if ("null".equalsIgnoreCase(string) || StringUtils.isEmpty(string)) {
                 return null;
             }
-            String[] ids = string.split("_");
+            String[] ids = CryptoUtils.decryptAES(string).split("_");
             try {
                 FeatureVersionId id = new FeatureVersionId();
                 id.setFeatureId(Integer.parseInt(ids[0]));
@@ -52,6 +52,6 @@ public class FeatureVersionDao extends AbstractDao<FeatureVersionId, FeatureVers
 
     @Override
     public String idToString(FeatureVersionId id) {
-        return null == id ? null : String.valueOf(id.getFeatureId()) + '_' + id.getVersionId();
+        return null == id ? null : CryptoUtils.encryptAES(String.valueOf(id.getFeatureId()) + '_' + id.getVersionId());
     }
 }

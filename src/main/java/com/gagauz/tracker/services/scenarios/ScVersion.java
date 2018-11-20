@@ -105,22 +105,17 @@ public class ScVersion extends DataBaseScenario {
                 features.add(feature);
             }
             featureDao.saveAll(features);
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.MONTH, -1);
             for (int j = 0; j < 3; j++) {
+
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.MONTH, j - 1);
+
                 Version version = new Version();
-                version.setReleased(j == 0);
+
                 version.setProject(project);
-                if (j != 4) {
-                    version.setName("TRACKER-1." + j);
-                    version.setReleaseDate(cal.getTime());
-                    cal.add(Calendar.MONTH, 1);
-                } else {
-                    version.setName("1." + j + "-SNAPSHOT");
-                    cal.setTime(new Date());
-                    cal.add(Calendar.MONTH, 1);
-                    version.setReleaseDate(cal.getTime());
-                }
+                version.setName("TRACKER-1." + j);
+                version.setReleaseDate(cal.getTime());
+                version.setReleased(cal.getTime().before(new Date()));
 
                 versionDao.save(version);
                 for (Feature feature : features) {
@@ -156,6 +151,7 @@ public class ScVersion extends DataBaseScenario {
                                 wl.setLogTime(es / (rand.nextInt(5) + 1));
                             } else {
                                 wl.setLogTime(es);
+                                ticket.setStatus(getClosedStatus());
                             }
                         }
                         if (rand.nextBoolean()) {
@@ -193,11 +189,11 @@ public class ScVersion extends DataBaseScenario {
                             Ticket bug = new Ticket();
                             bug.setFeatureVersion(featureVersion);
                             bug.setParent(ticket);
-                            bug.setType(getRandomType());
-                            bug.setStatus(getRandomStatus());
+                            bug.setType(getBugType());
+                            bug.setStatus(version.isReleased() ? getClosedStatus() : getRandomStatus());
                             bug.setOwner(ticket.getOwner());
                             bug.setAuthor(getRandomUser());
-                            bug.setSummary("Bug/ Регистрация");
+                            bug.setSummary("Ошибка 500");
                             bug.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
                             ticketDao.save(bug);
                         }
@@ -211,24 +207,47 @@ public class ScVersion extends DataBaseScenario {
     private Map<Integer, TicketType> typeHash;
     private Map<Integer, User> userHash;
 
-    private TicketStatus getRandomStatus() {
+    private Map<Integer, TicketStatus> getsStatuses() {
         if (null == statusHash) {
             statusHash = new HashMap<>();
             for (TicketStatus s : statusDao.findByProject(project)) {
                 statusHash.put(s.getId(), s);
             }
         }
-        return RandomUtils.getRandomObject(statusHash.values());
+        return statusHash;
     }
 
-    private TicketType getRandomType() {
+    private TicketStatus getRandomStatus() {
+        return RandomUtils.getRandomObject(getsStatuses().values());
+    }
+
+    private TicketStatus getClosedStatus() {
+        return getsStatuses().values().stream()
+                .filter(s -> s.getName().equalsIgnoreCase("closed"))
+                .findAny()
+                .orElseGet(() -> getRandomStatus());
+    }
+
+    private Map<Integer, TicketType> getTicketTypes() {
         if (null == typeHash) {
             typeHash = new HashMap<>();
             for (TicketType s : typeDao.findByProject(project)) {
                 typeHash.put(s.getId(), s);
             }
         }
-        return RandomUtils.getRandomObject(typeHash.values());
+        return typeHash;
+    }
+
+    private TicketType getRandomType() {
+        return RandomUtils.getRandomObject(getTicketTypes().values());
+    }
+
+    private TicketType getBugType() {
+        return getTicketTypes().values()
+                .stream()
+                .filter(t -> t.getName().equalsIgnoreCase("bug"))
+                .findAny()
+                .orElseGet(() -> getRandomType());
     }
 
     private User getRandomUser() {

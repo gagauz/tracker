@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -23,17 +24,8 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
     @Embeddable
     public static class FeatureVersionId implements Serializable {
         private static final long serialVersionUID = 1939148011273312467L;
-        private int projectId;
         private int featureId;
         private int versionId;
-
-        public int getProjectId() {
-            return projectId;
-        }
-
-        public void setProjectId(int projectId) {
-            this.projectId = projectId;
-        }
 
         public int getFeatureId() {
             return featureId;
@@ -57,7 +49,7 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
                 return this == obj;
             }
             FeatureVersionId other = (FeatureVersionId) obj;
-            return other.getProjectId() == projectId && other.getVersionId() == versionId && other.getVersionId() == versionId;
+            return other.getVersionId() == versionId && other.getVersionId() == versionId;
         }
 
         @Override
@@ -70,7 +62,6 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
     private static final long serialVersionUID = -8693198398126115278L;
     private FeatureVersionId id;
     private User creator;
-    private Project project;
     private Feature feature;
     private Version version;
     private String description;
@@ -88,7 +79,6 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
         this.id = id;
     }
 
-    @ForeignKey(name = "fk_featureVersion_creator")
     @ManyToOne(fetch = FetchType.LAZY)
     public User getCreator() {
         return creator;
@@ -98,15 +88,9 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
         this.creator = creator;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projectId", insertable = false, updatable = false, referencedColumnName = "id")
+    @Transient
     public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-        getId().projectId = null != project ? project.getId() : 0;
+        return getFeature().getProject();
     }
 
     @ForeignKey(name = "fk_featureVersion_feature")
@@ -118,7 +102,6 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
 
     public void setFeature(Feature feature) {
         this.feature = feature;
-        getId().projectId = null != feature && null != feature.getProject() ? feature.getProject().getId() : 0;
         getId().featureId = null != feature ? feature.getId() : 0;
     }
 
@@ -130,7 +113,6 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
 
     public void setVersion(Version version) {
         this.version = version;
-        getId().projectId = null != version && null != version.getProject() ? version.getProject().getId() : 0;
         getId().versionId = null != version ? version.getId() : 0;
     }
 
@@ -150,7 +132,7 @@ public class FeatureVersion implements IModel<FeatureVersionId>, Serializable {
 
     @Override
     public int hashCode() {
-        return getId().getProjectId() ^ (getId().getFeatureId() >>> 32) ^ (getId().getVersionId() >>> 32);
+        return getId().getFeatureId() ^ (getId().getVersionId() >>> 32);
     }
 
     @Override

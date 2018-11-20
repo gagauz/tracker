@@ -1,5 +1,20 @@
 package com.gagauz.tracker.web.components.ticket;
 
+import java.util.List;
+
+import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.annotations.Cached;
+import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.BeanEditForm;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.SelectModelFactory;
+import org.apache.tapestry5.services.ValueEncoderSource;
+
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.TicketType;
@@ -8,17 +23,6 @@ import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.services.dao.TicketStatusDao;
 import com.gagauz.tracker.services.dao.TicketTypeDao;
 import com.gagauz.tracker.services.dao.UserDao;
-
-import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.annotations.*;
-import org.apache.tapestry5.corelib.components.BeanEditForm;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.SelectModelFactory;
-import org.apache.tapestry5.services.ValueEncoderSource;
-
-import java.util.List;
 
 public class EditTicketForm {
 
@@ -103,13 +107,13 @@ public class EditTicketForm {
 
     @Cached
     public SelectModel getStatusModel() {
-        List<TicketStatus> list = ticketStatusDao.findByProject(ticket.getFeature().getProject());
+        List<TicketStatus> list = statusDao.findByUserGroupsAndProject(user.getUserGroups(), ticket.getFeature().getProject());
         return selectModelFactory.create(list, "name");
     }
 
     @Cached
     public SelectModel getTypeModel() {
-        List<TicketType> list = ticketTypeDao.findByProject(ticket.getFeature().getProject());
+        List<TicketType> list = ticketTypeDao.findByUserGroupsAndProject(user.getUserGroups(), ticket.getFeature().getProject());
         return selectModelFactory.create(list, "name");
     }
 }

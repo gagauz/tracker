@@ -15,7 +15,7 @@
 				<p:roles>
 					<t:label class="col-sm-3 control-label" for="roles"/>
 					<div class="col-sm-6">
-						<t:MultiSelect class="form-control" t:id="roles" model="allRoleGroups" value="editUser.roleGroups" size="4" blankLabel="message:select"/>
+						<t:MultiSelect class="form-control" t:id="roles" model="allRoleGroups" value="editUser.userGroups" size="4" blankLabel="message:select"/>
 					</div>
 				</p:roles>
 			</t:beanform>
@@ -25,9 +25,9 @@
 		</t:if>
 	</div>
 
-    <t:grid source="users" row="user" add="edit" class="table table-striped">
+    <t:grid source="users" row="user" add="edit" class="table table-striped" include="username,name">
     	<p:editCell>
-    	<t:eventlink event="edit" context="user.id">${message:edit}</t:eventlink>
+    		<t:eventlink event="edit" context="user.id">${message:edit}</t:eventlink>
     	</p:editCell>
     </t:grid>
 	

@@ -9,12 +9,15 @@ import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
 
-
 @Service
 public class TicketDao extends AbstractDao<Integer, Ticket> {
 
     public List<Ticket> findByProject(Project project) {
-        return getCriteriaFilter().eq("featureVersion.id.projectId", project.getId()).list();
+        return getCriteriaFilter()
+                .addAlias("featureVersion", "featureVersion")
+                .addAlias("featureVersion.feature", "feature")
+                .addAlias("feature.project", "project")
+                .eq("project.id", project.getId()).list();
     }
 
     public List<Ticket> findByVersion(Version version) {
@@ -28,6 +31,10 @@ public class TicketDao extends AbstractDao<Integer, Ticket> {
     public void updateTicketProgessTime(Ticket ticket) {
         createSQLQuery("update ticket set progress=COALESCE((select sum(logTime) from work_log where ticket_id="
                 + ticket.getId() + " group by ticket_id), 0) where id=" + ticket.getId()).executeUpdate();
+    }
+
+    public List<Ticket> findByFeatureAndVersion(Feature feature, Version version) {
+        return getCriteriaFilter().eq("featureVersion.id.featureId", feature.getId()).eq("featureVersion.id.versionId", version.getId()).list();
     }
 
 }
