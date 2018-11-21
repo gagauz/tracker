@@ -1,0 +1,25 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+	<h1>Version statistics</h1>
+	<div class="row">
+		<div class="col-sm-6">
+			<t:OutputRaw value="getPieChart(300)" />
+		</div>
+		<div class="col-sm-6">
+			<table>
+				<tr>
+					<th></th>
+					<th>Status</th>
+					<th>Count</th>
+				</tr>
+				<t:foreach source="getStatistics().entrySet()" value="stat">
+					<tr>
+						<td style="background:${stat.key.color};width:1.5em;"></td>
+						<td>${stat.key.name}</td>
+						<td>${stat.value}</td>
+					</tr>
+				</t:foreach>
+			</table>
+		</div>
+	</div>
+</t:container>

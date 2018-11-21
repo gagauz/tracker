@@ -1,0 +1,24 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+	<h1>Version tickets</h1>
+	<div class="row">
+		<div class="col-sm-12">
+			<t:grid source="tickets" 
+				row="ticket" 
+				include="key,summary,created"
+				add="owner">
+				<p:keyCell>
+					<t:if test="ticket.parent">
+						${ticket.parent.key} / 
+					</t:if>
+					${ticket.key}
+				</p:keyCell>
+				<p:ownerCell>
+					<t:if test="ticket.owner">
+						${ticket.owner.name}
+					</t:if>
+				</p:ownerCell>
+			</t:grid>
+		</div>
+	</div>
+</t:container>

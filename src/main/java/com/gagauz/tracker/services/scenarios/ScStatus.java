@@ -19,80 +19,80 @@ import com.xl0e.testdata.DataBaseScenario;
 @Service
 public class ScStatus extends DataBaseScenario {
 
-    @Autowired
-    private TicketStatusDao statusDao;
+	@Autowired
+	private TicketStatusDao statusDao;
 
-    @Autowired
-    private ProjectDao projectDao;
+	@Autowired
+	private ProjectDao projectDao;
 
-    @Autowired
-    private UserGroupDao userGroupDao;
+	@Autowired
+	private UserGroupDao userGroupDao;
 
-    @Autowired
-    private TicketStatusToUserGroupDao ticketStatusToUserGroupDao;
+	@Autowired
+	private TicketStatusToUserGroupDao ticketStatusToUserGroupDao;
 
-    private Project project;
+	private Project project;
 
-    private List<UserGroup> roles;
+	private List<UserGroup> roles;
 
-    @Override
-    protected List<Class<? extends DataBaseScenario>> getDependsOnClasses() {
-        return Arrays.asList(ScProject.class, ScUserGroups.class);
-    }
+	@Override
+	protected List<Class<? extends DataBaseScenario>> getDependsOnClasses() {
+		return Arrays.asList(ScProject.class, ScUserGroups.class);
+	}
 
-    @Override
-    protected void execute() {
-        project = projectDao.findByCode(ScProject.TRACKER);
-        assert (project != null);
-        TicketStatus closed = create("Closed");
-        allowTtransition(closed, "QA");
-        TicketStatus reopen = create("Reopened");
-        allowTtransition(reopen, "QA", "Developer");
+	@Override
+	protected void execute() {
+		project = projectDao.findByCode(ScProject.TRACKER);
+		assert (project != null);
+		TicketStatus closed = create("Closed", "#008000");
+		allowTtransition(closed, "QA");
+		TicketStatus reopen = create("Reopened", "#FF00FF");
+		allowTtransition(reopen, "QA", "Developer");
 
-        TicketStatus intest = create("In test", closed, reopen);
-        allowTtransition(intest, "QA");
+		TicketStatus intest = create("In test", "#00FF00", closed, reopen);
+		allowTtransition(intest, "QA");
 
-        TicketStatus readytest = create("Ready for test", intest);
-        allowTtransition(readytest, "Developer");
+		TicketStatus readytest = create("Ready for test", "#00FFFF", intest);
+		allowTtransition(readytest, "Developer");
 
-        TicketStatus indev = create("In development", readytest);
-        allowTtransition(indev, "Developer");
+		TicketStatus indev = create("In development", "#FFFF00", readytest);
+		allowTtransition(indev, "Developer");
 
-        TicketStatus open = create("Open", indev);
+		TicketStatus open = create("Open", "#FF0000", indev);
 
-        reopen.setAllowedTo(Arrays.asList(indev, readytest));
+		reopen.setAllowedTo(Arrays.asList(indev, readytest));
 
-        statusDao.flush();
-        ticketStatusToUserGroupDao.flush();
-    }
+		statusDao.flush();
+		ticketStatusToUserGroupDao.flush();
+	}
 
-    private void allowTtransition(TicketStatus status, String... groups) {
-        for (String group : groups) {
-            TicketStatusToUserGroup transition = new TicketStatusToUserGroup();
-            transition.getId().setTicketStatusId(status.getId());
-            transition.getId().setUserGroupId(getByGroup(group).getId());
-            ticketStatusToUserGroupDao.saveNoCommit(transition);
-        }
-    }
+	private void allowTtransition(TicketStatus status, String... groups) {
+		for (String group : groups) {
+			TicketStatusToUserGroup transition = new TicketStatusToUserGroup();
+			transition.getId().setTicketStatusId(status.getId());
+			transition.getId().setUserGroupId(getByGroup(group).getId());
+			ticketStatusToUserGroupDao.saveNoCommit(transition);
+		}
+	}
 
-    UserGroup getByGroup(String name) {
-        if (null == roles) {
-            roles = userGroupDao.findByProject(project);
-        }
-        return roles.stream().filter(g -> g.getName().equals(name)).findFirst().get();
-    }
+	UserGroup getByGroup(String name) {
+		if (null == roles) {
+			roles = userGroupDao.findByProject(project);
+		}
+		return roles.stream().filter(g -> g.getName().equals(name)).findFirst().get();
+	}
 
-    private TicketStatus create(String name, TicketStatus... lists) {
-        TicketStatus status = new TicketStatus();
-        status.setName(name);
-        status.setDescription(name);
-        status.setProject(project);
-        status.setCss(name.toLowerCase().replace(' ', '_'));
-        if (lists.length > 0) {
-            status.setAllowedTo(Arrays.asList(lists));
-        }
-        statusDao.save(status);
-        return status;
-    }
+	private TicketStatus create(String name, String color, TicketStatus... lists) {
+		TicketStatus status = new TicketStatus();
+		status.setName(name);
+		status.setDescription(name);
+		status.setProject(project);
+		status.setColor(color);
+		if (lists.length > 0) {
+			status.setAllowedTo(Arrays.asList(lists));
+		}
+		statusDao.save(status);
+		return status;
+	}
 
 }

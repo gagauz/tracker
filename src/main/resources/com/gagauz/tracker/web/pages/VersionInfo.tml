@@ -13,6 +13,10 @@
 			</li>
 		</ol>
   	</p:header>
+  	
+  	<t:VersionStat version="version" />
+  	
+  	<t:VersionTickets version="version" />
     
     <t:VersionUserMap version="version" />
     

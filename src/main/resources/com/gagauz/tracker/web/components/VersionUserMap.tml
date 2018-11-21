@@ -61,7 +61,7 @@
 						<td class="ticket-col ${cond:user,,unassigned}" data-user-id="${cond:user,prop:user.id,0}" style="background-color: ">
 							<div class="ticket-cells">
 								<t:loop source="userTickets" value="ticket">
-									<div class="ticket-cell-div ${cond:draggable,drag,} shadow" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">
+									<div class="ticket-cell-div shadow ${cond:draggable,drag,}" data-user-id="${cond:user,prop:user.id,0}" data-ticket-id="${ticket.id}">
 										<div class="drag-handle">
 											<i class="glyphicon glyphicon-move text text-info"></i>
 										</div>
