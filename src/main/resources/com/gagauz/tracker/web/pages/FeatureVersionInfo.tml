@@ -4,24 +4,6 @@
       xmlns:p="tapestry:parameter">
 
 
-    <p>Owner: ${featureVersion.owner.name}</p>
-    <p>Creator: ${featureVersion.creator.name}</p>
-    
-    <!-- 
-    <p>Subtickets</p>
-    <t:grid source="featureVersion.tickets" row="ticket" add="edit">
-    	<p:editCell>
-    		<t:pagelink page="FeatureVersionInfo" context="subticket">View</t:pagelink>
-    	</p:editCell>
-    </t:grid>
-    
-    <p>Bugs</p>
-    <t:grid source="featureVersion.bugs" row="bug" add="edit">
-    	<p:editCell>
-    		<t:pagelink page="FeatureVersionInfo" context="bug">View</t:pagelink>
-    	</p:editCell>
-    </t:grid>
-     -->
     <p:sidebar>
     
     </p:sidebar>

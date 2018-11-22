@@ -15,19 +15,24 @@
 				<table class="shadow-table">
 					<thead>
 						<tr>
-							<th class="version-col">${msg:Feature version list}</th>
+							<th class="version-col"></th>
 							<t:loop source="versions" value="version">
 								<th class="version-col">
 									<div class="cell">
-										<div>
-											<t:pagelink class="" t:page="versioninfo" t:context="version">
-												${message:version}: ${version.name}
-											</t:pagelink>
-											<t:ModalLink class="pull-right" t:zone="ticketZone" t:action="editVersion" t:context="version">
-												<i class="glyphicon glyphicon-pencil"></i>
-											</t:ModalLink>
-										</div>
-										<div>${message:release-date}: ${version.releaseDate}</div>
+										<t:if test="version">
+											<div>
+												<t:pagelink class="" t:page="versioninfo" t:context="version">
+													${message:version}: ${version.name}
+												</t:pagelink>
+												<t:ModalLink class="pull-right" t:zone="ticketZone" t:action="editVersion" t:context="version">
+													<i class="glyphicon glyphicon-pencil"></i>
+												</t:ModalLink>
+											</div>
+											<div>${message:release-date}: ${version.releaseDate}</div>
+											<p:else>
+												Unversioned
+											</p:else>
+										</t:if>
 									</div>
 								</th>
 							</t:loop>
@@ -46,31 +51,28 @@
 										</div>
 									</div>
 								</td>
-								<t:loop source="versions" value="version">
+								<t:loop source="getVersions(feature)" value="version">
 									<td class="released-${cond:version,prop:version.released,unknown}">
 										<div class="cell">
 											<div class="ticket-col-div">
-												<t:version.FeatureVersionCard zone="zone" ticketZone="ticketZone" feature="feature" version="version" featureVersion="featureVersion" />
-												<t:if test="featureVersion">
-													<div class="tickets">
-														<ul class="ticket-col-div-tickets">
-															<t:foreach t:source="tickets" t:value="ticket" limit="5">
-																<li>
-																	<t:pagelink class="${ticket.status.css}" t:page="TicketInfo" t:context="ticket">
-																		<i class="glyphicon icon"></i>
-																		${ticket.key} ${ticket.summary}
-																	</t:pagelink>
-																	<t:ModalLink class="" t:zone="viewTicketZone" t:action="viewticket" t:context="ticket">
-																		<i class="glyphicon glyphicon-eye-open"></i>
-																	</t:ModalLink>
-																</li>
-																<p:ellipsis>
-																	<li>${msg:Total} ${tickets.size()} ${msg:tickets}</li>
-																</p:ellipsis>
-															</t:foreach>
-														</ul>
-													</div>
-												</t:if>
+												<t:version.FeatureVersionCard zone="zone" ticketZone="ticketZone" feature="feature" version="version" />
+												<div class="tickets">
+													<ul class="ticket-col-div-tickets">
+														<t:foreach t:source="tickets" t:value="ticket" limit="5">
+															<li>
+																<t:pagelink class="${ticket.status.css}" t:page="TicketInfo" t:context="ticket" title="${ticket.status.name}">
+																	 ${ticket.key} ${ticket.summary}
+																</t:pagelink>
+																<t:ModalLink class="" t:zone="viewTicketZone" t:action="viewticket" t:context="ticket">
+																	<i class="glyphicon glyphicon-eye-open"></i>
+																</t:ModalLink>
+															</li>
+															<p:ellipsis>
+																<li>${msg:Total} ${tickets.size()} ${msg:tickets}</li>
+															</p:ellipsis>
+														</t:foreach>
+													</ul>
+												</div>
 											</div>
 										</div>
 									</td>

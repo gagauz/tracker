@@ -17,12 +17,12 @@ import org.apache.tapestry5.services.Ajax;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.web.services.ToolsService;
 
-import com.gagauz.tracker.db.model.FeatureVersion;
+import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.TicketType;
 import com.gagauz.tracker.db.model.User;
-import com.gagauz.tracker.services.dao.FeatureVersionDao;
+import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.services.dao.TicketStatusDao;
 import com.gagauz.tracker.services.dao.TicketTypeDao;
@@ -53,7 +53,10 @@ public class TicketHeader {
     private TicketType type;
 
     @Property
-    private FeatureVersion version;
+    private Version version;
+
+    @Property
+    private Feature feature;
 
     @Property
     private boolean edit;
@@ -87,9 +90,6 @@ public class TicketHeader {
 
     @Inject
     protected VersionDao versionDao;
-
-    @Inject
-    protected FeatureVersionDao featureVersionDao;
 
     @Inject
     private AjaxResponseRenderer ajaxResponseRenderer;
@@ -137,9 +137,10 @@ public class TicketHeader {
     }
 
     @Ajax
-    Object onChangeVersion(Ticket ticket, FeatureVersion version) {
+    Object onChangeVersion(Ticket ticket, Feature feature, Version version) {
         if (null != ticket && null != version) {
-            ticket.setFeatureVersion(version);
+            ticket.setFeature(feature);
+            ticket.setVersion(version);
             this.ticket = ticket;
         }
         return headerZone;
@@ -169,7 +170,8 @@ public class TicketHeader {
         newTicket = new Ticket();
         newTicket.setParent(ticket);
         newTicket.setAuthor(user);
-        newTicket.setFeatureVersion(ticket.getFeatureVersion());
+        newTicket.setFeature(ticket.getFeature());
+        newTicket.setVersion(ticket.getVersion());
         subtask = true;
         return newTicket;
     }
@@ -182,8 +184,8 @@ public class TicketHeader {
         return ticketTypeDao.findByUserGroupsAndProject(user.getUserGroups(), ticket.getProject());
     }
 
-    public List<FeatureVersion> getVersions() {
-        return featureVersionDao.findByFeature(ticket.getFeature());
+    public List<Version> getVersions() {
+        return versionDao.findByFeature(ticket.getFeature());
     }
 
     @Cached

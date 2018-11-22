@@ -2,6 +2,7 @@ package com.gagauz.tracker.db.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,186 +23,178 @@ import com.xl0e.hibernate.types.CollectionType;
 @Entity
 @Table(name = "ticket")
 @TypeDefs({
-		@TypeDef(name = "listOf.Attachment", typeClass = ArrayListType.class, parameters = {
-				@Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
-				@Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
-		})
+        @TypeDef(name = "listOf.Attachment", typeClass = ArrayListType.class, parameters = {
+                @Parameter(name = CollectionType.CLASS, value = "com.gagauz.tracker.db.model.Attachment"),
+                @Parameter(name = CollectionType.SERIALIZER, value = "com.gagauz.tracker.db.utils.AttachmentSerializer")
+        })
 })
 public class Ticket extends TimeTrackedEntity {
-	private static final long serialVersionUID = 9133733343859656192L;
-	private FeatureVersion featureVersion;
-	private String key1;
-	private TicketType type;
-	private TicketStatus status;
-	private User author;
-	private User owner;
-	private String summary;
-	private String description;
-	private int estimate;
-	private int progress;
-	private int priority;
-	private List<Attachment> attachments;
-	private Ticket parent;
-	private List<Ticket> children;
-	private List<Workflow> workflow;
+    private static final long serialVersionUID = 9133733343859656192L;
+    private Feature feature;
+    private Version version;
+    private String key;
+    private TicketType type;
+    private TicketStatus status;
+    private User author;
+    private User owner;
+    private String summary;
+    private String description;
+    private int estimate;
+    private int progress;
+    private int priority;
+    private List<Attachment> attachments;
+    private Ticket parent;
+    private List<Ticket> children;
+    private List<Workflow> workflow;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	public FeatureVersion getFeatureVersion() {
-		return featureVersion;
-	}
+    @Transient
+    public Project getProject() {
+        return feature.getProject();
+    }
 
-	public void setFeatureVersion(FeatureVersion featureVersion) {
-		this.featureVersion = featureVersion;
-		if (null == key1 && null != featureVersion) {
-			key1 = featureVersion.getFeature().getProject().getCode() + '-';
-		}
-	}
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    public Feature getFeature() {
+        return feature;
+    }
 
-	@Column(updatable = false)
-	public String getKey1() {
-		return key1;
-	}
+    public void setFeature(Feature feature) {
+        this.feature = feature;
+    }
 
-	public void setKey1(String key) {
-		key1 = key;
-	}
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    public Version getVersion() {
+        return version;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	public TicketType getType() {
-		return type;
-	}
+    public void setVersion(Version version) {
+        this.version = version;
+    }
 
-	public void setType(TicketType type) {
-		this.type = type;
-	}
+    @Column(name = "`key`", updatable = false, unique = true)
+    public String getKey() {
+        return key;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	public TicketStatus getStatus() {
-		return status;
-	}
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-	public void setStatus(TicketStatus status) {
-		this.status = status;
-	}
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    public TicketType getType() {
+        return type;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	public User getAuthor() {
-		return author;
-	}
+    public void setType(TicketType type) {
+        this.type = type;
+    }
 
-	public void setAuthor(User author) {
-		this.author = author;
-	}
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    public TicketStatus getStatus() {
+        return status;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	public User getOwner() {
-		return owner;
-	}
+    public void setStatus(TicketStatus status) {
+        this.status = status;
+    }
 
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    public User getAuthor() {
+        return author;
+    }
 
-	@Column(nullable = false)
-	public String getSummary() {
-		return summary;
-	}
+    public void setAuthor(User author) {
+        this.author = author;
+    }
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    public User getOwner() {
+        return owner;
+    }
 
-	@Column
-	@Lob
-	public String getDescription() {
-		return description;
-	}
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    @Column(nullable = false)
+    public String getSummary() {
+        return summary;
+    }
 
-	@Column(nullable = false)
-	public int getEstimate() {
-		return estimate;
-	}
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
-	public void setEstimate(int estimate) {
-		this.estimate = estimate;
-	}
+    @Column
+    @Lob
+    public String getDescription() {
+        return description;
+    }
 
-	@Column(nullable = false)
-	public int getProgress() {
-		return progress;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setProgress(int progress) {
-		this.progress = progress;
-	}
+    @Column(nullable = false)
+    public int getEstimate() {
+        return estimate;
+    }
 
-	@Column(nullable = false)
-	public int getPriority() {
-		return priority;
-	}
+    public void setEstimate(int estimate) {
+        this.estimate = estimate;
+    }
 
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
+    @Column(nullable = false)
+    public int getProgress() {
+        return progress;
+    }
 
-	@Column(columnDefinition = "TEXT")
-	@Type(type = "listOf.Attachment")
-	public List<Attachment> getAttachments() {
-		return attachments;
-	}
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
 
-	public void setAttachments(List<Attachment> attachments) {
-		this.attachments = attachments;
-	}
+    @Column(nullable = false)
+    public int getPriority() {
+        return priority;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	public Ticket getParent() {
-		return parent;
-	}
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 
-	public void setParent(Ticket ticket) {
-		parent = ticket;
-	}
+    @Column(columnDefinition = "TEXT")
+    @Type(type = "listOf.Attachment")
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-	public List<Ticket> getChildren() {
-		return children;
-	}
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 
-	public void setChildren(List<Ticket> children) {
-		this.children = children;
-	}
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    public Ticket getParent() {
+        return parent;
+    }
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ticket")
-	public List<Workflow> getWorkflow() {
-		return workflow;
-	}
+    public void setParent(Ticket ticket) {
+        parent = ticket;
+    }
 
-	public void setWorkflow(List<Workflow> workflow) {
-		this.workflow = workflow;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
+    public List<Ticket> getChildren() {
+        return children;
+    }
 
-	@Transient
-	public Project getProject() {
-		return featureVersion.getProject();
-	}
+    public void setChildren(List<Ticket> children) {
+        this.children = children;
+    }
 
-	@Transient
-	public Feature getFeature() {
-		return featureVersion.getFeature();
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticket")
+    public List<Workflow> getWorkflow() {
+        return workflow;
+    }
 
-	@Transient
-	public Version getVersion() {
-		return featureVersion.getVersion();
-	}
-
-	@Transient
-	public String getKey() {
-		return key1 + getId();
-	}
+    public void setWorkflow(List<Workflow> workflow) {
+        this.workflow = workflow;
+    }
 }

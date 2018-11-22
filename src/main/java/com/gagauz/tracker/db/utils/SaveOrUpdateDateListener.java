@@ -6,6 +6,7 @@ import java.util.Date;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 
+import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TimeTrackedEntity;
 
 public class SaveOrUpdateDateListener extends EmptyInterceptor {
@@ -13,7 +14,13 @@ public class SaveOrUpdateDateListener extends EmptyInterceptor {
 
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        if (entity instanceof TimeTrackedEntity) {
+        if (entity instanceof Ticket) {
+            Ticket ticket = (Ticket) entity;
+            if (null == ticket.getKey()) {
+                setValue("key", ticket.getProject().getCode() + '-' + id, state, propertyNames);
+                return true;
+            }
+        } else if (entity instanceof TimeTrackedEntity) {
             TimeTrackedEntity timeTrackedEntity = (TimeTrackedEntity) entity;
             Date date = new Date();
             if (timeTrackedEntity.getCreated() == null) {
@@ -24,6 +31,7 @@ public class SaveOrUpdateDateListener extends EmptyInterceptor {
             setValue("updated", date, state, propertyNames);
             return true;
         }
+
         return super.onSave(entity, id, state, propertyNames, types);
     }
 

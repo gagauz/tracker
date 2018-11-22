@@ -17,7 +17,9 @@
   	<t:VersionStat version="version" />
   	
   	<t:VersionTickets version="version" />
-    
+    <!-- 
     <t:VersionUserMap version="version" />
+     -->
+    <t:VersionStatusMap version="version" />
     
 </html>

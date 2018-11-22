@@ -10,7 +10,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.web.services.security.Secured;
 
 import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.services.dao.FeatureDao;
 
@@ -24,9 +23,6 @@ public class FeaturesList {
 
     @Property
     private Feature feature;
-
-    @Property
-    private FeatureVersion featureVersion;
 
     @Inject
     private FeatureDao featureDao;

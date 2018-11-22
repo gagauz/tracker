@@ -2,28 +2,11 @@
 	xmlns:p="tapestry:parameter">
 	<div class="feature-version-card">
 		<div class="head">
-			<t:if test="allowCreate">
-				<t:eventlink class="bt" t:event="createFeatureVersion"
-					t:context="[feature, version]" t:zone="prop:zone.clientId">
+			<t:if test="canCreateTicket">
+				<t:ModalLink role="button" class="bt" t:zone="prop:ticketZone"
+					t:action="createTicket" t:context="[feature, version]" title="${message:create-task}">
 					<i class="glyphicon glyphicon-plus"></i>
-					${message:create-feature-version}
-				</t:eventlink>
-
-				<p:else>
-					<t:if test="allowRemove">
-						<t:eventlink class="bt" t:event="deleteFeatureVersion"
-							t:context="[featureVersion]" t:zone="prop:zone.clientId"
-							title="${message:delete-feature-version}">
-							<i class="glyphicon glyphicon-trash"></i>
-						</t:eventlink>
-					</t:if>
-					<t:if test="!version.released">
-						<t:ModalLink role="button" class="bt" t:zone="prop:ticketZone"
-							t:action="createTicket" t:context="[featureVersion]" title="${message:create-task}">
-							<i class="glyphicon glyphicon-plus"></i>
-						</t:ModalLink>
-					</t:if>
-				</p:else>
+				</t:ModalLink>
 			</t:if>
 		</div>
 	</div>

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.gagauz.tracker.db.model.Attachment;
 import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
@@ -23,7 +22,6 @@ import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.db.model.WorkLog;
 import com.gagauz.tracker.db.model.Workflow;
 import com.gagauz.tracker.services.dao.FeatureDao;
-import com.gagauz.tracker.services.dao.FeatureVersionDao;
 import com.gagauz.tracker.services.dao.ProjectDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.services.dao.TicketStatusDao;
@@ -55,9 +53,6 @@ public class ScVersion extends DataBaseScenario {
 
     @Autowired
     private FeatureDao featureDao;
-
-    @Autowired
-    private FeatureVersionDao featureVersionDao;
 
     @Autowired
     private TicketDao ticketDao;
@@ -105,6 +100,7 @@ public class ScVersion extends DataBaseScenario {
                 features.add(feature);
             }
             featureDao.saveAll(features);
+
             for (int j = 0; j < 3; j++) {
 
                 Calendar cal = Calendar.getInstance();
@@ -118,22 +114,25 @@ public class ScVersion extends DataBaseScenario {
                 version.setReleased(cal.getTime().before(new Date()));
 
                 versionDao.save(version);
-                for (Feature feature : features) {
+            }
+
+            for (Feature feature : features) {
+                for (int j = 0; j < 4; j++) {
                     if (rand.nextBoolean() && rand.nextBoolean()) {
                         continue;
                     }
 
-                    FeatureVersion featureVersion = new FeatureVersion();
-                    featureVersion.setFeature(feature);
-                    featureVersion.setVersion(version);
-                    featureVersion.setCreator(user2);
-                    featureVersionDao.save(featureVersion);
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.MONTH, j - 1);
+                    String versionName = "TRACKER-1." + j;
+                    Version version = versionDao.findByName(versionName);
 
                     int stc = rand.nextInt(5) + 1;
                     for (int k = 0; k < stc; k++) {
                         Ticket ticket = new Ticket();
                         ticket.setType(getRandomType());
-                        ticket.setFeatureVersion(featureVersion);
+                        ticket.setFeature(feature);
+                        ticket.setVersion(version);
                         ticket.setOwner(getRandomUser());
                         ticket.setAuthor(getRandomUser());
                         ticket.setSummary("Регистрация");
@@ -143,7 +142,7 @@ public class ScVersion extends DataBaseScenario {
                         WorkLog wl = null;
                         ticket.setStatus(getRandomStatus());
                         assert (ticket.getStatus() != null);
-                        if (version.isReleased() || rand.nextBoolean()) {
+                        if (null != version && (version.isReleased() || rand.nextBoolean())) {
                             wl = new WorkLog();
                             wl.setTicket(ticket);
                             wl.setUser(ticket.getAuthor());
@@ -185,17 +184,21 @@ public class ScVersion extends DataBaseScenario {
                         }
 
                         int stc1 = rand.nextInt(3) + 1;
-                        for (int k1 = 0; k1 < stc1; k1++) {
-                            Ticket bug = new Ticket();
-                            bug.setFeatureVersion(featureVersion);
-                            bug.setParent(ticket);
-                            bug.setType(getBugType());
-                            bug.setStatus(version.isReleased() ? getClosedStatus() : getRandomStatus());
-                            bug.setOwner(ticket.getOwner());
-                            bug.setAuthor(getRandomUser());
-                            bug.setSummary("Ошибка 500");
-                            bug.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
-                            ticketDao.save(bug);
+
+                        if (null != version) {
+                            for (int k1 = 0; k1 < stc1; k1++) {
+                                Ticket bug = new Ticket();
+                                bug.setFeature(feature);
+                                bug.setVersion(version);
+                                bug.setParent(ticket);
+                                bug.setType(getBugType());
+                                bug.setStatus(version.isReleased() ? getClosedStatus() : getRandomStatus());
+                                bug.setOwner(ticket.getOwner());
+                                bug.setAuthor(getRandomUser());
+                                bug.setSummary("Ошибка 500");
+                                bug.setDescription("Описание того что нужно сделать конкретно, с макетами, если нужно.");
+                                ticketDao.save(bug);
+                            }
                         }
                     }
                 }

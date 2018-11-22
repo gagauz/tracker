@@ -27,12 +27,11 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.web.services.ToolsService;
 
 import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
-import com.gagauz.tracker.services.dao.FeatureVersionDao;
+import com.gagauz.tracker.services.dao.FeatureDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.services.dao.UserDao;
 import com.gagauz.tracker.utils.ColorMap;
@@ -67,7 +66,7 @@ public class VersionUserMap {
     private Entry<TicketStatus, Integer> entry;
 
     @Inject
-    private FeatureVersionDao featureVersionDao;
+    private FeatureDao featureDao;
 
     @Inject
     private TicketDao ticketDao;
@@ -188,14 +187,14 @@ public class VersionUserMap {
     }
 
     void onCreateFeatureVersion(Feature feature, Version version) {
-        FeatureVersion featureVersion = new FeatureVersion();
-        featureVersion.setFeature(feature);
-        featureVersion.setVersion(version);
-        User user = new User();
-        int id = this.securityUser.getId();
-        user.setId(id);
-        featureVersion.setCreator(user);
-        this.featureVersionDao.save(featureVersion);
+        //        FeatureVersion featureVersion = new FeatureVersion();
+        //        featureVersion.setFeature(feature);
+        //        featureVersion.setVersion(version);
+        //        User user = new User();
+        //        int id = this.securityUser.getId();
+        //        user.setId(id);
+        //        featureVersion.setCreator(user);
+        //        this.featureVersionDao.save(featureVersion);
     }
 
     public boolean isDraggable() {
@@ -235,14 +234,15 @@ public class VersionUserMap {
     }
 
     void afterRender() {
-        this.javaScriptSupport.require("page/VersionUserMap").invoke("init").with(getEventUrl());
+        this.javaScriptSupport.require("page/version_map").invoke("init").with(getEventUrl());
     }
 
-    void onChange(@RequestParameter(value = "user") Integer userId, @RequestParameter(value = "ticket") Integer ticketId) {
-        User user = this.userDao.findById(userId);
-        Ticket ticket = this.ticketDao.findById(ticketId);
-        if (null != ticket) {
+    void onChange(@RequestParameter(value = "target") Integer userId, @RequestParameter(value = "ticket") Integer ticketId) {
+        User user = userDao.findById(userId);
+        Ticket ticket = ticketDao.findById(ticketId);
+        if (null != user && null != ticket) {
             ticket.setOwner(user);
+            ticketDao.save(ticket);
         }
     }
 

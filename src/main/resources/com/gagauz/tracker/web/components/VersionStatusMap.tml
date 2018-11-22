@@ -1,0 +1,53 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+	<h2>Tickets by statuses</h2>
+	<div class="version-map version-user-map">
+		<div class="version-user-map-owerflow">
+			<table>
+				<tr>
+					<t:loop source="statuses" value="status">
+						<th class="" style="">
+							<div class="version-col">
+								${status.name}
+							</div>
+						</th>
+					</t:loop>
+				</tr>
+				<tr>
+					<t:loop source="statuses" value="status">
+						<td class="ticket-col ${cond:status,,unassigned}" data-target-id="${cond:status,prop:status.id,0}" style="background-color: ">
+							<div class="ticket-cells">
+								<t:loop source="statusTickets" value="ticket">
+									<div class="ticket-cell-div shadow ${cond:draggable,drag,}" data-target-id="${cond:status,prop:status.id,0}" data-ticket-id="${ticket.id}">
+										<div class="drag-handle">
+											<i class="glyphicon glyphicon-move text text-info"></i>
+										</div>
+										<div>
+											<div class="title">
+												<t:eventlink class="${ticket.type}" t:event="viewticket" t:context="ticket" async="true" title="${ticket.summary}">
+													<i class="glyphicon icon"></i> ${ticket.key} ${ticket.summary}
+												</t:eventlink>
+												<t:if test="ticket.owner">
+													<div>${ticket.owner.name}</div>
+												</t:if>
+											</div>
+											<div class="description">
+												${ticket.description}
+											</div>
+										</div>
+									</div>
+								</t:loop>
+							</div>
+						</td>
+					</t:loop>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	<div style="display:none">
+		<div t:id="ticketZone" class="ticket-popup">
+			<t:ticket.ViewTicketForm ticket="viewTicket" />
+		</div>
+	</div>
+	
+</div>

@@ -3,7 +3,7 @@
 		var init = function(url) {
     		d.draggable(".drag", {
     			handle : ".drag-handle",
-    			appendTo: "div.version-user-map",
+    			appendTo: "div.version-map",
     			snap: ".ticket-col",
     			helper: "clone",
     			start: function(){
@@ -16,11 +16,11 @@
     		d.droppable(".ticket-col", {
     			hoverClass: "ui-state-hover",
     			drop: function(event, ui) {
-    				if (ui.draggable.data("user-id") != $(this).data("user-id")) {
+    				if (ui.draggable.data("user-id") != $(this).data("target-id")) {
     					$(ui.draggable).detach().appendTo(this);
     					$.post(url, {
     							ticket: ui.draggable.data("ticket-id"),
-    							user: $(this).data("user-id")
+    							target: $(this).data("target-id")
     						},
     						function() {
     							window.location = window.location;

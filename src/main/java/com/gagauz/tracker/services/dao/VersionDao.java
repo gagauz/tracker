@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Version;
 
@@ -28,5 +29,14 @@ public class VersionDao extends AbstractDao<Integer, Version> {
             return null;
         }
         return list.get(0);
+    }
+
+    public List<Version> findByFeature(Feature feature) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Version findByName(String name) {
+        return getCriteriaFilter().eq("name", name).uniqueResult();
     }
 }

@@ -7,10 +7,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.web.services.security.Secured;
 
-import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
-import com.gagauz.tracker.services.dao.FeatureVersionDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 
 @Secured
@@ -20,13 +18,7 @@ public class VersionInfo {
     private Version version;
 
     @Property
-    private FeatureVersion featureVersion;
-
-    @Property
     private Ticket ticket;
-
-    @Inject
-    private FeatureVersionDao featureVersionDao;
 
     @Inject
     private TicketDao ticketDao;
@@ -42,11 +34,6 @@ public class VersionInfo {
 
     Object onPassivate() {
         return version;
-    }
-
-    @Cached
-    public List<FeatureVersion> getFeatureVersions() {
-        return featureVersionDao.findByVersion(version);
     }
 
     @Cached

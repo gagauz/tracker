@@ -76,7 +76,7 @@
 				</a>
 				<ul class="dropdown-menu" aria-labelledby="versionDropDown">
 				 	<t:loop source="versions" value="version">
-						<li><t:eventlink t:event="changeVersion" context="[ticket,version]" zone="ticketZone">${version.version.name}</t:eventlink></li>
+						<li><t:eventlink t:event="changeVersion" context="[ticket,version]" zone="ticketZone">${version.name}</t:eventlink></li>
 					</t:loop>
 				</ul>
 			</div>

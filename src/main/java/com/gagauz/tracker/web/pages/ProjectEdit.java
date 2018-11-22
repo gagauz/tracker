@@ -19,7 +19,6 @@ import org.apache.tapestry5.web.config.Global;
 import org.apache.tapestry5.web.services.security.Secured;
 
 import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Stage;
 import com.gagauz.tracker.db.model.Ticket;
@@ -65,7 +64,7 @@ public class ProjectEdit {
     private Version version;
 
     @Property
-    private FeatureVersion ticket;
+    private Ticket ticket;
 
     @Property
     private Ticket subticket;

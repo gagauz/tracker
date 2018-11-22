@@ -5,7 +5,8 @@
 			add="type, status, owner, featureVersion"
 			reorder="type, status, summary, description">
 			<p:featureVersion>
-				<t:hidden value="ticket.featureVersion" />
+				<t:hidden value="ticket.feature" />
+				<t:hidden value="ticket.version" />
 			</p:featureVersion>
 			<p:type>
 				<t:label class="col-sm-3 control-label" for="type" />

@@ -1,6 +1,5 @@
 package com.gagauz.tracker.web.pages;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,12 +14,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.web.services.security.Secured;
 
 import com.gagauz.tracker.db.model.Feature;
-import com.gagauz.tracker.db.model.FeatureVersion;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.services.dao.FeatureDao;
 import com.gagauz.tracker.services.dao.TicketDao;
-import com.gagauz.tracker.utils.Comparators;
 
 @Secured
 @Import(module = { "bootstrap/collapse" })
@@ -31,7 +28,7 @@ public class FeatureInfo {
     private Feature feature;
 
     @Property
-    private FeatureVersion featureVersion;
+    private Version version;
 
     @Property
     @Persist
@@ -68,15 +65,8 @@ public class FeatureInfo {
     }
 
     @Cached
-    public List<FeatureVersion> getFeatureVersions() {
-        List<FeatureVersion> list = feature.getFeatureVersions();
-        Collections.sort(list, Comparators.FEATURE_VERSION_BY_VERSION_COMPARATOR);
-        return list;
-    }
-
-    @Cached
     public Map<Version, List<Ticket>> getMap() {
-        Map<Version, List<Ticket>> map = new HashMap<>(feature.getFeatureVersions().size());
+        Map<Version, List<Ticket>> map = new HashMap<>();
         for (Ticket ticket : ticketDao.findByFeature(feature)) {
             List<Ticket> tickets = map.get(ticket.getVersion());
             if (null == tickets) {
@@ -89,10 +79,10 @@ public class FeatureInfo {
     }
 
     public List<Ticket> getTasks() {
-        return getMap().get(featureVersion.getVersion());
+        return getMap().get(version);
     }
 
     public List<Ticket> getBugs() {
-        return getMap().get(featureVersion.getVersion());
+        return getMap().get(version);
     }
 }
