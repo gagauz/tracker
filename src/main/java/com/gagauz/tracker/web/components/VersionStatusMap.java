@@ -23,11 +23,13 @@ import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.web.services.ToolsService;
 
+import com.gagauz.tracker.db.model.CanbanGroup;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.dao.CanbanGroupDao;
 import com.gagauz.tracker.services.dao.FeatureDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.services.dao.TicketStatusDao;
@@ -37,119 +39,191 @@ import com.xl0e.util.C;
 @Import(module = "bootstrap/dropdown")
 public class VersionStatusMap {
 
-    @Parameter(allowNull = false, required = true, principal = true)
-    private Version version;
+	@Parameter(allowNull = false, required = true, principal = true)
+	private Version version;
 
-    @Component(parameters = { "id=literal:ticketZone", "show=popup", "update=popup" })
-    private Zone ticketZone;
+	@Component(parameters = { "id=literal:ticketZone", "show=popup", "update=popup" })
+	private Zone ticketZone;
 
-    @Property
-    private Feature feature;
+	@Component(parameters = { "id=prop:zoneId" })
+	private Zone zone;
 
-    @Property
-    private TicketStatus status;
+	@Property
+	private Feature feature;
 
-    private Ticket ticket;
+	@Property
+	private TicketStatus status;
 
-    @Property
-    private Ticket viewTicket;
+	@Property
+	private CanbanGroup group;
 
-    @Inject
-    private FeatureDao featureDao;
+	private Ticket ticket;
 
-    @Inject
-    private TicketDao ticketDao;
+	@Property
+	private Ticket viewTicket;
 
-    @Inject
-    private TicketStatusDao ticketStatusDao;
+	@Inject
+	private FeatureDao featureDao;
 
-    @Inject
-    private Messages messages;
+	@Inject
+	private TicketDao ticketDao;
 
-    @SessionState
-    private User securityUser;
+	@Inject
+	private TicketStatusDao ticketStatusDao;
 
-    @Inject
-    private ComponentResources resources;
+	@Inject
+	private Messages messages;
 
-    @Inject
-    private ToolsService toolsService;
+	@SessionState
+	private User securityUser;
 
-    @Inject
-    private AjaxResponseRenderer ajaxResponseRenderer;
+	@Inject
+	private ComponentResources resources;
 
-    @Inject
-    private JavaScriptSupport javaScriptSupport;
+	@Inject
+	private ToolsService toolsService;
 
-    private Map<TicketStatus, List<Ticket>> statusTicketMap;
+	@Inject
+	private AjaxResponseRenderer ajaxResponseRenderer;
 
-    @Cached
-    public Collection<TicketStatus> getStatuses() {
-        if (null == this.statusTicketMap) {
-            List<TicketStatus> statuses = ticketStatusDao.findByProject(version.getProject());
-            Collections.sort(statuses, (s1, s2) -> {
-                if (s2.getAllowedTo().contains(s1)) {
-                    return 1;
-                }
-                if (s1.getAllowedTo().contains(s2)) {
-                    return -1;
-                }
-                return 0;
-            });
-            statusTicketMap = new LinkedHashMap<>(statuses.size());
-            statuses.forEach(s -> statusTicketMap.put(s, C.arrayList()));
-            for (Ticket ticket : ticketDao.findByVersion(version)) {
-                statusTicketMap.computeIfAbsent(ticket.getStatus(), x -> C.arrayList()).add(ticket);
-            }
-        }
-        return statusTicketMap.keySet();
-    }
+	@Inject
+	private CanbanGroupDao canbanGroupDao;
 
-    public Collection<Ticket> getStatusTickets() {
-        return statusTicketMap.get(status);
-    }
+	@Inject
+	private JavaScriptSupport javaScriptSupport;
 
-    public boolean isDraggable() {
-        return true;
-    }
+	private Map<CanbanGroup, List<Ticket>> groupToTicketsMap;
 
-    public Ticket getTicket() {
-        return this.ticket;
-    }
+	private Map<TicketStatus, List<Ticket>> statusToTicketsMap;
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
-    }
+	@Cached
+	public Collection<CanbanGroup> getStatusGroups() {
 
-    public String getEventUrl() {
-        return this.resources.createEventLink("change").toRedirectURI();
-    }
+		if (null == this.groupToTicketsMap) {
+			List<CanbanGroup> groups = canbanGroupDao.findByProject(version.getProject());
+			if (groups.isEmpty()) {
+				return Collections.emptyList();
+			}
+			groupToTicketsMap = new LinkedHashMap<>(groups.size());
+			Map<TicketStatus, List<CanbanGroup>> statusToGroup = C.hashMap();
+			groups.forEach(group -> {
+				groupToTicketsMap.put(group, C.arrayList());
+				group.getStatuses().forEach(s -> statusToGroup.computeIfAbsent(s, s1 -> C.arrayList()).add(group));
+			});
 
-    void afterRender() {
-        this.javaScriptSupport.require("page/version_map").invoke("init").with(getEventUrl());
-    }
+			for (Ticket ticket : ticketDao.findByVersionAndStatuses(version, statusToGroup.keySet())) {
+				statusToGroup.get(ticket.getStatus())
+						.forEach(group -> groupToTicketsMap.computeIfAbsent(group, x -> C.arrayList()).add(ticket));
+			}
+		}
+		return groupToTicketsMap.keySet();
+	}
 
-    @Ajax
-    void onChange(@RequestParameter(value = "target") Integer statusId, @RequestParameter(value = "ticket") Integer ticketId) {
-        TicketStatus status = ticketStatusDao.findById(statusId);
-        Ticket ticket = this.ticketDao.findById(ticketId);
-        if (null != ticket) {
-            ticket.setStatus(status);
-            ticketDao.save(ticket);
-        }
-    }
+	@Cached
+	public Collection<TicketStatus> getStatuses() {
 
-    @Ajax
-    void onViewTicket(Ticket ticket) {
-        this.viewTicket = ticket;
-        this.ajaxResponseRenderer
-                .addRender(Layout.MODAL_BODY_ID, this.ticketZone.getBody())
-                .addCallback((JavaScriptCallback) javascriptSupport -> javascriptSupport.require("modal").invoke("showModal")
-                        .with(Layout.MODAL_ID));
-    }
+		if (null == this.statusToTicketsMap) {
+			List<TicketStatus> statuses = ticketStatusDao.findByProject(version.getProject());
 
-    public String getBgColor() {
-        return ColorMap.getColor(status.getId());
-    }
+			if (statuses.isEmpty()) {
+				return Collections.emptyList();
+			}
+			Collections.sort(statuses, (a, b) -> {
+				if (C.isEmpty(a.getAllowedTo())) {
+					return 1;
+				}
+				if (a.getAllowedTo().contains(b)) {
+					return -1;
 
+				}
+				if (b.getAllowedTo().contains(a)) {
+					return 1;
+
+				}
+				if (!C.isEmpty(a.getAllowedTo())) {
+					return -1;
+				}
+				return 0;
+			});
+			statusToTicketsMap = new LinkedHashMap<>(statuses.size());
+			statuses.forEach(status -> {
+				statusToTicketsMap.put(status, C.arrayList());
+			});
+
+			for (Ticket ticket : ticketDao.findByVersion(version)) {
+				statusToTicketsMap.computeIfAbsent(ticket.getStatus(), x -> C.arrayList()).add(ticket);
+			}
+		}
+		return statusToTicketsMap.keySet();
+	}
+
+	public Collection<Ticket> getGroupTickets() {
+		return groupToTicketsMap.get(group);
+	}
+
+	public Collection<Ticket> getStatusTickets() {
+		return statusToTicketsMap.get(status);
+	}
+
+	public boolean isDraggable() {
+		return true;
+	}
+
+	public Ticket getTicket() {
+		return this.ticket;
+	}
+
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
+	}
+
+	public String getEventUrl() {
+		return resources.createEventLink("change").toRedirectURI();
+	}
+
+	void afterRender() {
+		javaScriptSupport.require("page/version_map").invoke("init").with(getEventUrl());
+	}
+
+	@Ajax
+	void onChange(@RequestParameter(value = "target") Integer statusId,
+			@RequestParameter(value = "ticket") Integer ticketId) {
+		TicketStatus status = ticketStatusDao.findById(statusId);
+		Ticket ticket = this.ticketDao.findById(ticketId);
+		if (null != ticket) {
+			ticket.setStatus(status);
+			ticketDao.save(ticket);
+			ajaxResponseRenderer.addRender(getZoneId(), zone.getBody());
+		}
+	}
+
+	@Ajax
+	void onViewTicket(Ticket ticket) {
+		this.viewTicket = ticket;
+		this.ajaxResponseRenderer
+				.addRender(Layout.MODAL_BODY_ID, this.ticketZone.getBody())
+				.addCallback(
+						(JavaScriptCallback) javascriptSupport -> javascriptSupport.require("modal").invoke("showModal")
+								.with(Layout.MODAL_ID));
+	}
+
+	public String getBgColor() {
+		return ColorMap.getColor(status.getId());
+	}
+
+	public void onRemove(CanbanGroup group) {
+		canbanGroupDao.delete(group);
+	}
+
+	public String getZoneId() {
+		return getClass().getSimpleName() + "_zone";
+	}
+
+	public String getAllowTo(TicketStatus status) {
+		return C.emptyIfNull(status.getAllowedTo()).stream()
+				.map(TicketStatus::getId)
+				.map(String::valueOf)
+				.reduce(null,
+						(a, b) -> a == null ? b : a + "," + b);
+	}
 }

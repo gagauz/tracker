@@ -2,6 +2,7 @@ package com.gagauz.tracker.services.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -55,6 +56,13 @@ public class TicketDao extends AbstractDao<Integer, Ticket> {
 
 	public long countTicketsByVersion(Version version) {
 		return getCriteriaFilter().eq("version", version).count();
+	}
+
+	public List<Ticket> findByVersionAndStatuses(Version version, Set<TicketStatus> statuses) {
+		return getCriteriaFilter()
+				.eq("version", version)
+				.in("status", statuses)
+				.list();
 	}
 
 }

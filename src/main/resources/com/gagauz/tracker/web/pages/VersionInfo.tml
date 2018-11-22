@@ -5,11 +5,17 @@
 
 	<p:header>
   		<ol class="breadcrumb">
-			<li class="active">
-				${msg:'version'}: ${version.name}
-			</li>
 			<li>
 				<t:pagelink t:page="projectinfo" t:context="version.project">${version.project.name}</t:pagelink>
+			</li>
+			<li class="active">
+				${version.name}
+			</li>
+			<li>
+				
+			</li>
+			<li>
+				<t:pagelink t:page="versioncanban" t:context="version">Canban board</t:pagelink>
 			</li>
 		</ol>
   	</p:header>
@@ -19,7 +25,5 @@
   	<t:VersionTickets version="version" />
     <!-- 
     <t:VersionUserMap version="version" />
-     -->
-    <t:VersionStatusMap version="version" />
-    
+     -->   
 </html>

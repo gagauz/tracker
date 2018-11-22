@@ -14,40 +14,40 @@ import com.gagauz.tracker.services.dao.TicketDao;
 @Secured
 public class VersionInfo {
 
-    @Property(write = false)
-    private Version version;
+	@Property(write = false)
+	protected Version version;
 
-    @Property
-    private Ticket ticket;
+	@Property
+	private Ticket ticket;
 
-    @Inject
-    private TicketDao ticketDao;
+	@Inject
+	private TicketDao ticketDao;
 
-    Object onActivate(Version version) {
-        if (null == version) {
-            return Index.class;
-        }
-        this.version = version;
+	Object onActivate(Version version) {
+		if (null == version) {
+			return Index.class;
+		}
+		this.version = version;
 
-        return null;
-    }
+		return null;
+	}
 
-    Object onPassivate() {
-        return version;
-    }
+	Object onPassivate() {
+		return version;
+	}
 
-    @Cached
-    public List<Ticket> getAllTickets() {
-        return ticketDao.findByVersion(version);
-    }
+	@Cached
+	public List<Ticket> getAllTickets() {
+		return ticketDao.findByVersion(version);
+	}
 
-    @Cached
-    public List<Ticket> getTickets() {
-        return getAllTickets();
-    }
+	@Cached
+	public List<Ticket> getTickets() {
+		return getAllTickets();
+	}
 
-    @Cached
-    public List<Ticket> getBugs() {
-        return getAllTickets();
-    }
+	@Cached
+	public List<Ticket> getBugs() {
+		return getAllTickets();
+	}
 }
