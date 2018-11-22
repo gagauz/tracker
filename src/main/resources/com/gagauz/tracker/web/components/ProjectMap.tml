@@ -24,9 +24,16 @@
 												<t:pagelink class="" t:page="versioninfo" t:context="version">
 													${message:version}: ${version.name}
 												</t:pagelink>
-												<t:ModalLink class="pull-right" t:zone="ticketZone" t:action="editVersion" t:context="version">
-													<i class="glyphicon glyphicon-pencil"></i>
-												</t:ModalLink>
+												<div class="pull-right">
+													<t:ModalLink class="bt" t:zone="ticketZone" t:action="editVersion" t:context="version">
+														<i class="glyphicon glyphicon-pencil"></i>
+													</t:ModalLink>
+													<t:if test="isVersionRemovable(version)">
+														<t:eventlink class="bt" t:event="dropVersion" t:context="version" t:zone="prop:zoneId">
+															<i class="glyphicon glyphicon-trash"></i>	
+														</t:eventlink>
+													</t:if>
+												</div>
 											</div>
 											<div>${message:release-date}: ${version.releaseDate}</div>
 											<p:else>
@@ -44,7 +51,7 @@
 								<td>
 									<div class="cell">
 										<div class="feature-col">
-											<t:pagelink t:page="featureinfo" t:context="feature">${feature.name}</t:pagelink>
+											<t:pagelink t:page="featureinfo" t:context="feature">${feature.code} ${feature.name}</t:pagelink>
 											<div class="description">
 												${feature.description}
 											</div>

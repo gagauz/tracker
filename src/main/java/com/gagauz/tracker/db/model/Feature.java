@@ -12,50 +12,56 @@ import com.gagauz.tracker.db.base.DB;
 @Entity
 @Table(name = DB.Table.feature)
 public class Feature extends TimeTrackedEntity {
-    private static final long serialVersionUID = 8492010488178699625L;
-    private Project project;
-    private User creator;
-    private String name;
-    private String description;
+	private static final long serialVersionUID = 8492010488178699625L;
+	private String code;
+	private Project project;
+	private User creator;
+	private String name;
+	private String description;
 
-    public Feature() {
-        // default constructor
-    }
+	@Column(nullable = false, updatable = false, unique = true)
+	public String getCode() {
+		return code;
+	}
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    public Project getProject() {
-        return this.project;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	public Project getProject() {
+		return this.project;
+	}
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    public User getCreator() {
-        return this.creator;
-    }
+	public void setProject(Project project) {
+		this.project = project;
+	}
 
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	public User getCreator() {
+		return this.creator;
+	}
 
-    @Column(nullable = false)
-    public String getName() {
-        return this.name;
-    }
+	public void setCreator(User creator) {
+		this.creator = creator;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	@Column(nullable = false)
+	public String getName() {
+		return this.name;
+	}
 
-    @Column
-    @Lob
-    public String getDescription() {
-        return this.description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@Column
+	@Lob
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

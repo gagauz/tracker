@@ -6,6 +6,7 @@ public interface DB {
 		String user_to_user_groups = "user_to_user_groups";
 		String user_group = "user_group";
 		String project = "project";
+		String canban_group = "canban_group";
 	}
 
 	interface Column {
