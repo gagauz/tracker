@@ -2,9 +2,10 @@
 	define(['jquery', 'draggable'], function($, d){
 		var init = function(url) {
     		d.draggable(".drag", {
+    			containment : '.drag-container',
     			handle : ".drag-handle",
     			appendTo: "div.version-map",
-    			snap: ".ticket-col",
+    			snap: false,
     			helper: "clone",
     			start: function(){
     	        	$(this).hide()
@@ -16,14 +17,22 @@
     		d.droppable(".ticket-col", {
     			hoverClass: "ui-state-hover",
     			drop: function(event, ui) {
-    				if (ui.draggable.data("user-id") != $(this).data("target-id")) {
-    					$(ui.draggable).detach().appendTo(this);
+    				
+    				if (ui.draggable.data("col-id") != $(this).data("col-id")) {
+    					var array = (new Function("return [" + ui.draggable.data("target-col-ids") + "];"))();
+    					
+    					if (array.indexOf($(this).data("col-id")) == -1) {
+    						return;
+    					}
+    					var $this = this;
+    					
     					$.post(url, {
     							ticket: ui.draggable.data("ticket-id"),
-    							target: $(this).data("target-id")
+    							target: $(this).data("col-id")
     						},
     						function() {
-    							window.location = window.location;
+    							$(ui.draggable).detach().appendTo($this);
+    							//window.location = window.location;
     						} 
     					);
     				}

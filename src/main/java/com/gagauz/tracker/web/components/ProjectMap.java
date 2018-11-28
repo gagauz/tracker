@@ -197,6 +197,6 @@ public class ProjectMap {
 	@Ajax
 	public void onDropVersion(Version version) {
 		versionDao.delete(version);
-		ajaxResponseRenderer.addRender(getZoneId(), zone);
+		ajaxResponseRenderer.addRender(getZoneId(), zone.getBody());
 	}
 }

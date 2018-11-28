@@ -15,32 +15,40 @@ import com.gagauz.tracker.db.model.TicketStatus;
 import com.gagauz.tracker.services.dao.TicketStatusDao;
 
 public class TicketStatusEdit {
-    @Parameter(autoconnect = true)
-    @Property
-    private TicketStatus object;
+	@Parameter(autoconnect = true)
+	@Property
+	private TicketStatus object;
 
-    @Parameter(autoconnect = true)
-    private Project project;
+	@Parameter(autoconnect = true)
+	@Property
+	private Project project;
 
-    @Property
-    private TicketStatus row;
+	@Property
+	private TicketStatus row;
 
-    @Inject
-    private TicketStatusDao ticketStatusDao;
+	@Inject
+	private TicketStatusDao ticketStatusDao;
 
-    @Inject
-    private SelectModelFactory selectModelFactory;
+	@Inject
+	private SelectModelFactory selectModelFactory;
 
-    void onEdit(TicketStatus status) {
-        this.object = status;
-    }
+	void onEdit(TicketStatus status) {
+		this.object = status;
+	}
 
-    public GridDataSource getStatuses() {
-        return new CollectionGridDataSourceRowTypeFix<>(ticketStatusDao.findByProject(project), TicketStatus.class);
-    }
+	public GridDataSource getStatuses() {
+		return new CollectionGridDataSourceRowTypeFix<>(ticketStatusDao.findByProject(project), TicketStatus.class);
+	}
 
-    public SelectModel getModel() {
-        return selectModelFactory.create(
-                ticketStatusDao.findByProject(project).stream().filter(st -> !st.equals(object)).collect(Collectors.toList()), "name");
-    }
+	public SelectModel getModel() {
+		return selectModelFactory.create(
+				ticketStatusDao.findByProject(project).stream().filter(st -> !st.equals(object))
+						.collect(Collectors.toList()),
+				"name");
+	}
+
+	public void onSuccessFromForm1() {
+		object.setProject(project);
+		ticketStatusDao.save(object);
+	}
 }
