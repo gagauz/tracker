@@ -11,13 +11,15 @@
 			<li class="active">
 				${version.name}
 			</li>
+			
 			<li>
-				
+				<t:pagelink t:page="versioncanban" t:context="version">Canban board</t:pagelink>		
 			</li>
 			<li>
-				<t:pagelink t:page="versioncanban" t:context="version">Canban board</t:pagelink>
+				<t:pagelink t:page="version/repository" t:context="version">Repository</t:pagelink>		
 			</li>
 		</ol>
+		
   	</p:header>
   	
   	<t:VersionStat version="version" />

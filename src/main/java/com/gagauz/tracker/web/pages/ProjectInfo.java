@@ -122,7 +122,6 @@ public class ProjectInfo {
         Version lastVersion = this.versionDao.findLast(this.project);
         String nextName = getNextVersion(this.project, lastVersion);
         this.newVersion.setName(nextName);
-        this.newVersion.setCvsBranchName(nextName);
         return this.newVersion;
     }
 

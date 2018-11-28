@@ -2,11 +2,15 @@ package com.gagauz.tracker.db.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.gagauz.tracker.db.model.cvs.Branch;
 import com.xl0e.hibernate.model.IModel;
 
 @Entity
@@ -17,6 +21,7 @@ public class Commit implements IModel<String> {
     private String comment;
     private Date date;
     private String details;
+    private Branch branch;
 
     @Override
     @Id
@@ -63,5 +68,14 @@ public class Commit implements IModel<String> {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
 }

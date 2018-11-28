@@ -33,6 +33,14 @@
 		<t:ticket.TicketTypeEdit object="object" />
 	</t:block>
 	
+	<h2>CVS Repository</h2>
+	<t:beaneditform t:id="newrepository" object="newrepository" exclude="id">
+	</t:beaneditform>
+	
+	<h2>Project repository</h2>
+	<t:beaneditform t:id="newprojectrepository" object="newprojectrepository" exclude="id">
+	</t:beaneditform>
+	
 	<div t:id="modalZone">
 	
 	</div>

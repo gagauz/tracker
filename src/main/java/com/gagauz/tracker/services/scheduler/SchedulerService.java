@@ -1,114 +1,46 @@
 package com.gagauz.tracker.services.scheduler;
 
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TriggerContext;
-import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gagauz.tracker.db.model.Project;
+import com.gagauz.tracker.services.cvs.CvsRepositoryService;
 import com.gagauz.tracker.services.dao.ProjectDao;
+import com.gagauz.tracker.services.dao.VersionDao;
+import com.gagauz.tracker.services.dao.cvs.BranchDao;
 
 @Service
 public class SchedulerService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SchedulerService.class);
 
     @Autowired
     private ProjectDao projectDao;
 
     @Autowired
-    private SessionFactory sessionFactory;
+    private BranchDao branchDao;
 
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
+    @Autowired
+    private VersionDao versionDao;
 
+    @Autowired
+    private CvsRepositoryService cvsRepositoryService;
+
+    @Scheduled(fixedRate = 30000, initialDelay = 30000)
     @Transactional
-    public void update() {
-        updateNonTransactional();
-    }
+    public void execute() {
 
-    public void updateNonTransactional() {
-        executor.shutdownNow();
-        List<Project> schedulers = projectDao.findAll();
-        executor = Executors.newScheduledThreadPool(schedulers.size());
-        for (final Project scheduler : schedulers) {
-            executor.execute(createRunnable(scheduler.getId(), new CronTrigger("*/1 * * ? * ?")));
+        try {
+
+            cvsRepositoryService.connectVersionWithVCS(versionDao.findUnconnectedVersions());
+
+        } catch (Exception e) {
+            //TODO: Record error
+            e.printStackTrace();
         }
-    }
-
-    protected Runnable createRunnable(final int schedulerId, final CronTrigger cronTrigger) {
-        return new Runnable() {
-
-            Date actualExecTime;
-            Date scheduledExecTime;
-            Date completionTime;
-
-            @Override
-            public void run() {
-                actualExecTime = new Date();
-                try {
-                    //Skip first execution
-                    if (scheduledExecTime != null) {
-                        System.out.println("Execute [" + schedulerId + "]");
-                        //                        StageTrigger trigger = stageTriggerDao.findById(schedulerId);
-                        //                        System.out.println("Execute trigger " + trigger.getData());
-                        //                        if (trigger.getType() == Type.SCRIPT) {
-                        //                            StringBuilder sb = new StringBuilder();
-                        //
-                        //                            String projectDir = PathUtils.getProjectBaseDir(trigger.getParent().getProject());
-                        //                            File dir = new File(projectDir);
-                        //
-                        //                            BashUtils.execute(dir, sb, trigger.getData());
-                        //                            System.out.println("--------------------------------------------------------------------");
-                        //                            System.out.println(sb.toString());
-                        //                            System.out.println("--------------------------------------------------------------------");
-                        //                        }
-                    }
-                    Thread.sleep(15000);
-                } catch (Exception e) {
-                    //TODO: Record error
-                    e.printStackTrace();
-                } finally {
-                    // Schedule next execution
-                    completionTime = new Date();
-
-                    System.out.println("actualExecTime    " + actualExecTime);
-                    System.out.println("completionTime    " + completionTime);
-                    System.out.println("scheduledExecTime " + scheduledExecTime);
-
-                    scheduledExecTime = cronTrigger.nextExecutionTime(getContext());
-                    long delay = scheduledExecTime.getTime() - System.currentTimeMillis();
-                    System.out.println("Next exec time [" + scheduledExecTime + "]");
-                    executor.schedule(this, delay, TimeUnit.MILLISECONDS);
-                }
-            }
-
-            private TriggerContext getContext() {
-                return new TriggerContext() {
-
-                    @Override
-                    public Date lastScheduledExecutionTime() {
-                        return scheduledExecTime;
-                    }
-
-                    @Override
-                    public Date lastCompletionTime() {
-                        return completionTime;
-                    }
-
-                    @Override
-                    public Date lastActualExecutionTime() {
-                        return actualExecTime;
-                    }
-                };
-            }
-
-        };
     }
 
 }

@@ -109,9 +109,13 @@ public class ScVersion extends DataBaseScenario {
                 Version version = new Version();
 
                 version.setProject(project);
-                version.setName("TRACKER-1." + j);
+                version.setName("TRACKER-" + j);
                 version.setReleaseDate(cal.getTime());
                 version.setReleased(cal.getTime().before(new Date()));
+
+                //                Branch branch = new Branch();
+                //                branch.setName("version/" + version.getName());
+                //                branch.setVersion(version);
 
                 versionDao.save(version);
             }
@@ -124,7 +128,7 @@ public class ScVersion extends DataBaseScenario {
 
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.MONTH, j - 1);
-                    String versionName = "TRACKER-1." + j;
+                    String versionName = "TRACKER-" + j;
                     Version version = versionDao.findByName(versionName);
 
                     int stc = rand.nextInt(5) + 1;

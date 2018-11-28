@@ -1,5 +1,8 @@
 package com.gagauz.tracker.services.dao;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -38,5 +41,15 @@ public class VersionDao extends AbstractDao<Integer, Version> {
 
     public Version findByName(String name) {
         return getCriteriaFilter().eq("name", name).uniqueResult();
+    }
+
+    public List<Version> findUnconnectedVersions() {
+        Date date = Date.from(LocalDateTime.now().minusHours(1).toInstant(ZoneOffset.of(ZoneOffset.systemDefault().getId())));
+        return getSession().createQuery("select v from Version v "
+                + "join Project p on p.id=v.project.id "
+                + "join ProjectRepository pr on pr.project.id=p.id "
+                + "join Repository r on r.id=pr.repository.id "
+                + "join Branch b on b.version.id=v.id "
+                + "where r is not null AND (b is null or b.lastCommitDate is null or b.lastCommitDate < :date)").list();
     }
 }

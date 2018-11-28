@@ -25,10 +25,14 @@ import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.UserGroup;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.db.model.cvs.ProjectRepository;
+import com.gagauz.tracker.db.model.cvs.Repository;
 import com.gagauz.tracker.services.dao.FeatureDao;
+import com.gagauz.tracker.services.dao.ProjectDao;
 import com.gagauz.tracker.services.dao.StageDao;
 import com.gagauz.tracker.services.dao.UserGroupDao;
 import com.gagauz.tracker.services.dao.VersionDao;
+import com.gagauz.tracker.services.dao.cvs.RepositoryDao;
 
 @Secured
 public class ProjectEdit {
@@ -75,6 +79,15 @@ public class ProjectEdit {
     @Property
     private Stage stage;
 
+    @Property
+    private Block operation;
+
+    @Property
+    private ProjectRepository newProjectRepository;
+
+    @Property
+    private Repository newRepository;
+
     @Inject
     private FeatureDao featureDao;
 
@@ -88,13 +101,16 @@ public class ProjectEdit {
     private UserGroupDao roleGroupDao;
 
     @Inject
+    private RepositoryDao repositoryDao;
+
+    @Inject
+    private ProjectDao projectDao;
+
+    @Inject
     private ComponentResources resources;
 
     @SessionState
     private User securityUser;
-
-    @Property
-    private Block operation;
 
     @PageActivationContext(index = 1)
     private String operationName;
@@ -111,6 +127,10 @@ public class ProjectEdit {
             this.operation = this.resources.getBlock(operationName);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        newProjectRepository = project.getProjectRepository();
+        if (null != newProjectRepository) {
+            newRepository = newProjectRepository.getRepository();
         }
         return null;
     }
@@ -142,7 +162,6 @@ public class ProjectEdit {
         Version lastVersion = this.versionDao.findLast(this.project);
         String nextName = getNextVersion(this.project, lastVersion);
         this.newVersion.setName(nextName);
-        this.newVersion.setCvsBranchName(nextName);
         return this.newVersion;
     }
 
@@ -166,5 +185,14 @@ public class ProjectEdit {
     public static void main(String[] args) {
         String g = getNextVersion("фывфвыфвы-11.10");
         System.out.println(g);
+    }
+
+    void onSuccessFromNewRepository() {
+        repositoryDao.save(newRepository);
+    }
+
+    void onSuccessFromNewProjectRepository() {
+        project.setProjectRepository(newProjectRepository);
+        projectDao.save(project);
     }
 }
