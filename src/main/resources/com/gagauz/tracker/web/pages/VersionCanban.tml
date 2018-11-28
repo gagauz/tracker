@@ -14,6 +14,9 @@
 			<li class="active">
 				Canban board
 			</li>
+			<li>
+				<t:pagelink t:page="version/repository" t:context="version">Repository</t:pagelink>		
+			</li>
 		</ol>
   	</p:header>
 
@@ -24,14 +27,25 @@
 					t:context="[version.project]">
 			<i class="glyphicon glyphicon-plus"></i> Create group
 		</t:ModalLink>
+		
+		<t:foreach source="groups" value="group">
+			<t:eventlink class="btn ${cond:isSelectedGroup(),btn-primary,btn-default}" event="selectgroup" context="group">${group.name}</t:eventlink>
+			<t:ModalLink class="btn btn-default" 
+					t:zone="prop:zone"
+					t:action="editGroup" 
+					t:context="[group]"><i class="glyphicon glyphicon-pencil"></i></t:ModalLink>
+			<t:eventlink class="btn ${cond:isSelectedGroup(),btn-primary,btn-default}" event="removegroup" context="group"><i class="glyphicon glyphicon-trash"></i></t:eventlink>
+		</t:foreach>
 	</div>
+	
   	
-    <t:VersionStatusMap version="version" />
+    <t:VersionStatusMap version="version" group="canbanGroup"/>
     
     <div style="display:none">
 	    <div t:id="zone" class="ticket-popup">
 	    	<t:beaneditform t:id="form1" object="newgroup" include="name" add="statuses">
 	    		<p:statuses>
+	    			<t:hidden value="newgroup.id" />
 	    			<t:hidden value="newgroup.project" />
 	    			<t:label class="col-sm-3 control-label" for="statuses"></t:label>
 					<div class="col-sm-9">

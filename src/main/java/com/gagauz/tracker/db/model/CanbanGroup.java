@@ -48,7 +48,7 @@ public class CanbanGroup extends Model {
 		this.sort = sort;
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	public Set<TicketStatus> getStatuses() {
 		return statuses;
 	}

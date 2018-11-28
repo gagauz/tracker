@@ -42,6 +42,9 @@ public class VersionStatusMap {
 	@Parameter(allowNull = false, required = true, principal = true)
 	private Version version;
 
+	@Parameter
+	private CanbanGroup group;
+
 	@Component(parameters = { "id=literal:ticketZone", "show=popup", "update=popup" })
 	private Zone ticketZone;
 
@@ -53,9 +56,6 @@ public class VersionStatusMap {
 
 	@Property
 	private TicketStatus status;
-
-	@Property
-	private CanbanGroup group;
 
 	private Ticket ticket;
 
@@ -92,38 +92,17 @@ public class VersionStatusMap {
 	@Inject
 	private JavaScriptSupport javaScriptSupport;
 
-	private Map<CanbanGroup, List<Ticket>> groupToTicketsMap;
-
 	private Map<TicketStatus, List<Ticket>> statusToTicketsMap;
 
-	@Cached
-	public Collection<CanbanGroup> getStatusGroups() {
-
-		if (null == this.groupToTicketsMap) {
-			List<CanbanGroup> groups = canbanGroupDao.findByProject(version.getProject());
-			if (groups.isEmpty()) {
-				return Collections.emptyList();
-			}
-			groupToTicketsMap = new LinkedHashMap<>(groups.size());
-			Map<TicketStatus, List<CanbanGroup>> statusToGroup = C.hashMap();
-			groups.forEach(group -> {
-				groupToTicketsMap.put(group, C.arrayList());
-				group.getStatuses().forEach(s -> statusToGroup.computeIfAbsent(s, s1 -> C.arrayList()).add(group));
-			});
-
-			for (Ticket ticket : ticketDao.findByVersionAndStatuses(version, statusToGroup.keySet())) {
-				statusToGroup.get(ticket.getStatus())
-						.forEach(group -> groupToTicketsMap.computeIfAbsent(group, x -> C.arrayList()).add(ticket));
-			}
-		}
-		return groupToTicketsMap.keySet();
+	boolean setupRender() {
+		return group != null;
 	}
 
 	@Cached
 	public Collection<TicketStatus> getStatuses() {
 
 		if (null == this.statusToTicketsMap) {
-			List<TicketStatus> statuses = ticketStatusDao.findByProject(version.getProject());
+			List<TicketStatus> statuses = C.arrayList(group.getStatuses());
 
 			if (statuses.isEmpty()) {
 				return Collections.emptyList();
@@ -150,15 +129,11 @@ public class VersionStatusMap {
 				statusToTicketsMap.put(status, C.arrayList());
 			});
 
-			for (Ticket ticket : ticketDao.findByVersion(version)) {
+			for (Ticket ticket : ticketDao.findByVersionAndStatuses(version, statuses)) {
 				statusToTicketsMap.computeIfAbsent(ticket.getStatus(), x -> C.arrayList()).add(ticket);
 			}
 		}
 		return statusToTicketsMap.keySet();
-	}
-
-	public Collection<Ticket> getGroupTickets() {
-		return groupToTicketsMap.get(group);
 	}
 
 	public Collection<Ticket> getStatusTickets() {

@@ -21,12 +21,12 @@
 				<tr class="drag-container">
 					<t:loop source="statuses" value="status">
 						<td class="ticket-col ${cond:status,,unassigned}" 
-								data-target-id="${status.id}"
-								data-allow-to="[${getAllowTo(status)}]"
+								data-col-id="${status.id}"
 								>
 							<div class="ticket-cells">
 								<t:loop source="statusTickets" value="ticket">
-									<div class="ticket-cell-div shadow ${cond:draggable,drag,}" data-target-id="${cond:status,prop:status.id,0}" data-ticket-id="${ticket.id}">
+								
+									<div class="ticket-cell-div shadow ${cond:draggable,drag,}" data-col-id="${status.id}" data-target-col-ids="[${getAllowTo(status)}]" data-ticket-id="${ticket.id}">
 										<div class="drag-handle">
 											<i class="glyphicon glyphicon-move text text-info"></i>
 										</div>
