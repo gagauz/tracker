@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.tapestry5.annotations.Cached;
 import org.apache.tapestry5.annotations.Import;
@@ -16,6 +17,7 @@ import org.apache.tapestry5.web.services.security.Secured;
 import com.gagauz.tracker.db.model.Feature;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.FeatureVersionService;
 import com.gagauz.tracker.services.dao.FeatureDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 
@@ -37,11 +39,17 @@ public class FeatureInfo {
     @Property
     private Ticket ticket;
 
+    @Property
+    private Entry<Version, List<Ticket>> entry;
+
     @Inject
     private TicketDao ticketDao;
 
     @Inject
     private FeatureDao featureDao;
+
+    @Inject
+    private FeatureVersionService featureVersionService;
 
     Object onActivate(Feature feature) {
         if (null == feature) {
@@ -79,10 +87,15 @@ public class FeatureInfo {
     }
 
     public List<Ticket> getTasks() {
-        return getMap().get(version);
+        return entry.getValue();
     }
 
     public List<Ticket> getBugs() {
-        return getMap().get(version);
+        return entry.getValue();
+    }
+
+    @Cached
+    public Map<Version, List<Ticket>> getFeatureVersionMap() {
+        return featureVersionService.getFeatureVersionMap(feature);
     }
 }

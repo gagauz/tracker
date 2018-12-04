@@ -38,15 +38,15 @@
 		</div>
 	</div>
 	<div class="feature-info">
-		<t:loop source="featureVersions" value="featureVersion">
+		<t:loop source="getFeatureVersionMap().entrySet()" value="entry">
 			<div class="panel panel-info">
 				<div class="panel-heading">
-					<t:if test="featureVersion.version">
-						<t:pagelink t:page="versioninfo" t:context="featureVersion.version">${message:version}:
-							${featureVersion.version.name}
+					<t:if test="entry.key">
+						<t:pagelink t:page="versioninfo" t:context="entry.key">${message:version}:
+							${entry.key.name}
 						</t:pagelink>
 						${message:release-date}:
-						${date:featureVersion.version.releaseDate,d.MM.yyyy}
+						${date:entry.key.releaseDate,d.MM.yyyy}
 						<p:else>
 							${message:future-versions}
 						</p:else>
@@ -58,14 +58,6 @@
 						<div class="ticket-div">
 							<t:pagelink t:page="TicketInfo" t:context="ticket"
 								class="${ticket.type.name}"><i class="icon glyphicon"></i> ${ticket.type.name} #${ticket.id} ${ticket.summary}
-							</t:pagelink>
-						</div>
-					</t:loop>
-					<h5>Bugs</h5>
-					<t:loop source="getBugs()" value="ticket">
-						<div class="ticket-div">
-							<t:pagelink t:page="TicketInfo" t:context="ticket"
-								class="${ticket.type}"><i class="icon glyphicon"></i> ${ticket.type.name} #${ticket.id} ${ticket.summary}
 							</t:pagelink>
 						</div>
 					</t:loop>

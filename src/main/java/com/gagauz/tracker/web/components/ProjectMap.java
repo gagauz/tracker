@@ -2,7 +2,6 @@ package com.gagauz.tracker.web.components;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +24,7 @@ import com.gagauz.tracker.db.model.Project;
 import com.gagauz.tracker.db.model.Ticket;
 import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.db.model.Version;
+import com.gagauz.tracker.services.FeatureVersionService;
 import com.gagauz.tracker.services.dao.FeatureDao;
 import com.gagauz.tracker.services.dao.TicketDao;
 import com.gagauz.tracker.services.dao.VersionDao;
@@ -33,170 +33,159 @@ import com.xl0e.util.C;
 @Import(stack = "app")
 public class ProjectMap {
 
-	@Component(parameters = { "id=prop:zoneId" })
-	@Property(write = false)
-	private Zone zone;
+    @Component(parameters = { "id=prop:zoneId" })
+    @Property(write = false)
+    private Zone zone;
 
-	@Component(parameters = { "id=literal:ticketZone" })
-	@Property(write = false)
-	private Zone ticketZone;
+    @Component(parameters = { "id=literal:ticketZone" })
+    @Property(write = false)
+    private Zone ticketZone;
 
-	@Component(parameters = { "id=literal:viewTicketZone" })
-	private Zone viewTicketZone;
+    @Component(parameters = { "id=literal:viewTicketZone" })
+    private Zone viewTicketZone;
 
-	@Parameter(allowNull = false, required = true, principal = true)
-	private Project project;
+    @Parameter(allowNull = false, required = true, principal = true)
+    private Project project;
 
-	@Property
-	private Version version;
+    @Property
+    private Version version;
 
-	@Property
-	private Feature feature;
+    @Property
+    private Feature feature;
 
-	@Persist(value = "flash")
-	@Property
-	private Version editVersion;
+    @Persist(value = "flash")
+    @Property
+    private Version editVersion;
 
-	private Ticket ticket;
+    private Ticket ticket;
 
-	@Property
-	private Ticket newTicket;
+    @Property
+    private Ticket newTicket;
 
-	@Property
-	private int estimate;
+    @Property
+    private int estimate;
 
-	@Property
-	private int progress;
+    @Property
+    private int progress;
 
-	@Persist
-	@Property
-	private boolean activeVersions;
+    @Persist
+    @Property
+    private boolean activeVersions;
 
-	@Persist
-	@Property
-	private boolean releasedVersions;
+    @Persist
+    @Property
+    private boolean releasedVersions;
 
-	@Inject
-	private VersionDao versionDao;
+    @Inject
+    private VersionDao versionDao;
 
-	@Inject
-	private FeatureDao featureDao;
+    @Inject
+    private FeatureDao featureDao;
 
-	@Inject
-	private TicketDao ticketDao;
+    @Inject
+    private TicketDao ticketDao;
 
-	@SessionState
-	private User securityUser;
+    @SessionState
+    private User securityUser;
 
-	@Inject
-	private Request request;
+    @Inject
+    private Request request;
 
-	@Inject
-	private AjaxResponseRenderer ajaxResponseRenderer;
+    @Inject
+    private AjaxResponseRenderer ajaxResponseRenderer;
 
-	@Cached
-	private Map<Feature, Map<Version, List<Ticket>>> getFeatureVersionMap() {
-		Map<Feature, Map<Version, List<Ticket>>> featureVersionMap = new LinkedHashMap<>();
-		List<Feature> features = featureDao.findByProject(project);
-		List<Version> versions = versionDao.findByProject(project);
-		List<Ticket> tickets = ticketDao.findByProject(project);
-		for (Feature feature : features) {
-			Map<Version, List<Ticket>> ticketsToVersion = new LinkedHashMap<>();
-			featureVersionMap.put(feature, ticketsToVersion);
-			versions.forEach(version -> ticketsToVersion.put(version, C.arrayList()));
-			ticketsToVersion.put(null, C.arrayList());
-			featureVersionMap.put(feature, ticketsToVersion);
-		}
-		for (Ticket ticket : tickets) {
-			featureVersionMap.get(ticket.getFeature()).get(ticket.getVersion()).add(ticket);
-		}
-		return featureVersionMap;
-	}
+    @Inject
+    private FeatureVersionService featureVersionService;
 
-	public Collection<Version> getVersions() {
-		return getFeatureVersionMap().values().stream().findFirst().map(Map::keySet).orElse(Collections.emptySet());
-	}
+    @Cached
+    private Map<Feature, Map<Version, List<Ticket>>> getFeatureVersionMap() {
+        return featureVersionService.getFeatureVersionMap(project, true);
+    }
 
-	public Collection<Version> getVersions(Feature feature) {
-		return getFeatureVersionMap().get(feature).keySet();
-	}
+    public Collection<Version> getVersions() {
+        return getFeatureVersionMap().values().stream().findFirst().map(Map::keySet).orElse(Collections.emptySet());
+    }
 
-	public Collection<Feature> getFeatures() {
-		return getFeatureVersionMap().keySet();
-	}
+    public Collection<Version> getVersions(Feature feature) {
+        return getFeatureVersionMap().get(feature).keySet();
+    }
 
-	@Ajax
-	Object onCreateTicket(Feature feature, Version version) {
-		newTicket = new Ticket();
-		newTicket.setFeature(feature);
-		newTicket.setVersion(version);
-		newTicket.setAuthor(securityUser);
+    public Collection<Feature> getFeatures() {
+        return getFeatureVersionMap().keySet();
+    }
 
-		return newTicket;
-	}
+    @Ajax
+    Object onCreateTicket(Feature feature, Version version) {
+        newTicket = new Ticket();
+        newTicket.setFeature(feature);
+        newTicket.setVersion(version);
+        newTicket.setAuthor(securityUser);
 
-	@Ajax
-	Object onEditVersion(Version version) {
-		editVersion = version;
-		return editVersion;
-	}
+        return newTicket;
+    }
 
-	@Ajax
-	Object onViewTicket(Ticket ticket) {
-		newTicket = ticket;
-		return newTicket;
-	}
+    @Ajax
+    Object onEditVersion(Version version) {
+        editVersion = version;
+        return editVersion;
+    }
 
-	public List<Ticket> getTickets() {
-		List<Ticket> list = getFeatureVersionMap().get(feature).getOrDefault(version, Collections.emptyList());
-		return list;
-	}
+    @Ajax
+    Object onViewTicket(Ticket ticket) {
+        newTicket = ticket;
+        return newTicket;
+    }
 
-	public Ticket getTicket() {
-		return ticket;
-	}
+    public List<Ticket> getTickets() {
+        List<Ticket> list = getFeatureVersionMap().get(feature).getOrDefault(version, Collections.emptyList());
+        return list;
+    }
 
-	public void setTicket(Ticket ticket) {
-		estimate += ticket.getEstimate();
-		progress += ticket.getProgress();
-		this.ticket = ticket;
-	}
+    public Ticket getTicket() {
+        return ticket;
+    }
 
-	public boolean isNotReleased() {
-		return null == version || !version.isReleased();
-	}
+    public void setTicket(Ticket ticket) {
+        estimate += ticket.getEstimate();
+        progress += ticket.getProgress();
+        this.ticket = ticket;
+    }
 
-	public String getZoneId() {
-		return "ProjectMapZone";
-	}
+    public boolean isNotReleased() {
+        return null == version || !version.isReleased();
+    }
 
-	void onViewMode(String mode) {
-		if ("a".equals(mode)) {
-			releasedVersions = false;
-			activeVersions = true;
-		}
-		if ("r".equals(mode)) {
-			releasedVersions = true;
-			activeVersions = false;
-		}
-	}
+    public String getZoneId() {
+        return "ProjectMapZone";
+    }
 
-	public boolean isNoReleaseVersion() {
-		return false;
-	}
+    void onViewMode(String mode) {
+        if ("a".equals(mode)) {
+            releasedVersions = false;
+            activeVersions = true;
+        }
+        if ("r".equals(mode)) {
+            releasedVersions = true;
+            activeVersions = false;
+        }
+    }
 
-	public boolean isVersionRemovable(Version version) {
-		// return ticketDao.countTicketsByVersion(version) == 0;
-		return getFeatureVersionMap().values().stream()
-				.map(Map::entrySet)
-				.flatMap(Set::stream)
-				.filter(e -> version.equals(e.getKey()))
-				.allMatch(e -> C.isEmpty(e.getValue()));
-	}
+    public boolean isNoReleaseVersion() {
+        return false;
+    }
 
-	@Ajax
-	public void onDropVersion(Version version) {
-		versionDao.delete(version);
-		ajaxResponseRenderer.addRender(getZoneId(), zone.getBody());
-	}
+    public boolean isVersionRemovable(Version version) {
+        // return ticketDao.countTicketsByVersion(version) == 0;
+        return getFeatureVersionMap().values().stream()
+                .map(Map::entrySet)
+                .flatMap(Set::stream)
+                .filter(e -> version.equals(e.getKey()))
+                .allMatch(e -> C.isEmpty(e.getValue()));
+    }
+
+    @Ajax
+    public void onDropVersion(Version version) {
+        versionDao.delete(version);
+        ajaxResponseRenderer.addRender(getZoneId(), zone.getBody());
+    }
 }

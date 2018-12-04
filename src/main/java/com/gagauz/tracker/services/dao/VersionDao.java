@@ -35,8 +35,8 @@ public class VersionDao extends AbstractDao<Integer, Version> {
     }
 
     public List<Version> findByFeature(Feature feature) {
-        // TODO Auto-generated method stub
-        return null;
+        return getSession().createQuery("select distinct t.version from Ticket t "
+                + "where t.feature=:feature").setParameter("feature", feature).list();
     }
 
     public Version findByName(String name) {
