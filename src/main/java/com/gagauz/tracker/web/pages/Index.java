@@ -17,7 +17,7 @@ public class Index {
     private ProjectDao projectDao;
 
     public GridDataSource getProjects() {
-        return new CollectionGridDataSourceRowTypeFix(projectDao.findAll(), Project.class);
+        return new CollectionGridDataSourceRowTypeFix<>(projectDao.findAll(), Project.class);
     }
 
 }

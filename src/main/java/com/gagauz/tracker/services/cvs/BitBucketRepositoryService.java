@@ -1,6 +1,5 @@
 package com.gagauz.tracker.services.cvs;
 
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,14 +7,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import com.gagauz.tracker.db.model.Version;
 import com.gagauz.tracker.db.model.cvs.Branch;
@@ -124,34 +118,28 @@ public class BitBucketRepositoryService extends AbstractVCSService {
 
     }
 
+    @SuppressWarnings("rawtypes")
     public static void main(String[] args) {
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        ResponseEntity<Map> resp = request("https://api.bitbucket.org/2.0/repositories/xl0e/ivaga-shop/refs/branches?fields=values.name,values.links.html,values.links.commits")
+                .get()
+                .usernameAndPassword(System.getProperty("tracker.username"), System.getProperty("tracker.password"))
+                .execute(Map.class);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        JsonUtils.parseArray(resp.getBody(), "values").ifPresent(branch -> {
+            branch.forEach(b -> {
+                JsonUtils.parseString(b, "name").ifPresent(n -> {
+                    System.out.println(n);
+                    String commitsurl = JsonUtils.parseString(b, "links/commits/href").get()
+                            + "?fields=values.hash,values.hash,values.links.html,values.author.raw,values.message,values.date,values.type";
+                    ResponseEntity<Map> resp1 = request(commitsurl)
+                            .get()
+                            .usernameAndPassword(System.getProperty("tracker.username"), System.getProperty("tracker.password"))
+                            .execute(Map.class);
+                    System.out.println(resp1);
+                });
+            });
+        });
 
-        String plainCreds = "1:1";
-        byte[] plainCredsBytes = plainCreds.getBytes();
-        plainCredsBytes = Base64.getEncoder().encode(plainCredsBytes);
-        String base64Creds = new String(plainCredsBytes);
-        headers.add("Authorization", "Basic " + base64Creds);
-
-        HttpEntity<Map> request = new HttpEntity<>(map, headers);
-
-        ResponseEntity<HashMap> branches = createTemplate().exchange(
-                "https://api.bitbucket.org/2.0/repositories/xl0e/ivaga-shop/refs/branches",
-                HttpMethod.GET,
-                request,
-                HashMap.class);
-
-        //        ResponseEntity<HashMap> branches = createTemplate().exchange(
-        //                "https://bitbucket.org/site/oauth2/access_token",
-        //                HttpMethod.POST,
-        //                request,
-        //                HashMap.class);
-
-        System.out.println(branches.getHeaders());
-        System.out.println(branches.getBody());
     }
 }
