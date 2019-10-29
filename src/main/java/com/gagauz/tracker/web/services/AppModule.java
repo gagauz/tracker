@@ -41,7 +41,7 @@ import com.gagauz.tracker.db.model.User;
 import com.gagauz.tracker.services.dao.UserDao;
 import com.gagauz.tracker.services.scheduler.SchedulerService;
 import com.gagauz.tracker.services.setup.TestDataInitializer;
-import com.gagauz.tracker.utils.AppProperties;
+import com.gagauz.tracker.utils.Environment;
 import com.xl0e.tapestry.hibernate.HibernateModule;
 import com.xl0e.util.Cast;
 import com.xl0e.util.CryptoUtils;
@@ -61,7 +61,7 @@ public class AppModule {
 
 	@Startup
 	public static void initScenarios(@Inject TestDataInitializer ai, @Inject SchedulerService schedulerService) {
-		if (AppProperties.FILL_TEST_DATA.getBoolean()) {
+		if (Environment.FILL_TEST_DATA.getBoolean()) {
 			ai.execute();
 			schedulerService.update();
 		}

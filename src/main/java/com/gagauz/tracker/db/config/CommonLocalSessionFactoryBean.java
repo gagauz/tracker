@@ -17,7 +17,7 @@ import org.hibernate.tool.schema.Action;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import com.gagauz.tracker.db.utils.SaveOrUpdateDateListener;
-import com.gagauz.tracker.utils.AppProperties;
+import com.gagauz.tracker.utils.Environment;
 
 public class CommonLocalSessionFactoryBean extends LocalSessionFactoryBean {
     public CommonLocalSessionFactoryBean() {
@@ -25,11 +25,11 @@ public class CommonLocalSessionFactoryBean extends LocalSessionFactoryBean {
         setAnnotatedPackages(new String[] { com.gagauz.tracker.db.model.User.class.getPackage().getName() });
         Properties properties = new Properties();
 
-        properties.put(DIALECT, AppProperties.JDBC_DIALECT.toString());
+        properties.put(DIALECT, Environment.JDBC_DIALECT.toString());
         properties.put(SHOW_SQL, false);
         properties.put(FORMAT_SQL, false);
         properties.put(USE_SQL_COMMENTS, false);
-        if (AppProperties.FILL_TEST_DATA.getBoolean()) {
+        if (Environment.FILL_TEST_DATA.getBoolean()) {
             properties.put(HBM2DDL_AUTO, Action.CREATE_DROP);
         } else {
             properties.put(HBM2DDL_AUTO, Action.NONE);

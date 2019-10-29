@@ -7,19 +7,19 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-import com.gagauz.tracker.utils.AppProperties;
+import com.gagauz.tracker.utils.Environment;
 
 public class DevDataSource extends SimpleDriverDataSource implements DataSource {
 
     public DevDataSource() {
         try {
-            setDriverClass((Class<? extends Driver>) Class.forName(AppProperties.JDBC_DRIVER.toString()));
+            setDriverClass((Class<? extends Driver>) Class.forName(Environment.JDBC_DRIVER.toString()));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        setUrl(AppProperties.JDBC_URL.toString());
-        setUsername(AppProperties.JDBC_USERNAME.toString());
-        setPassword(AppProperties.JDBC_PASSWORD.toString());
+        setUrl(Environment.JDBC_URL.toString());
+        setUsername(Environment.JDBC_USERNAME.toString());
+        setPassword(Environment.JDBC_PASSWORD.toString());
         Properties props = new Properties();
         props.setProperty("cacheServerConfiguration", "true");
         props.setProperty("useUnicode", "true");

@@ -3,7 +3,7 @@ package com.gagauz.tracker.utils;
 import com.gagauz.tracker.config.Constants;
 import com.xl0e.util.IAppProperty;
 
-public enum AppProperties implements IAppProperty<AppProperties> {
+public enum Environment implements IAppProperty<Environment> {
     JDBC_USERNAME("b4f"),
     JDBC_PASSWORD("office"),
     JDBC_URL("jdbc:mysql://localhost:3306/tracker?autoReconnect=true&useUnicode=true&createDatabaseIfNotExist=true&characterEncoding=utf-8"),
@@ -15,7 +15,7 @@ public enum AppProperties implements IAppProperty<AppProperties> {
 
     private final String defaultValue;
 
-    AppProperties(String defaultValue) {
+    Environment(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 

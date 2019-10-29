@@ -4,7 +4,7 @@ import org.apache.tapestry5.web.config.AbstractWebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import com.gagauz.tracker.config.DevCommonConfiguration;
-import com.gagauz.tracker.utils.AppProperties;
+import com.gagauz.tracker.utils.Environment;
 import com.gagauz.tracker.web.services.AppModule;
 
 public class WebAppInitializer extends AbstractWebApplicationInitializer {
@@ -26,6 +26,6 @@ public class WebAppInitializer extends AbstractWebApplicationInitializer {
 
     @Override
     protected void onSpringContext(AnnotationConfigWebApplicationContext context) {
-        context.getEnvironment().setActiveProfiles(AppProperties.PROFILE.getString());
+        context.getEnvironment().setActiveProfiles(Environment.PROFILE.getString());
     }
 }
