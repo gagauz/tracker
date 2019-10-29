@@ -101,7 +101,7 @@ public class VersionStatusMap {
 	@Cached
 	public Collection<TicketStatus> getStatuses() {
 
-		if (null == this.statusToTicketsMap) {
+		if (null == statusToTicketsMap) {
 			List<TicketStatus> statuses = C.arrayList(group.getStatuses());
 
 			if (statuses.isEmpty()) {
@@ -125,9 +125,7 @@ public class VersionStatusMap {
 				return 0;
 			});
 			statusToTicketsMap = new LinkedHashMap<>(statuses.size());
-			statuses.forEach(status -> {
-				statusToTicketsMap.put(status, C.arrayList());
-			});
+			statuses.forEach(status -> statusToTicketsMap.put(status, C.arrayList()));
 
 			for (Ticket ticket : ticketDao.findByVersionAndStatuses(version, statuses)) {
 				statusToTicketsMap.computeIfAbsent(ticket.getStatus(), x -> C.arrayList()).add(ticket);
@@ -176,10 +174,10 @@ public class VersionStatusMap {
 	void onViewTicket(Ticket ticket) {
 		this.viewTicket = ticket;
 		this.ajaxResponseRenderer
-				.addRender(Layout.MODAL_BODY_ID, this.ticketZone.getBody())
-				.addCallback(
-						(JavaScriptCallback) javascriptSupport -> javascriptSupport.require("modal").invoke("showModal")
-								.with(Layout.MODAL_ID));
+		.addRender(Layout.MODAL_BODY_ID, this.ticketZone.getBody())
+		.addCallback(
+				(JavaScriptCallback) javascriptSupport -> javascriptSupport.require("modal").invoke("showModal")
+				.with(Layout.MODAL_ID));
 	}
 
 	public String getBgColor() {
